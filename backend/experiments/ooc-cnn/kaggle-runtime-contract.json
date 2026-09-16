@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "contract_id": "organchip-ooc-cnn-kaggle-runtime-v1",
+  "execution_policy": {
+    "internet_required": false,
+    "network_installation_allowed": false,
+    "implicit_model_downloads_allowed": false,
+    "test_manifest_access_modes": [
+      "final-eval"
+    ]
+  },
+  "modes": {
+    "smoke": {
+      "allowed_devices": [
+        "cpu",
+        "cuda"
+      ],
+      "gpu_required": false,
+      "pretrained_weights_required": false
+    },
+    "validation": {
+      "allowed_devices": [
+        "cuda"
+      ],
+      "gpu_required": true,
+      "pretrained_weights_required": true
+    },
+    "final-eval": {
+      "allowed_devices": [
+        "cuda"
+      ],
+      "gpu_required": true,
+      "pretrained_weights_required": true,
+      "frozen_manifest_required": true,
+      "test_access_receipt_required": true
+    }
+  },
+  "runtime": {
+    "python": {
+      "specifier": ">=3.11,<3.13",
+      "locally_validated_version": "3.12.14"
+    },
+    "packages": {
+      "torch": {
+        "specifier": ">=2.6,<2.11",
+        "locally_validated_version": "2.10.0"
+      },
+      "torchvision": {
+        "specifier": ">=0.21,<0.26",
+        "locally_validated_version": "0.25.0"
+      },
+      "numpy": {
+        "specifier": ">=2.0,<2.4",
+        "locally_validated_version": "2.3.5"
+      },
+      "pandas": {
+        "specifier": ">=2.2,<3.1",
+        "locally_validated_version": "3.0.5"
+      },
+      "Pillow": {
+        "specifier": ">=11,<13",
+        "locally_validated_version": "12.3.0"
+      },
+      "scikit-learn": {
+        "specifier": ">=1.6,<2",
+        "locally_validated_version": "1.9.1"
+      },
+      "matplotlib": {
+        "specifier": ">=3.9,<3.12",
+        "locally_validated_version": "3.11.1"
+      },
+      "onnx": {
+        "specifier": ">=1.17,<1.23",
+        "locally_validated_version": "1.22.0"
+      },
+      "onnxruntime": {
+        "specifier": ">=1.20,<1.23",
+        "locally_validated_version": "1.22.2"
+      }
+    },
+    "tooling_packages": {
+      "pytest": {
+        "specifier": ">=8.4,<9",
+        "cpu_environment_version": "8.4.2"
+      },
+      "ruff": {
+        "specifier": ">=0.16,<0.17",
+        "cpu_environment_version": "0.16.7"
+      },
+      "nbformat": {
+        "specifier": ">=5.10,<6",
+        "cpu_environment_version": "5.10.4"
+      },
+      "nbclient": {
+        "specifier": ">=0.10,<0.11",
+        "cpu_environment_version": "0.10.2"
+      },
+      "ipykernel": {
+        "specifier": ">=6.31,<7",
+        "cpu_environment_version": "6.31.0"
+      }
+    },
+    "accepted_torch_torchvision_pairs": [
+      {
+        "torch": "2.6.*",
+        "torchvision": "0.21.*"
+      },
+      {
+        "torch": "2.7.*",
+        "torchvision": "0.22.*"
+      },
+      {
+        "torch": "2.8.*",
+        "torchvision": "0.23.*"
+      },
+      {
+        "torch": "2.9.*",
+        "torchvision": "0.24.*"
+      },
+      {
+        "torch": "2.10.*",
+        "torchvision": "0.25.*"
+      }
+    ]
+  },
+  "local_inputs": {
+    "source_bundle_required": true,
+    "dataset_required": true,
+    "split_lock_required": true,
+    "initial_weights": {
+      "required_for_modes": [
+        "validation",
+        "final-eval"
+      ],
+      "source": "explicit-local-file",
+      "torchvision_default_weights_allowed": false,
+      "required_metadata": [
+        "path",
+        "sha256",
+        "architecture",
+        "weight_enum",
+        "source_url",
+        "license"
+      ]
+    }
+  },
+  "required_hashes": {
+    "all_modes": [
+      "source_bundle_sha256",
+      "runtime_contract_sha256",
+      "config_sha256",
+      "dataset_inventory_sha256",
+      "split_lock_sha256",
+      "train_validation_manifest_sha256"
+    ],
+    "validation": [
+      "initial_weights_sha256"
+    ],
+    "final-eval": [
+      "initial_weights_sha256",
+      "frozen_manifest_sha256",
+      "checkpoint_sha256",
+      "test_manifest_sha256",
+      "preprocessing_sha256",
+      "labels_sha256"
+    ]
+  },
+  "preflight": {
+    "fail_if_gpu_missing_in_modes": [
+      "validation",
+      "final-eval"
+    ],
+    "fail_if_network_installation_requested": true,
+    "fail_if_implicit_weight_download_requested": true,
+    "fail_if_required_hash_missing": true,
+    "fail_if_hash_mismatch": true,
+    "fail_if_torchvision_pair_unlisted": true,
+    "capture": [
+      "python_version",
+      "package_versions",
+      "pip_freeze",
+      "cuda_version",
+      "cudnn_version",
+      "gpu_name",
+      "gpu_count"
+    ]
+  }
+}

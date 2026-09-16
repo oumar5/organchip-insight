@@ -1,0 +1,19 @@
+name: organchip-ooc-cnn-cpu
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.14
+  - pytorch=2.10.0
+  - torchvision=0.25.0
+  - numpy=2.3.5
+  - pandas=3.0.5
+  - pillow=12.3.0
+  - scikit-learn=1.9.1
+  - matplotlib-base=3.11.1
+  - onnx=1.22.0
+  - onnxruntime=1.22.2
+  - pytest=8.4.2
+  - ruff=0.16.7
+  - nbformat=5.10.4
+  - nbclient=0.10.2
+  - ipykernel=6.31.0
