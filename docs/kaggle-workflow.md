@@ -36,20 +36,26 @@ choix et autorisation de l'évaluation finale. L'organisation finale précise do
 respecter les besoins de provenance du CLI ; le bundle de sélection finale sera
 préparé seulement après le run de validation retenu.
 
-Chemins montés retenus pour la validation campagne v2 :
+Kaggle peut monter un dataset attaché soit directement sous son slug, soit sous
+`datasets/<propriétaire>/<slug>`. Le bundle source v6 conserve en outre le
+dossier de staging portant le même nom que le slug. Le notebook ne dépend donc
+plus d'un chemin absolu unique : `mounted_dataset_path` vérifie les deux points
+de montage et les deux structures internes avant toute copie.
+
+Chemins logiques recherchés pour la validation campagne v2 :
 
 ```text
-/kaggle/input/datasets/oumarbenlol/organchip-insight-source-campaign-v2/organchip-insight
+/kaggle/input/[datasets/oumarbenlol/]organchip-insight-source-campaign-v2/[organchip-insight-source-campaign-v2/]organchip-insight
 /kaggle/input/datasets/oumarbenlol/organchip-train-validation-v2/train-validation/images
 /kaggle/input/datasets/oumarbenlol/organchip-cnn-offline-resources-v1/resources
 ```
 
-La version source privée publiée après le durcissement de provenance est la
-version 5. Son manifeste logique porte le SHA-256
-`2fef17b49d73c5b8480bca4afeb97e5259a61871baeab7559dbcaf4b4b8ffcba` et le
-commit source complet `acc92e96afad74c048c5764de6db0dc864538c4b`. Le ZIP de
+La version source privée publiée pour les ablations A/B est la version 6. Son
+manifeste logique porte le SHA-256
+`2b431a49757aa39cb40043c20a3733e861cdfaf40d8027a852016b4f6c1b3c88` et le
+commit source complet `b855c5fff7d3851ab0df1a0db365db09f7e3273b`. Le ZIP de
 transport porte le SHA-256
-`05d3fd7faeb0f3858aa5fa5db824f17acb3c73ab42a8ce7a7e9fd926b111701a`.
+`e0dd2957600bb313f1605ad2a9658d742487f17c2cff463b3f04db0b7cb88676`.
 Le notebook vérifie le manifeste logique et le commit avant toute reprise ou
 nouvelle exécution.
 
