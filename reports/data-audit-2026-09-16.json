@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-16T02:29:00.817346+00:00",
-  "git_commit": "0bdee0ccc02d5a430331f7e698a189360a1be2f2",
+  "generated_at_utc": "2026-09-16T04:08:43.067902+00:00",
+  "git_commit": "878238de167fe75292b8809c02491cd6306f54a5",
   "manifest": "data/manifests/datasets.json",
   "resources": [
     {
@@ -17,8 +17,11 @@
     {
       "id": "ooc-images-v1",
       "path": "data/raw/ooc/OOC_image_dataset.zip",
-      "status": "not_downloaded",
-      "large": true
+      "size_bytes": 6710767405,
+      "checksums": {
+        "md5": "8f7e058996203d48eb03b2d86c0a2e4d"
+      },
+      "status": "verified"
     },
     {
       "id": "bbbc019-microfluidic-v2",
@@ -148,9 +151,625 @@
       "warning": "Prefixes look like acquisition dates, but the dataset does not document them as independent experiment, chip, well, or donor identifiers."
     },
     "split_audit": {
-      "status": "blocked_without_image_archive",
-      "reason": "The datasheet has no train/validation/test or biological group column. Published split membership only exists in the 6.7 GB image archive."
+      "status": "audited",
+      "published_splits_present": [
+        "test",
+        "train",
+        "val"
+      ],
+      "acquisition_prefixes_shared_across_splits": 59,
+      "recommended_policy": "Create a new group-aware split by acquisition prefix for the primary estimate. Keep the published split only as a secondary comparison with the paper."
     }
+  },
+  "ooc_archive": {
+    "root": "data/raw/ooc/OOC_image_dataset",
+    "image_count": 3072,
+    "audited_image_count": 3072,
+    "total_image_bytes": 6709839467,
+    "invalid_path_structure": [],
+    "metadata_record_count": 3072,
+    "missing_image_ids": [],
+    "unknown_image_ids": [],
+    "split_counts": {
+      "test": 656,
+      "train": 2130,
+      "val": 286
+    },
+    "path_label_counts": {
+      "bad": 1345,
+      "good": 1727
+    },
+    "split_label_counts": {
+      "test/bad": 291,
+      "test/good": 365,
+      "train/bad": 931,
+      "train/good": 1199,
+      "val/bad": 123,
+      "val/good": 163
+    },
+    "split_cell_type_counts": {
+      "test/A549": 164,
+      "test/CACO": 75,
+      "test/HPMEC": 301,
+      "test/HSAEC": 57,
+      "test/HUVEC": 25,
+      "test/NHBE": 34,
+      "train/A549": 538,
+      "train/CACO": 239,
+      "train/HPMEC": 1019,
+      "train/HSAEC": 167,
+      "train/HUVEC": 73,
+      "train/NHBE": 94,
+      "val/A549": 73,
+      "val/CACO": 32,
+      "val/HPMEC": 142,
+      "val/HSAEC": 20,
+      "val/HUVEC": 9,
+      "val/NHBE": 10
+    },
+    "label_mapping_from_paths": {
+      "1": {
+        "good": 1727
+      },
+      "2": {
+        "bad": 1345
+      }
+    },
+    "one_to_one_label_mapping": true,
+    "cell_type_mismatch_count": 0,
+    "day_bucket_mismatch_count": 0,
+    "mismatch_examples": [],
+    "image_dimensions": {
+      "1536x2048": 3,
+      "2048x1536": 934,
+      "2056x1542": 2048,
+      "640x480": 87
+    },
+    "image_modes": {
+      "L": 2048,
+      "RGB": 1024
+    },
+    "exact_file_hashes": {
+      "duplicate_group_count": 0,
+      "cross_split_group_count": 0,
+      "cross_split_examples": []
+    },
+    "difference_hashes": {
+      "duplicate_group_count": 3,
+      "cross_split_group_count": 1,
+      "cross_split_examples": [
+        {
+          "dhash256": "eec36ec30ec30f63cc3bcc3bce83ce93ce83cf83cfa3cfe3cfd3cf83cd03cdc3",
+          "count": 2,
+          "splits": [
+            "test",
+            "train"
+          ],
+          "paths": [
+            "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/2-3_days/230510_2.png",
+            "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/2-3_days/230510_1.png"
+          ]
+        }
+      ]
+    },
+    "near_duplicate_screen": {
+      "method": "256-bit difference hash on a 17x16 grayscale thumbnail",
+      "maximum_hamming_distance": 8,
+      "cross_split_candidate_pair_count": 57,
+      "same_acquisition_prefix_pair_count": 57,
+      "label_conflict_pair_count": 11,
+      "examples": [
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/4+_days/230529_74.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230529_110.png"
+        },
+        {
+          "distance": 5,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230529_59.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/bad/cell_type_HPMEC/4+_days/230529_22.png"
+        },
+        {
+          "distance": 6,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230425_124.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/4+_days/230425_160.png"
+        },
+        {
+          "distance": 6,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_NHBE/2-3_days/230317_78.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_HPMEC/4_days/230317_49.png"
+        },
+        {
+          "distance": 6,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/4+_days/230425_163.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/good/cell_type_HPMEC/4+_days/230425_126.png"
+        },
+        {
+          "distance": 7,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/0-1_days/230523_49.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/0-1_days/230523_50.png"
+        },
+        {
+          "distance": 7,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_NHBE/2-3_days/230317_74.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/bad/cell_type_HPMEC/4_days/230317_45.png"
+        },
+        {
+          "distance": 8,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/4+_days/230320_30.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230320_67.png"
+        },
+        {
+          "distance": 8,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/4_days/230317_42.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_NHBE/2-3_days/230317_71.png"
+        },
+        {
+          "distance": 8,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_A549/0-1_days/230525_54.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_HPMEC/2-3_days/230525_17.png"
+        },
+        {
+          "distance": 8,
+          "same_acquisition_prefix": true,
+          "label_conflict": true,
+          "left": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_HPMEC/4+_days/230529_20.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/good/cell_type_A549/4+_days/230529_57.png"
+        },
+        {
+          "distance": 0,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/2-3_days/230510_2.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/2-3_days/230510_1.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/4+_days/230529_35.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_HPMEC/4+_days/230529_34.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_NHBE/4_days/230512_85.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_NHBE/4_days/230512_86.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/0-1_days/230119_5.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/0-1_days/230119_6.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230320_21.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230320_58.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230425_122.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230425_158.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230425_137.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230425_174.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4_days/230512_6.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/4_days/230512_5.png"
+        },
+        {
+          "distance": 1,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/4+_days/230425_163.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/bad/cell_type_A549/4+_days/230425_162.png"
+        },
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_CACO/4+_days/230405_9.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_CACO/4+_days/230405_8.png"
+        },
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_A549/4+_days/230425_152.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/good/cell_type_HPMEC/4+_days/230425_116.png"
+        },
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_A549/4+_days/230425_155.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/4+_days/230425_119.png"
+        },
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_A549/4+_days/230529_109.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/good/cell_type_HPMEC/4+_days/230529_73.png"
+        },
+        {
+          "distance": 2,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230320_20.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230320_57.png"
+        },
+        {
+          "distance": 3,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/bad/cell_type_HPMEC/4+_days/230529_178.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/4+_days/230529_214.png"
+        },
+        {
+          "distance": 3,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/4+_days/230425_114.png",
+          "right": "data/raw/ooc/OOC_image_dataset/val/good/cell_type_A549/4+_days/230425_150.png"
+        },
+        {
+          "distance": 4,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_A549/4+_days/230425_100.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_HPMEC/4+_days/230425_46.png"
+        },
+        {
+          "distance": 4,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4+_days/230425_111.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230425_147.png"
+        },
+        {
+          "distance": 4,
+          "same_acquisition_prefix": true,
+          "label_conflict": false,
+          "left": "data/raw/ooc/OOC_image_dataset/test/good/cell_type_HPMEC/4_days/230512_6.png",
+          "right": "data/raw/ooc/OOC_image_dataset/train/good/cell_type_A549/4+_days/230512_42.png"
+        }
+      ],
+      "warning": "This is a conservative visual-similarity screen, not proof that two microscopy fields are the same acquisition. Review candidates manually."
+    },
+    "acquisition_prefixes": {
+      "count": 59,
+      "shared_across_splits_count": 59,
+      "shared_across_splits": {
+        "220429": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220502": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220503": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220506": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220512": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220515": [
+          "test",
+          "train"
+        ],
+        "220526": [
+          "test",
+          "train"
+        ],
+        "220606": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220608": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220609": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220610": [
+          "train",
+          "val"
+        ],
+        "220611": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220612": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220620": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220626": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220630": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220706": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220708": [
+          "test",
+          "train"
+        ],
+        "220715": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220716": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220718": [
+          "test",
+          "train",
+          "val"
+        ],
+        "220721": [
+          "test",
+          "train"
+        ],
+        "220722": [
+          "test",
+          "train"
+        ],
+        "220724": [
+          "test",
+          "train",
+          "val"
+        ],
+        "221010": [
+          "test",
+          "train",
+          "val"
+        ],
+        "221012": [
+          "test",
+          "train",
+          "val"
+        ],
+        "221123": [
+          "test",
+          "train"
+        ],
+        "221214": [
+          "test",
+          "train",
+          "val"
+        ],
+        "221215": [
+          "test",
+          "train"
+        ],
+        "221219": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230109": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230110": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230119": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230123": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230206": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230214": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230215": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230216": [
+          "train",
+          "val"
+        ],
+        "230314": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230315": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230316": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230317": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230320": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230321": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230328": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230329": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230403": [
+          "test",
+          "train"
+        ],
+        "230405": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230411": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230419": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230424": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230425": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230510": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230512": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230517": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230523": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230524": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230525": [
+          "test",
+          "train",
+          "val"
+        ],
+        "230529": [
+          "test",
+          "train",
+          "val"
+        ]
+      },
+      "warning": "The YYMMDD-style prefix is treated as a conservative acquisition group. The dataset does not document a chip, well, donor, or experiment identifier."
+    },
+    "inventory": {
+      "path": "reports/ooc-image-inventory-2026-09-16.csv",
+      "sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+      "rows": 3072
+    },
+    "archive_consistent": true
   },
   "bbbc019_microfluidic": {
     "root": "data/raw/bbbc019/Microfluidic",
@@ -427,7 +1046,9 @@
   },
   "decision": {
     "safe_to_benchmark_bbbc019": true,
-    "safe_to_train_ooc_classifier": false,
-    "reason": "BBBC019 image/mask pairs are complete. OoC split leakage cannot be audited until image paths or an explicit experiment/chip grouping are available."
+    "safe_to_train_ooc_classifier": true,
+    "safe_to_claim_unbiased_published_test": false,
+    "required_ooc_split_policy": "group by acquisition-prefix heuristic",
+    "reason": "OoC images, paths, labels, cell types and day buckets are internally consistent. Training is now possible, but any acquisition prefix shared between published splits makes that test estimate vulnerable to leakage."
   }
 }

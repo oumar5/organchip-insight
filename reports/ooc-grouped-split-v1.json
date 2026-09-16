@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "split_id": "ooc-grouped-by-acquisition-prefix-v1",
+  "generated_at_utc": "2026-09-16T04:16:32.508008+00:00",
+  "git_commit": "37d54cf1fd28280be28c2b3504966df9ed353bd4",
+  "config": "backend/training/configs/ooc-grouped-split-v1.json",
+  "config_sha256": "d65d77468d72767c1edd35c9c3e64742292a83c189d4a0339882f62794e9a8dd",
+  "source_inventory": {
+    "path": "reports/ooc-image-inventory-2026-09-16.csv",
+    "sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+    "rows": 3072
+  },
+  "policy": {
+    "group_field": "acquisition_prefix",
+    "seed": 20260916,
+    "search_attempts": 20000,
+    "target_fractions": {
+      "train": 0.7,
+      "validation": 0.15,
+      "test": 0.15
+    },
+    "category_weights": {
+      "path_label": 4.0,
+      "path_cell_type": 2.0,
+      "path_day_bucket": 1.0
+    }
+  },
+  "results": {
+    "record_counts": {
+      "test": 473,
+      "train": 2137,
+      "validation": 462
+    },
+    "record_fractions": {
+      "test": 0.153971,
+      "train": 0.695638,
+      "validation": 0.150391
+    },
+    "group_counts": {
+      "train": 40,
+      "validation": 10,
+      "test": 9
+    },
+    "group_overlaps": {
+      "train_validation": [],
+      "train_test": [],
+      "validation_test": []
+    },
+    "label_counts": {
+      "train": {
+        "bad": 946,
+        "good": 1191
+      },
+      "validation": {
+        "bad": 194,
+        "good": 268
+      },
+      "test": {
+        "bad": 205,
+        "good": 268
+      }
+    },
+    "cell_type_counts": {
+      "train": {
+        "A549": 544,
+        "CACO": 263,
+        "HPMEC": 1005,
+        "HSAEC": 174,
+        "HUVEC": 56,
+        "NHBE": 95
+      },
+      "validation": {
+        "A549": 121,
+        "CACO": 59,
+        "HPMEC": 202,
+        "HSAEC": 16,
+        "HUVEC": 39,
+        "NHBE": 25
+      },
+      "test": {
+        "A549": 110,
+        "CACO": 24,
+        "HPMEC": 255,
+        "HSAEC": 54,
+        "HUVEC": 12,
+        "NHBE": 18
+      }
+    },
+    "day_bucket_counts": {
+      "train": {
+        "0-1_days": 595,
+        "2-3_days": 596,
+        "4+_days": 831,
+        "4_days": 115
+      },
+      "validation": {
+        "0-1_days": 134,
+        "2-3_days": 94,
+        "4+_days": 179,
+        "4_days": 55
+      },
+      "test": {
+        "0-1_days": 123,
+        "2-3_days": 108,
+        "4+_days": 189,
+        "4_days": 53
+      }
+    },
+    "near_duplicate_policy": {
+      "audited_cross_split_candidates": 57,
+      "all_candidates_share_group_field": true,
+      "candidates_crossing_grouped_split": 0
+    }
+  },
+  "diagnostics": {
+    "test_search_score": 0.6796461751467974,
+    "validation_search_score": 0.7529806763002467,
+    "groups": {
+      "train": [
+        "220429",
+        "220502",
+        "220506",
+        "220515",
+        "220526",
+        "220606",
+        "220608",
+        "220609",
+        "220611",
+        "220612",
+        "220626",
+        "220630",
+        "220706",
+        "220708",
+        "220715",
+        "220716",
+        "220718",
+        "220721",
+        "220722",
+        "221012",
+        "221123",
+        "221215",
+        "221219",
+        "230109",
+        "230110",
+        "230119",
+        "230206",
+        "230216",
+        "230314",
+        "230315",
+        "230317",
+        "230320",
+        "230329",
+        "230403",
+        "230405",
+        "230419",
+        "230425",
+        "230523",
+        "230525",
+        "230529"
+      ],
+      "validation": [
+        "220503",
+        "220512",
+        "220610",
+        "221214",
+        "230214",
+        "230215",
+        "230316",
+        "230411",
+        "230424",
+        "230510"
+      ],
+      "test": [
+        "220620",
+        "220724",
+        "221010",
+        "230123",
+        "230321",
+        "230328",
+        "230512",
+        "230517",
+        "230524"
+      ]
+    },
+    "coverage": {
+      "train": {
+        "path_label": [
+          "bad",
+          "good"
+        ],
+        "path_cell_type": [
+          "A549",
+          "CACO",
+          "HPMEC",
+          "HSAEC",
+          "HUVEC",
+          "NHBE"
+        ],
+        "path_day_bucket": [
+          "0-1_days",
+          "2-3_days",
+          "4+_days",
+          "4_days"
+        ]
+      },
+      "validation": {
+        "path_label": [
+          "bad",
+          "good"
+        ],
+        "path_cell_type": [
+          "A549",
+          "CACO",
+          "HPMEC",
+          "HSAEC",
+          "HUVEC",
+          "NHBE"
+        ],
+        "path_day_bucket": [
+          "0-1_days",
+          "2-3_days",
+          "4+_days",
+          "4_days"
+        ]
+      },
+      "test": {
+        "path_label": [
+          "bad",
+          "good"
+        ],
+        "path_cell_type": [
+          "A549",
+          "CACO",
+          "HPMEC",
+          "HSAEC",
+          "HUVEC",
+          "NHBE"
+        ],
+        "path_day_bucket": [
+          "0-1_days",
+          "2-3_days",
+          "4+_days",
+          "4_days"
+        ]
+      }
+    }
+  },
+  "output": {
+    "path": "data/splits/ooc-grouped-v1.csv",
+    "sha256": "5ffcf7ff0d69901f7362903d2532462c2758386dfbee2d6265b7a11d61b30d8c",
+    "rows": 3072
+  },
+  "limitations": [
+    "The acquisition prefix is a YYMMDD heuristic, not a documented chip, well, donor, or experiment id.",
+    "A future release should replace the heuristic when stronger biological grouping metadata is available."
+  ]
+}
