@@ -58,6 +58,29 @@ seed 20260916, 20 000 essais d'équilibrage des catégories, poids label/type/jo
 jamais les performances d'un modèle. Si les contraintes de couverture échouent,
 documenter l'échec au lieu d'ajuster silencieusement la règle.
 
+### Addendum avant génération — échec de couverture observé
+
+La première tentative d'affectation, le 16 septembre 2026, a échoué avant toute
+écriture : elle sélectionnait deux des trois campagnes contenant `NHBE` pour le
+test, donc la validation ne pouvait plus contenir cette catégorie. Aucun score
+de modèle n'a été calculé et aucun manifeste candidat n'a été conservé.
+
+La contrainte de couverture est rendue explicite avant la nouvelle génération :
+le holdout test doit contenir chaque catégorie et laisser au moins deux campagnes
+contenant chacune d'elles ; le holdout validation doit en contenir chacune et
+en laisser au moins une pour train. Les 20 000 essais, la seed, les fractions et
+les poids restent inchangés. Cette règle formalise la couverture déjà exigée ;
+elle n'utilise aucune performance de modèle.
+
+Le manifeste a ensuite été généré sans entraîner ni évaluer de modèle : 2 056
+images et 17 campagnes en train, 509 images et 6 campagnes en validation, 507
+images et 6 campagnes dans le test final. Toutes les catégories exigées sont
+présentes dans les trois partitions et aucune paire dHash ≤ 8 ne traverse les
+partitions. Le rapport est
+[ooc-campaign-split-v2.json](../reports/ooc-campaign-split-v2.json). Le test
+reste physiquement séparé des entrées de sélection, même s'il est préparé comme
+dataset privé pour l'évaluation finale.
+
 Vérifier ensuite les quasi-doublons inter-splits avec le critère v1 (distance
 dHash256 ≤ 8). Une violation bloque le gel du manifeste : elle ne justifie pas
 de changer la règle après consultation des scores. Adapter le verrou de données

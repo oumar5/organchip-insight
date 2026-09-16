@@ -1,0 +1,176 @@
+{
+  "campaign_audit_sha256": "5d8cbd0c91a81937b6b5b22b4e2a097dccbcd7b93cb88c7078254fabc4486e41",
+  "config": "backend/training/configs/ooc-campaign-split-v2.json",
+  "config_sha256": "79d0c9d8830a3ca8209a2c252b343c9bbde907fb152a58fe904360d91b12c655",
+  "coverage": {
+    "test": {
+      "path_cell_type": [
+        "A549",
+        "CACO",
+        "HPMEC",
+        "HSAEC",
+        "HUVEC",
+        "NHBE"
+      ],
+      "path_day_bucket": [
+        "0-1_days",
+        "2-3_days",
+        "4+_days",
+        "4_days"
+      ],
+      "path_label": [
+        "bad",
+        "good"
+      ]
+    },
+    "train": {
+      "path_cell_type": [
+        "A549",
+        "CACO",
+        "HPMEC",
+        "HSAEC",
+        "HUVEC",
+        "NHBE"
+      ],
+      "path_day_bucket": [
+        "0-1_days",
+        "2-3_days",
+        "4+_days",
+        "4_days"
+      ],
+      "path_label": [
+        "bad",
+        "good"
+      ]
+    },
+    "validation": {
+      "path_cell_type": [
+        "A549",
+        "CACO",
+        "HPMEC",
+        "HSAEC",
+        "HUVEC",
+        "NHBE"
+      ],
+      "path_day_bucket": [
+        "0-1_days",
+        "2-3_days",
+        "4+_days",
+        "4_days"
+      ],
+      "path_label": [
+        "bad",
+        "good"
+      ]
+    }
+  },
+  "coverage_reservation": {
+    "reason": "The unreserved preregistered search selected two of the three NHBE campaigns for test, making train/validation coverage impossible.",
+    "test_minimum_remaining_groups_per_category": 2,
+    "validation_minimum_remaining_groups_per_category": 1
+  },
+  "generated_at_utc": "2026-09-16T10:11:31.071400+00:00",
+  "group_counts": {
+    "test": 6,
+    "train": 17,
+    "validation": 6
+  },
+  "groups": {
+    "test": [
+      "campaign-220512",
+      "campaign-220626",
+      "campaign-230109",
+      "campaign-230214",
+      "campaign-230411",
+      "campaign-230510"
+    ],
+    "train": [
+      "campaign-220429",
+      "campaign-220526",
+      "campaign-220620",
+      "campaign-220630",
+      "campaign-220706",
+      "campaign-220715",
+      "campaign-221123",
+      "campaign-221219",
+      "campaign-230119",
+      "campaign-230123",
+      "campaign-230206",
+      "campaign-230314",
+      "campaign-230328",
+      "campaign-230403",
+      "campaign-230424",
+      "campaign-230523",
+      "campaign-230529"
+    ],
+    "validation": [
+      "campaign-220606",
+      "campaign-221010",
+      "campaign-221214",
+      "campaign-221215",
+      "campaign-230419",
+      "campaign-230517"
+    ]
+  },
+  "inventory_sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+  "limitations": [
+    "Temporal campaigns are heuristic connected components, not biological IDs.",
+    "Target labels were used only for category balancing, never for model selection.",
+    "The test labels have been available historically; this is not a globally unseen test."
+  ],
+  "near_duplicate_audit": {
+    "complete": true,
+    "cross_split_candidate_pair_count": 0,
+    "cross_split_pair_count": 2346959,
+    "distance_counts": {},
+    "exact_file_match_pair_count": 0,
+    "examples": [],
+    "label_conflict_pair_count": 0,
+    "maximum_hamming_distance": 8,
+    "method": "256-bit difference hash on a 17x16 grayscale thumbnail",
+    "passed": true,
+    "same_acquisition_prefix_pair_count": 0,
+    "scope": "all unordered image pairs assigned to different grouped splits",
+    "split_pairs": {
+      "train_test": {
+        "candidate_pairs": 0,
+        "pairs_examined": 1042392
+      },
+      "train_validation": {
+        "candidate_pairs": 0,
+        "pairs_examined": 1046504
+      },
+      "validation_test": {
+        "candidate_pairs": 0,
+        "pairs_examined": 258063
+      }
+    },
+    "warning": "This exhaustively screens the configured difference-hash distance; it does not prove the absence of duplicates under rotations, crops or other transformations."
+  },
+  "outputs": {
+    "data/splits/ooc-campaign-v2-test.csv": {
+      "rows": 507,
+      "sha256": "d0490b75b41e958518fbe9152779d6225b4673ff0d0d97acccdd8ab737ca9e31"
+    },
+    "data/splits/ooc-campaign-v2-train-validation.csv": {
+      "rows": 2565,
+      "sha256": "b191947b892bfa7e9442aca0051c3b2246343a289715073fd17eefabcf8ea4a3"
+    },
+    "data/splits/ooc-campaign-v2.csv": {
+      "rows": 3072,
+      "sha256": "2d2d3e0db2b4f912bd6b0d2219a17dae2746f3d8fcd08dc0414428204dae798e"
+    }
+  },
+  "record_counts": {
+    "test": 507,
+    "train": 2056,
+    "validation": 509
+  },
+  "schema_version": 1,
+  "scope": "assignment only; no model training or performance evaluation",
+  "search_scores": {
+    "test": 0.9879514172743867,
+    "validation": 1.312415545315815
+  },
+  "split_id": "ooc-grouped-by-temporal-campaign-v2"
+}

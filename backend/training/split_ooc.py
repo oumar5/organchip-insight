@@ -120,6 +120,7 @@ def select_holdout_groups(
     target_fraction: float,
     seed: int,
     attempts: int,
+    minimum_remaining_groups_per_category: int = 0,
 ) -> tuple[set[str], float]:
     if not 0 < target_fraction < 1:
         raise ValueError("target_fraction must be between zero and one")
@@ -138,6 +139,12 @@ def select_holdout_groups(
         for group, group_records in grouped_records.items()
     }
     grouped_sizes = {group: len(group_records) for group, group_records in grouped_records.items()}
+    if (
+        isinstance(minimum_remaining_groups_per_category, bool)
+        or not isinstance(minimum_remaining_groups_per_category, int)
+        or minimum_remaining_groups_per_category < 0
+    ):
+        raise ValueError("minimum remaining groups per category must be non-negative")
     base_group_count = round(len(groups) * target_fraction)
     candidate_group_counts = [
         count
@@ -157,6 +164,29 @@ def select_holdout_groups(
         remaining_size = record_count - selected_size
         if selected_size == 0 or remaining_size == 0:
             continue
+
+        if minimum_remaining_groups_per_category:
+            feasible = True
+            for field in fields:
+                for category in reference_counts[field]:
+                    selected_has_category = any(
+                        grouped_counts[group][field][category] > 0 for group in selected
+                    )
+                    remaining_group_count = sum(
+                        grouped_counts[group][field][category] > 0
+                        for group in groups
+                        if group not in selected
+                    )
+                    if (
+                        not selected_has_category
+                        or remaining_group_count < minimum_remaining_groups_per_category
+                    ):
+                        feasible = False
+                        break
+                if not feasible:
+                    break
+            if not feasible:
+                continue
 
         score = 15.0 * abs(selected_size / record_count - target_fraction)
         for field, weight in category_weights.items():
@@ -215,6 +245,9 @@ def build_grouped_assignment(
         target_fraction=test_fraction,
         seed=seed,
         attempts=attempts,
+        minimum_remaining_groups_per_category=int(
+            config.get("test_minimum_remaining_groups_per_category", 0)
+        ),
     )
     remaining = [record for record in records if record[group_field] not in test_groups]
     relative_validation_fraction = validation_fraction / (1.0 - test_fraction)
@@ -226,6 +259,9 @@ def build_grouped_assignment(
         target_fraction=relative_validation_fraction,
         seed=seed + 1,
         attempts=attempts,
+        minimum_remaining_groups_per_category=int(
+            config.get("validation_minimum_remaining_groups_per_category", 0)
+        ),
     )
     train_groups = {
         record[group_field] for record in remaining if record[group_field] not in validation_groups

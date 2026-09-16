@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -41,6 +41,9 @@ data-audit:
 
 split-ooc:
 	uv run --project backend python backend/training/split_ooc.py --config backend/training/configs/ooc-grouped-split-v1.json
+
+split-ooc-campaign-v2:
+	uv run --project backend python backend/training/build_ooc_campaign_split.py --config backend/training/configs/ooc-campaign-split-v2.json
 
 train-ooc-baseline:
 	uv run --project backend --extra ml python backend/training/train_ooc_baseline.py --config backend/training/configs/ooc-handcrafted-baseline-v1.json

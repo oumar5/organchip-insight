@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "split_id": "ooc-grouped-by-temporal-campaign-v2",
+  "inventory": "reports/ooc-image-inventory-2026-09-16.csv",
+  "inventory_sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+  "campaign_audit": "reports/ooc-campaign-structure-v2-2026-09-16.json",
+  "campaign_audit_sha256": "5d8cbd0c91a81937b6b5b22b4e2a097dccbcd7b93cb88c7078254fabc4486e41",
+  "group_field": "group_id",
+  "seed": 20260916,
+  "search_attempts": 20000,
+  "test_minimum_remaining_groups_per_category": 2,
+  "validation_minimum_remaining_groups_per_category": 1,
+  "validation_fraction": 0.15,
+  "test_fraction": 0.15,
+  "category_weights": {
+    "path_label": 4.0,
+    "path_cell_type": 2.0,
+    "path_day_bucket": 1.0
+  },
+  "required_coverage_fields": [
+    "path_label",
+    "path_cell_type",
+    "path_day_bucket"
+  ],
+  "near_duplicate_maximum_hamming_distance": 8,
+  "output_csv": "data/splits/ooc-campaign-v2.csv",
+  "train_validation_output": "data/splits/ooc-campaign-v2-train-validation.csv",
+  "test_output": "data/splits/ooc-campaign-v2-test.csv",
+  "output_report": "reports/ooc-campaign-split-v2.json"
+}

@@ -86,6 +86,47 @@ def test_grouped_split_is_deterministic_and_disjoint() -> None:
     assert set(first.values()) == {"train", "validation", "test"}
 
 
+def test_holdout_can_reserve_category_groups_for_future_partitions() -> None:
+    records = [
+        {
+            "path": f"{group}.png",
+            "group": group,
+            "category": category,
+        }
+        for group, category in (
+            ("rare-a", "rare"),
+            ("rare-b", "rare"),
+            ("rare-c", "rare"),
+            ("common-a", "common"),
+            ("common-b", "common"),
+            ("common-c", "common"),
+        )
+    ]
+    from training.split_ooc import select_holdout_groups
+
+    selected, _ = select_holdout_groups(
+        records,
+        reference_records=records,
+        group_field="group",
+        category_weights={"category": 1.0},
+        target_fraction=0.34,
+        seed=7,
+        attempts=1000,
+        minimum_remaining_groups_per_category=2,
+    )
+    assert {record["category"] for record in records if record["group"] in selected} == {
+        "common",
+        "rare",
+    }
+    for category in {"common", "rare"}:
+        remaining = {
+            record["group"]
+            for record in records
+            if record["category"] == category and record["group"] not in selected
+        }
+        assert len(remaining) >= 2
+
+
 def test_near_duplicate_audit_recomputes_all_grouped_cross_split_pairs() -> None:
     records = [
         _audit_record("a.png", dhash=0, prefix="group-a", label="bad"),
