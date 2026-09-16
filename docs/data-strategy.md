@@ -1,58 +1,66 @@
-# Strategie de donnees
+# Stratégie de données
 
-## Objectif de l'audit
+## Décision en trois jeux
 
-Selectionner un dataset permettant une demonstration credible en moins de 25
-jours, avec une licence compatible, des labels exploitables et une separation
-entrainement/test sans fuite biologique.
+| Rôle | Dataset | Licence | Pourquoi |
+|---|---|---|---|
+| Démonstration OoC | [OOC Image Dataset](https://doi.org/10.5281/zenodo.10203721) | CC-BY-SA | 3 072 bright-fields et métadonnées OoC |
+| Validation microfluidique | [BBBC019 Microfluidics](https://bbbc.broadinstitute.org/BBBC019) | CC-BY 3.0 | images DIC et masques manuels |
+| Validation d'instances | [BBBC038](https://bbbc.broadinstitute.org/BBBC038) | CC0 | diversité et masques de noyaux |
 
-## Candidats prioritaires
+Cette combinaison couvre pertinence applicative, vérité terrain et
+généralisation sans imposer un téléchargement de plusieurs centaines de Go.
 
-| Source | Usage potentiel | Risque principal |
-|---|---|---|
-| BBBC | segmentation, morphologie, reponse a des composes | lien indirect avec organ-on-chip |
-| RxRx1 | embeddings et perturbations cellulaires | volume et effets de lot |
-| JUMP Cell Painting | profils phenotypiques et mecanismes d'action | complexite et cout de calcul |
-| IDR | validation externe sur imagerie biologique | heterogeneite des etudes |
-| Donnee OoC publique | validation directe du cas d'usage | disponibilite et annotations |
+## Fiche obligatoire avant téléchargement
 
-## Criteres de decision
+Pour chaque version :
 
-Chaque candidat doit etre note sur :
+- URL et date d'accès ;
+- identifiant/version ;
+- licence exacte et obligations ;
+- checksum des archives ;
+- modalités, canaux et résolution ;
+- structure des métadonnées ;
+- unité biologique et unité de réplication ;
+- cible, vérité terrain et métriques ;
+- règles de redistribution.
 
-1. pertinence organ-on-chip ou transfert justifie ;
-2. licence et redistribution ;
-3. qualite et provenance ;
-4. presence de controles, traitements et replicats ;
-5. labels disponibles ;
-6. volume compatible avec les ressources ;
-7. metrique scientifique defendable ;
-8. possibilite de validation externe.
+## Split anti-fuite
 
-## Protocole anti-fuite
+Le split suit la plus grande unité disponible : expérience, plaque, puce, puits,
+donneur ou acquisition. Des images voisines d'une même unité ne doivent pas être
+réparties aléatoirement entre entraînement et test.
 
-La separation ne doit pas etre faite aleatoirement image par image lorsqu'un
-meme puits, lot, plaque, donneur ou experience produit plusieurs images.
+Ordre préféré :
 
-Ordre prefere :
+1. validation externe sur un dataset distinct ;
+2. test par expérience ou plaque entière ;
+3. validation par groupe ;
+4. entraînement sur les groupes restants.
 
-1. test externe ou lot complet jamais vu ;
-2. validation par plaque ou experience ;
-3. entrainement sur les lots restants.
+Les normalisations et sélections de caractéristiques sont ajustées uniquement
+sur l'entraînement.
 
-Les transformations apprises, normalisations et selections de caracteristiques
-doivent etre ajustees uniquement sur l'entrainement.
+## Étapes
 
-## Metriques envisagees
+1. télécharger BBBC019 Microfluidics et exécuter la baseline ;
+2. télécharger BBBC038 stage 1 et figer un benchmark ;
+3. télécharger les métadonnées OoC avant les images ;
+4. vérifier les valeurs manquantes et unités ;
+5. sélectionner un sous-ensemble reproductible ;
+6. intégrer un manifeste versionné, jamais les données brutes dans Git.
 
-- segmentation : Dice, IoU, precision et rappel par objet ;
-- classification : AUROC, macro-F1, precision-recall ;
-- regression : MAE, RMSE, correlation et intervalles de confiance ;
-- calibration : Brier Score ou Expected Calibration Error ;
-- robustesse : performances par plaque, dose, lot et type d'image.
+## Métriques
 
-## Decision bloquante
+- premier plan : précision, rappel, F1, IoU ;
+- instances : Dice/IoU, précision/rappel par objet, erreur de comptage ;
+- robustesse : taux d'échec par modalité, condition et lot ;
+- performance : secondes par mégapixel et mémoire maximale ;
+- phénotype futur : effet standardisé et intervalle de confiance par unité.
 
-Aucun entrainement competitif ne commence avant la redaction d'une fiche de
-dataset avec licence, schema, split, cible et metrique principale.
+## Données écartées pour le premier jalon
+
+RxRx1 est riche mais pèse 296 Go et sa licence est CC-BY-NC-SA. JUMP est encore
+plus volumineux. Ces ressources pourront servir via profils pré-calculés, pas
+comme dépendance de la première démonstration.
 

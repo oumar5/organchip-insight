@@ -1,46 +1,60 @@
 # OrganChip Insight
 
-OrganChip Insight est une plateforme reproductible d'analyse d'images de
-microscopie pour comparer des groupes temoins et traites, quantifier des
-changements phenotypiques et produire des rapports scientifiques auditables.
+Plateforme locale et reproductible d'analyse d'images de microscopie pour les
+expériences organ-on-a-chip.
 
-Le projet est concu pour le challenge **AI4S Open Innovation: AI for Life
-Science**. Il est developpe localement, puis publie sous forme de depot public,
-de demonstration et de Writeup Kaggle.
+OrganChip Insight permet déjà de créer une expérience, importer des images,
+exécuter une segmentation sans entraînement, inspecter les overlays et retrouver
+les résultats après redémarrage. Les sorties actuelles sont **exploratoires** :
+elles ne constituent ni un diagnostic ni une conclusion biologique.
 
-## Architecture
+## Capacités actuelles
 
-- `backend/` : API FastAPI, stockage local, analyse d'image et futurs modeles ML.
-- `frontend/` : interface React, Vite et TypeScript.
-- `docs/` : architecture, exigences du challenge, strategie de donnees et roadmap.
-- `docker-compose.yml` : demonstration reproductible en deux conteneurs.
+- interface React/TypeScript en français et responsive ;
+- API FastAPI documentée par OpenAPI ;
+- expériences et résultats persistés dans SQLite ;
+- vérification de contenu et limite de taille des uploads ;
+- inférence CPU sans poids : Otsu, morphologie, composantes connexes ;
+- comptage, surfaces, diamètre, intensité, contraste et score qualité ;
+- overlays de segmentation inspectables ;
+- registre transparent des moteurs disponibles et candidats ;
+- même pipeline depuis l'interface, l'API ou `inference.py` ;
+- Docker Compose et suites de tests.
 
-## Demarrage rapide avec Docker
+## Démarrage recommandé
+
+Prérequis : Docker Desktop avec Docker Compose.
 
 ```bash
 cp .env.example .env
 docker compose up --build
 ```
 
-Puis ouvrir :
+Ouvrir ensuite :
 
 - application : <http://localhost:8080>
 - API : <http://localhost:8000>
-- documentation OpenAPI : <http://localhost:8000/docs>
+- OpenAPI : <http://localhost:8000/docs>
 
-## Developpement local
+Les données sont conservées dans le volume Docker `organchip_data`.
 
-Backend :
+Si un port est déjà occupé, modifier `.env` sans toucher au code :
 
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
-uvicorn app.main:app --reload
+```dotenv
+ORGANCHIP_BACKEND_PORT=18000
+ORGANCHIP_FRONTEND_PORT=18080
 ```
 
-Frontend :
+## Développement local
+
+Backend, depuis la racine :
+
+```bash
+uv sync --project backend --extra dev
+uv run --project backend uvicorn app.main:app --reload
+```
+
+Frontend, dans un second terminal :
 
 ```bash
 cd frontend
@@ -48,21 +62,61 @@ npm install
 npm run dev
 ```
 
-## Etat actuel
+Ouvrir <http://localhost:5173>. Vite relaie les appels `/api` vers le backend.
 
-Le socle permet deja de :
+## Inférence en ligne de commande
 
-- creer et lister des experiences ;
-- televerser des images PNG, JPEG ou TIFF ;
-- calculer une analyse d'image de reference (intensite, contraste et qualite) ;
-- afficher les resultats dans une interface scientifique ;
-- executer l'ensemble avec Docker.
+```bash
+cd backend
+uv run python inference.py image-1.png image-2.tif --output-dir artifacts/demo
+```
 
-La segmentation cellulaire, l'analyse phenotypique et la toxicite seront
-ajoutees apres selection et audit du dataset. Aucune metrique scientifique
-simulee n'est presentee comme un resultat de modele.
+La commande écrit les overlays et un `result.json` traçable.
+
+## Vérification
+
+```bash
+make check
+```
+
+Ou séparément :
+
+```bash
+uv run --project backend ruff check backend/app backend/tests backend/inference.py
+uv run --project backend pytest backend/tests
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
+docker compose config --quiet
+```
+
+## Architecture
+
+```text
+frontend React
+    -> API FastAPI
+        -> SQLite : expériences et résultats
+        -> fichiers : images et overlays
+        -> registre de moteurs
+            -> segmentation adaptative v1 (disponible)
+            -> µSAM (planifié)
+            -> Cellpose (revue de licence)
+```
 
 ## Documentation
 
-Commencer par [docs/README.md](docs/README.md).
+Commencer par l'[index documentaire](docs/README.md), puis lire :
 
+- [vision produit](docs/product-brief.md) ;
+- [inférence avant entraînement](docs/inference.md) ;
+- [recherche et décisions](docs/research.md) ;
+- [stratégie de données](docs/data-strategy.md) ;
+- [plan de validation](docs/validation.md) ;
+- [roadmap](docs/roadmap.md).
+
+## Positionnement challenge
+
+Catégorie prévue : **Tool & Platform** pour le challenge
+[AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien).
+
+La priorité scientifique suivante est un benchmark reproductible sur BBBC019
+Microfluidics et BBBC038, puis une démonstration sur le dataset OoC public.

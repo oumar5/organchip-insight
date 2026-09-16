@@ -1,12 +1,31 @@
-# Documentation
+# Documentation OrganChip Insight
 
-Ce dossier constitue la source de verite produit et scientifique du projet.
+Ce dossier est la source de vérité produit, scientifique et technique.
 
-- [architecture.md](architecture.md) : composants, flux et decisions techniques.
-- [competition-requirements.md](competition-requirements.md) : exigences AI4S et preuves attendues.
-- [data-strategy.md](data-strategy.md) : selection des datasets, licences et protocole anti-fuite.
-- [roadmap.md](roadmap.md) : feuille de route jusqu'a la soumission.
+## Commencer
 
-Les choix de modele, de dataset et de metriques doivent etre documentes ici
-avant d'etre integres au produit ou cites dans le rapport final.
+1. [Vision produit](product-brief.md)
+2. [Démarrage du projet](../README.md)
+3. [Inférence avant entraînement](inference.md)
+4. [Architecture](architecture.md)
+5. [API](api.md)
+
+## Recherche scientifique
+
+- [Recherche et décisions](research.md)
+- [Stratégie de données](data-strategy.md)
+- [Plan de validation](validation.md)
+- [Exigences du challenge](competition-requirements.md)
+
+## Produit et exploitation
+
+- [Expérience utilisateur](ux.md)
+- [Sécurité et données](security-and-data.md)
+- [Roadmap](roadmap.md)
+
+## Règle documentaire
+
+Une performance, une licence ou une capacité n'est annoncée comme acquise que si
+elle est reliée à une source, un script ou un test versionné. Les intentions
+restent marquées comme `planifié`, `candidat` ou `à valider`.
 

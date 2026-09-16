@@ -1,47 +1,60 @@
-# Roadmap de soumission
+# Roadmap vers la soumission
 
-## Phase 1 — Donnees et preuve de faisabilite
+État au 16 septembre 2026. La date limite publiée est le 10 octobre 2026.
 
-- auditer les datasets prioritaires ;
-- choisir une tache principale et une metrique ;
-- telecharger un sous-ensemble reproductible ;
-- etablir la baseline et le split anti-fuite ;
-- documenter la licence et les limites.
+## Jalon 1 — Socle démontrable
 
-## Phase 2 — Modele et evaluation
+- [x] FastAPI + React + Docker ;
+- [x] branche de travail `dev` ;
+- [x] création et persistance SQLite des expériences ;
+- [x] upload vérifié PNG/JPEG/TIFF ;
+- [x] inférence zéro entraînement ;
+- [x] overlays et métriques réelles ;
+- [x] registre de moteurs et limites visibles ;
+- [x] CLI `inference.py` ;
+- [x] tests backend, type-check et build ;
+- [x] documentation produit, recherche, UX et validation.
 
-- integrer une segmentation preentrainee ;
-- mesurer la baseline ;
-- fine-tuner uniquement si les labels le justifient ;
-- extraire les caracteristiques et embeddings ;
-- entrainer le modele phenotypique ;
-- ajouter calibration, ablations et analyse d'erreurs.
+## Jalon 2 — Données et benchmark
 
-## Phase 3 — Produit
+- [ ] manifeste BBBC019 Microfluidics avec checksum ;
+- [ ] script de téléchargement reproductible ;
+- [ ] métriques premier plan et rapport d'erreurs ;
+- [ ] benchmark BBBC038 ;
+- [ ] audit métadonnées du dataset OoC ;
+- [ ] comparaison baseline / µSAM / alternative admissible ;
+- [ ] décision de moteur documentée.
 
-- connecter le modele versionne a FastAPI ;
-- afficher masques, controles et traitements dans React ;
-- ajouter provenance, avertissements et incertitude ;
-- generer un rapport exportable ;
-- rendre la demonstration accessible et robuste.
+## Jalon 3 — Expérience scientifique
 
-## Phase 4 — Remise
+- [ ] rattacher chaque image à contrôle/traitement, puce, puits et temps ;
+- [ ] agrégation par unité expérimentale ;
+- [ ] comparaison avec tailles d'effet et intervalles ;
+- [ ] caractéristiques morphologiques plus riches ;
+- [ ] export CSV/JSON et rapport ;
+- [ ] analyse d'erreurs et cas hors distribution.
 
-- figer les resultats et artefacts ;
-- verifier la reproduction depuis un environnement propre ;
-- rediger le rapport de 15 a 20 pages ;
-- enregistrer une video de moins de cinq minutes ;
-- publier le depot et le Writeup Kaggle ;
-- preparer une presentation courte pour la finale.
+## Jalon 4 — Stabilisation produit
 
-## Definition de termine
+- [ ] file de tâches et progression ;
+- [ ] limites de pixels et sécurité renforcée ;
+- [ ] tests end-to-end navigateur ;
+- [ ] test sur machine propre CPU ;
+- [ ] déploiement public ou démonstration enregistrée de secours ;
+- [ ] audit accessibilité et performance.
 
-Le projet n'est soumis que si :
+## Jalon 5 — Remise
 
-- chaque chiffre du rapport provient d'un script versionne ;
-- le dataset et les licences sont cites ;
-- la demonstration fonctionne sans compte payant ;
-- Docker lance l'application sur une machine propre ;
-- les limites et echecs sont exposes ;
-- le Writeup contient video, depot, resume et rapport.
+- [ ] figer données, code, résultats et citations ;
+- [ ] rapport 15–20 pages ;
+- [ ] vidéo ≤ 5 minutes ;
+- [ ] dépôt public et release ;
+- [ ] Writeup Kaggle ;
+- [ ] présentation de finale.
+
+## Définition de terminé
+
+Le projet est prêt à soumettre lorsque chaque chiffre vient d'un script versionné,
+les licences sont vérifiées, Docker fonctionne sur une machine propre, les limites
+sont visibles et un évaluateur peut reproduire l'inférence sans service payant.
 
