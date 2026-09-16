@@ -9,6 +9,8 @@ Les données sources restent dans `data/raw/` et les images d'erreur générées
 ```bash
 make data-fetch
 make data-audit
+make split-ooc
+make train-ooc-baseline
 make benchmark-bbbc019
 ```
 
@@ -19,6 +21,14 @@ make benchmark-bbbc019
   agrégats, intervalles bootstrap et mesures image par image ;
 - `benchmarks/bbbc019-microfluidic-adaptive-v1.csv` : mêmes mesures par image,
   faciles à analyser dans un tableur.
+- `benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.json` et `.csv` :
+  benchmark zero-shot µSAM sur les mêmes 13 images et masques ;
+- `ooc-grouped-split-v1.json` et `../data/splits/ooc-grouped-v1.csv` : split
+  OoC groupé par préfixe d'acquisition ;
+- `benchmarks/ooc-handcrafted-image-quality-v1.json` : sélection sur validation,
+  évaluation test groupée, intervalles et tranches du baseline image-only ;
+- `predictions/ooc-handcrafted-image-quality-v1-test.csv` : 473 prédictions test
+  auditables ligne par ligne.
 
 Les overlays d'erreur utilisent vert pour les vrais positifs, orange pour les
 faux positifs et magenta pour les faux négatifs. Ils ne sont pas versionnés afin

@@ -45,6 +45,27 @@ Sur le dataset Zenodo OoC :
 - faire relire un échantillon d'overlays ;
 - ne pas créer de label de qualité qui n'existe pas dans les métadonnées.
 
+### Classification de qualité d'image
+
+Le premier baseline image-only utilise 50 caractéristiques déterministes, sans
+poids externe. Le modèle et le seuil sont sélectionnés uniquement sur la
+validation groupée par préfixe `YYMMDD` ; le test contient neuf préfixes tenus à
+l'écart.
+
+| Split | Macro-F1 | Balanced accuracy | ROC-AUC |
+|---|---:|---:|---:|
+| Validation | 0,761214 | 0,755174 | 0,825165 |
+| Test groupé | 0,692077 | 0,693102 | 0,802821 |
+
+L'intervalle bootstrap par préfixe du macro-F1 test est
+`[0,561284 ; 0,750882]`. Cette largeur et la baisse face à la validation doivent
+rester visibles. Le préfixe est seulement une heuristique de date ; ce résultat
+mesure une généralisation à des dates tenues à l'écart, pas à des puces ou
+expériences indépendantes documentées.
+
+Rapport :
+[`reports/benchmarks/ooc-handcrafted-image-quality-v1.json`](../reports/benchmarks/ooc-handcrafted-image-quality-v1.json).
+
 ## Intervalles et répétabilité
 
 - bootstrap par unité expérimentale, jamais seulement par image ;

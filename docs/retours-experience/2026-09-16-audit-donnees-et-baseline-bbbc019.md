@@ -4,6 +4,18 @@ Date : **16 septembre 2026**
 
 Statut : **benchmark réel terminé, décision µSAM confirmée**
 
+## Addendum du 16 septembre 2026
+
+L'archive OoC complète a ensuite pu être téléchargée et auditée. Le blocage
+décrit plus bas est donc historique : les chemins ont révélé que les 59
+préfixes `YYMMDD` traversaient les splits publiés. Un split groupé par préfixe a
+été figé et un premier classifieur image-only a été mesuré. Voir le
+[retour d'expérience du baseline OoC](2026-09-16-baseline-ooc-handcrafted.md).
+
+Le préfixe reste un proxy de date, pas un identifiant documenté de puce, puits,
+donneur ou expérience. Le nouveau test réduit un risque de fuite sans devenir
+pour autant une validation biologique indépendante.
+
 ## Résumé de la décision
 
 Le chemin complet fonctionne : téléchargement borné, checksum, extraction sûre,

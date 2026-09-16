@@ -22,8 +22,12 @@
 - [x] métriques premier plan et rapport d'erreurs ;
 - [ ] benchmark BBBC038 ;
 - [x] audit métadonnées du dataset OoC ;
-- [ ] comparaison baseline / µSAM / alternative admissible ;
-- [ ] décision de moteur documentée.
+- [x] split OoC groupé par préfixe d'acquisition ;
+- [x] baseline OoC image-only avec test tenu à l'écart ;
+- [x] comparaison segmentation adaptative / µSAM sur BBBC019 ;
+- [x] décision produit : aperçu adaptatif, analyse µSAM asynchrone ;
+- [ ] audit exhaustif des quasi-doublons sur le nouveau split ;
+- [ ] baseline de confondants mode/résolution avant CNN.
 
 ## Jalon 3 — Expérience scientifique
 
