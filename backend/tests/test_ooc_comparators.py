@@ -41,6 +41,7 @@ def test_categorical_comparator_is_fit_on_train_only() -> None:
     assert probabilities == pytest.approx([0.25, 0.75, 0.5])
     assert details["unseen_validation_categories"] == ["RGBA/4x4"]
     assert details["global_train_probability_good"] == 0.5
+    assert details["fixed_threshold"] == 0.5
 
 
 def test_evaluation_reports_mode_slices() -> None:

@@ -115,7 +115,7 @@ def _categorical_probabilities(
         "feature": field,
         "fit_split": "train",
         "smoothing": "Laplace alpha=1",
-        "threshold": 0.5,
+        "fixed_threshold": 0.5,
         "global_train_probability_good": round(global_probability, 6),
         "unseen_validation_categories": sorted(
             set(evaluation_categories) - set(category_probabilities)
@@ -311,6 +311,9 @@ def run(config_path: Path) -> dict[str, Any]:
         validation_rows,
         field="mode_resolution",
     )
+    shortcut_threshold, shortcut_selected_metrics = _select_threshold(
+        validation_labels, shortcut_probabilities
+    )
 
     model_path = PROJECT_ROOT / config["model_output"]
     model_path.parent.mkdir(parents=True, exist_ok=True)
@@ -399,11 +402,19 @@ def run(config_path: Path) -> dict[str, Any]:
             },
             "mode_resolution_shortcut": {
                 **shortcut_details,
-                "validation": _evaluation(
+                "selected_threshold": round(shortcut_threshold, 6),
+                "selection_metrics": shortcut_selected_metrics,
+                "fixed_threshold_validation": _evaluation(
                     validation_rows,
                     validation_labels,
                     shortcut_probabilities,
                     0.5,
+                ),
+                "selected_threshold_validation": _evaluation(
+                    validation_rows,
+                    validation_labels,
+                    shortcut_probabilities,
+                    shortcut_threshold,
                 ),
             },
             "handcrafted": {
@@ -483,10 +494,11 @@ def main() -> None:
     )
     report = run(config_path.resolve())
     summary = {
-        name: details["validation"]["global"]
-        if name != "handcrafted"
-        else details["selected_threshold_validation"]["global"]
-        for name, details in report["comparators"].items()
+        "majority": report["comparators"]["majority"]["validation"]["global"],
+        "mode_resolution_shortcut": report["comparators"]
+        ["mode_resolution_shortcut"]["selected_threshold_validation"]["global"],
+        "handcrafted": report["comparators"]["handcrafted"]
+        ["selected_threshold_validation"]["global"],
     }
     print(json.dumps(summary, indent=2, ensure_ascii=False, sort_keys=True))
 
