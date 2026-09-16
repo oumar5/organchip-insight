@@ -46,15 +46,8 @@ MICRO_SAM_ENGINE = AnalysisEngine(
     ],
 )
 
-
-def list_engines() -> list[AnalysisEngine]:
-    return [ADAPTIVE_SEGMENTATION_ENGINE, MICRO_SAM_ENGINE, CELLPOSE_ENGINE]
-
-
-def get_available_engine(engine_id: str) -> AnalysisEngine:
-    if (
-        engine_id != ADAPTIVE_SEGMENTATION_ENGINE.id
-        or ADAPTIVE_SEGMENTATION_ENGINE.status != "available"
-    ):
-        raise ValueError(f"Inference engine '{engine_id}' is not available")
-    return ADAPTIVE_SEGMENTATION_ENGINE
+REGISTERED_ENGINES = (
+    ADAPTIVE_SEGMENTATION_ENGINE,
+    MICRO_SAM_ENGINE,
+    CELLPOSE_ENGINE,
+)

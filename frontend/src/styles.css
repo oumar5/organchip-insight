@@ -401,6 +401,16 @@ h2 {
   box-shadow: 0 0 0 4px rgba(63, 187, 135, 0.12);
 }
 
+.system-status.loading span {
+  background: #d49a32;
+  box-shadow: 0 0 0 4px rgba(212, 154, 50, 0.12);
+}
+
+.system-status.unavailable span {
+  background: #c65c46;
+  box-shadow: 0 0 0 4px rgba(198, 92, 70, 0.12);
+}
+
 .alert {
   position: relative;
   display: grid;
@@ -631,12 +641,13 @@ select:focus {
 
 .engine-catalog-heading strong {
   color: #334a40;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
 }
 
 .engine-catalog-heading small {
   color: #718078;
-  font-size: 0.61rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
   text-align: right;
 }
 
@@ -660,7 +671,7 @@ select:focus {
 
 .engine-card-heading strong {
   color: #293d34;
-  font-size: 0.73rem;
+  font-size: 0.78rem;
 }
 
 .engine-status {
@@ -669,7 +680,7 @@ select:focus {
   border-radius: 999px;
   color: #5b665f;
   background: #e8ece9;
-  font-size: 0.56rem;
+  font-size: 0.64rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -698,14 +709,14 @@ select:focus {
 .engine-card p {
   margin: 7px 0 5px;
   color: #527064;
-  font-size: 0.65rem;
-  line-height: 1.4;
+  font-size: 0.72rem;
+  line-height: 1.45;
 }
 
 .engine-meta {
   display: block;
   color: #658174;
-  font-size: 0.59rem;
+  font-size: 0.68rem;
   font-weight: 700;
 }
 
@@ -713,8 +724,8 @@ select:focus {
   margin: 7px 0 0;
   padding-left: 16px;
   color: #68766f;
-  font-size: 0.6rem;
-  line-height: 1.4;
+  font-size: 0.7rem;
+  line-height: 1.45;
 }
 
 .engine-card li + li {
@@ -727,7 +738,7 @@ select:focus {
   border: 1px dashed #d5ded9;
   border-radius: 10px;
   color: #78857f;
-  font-size: 0.67rem;
+  font-size: 0.72rem;
   text-align: center;
 }
 

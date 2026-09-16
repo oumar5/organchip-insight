@@ -7,14 +7,12 @@ from fastapi.responses import FileResponse
 from PIL import Image, UnidentifiedImageError
 
 from app.config import get_settings
-from app.ml.pipeline import AdaptiveSegmentationAnalyzer
-from app.ml.registry import get_available_engine
+from app.ml.runtime import get_available_runtime
 from app.repository import repository
 from app.schemas import AnalysisResult, Experiment, ExperimentCreate, UploadSummary
 
 router = APIRouter()
 settings = get_settings()
-analyzer = AdaptiveSegmentationAnalyzer()
 
 ALLOWED_SUFFIXES = {".png", ".jpg", ".jpeg", ".tif", ".tiff"}
 
@@ -119,7 +117,7 @@ def analyze_experiment(
         )
 
     try:
-        engine = get_available_engine(engine_id)
+        engine, analyzer = get_available_runtime(engine_id)
     except ValueError as error:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

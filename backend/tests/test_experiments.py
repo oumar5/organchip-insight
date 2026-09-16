@@ -1,9 +1,11 @@
 from io import BytesIO
 
+import pytest
 from fastapi.testclient import TestClient
 from PIL import Image, ImageDraw
 
 from app.main import app
+from app.ml import registry, runtime
 
 client = TestClient(app)
 
@@ -128,3 +130,47 @@ def test_unavailable_inference_engines_are_rejected() -> None:
         )
         assert response.status_code == 422
         assert "is not available" in response.json()["detail"]
+
+
+def test_registry_fails_closed_when_status_has_no_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(registry.MICRO_SAM_ENGINE, "status", "available")
+
+    with pytest.raises(RuntimeError, match="mapping is inconsistent"):
+        runtime.list_inference_engines()
+
+
+def test_registry_can_report_no_available_engine(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(registry.ADAPTIVE_SEGMENTATION_ENGINE, "status", "experimental")
+
+    assert not any(engine.status == "available" for engine in runtime.list_inference_engines())
+    with pytest.raises(ValueError, match="is not available"):
+        runtime.get_available_runtime(registry.ADAPTIVE_SEGMENTATION_ENGINE.id)
+
+
+def test_runtime_dispatch_preserves_engine_provenance() -> None:
+    engine, analyzer = runtime.get_available_runtime(registry.ADAPTIVE_SEGMENTATION_ENGINE.id)
+
+    assert analyzer.engine is engine
+    assert analyzer.engine.id == registry.ADAPTIVE_SEGMENTATION_ENGINE.id
+
+
+def test_runtime_rejects_duplicate_registry_ids(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        runtime,
+        "REGISTERED_ENGINES",
+        (*runtime.REGISTERED_ENGINES, registry.ADAPTIVE_SEGMENTATION_ENGINE),
+    )
+
+    with pytest.raises(RuntimeError, match=r"duplicates=\['adaptive-segmentation-v1'\]"):
+        runtime.list_inference_engines()
+
+
+def test_runtime_rejects_forged_engine_metadata(monkeypatch: pytest.MonkeyPatch) -> None:
+    analyzer = runtime.ANALYZERS_BY_ENGINE_ID[registry.ADAPTIVE_SEGMENTATION_ENGINE.id]
+    forged_engine = registry.ADAPTIVE_SEGMENTATION_ENGINE.model_copy(
+        update={"name": "Métadonnées divergentes"}
+    )
+    monkeypatch.setattr(analyzer, "engine", forged_engine)
+
+    with pytest.raises(RuntimeError, match=r"mismatched=\['adaptive-segmentation-v1'\]"):
+        runtime.list_inference_engines()

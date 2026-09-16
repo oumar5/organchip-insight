@@ -99,6 +99,7 @@ function readableFilename(filename: string): string {
 export default function App() {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [engines, setEngines] = useState<AnalysisEngine[]>([]);
+  const [engineRegistryLoaded, setEngineRegistryLoaded] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEngineId, setSelectedEngineId] = useState("");
   const [form, setForm] = useState<ExperimentCreate>(initialForm);
@@ -115,6 +116,17 @@ export default function App() {
     () => engines.find((engine) => engine.id === selectedEngineId) ?? null,
     [engines, selectedEngineId],
   );
+  const hasAvailableEngine = engines.some((engine) => engine.status === "available");
+  const inferenceStatus = !engineRegistryLoaded
+    ? "loading"
+    : hasAvailableEngine
+      ? "ready"
+      : "unavailable";
+  const inferenceStatusLabel = !engineRegistryLoaded
+    ? "Vérification de l’inférence…"
+    : hasAvailableEngine
+      ? "Inférence disponible"
+      : "Inférence indisponible";
 
   async function refreshExperiments(preferredId?: string) {
     const items = await listExperiments();
@@ -125,16 +137,18 @@ export default function App() {
   useEffect(() => {
     Promise.all([
       refreshExperiments(),
-      listInferenceEngines().then((items) => {
-        setEngines(items);
-        setSelectedEngineId((currentId) => {
-          const currentEngine = items.find((engine) => engine.id === currentId);
-          if (currentEngine?.status === "available") {
-            return currentId;
-          }
-          return items.find((engine) => engine.status === "available")?.id ?? "";
-        });
-      }),
+      listInferenceEngines()
+        .then((items) => {
+          setEngines(items);
+          setSelectedEngineId((currentId) => {
+            const currentEngine = items.find((engine) => engine.id === currentId);
+            if (currentEngine?.status === "available") {
+              return currentId;
+            }
+            return items.find((engine) => engine.status === "available")?.id ?? "";
+          });
+        })
+        .finally(() => setEngineRegistryLoaded(true)),
     ]).catch((requestError: Error) => setError(requestError.message));
   }, []);
 
@@ -266,8 +280,8 @@ export default function App() {
             <p className="eyebrow">AI for life science · espace de travail</p>
             <h1>Transformer les images en preuves mesurables.</h1>
           </div>
-          <div className="system-status">
-            <span /> Inférence disponible
+          <div className={`system-status ${inferenceStatus}`}>
+            <span /> {inferenceStatusLabel}
           </div>
         </header>
 

@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+from app.ml.runtime import inference_ready
+
 router = APIRouter()
 
 
@@ -9,5 +11,5 @@ def health() -> dict[str, str | bool]:
         "status": "ok",
         "service": "organchip-insight-api",
         "version": "0.2.0",
-        "inference_ready": True,
+        "inference_ready": inference_ready(),
     }

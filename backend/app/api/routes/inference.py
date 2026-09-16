@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.ml.registry import list_engines
+from app.ml.runtime import list_inference_engines
 from app.schemas import AnalysisEngine
 
 router = APIRouter()
@@ -8,4 +8,4 @@ router = APIRouter()
 
 @router.get("/engines", response_model=list[AnalysisEngine])
 def get_inference_engines() -> list[AnalysisEngine]:
-    return list_engines()
+    return list_inference_engines()
