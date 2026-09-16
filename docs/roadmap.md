@@ -27,7 +27,11 @@
 - [x] comparaison segmentation adaptative / µSAM sur BBBC019 ;
 - [x] décision produit : aperçu adaptatif, analyse µSAM asynchrone ;
 - [x] audit exhaustif des quasi-doublons sur le nouveau split ;
-- [x] baseline de confondants mode/résolution avant CNN.
+- [x] baseline de confondants mode/résolution avant CNN ;
+- [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
+- [x] smoke CPU avec hashes d'images vérifiés et export ONNX contrôlé ;
+- [ ] validation CNN complète sur GPU Kaggle ;
+- [ ] ouverture unique du test après gel de la sélection et des hashes.
 
 ## Jalon 3 — Expérience scientifique
 

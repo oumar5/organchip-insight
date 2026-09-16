@@ -20,6 +20,8 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - overlays de segmentation inspectables ;
 - registre transparent des moteurs disponibles et candidats ;
 - même pipeline depuis l'interface, l'API ou `inference.py` ;
+- pipeline expérimental MobileNetV3 reproductible, avec modes `smoke`,
+  `validation` et `final-eval` isolés ;
 - Docker Compose et suites de tests.
 
 ## Démarrage recommandé
@@ -103,6 +105,24 @@ make benchmark-bbbc019
 
 Les données brutes restent dans `data/raw/`, hors Git. Le manifeste, l'audit et
 les résultats versionnés sont décrits dans [data/README.md](data/README.md).
+
+Le pipeline CNN OoC a passé un smoke test CPU et une vérification d'export
+ONNX. Ce contrôle de 12 images vérifie le chemin technique, pas la performance
+du modèle : la validation complète sur GPU Kaggle et l'évaluation finale du
+test gelé restent à réaliser. Voir le
+[retour d'expérience CNN](docs/retours-experience/2026-09-16-pipeline-cnn-smoke.md).
+
+Contrôles locaux du pipeline et du notebook :
+
+```bash
+make cnn-protocol-test
+make cnn-notebook-check
+CNN_RUN_ID=smoke-local-manual-v1 make cnn-smoke
+```
+
+Le [notebook Kaggle](notebooks/ooc-cnn-kaggle.ipynb) reste hors ligne par
+construction : aucune installation, aucun téléchargement implicite de poids et
+aucune action de publication Kaggle.
 
 ## Architecture
 

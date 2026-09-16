@@ -1,6 +1,8 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-notebook-check
 
 MICROSAM_ENV ?= $(CURDIR)/data/cache/microsam-env
+CNN_PYTHON ?= $(MICROSAM_ENV)/bin/python
+CNN_RUN_ID ?= smoke-local-manual
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
@@ -20,7 +22,7 @@ frontend-build:
 frontend-typecheck:
 	npm --prefix frontend run typecheck
 
-check: backend-lint backend-test frontend-typecheck frontend-build
+check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check
 	docker compose config --quiet
 
 data-fetch:
@@ -37,6 +39,18 @@ split-ooc:
 
 train-ooc-baseline:
 	uv run --project backend --extra ml python backend/training/train_ooc_baseline.py --config backend/training/configs/ooc-handcrafted-baseline-v1.json
+
+cnn-build-manifests:
+	PYTHONPATH=backend uv run --project backend python -m training.ooc_cnn.build_manifests
+
+cnn-protocol-test:
+	uv run --project backend --extra dev pytest -q backend/tests/test_ooc_cnn_protocol.py backend/tests/test_ooc_cnn_data.py backend/tests/test_ooc_cnn_metrics.py backend/tests/test_ooc_cnn_runtime.py
+
+cnn-smoke:
+	PYTHONPATH=backend $(CNN_PYTHON) -m training.ooc_cnn.cli train --mode smoke --device cpu --run-id $(CNN_RUN_ID)
+
+cnn-notebook-check:
+	uv run --project backend python backend/scripts/check_ooc_cnn_notebook.py
 
 benchmark-bbbc019:
 	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json
