@@ -37,13 +37,13 @@ préparé seulement après le run de validation retenu.
 Chemins montés retenus pour la validation campagne v2 :
 
 ```text
-/kaggle/input/organchip-insight-source-campaign-v2/organchip-insight
-/kaggle/input/organchip-train-validation-v2/train-validation/images
-/kaggle/input/organchip-cnn-offline-resources-v1/resources
+/kaggle/input/datasets/oumarbenlol/organchip-insight-source-campaign-v2/organchip-insight
+/kaggle/input/datasets/oumarbenlol/organchip-train-validation-v2/train-validation/images
+/kaggle/input/datasets/oumarbenlol/organchip-cnn-offline-resources-v1/resources
 ```
 
 Le notebook refuse un smoke ou une validation si
-`/kaggle/input/organchip-frozen-test-v2-zip` est présent.
+`/kaggle/input/datasets/oumarbenlol/organchip-frozen-test-v2-zip` est présent.
 
 Ne jamais envoyer le dépôt entier : exclure `.git`, `.env`, clés, caches,
 expériences personnelles et artefacts de test. L'outil de staging doit utiliser
