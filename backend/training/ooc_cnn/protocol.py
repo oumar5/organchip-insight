@@ -148,7 +148,9 @@ def load_frozen_manifest(
         "selection_split": "validation",
         "test_used_for_selection": False,
         "test_manifest_opened_while_freezing": False,
-        "final_evaluation_requires_single_access_receipt": True,
+        "workspace_receipt_required_before_test_open": True,
+        "workspace_receipt_blocks_repeat_access": True,
+        "global_single_access_enforced": False,
     }:
         raise ValueError("Frozen manifest policy is invalid")
     if selection.get("checkpoint_metric") != "validation macro_f1 at threshold 0.5":
@@ -272,6 +274,8 @@ def validate_receipt_chain(receipt_directory: Path) -> tuple[Path, ...]:
         receipt = _load_json(path, "Test access receipt")
         if receipt.get("schema_version") != 1:
             raise ValueError(f"Test access receipt schema is invalid: {path}")
+        if receipt.get("receipt_scope") != "workspace_receipt_directory":
+            raise ValueError(f"Test access receipt scope is invalid: {path}")
         if receipt.get("sequence") != expected_sequence:
             raise ValueError(f"Test access receipt sequence is invalid: {path}")
         if receipt.get("previous_receipt_sha256") != previous_file_sha256:
@@ -303,7 +307,8 @@ def append_test_access_receipt(
         previous_paths = validate_receipt_chain(receipt_directory)
         if previous_paths:
             raise RuntimeError(
-                "The frozen CNN test manifest has already been authorized once"
+                "The frozen CNN test manifest has already been authorized in this "
+                "workspace receipt directory"
             )
         previous_sha256 = sha256_file(previous_paths[-1]) if previous_paths else None
         receipt_id = (receipt_id_factory or (lambda: uuid.uuid4().hex))()
@@ -321,6 +326,7 @@ def append_test_access_receipt(
             "event": "test_manifest_open_authorized",
             "created_at_utc": created_at.isoformat(),
             "mode": RunMode.FINAL_EVAL.value,
+            "receipt_scope": "workspace_receipt_directory",
             "confirmation": FINAL_EVAL_CONFIRMATION,
             "reason": reason,
             "experiment_id": frozen_manifest.experiment_id,

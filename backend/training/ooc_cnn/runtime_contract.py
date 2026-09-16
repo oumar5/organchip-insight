@@ -5,13 +5,14 @@ from __future__ import annotations
 import importlib.metadata
 import json
 import platform
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 
-from training.ooc_cnn.manifests import sha256_file
+from training.ooc_cnn.manifests import sha256_file, validate_sha256
 from training.ooc_cnn.protocol import RunMode
 
 
@@ -37,14 +38,9 @@ def _pip_freeze() -> list[str]:
     return sorted(values, key=str.lower)
 
 
-def validate_runtime_contract(
-    *,
-    contract_path: Path,
-    expected_sha256: str,
-    mode: RunMode | str,
-    requested_device: str,
-) -> tuple[str, dict[str, Any]]:
-    if sha256_file(contract_path) != expected_sha256:
+def _load_contract(contract_path: Path, expected_sha256: str) -> dict[str, Any]:
+    expected = validate_sha256(expected_sha256, "runtime contract expected_sha256")
+    if sha256_file(contract_path) != expected:
         raise RuntimeError("CNN runtime contract checksum mismatch")
     try:
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
@@ -52,10 +48,70 @@ def validate_runtime_contract(
         raise RuntimeError("CNN runtime contract is not valid JSON") from error
     if not isinstance(contract, dict) or contract.get("schema_version") != 1:
         raise RuntimeError("CNN runtime contract must use schema_version 1")
+    return contract
+
+
+def _required_hash_names(
+    contract: dict[str, Any], run_mode: RunMode
+) -> tuple[str, ...]:
+    required_hashes = contract.get("required_hashes")
+    if not isinstance(required_hashes, dict):
+        raise RuntimeError("CNN runtime required-hash contract is invalid")
+    names: list[str] = []
+    for section in ("all_modes", run_mode.value):
+        values = required_hashes.get(section, [])
+        if (
+            not isinstance(values, list)
+            or not all(isinstance(value, str) and value for value in values)
+        ):
+            raise RuntimeError(f"CNN runtime required hashes are invalid: {section}")
+        names.extend(values)
+    if len(set(names)) != len(names):
+        raise RuntimeError("CNN runtime required hashes contain duplicates")
+    return tuple(names)
+
+
+def validate_required_hashes(
+    *,
+    contract_path: Path,
+    expected_sha256: str,
+    mode: RunMode | str,
+    provided_hashes: Mapping[str, object],
+) -> dict[str, str]:
+    """Validate that every mode-required digest is explicitly present and shaped."""
+
+    contract = _load_contract(contract_path, expected_sha256)
+    preflight = contract.get("preflight")
+    if not isinstance(preflight, dict) or preflight.get(
+        "fail_if_required_hash_missing"
+    ) is not True:
+        raise RuntimeError("CNN runtime required-hash preflight policy is invalid")
+    run_mode = RunMode(mode)
+    required_names = _required_hash_names(contract, run_mode)
+    missing = [name for name in required_names if name not in provided_hashes]
+    if missing:
+        raise RuntimeError(
+            "CNN runtime required hashes are missing: " + ", ".join(missing)
+        )
+    return {
+        name: validate_sha256(provided_hashes[name], f"required hash {name}")
+        for name in required_names
+    }
+
+
+def validate_runtime_contract(
+    *,
+    contract_path: Path,
+    expected_sha256: str,
+    mode: RunMode | str,
+    requested_device: str,
+) -> tuple[str, dict[str, Any]]:
+    contract = _load_contract(contract_path, expected_sha256)
     if contract.get("execution_policy") != {
         "internet_required": False,
         "network_installation_allowed": False,
         "implicit_model_downloads_allowed": False,
+        "test_access_receipt_scope": "workspace",
         "test_manifest_access_modes": ["final-eval"],
     }:
         raise RuntimeError("CNN runtime execution policy is invalid")
@@ -64,9 +120,38 @@ def validate_runtime_contract(
     runtime = contract.get("runtime")
     if not isinstance(mode_contract, dict) or not isinstance(runtime, dict):
         raise RuntimeError("CNN runtime contract is incomplete")
-    weights_required = run_mode in {RunMode.VALIDATION, RunMode.FINAL_EVAL}
+    preflight = contract.get("preflight")
+    boolean_flags = (
+        "fail_if_network_installation_requested",
+        "fail_if_implicit_weight_download_requested",
+        "fail_if_required_hash_missing",
+        "fail_if_hash_mismatch",
+        "fail_if_torchvision_pair_unlisted",
+    )
+    if not isinstance(preflight, dict) or any(
+        preflight.get(name) is not True for name in boolean_flags
+    ):
+        raise RuntimeError("CNN runtime preflight policy is invalid")
+    if preflight.get("fail_if_gpu_missing_in_modes") != [
+        "validation",
+        "final-eval",
+    ]:
+        raise RuntimeError("CNN runtime GPU preflight policy is invalid")
+    initial_weights_modes = (
+        contract.get("local_inputs", {})
+        .get("initial_weights", {})
+        .get("required_for_modes")
+    )
+    if initial_weights_modes != ["validation"]:
+        raise RuntimeError("CNN runtime initial-weight input policy is invalid")
+    weights_required = run_mode is RunMode.VALIDATION
     if mode_contract.get("pretrained_weights_required") is not weights_required:
         raise RuntimeError("CNN runtime pretrained-weight policy is invalid")
+    if run_mode is RunMode.FINAL_EVAL and mode_contract.get(
+        "test_access_receipt_scope"
+    ) != "workspace":
+        raise RuntimeError("CNN runtime final receipt scope is invalid")
+    required_hash_names = _required_hash_names(contract, run_mode)
 
     python_specifier = runtime.get("python", {}).get("specifier")
     if not isinstance(python_specifier, str) or Version(
@@ -132,6 +217,7 @@ def validate_runtime_contract(
         "mode": run_mode.value,
         "execution_policy": contract["execution_policy"],
         "declared_required_hashes": contract.get("required_hashes"),
+        "required_hashes_for_mode": list(required_hash_names),
         "python": platform.python_version(),
         "packages": installed,
         "torch_cuda_version": torch.version.cuda,

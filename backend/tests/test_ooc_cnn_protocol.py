@@ -144,7 +144,9 @@ def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
                     "selection_split": "validation",
                     "test_used_for_selection": False,
                     "test_manifest_opened_while_freezing": False,
-                    "final_evaluation_requires_single_access_receipt": True,
+                    "workspace_receipt_required_before_test_open": True,
+                    "workspace_receipt_blocks_repeat_access": True,
+                    "global_single_access_enforced": False,
                 },
                 "selection": {
                     "checkpoint_metric": "validation macro_f1 at threshold 0.5",
@@ -367,7 +369,7 @@ def test_final_eval_requires_all_authorizations(
     assert not (tmp_path / "reports/test-access").exists()
 
 
-def test_final_eval_writes_receipt_before_test_open_and_refuses_second_access(
+def test_final_eval_writes_receipt_before_test_open_and_refuses_same_workspace_retry(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     paths = _fixture_project(tmp_path)
@@ -409,7 +411,7 @@ def test_final_eval_writes_receipt_before_test_open_and_refuses_second_access(
         now=lambda: base_time,
         receipt_id_factory=lambda: "receipt-one",
     )
-    with pytest.raises(RuntimeError, match="already been authorized once"):
+    with pytest.raises(RuntimeError, match="workspace receipt directory"):
         load_run_manifests(
             **common,
             now=lambda: base_time + timedelta(seconds=1),
@@ -422,6 +424,7 @@ def test_final_eval_writes_receipt_before_test_open_and_refuses_second_access(
     receipt = json.loads(chain[0].read_text(encoding="utf-8"))
     assert receipt["previous_receipt_sha256"] is None
     assert receipt["reason"] == "frozen model final evaluation"
+    assert receipt["receipt_scope"] == "workspace_receipt_directory"
 
 
 def test_final_eval_opens_external_test_manifest_only_after_receipt(
@@ -669,7 +672,15 @@ def test_receipt_chain_detects_tampering(tmp_path: Path) -> None:
         receipt_id_factory=lambda: "receipt-one",
     )
     receipt_path = validate_receipt_chain(receipt_directory)[0]
-    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    original_receipt = receipt_path.read_text(encoding="utf-8")
+    receipt = json.loads(original_receipt)
+    receipt["receipt_scope"] = "global"
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="scope is invalid"):
+        validate_receipt_chain(receipt_directory)
+
+    receipt = json.loads(original_receipt)
     receipt["reason"] = "tampered reason"
     receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
 

@@ -194,6 +194,7 @@ def check_notebook(path: Path) -> None:
             "load_split_lock",
             "SPLIT_LOCK.source_sha256 != CANONICAL_SPLIT_SHA256",
             "validate_runtime_contract",
+            "validate_required_hashes",
             "torch.cuda.is_available()",
             "torch.cuda.get_device_name(0)",
             'RUN_MODE in {"validation", "final-eval"}',
@@ -205,6 +206,9 @@ def check_notebook(path: Path) -> None:
             '"canonical_grouped_split_sha256": SPLIT_LOCK.source_sha256',
             '"train_validation_manifest_sha256"',
             '"dataset_inventory_sha256"',
+            "COMMON_REQUIRED_HASHES",
+            "VALIDATED_REQUIRED_HASHES",
+            "provided_hashes=PROVIDED_REQUIRED_HASHES",
             "load_initial_weights",
         ),
         "preflight cell",
@@ -300,6 +304,10 @@ def check_notebook(path: Path) -> None:
             '"--reason", FINAL_EVAL_REASON',
             'if artifact_name != "test_manifest"',
             "external_test_manifest = FINAL_BUNDLE_ROOT / TEST_MANIFEST_RELATIVE",
+            "FINAL_REQUIRED_HASHES = validate_required_hashes",
+            '"frozen_manifest_sha256"',
+            '"checkpoint_sha256"',
+            '"test_manifest_sha256"',
         ),
         "final-eval cell",
     )
@@ -315,12 +323,16 @@ def check_notebook(path: Path) -> None:
     command_position = final.index("FINAL_RESULT = run_cli([")
     if max(guard_positions) >= command_position:
         raise ValueError("Final evaluation command must appear after every explicit guard")
+    if final.index("FINAL_REQUIRED_HASHES = validate_required_hashes") >= command_position:
+        raise ValueError("Final required hashes must be validated before test access")
 
     non_final = "\n".join(source for tag, source in tagged_cells.items() if tag != "final-eval")
     if "--test-manifest" in non_final:
         raise ValueError("Only the final-eval cell may pass a test manifest")
     if code.count('"--image-root"') < 3:
         raise ValueError("Smoke, validation, and final-eval must all pass --image-root")
+    if "reports/test-access/ooc-cnn" not in all_text:
+        raise ValueError("Notebook must require preserving the workspace test receipt")
 
 
 def main() -> int:

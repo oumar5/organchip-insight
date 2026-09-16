@@ -8,6 +8,7 @@ from training.ooc_cnn.export import _load_selection_report
 from training.ooc_cnn.freeze import create_frozen_manifest
 from training.ooc_cnn.manifests import sha256_file
 from training.ooc_cnn.provenance import artifact_record, source_hashes
+from training.ooc_cnn.runtime_contract import validate_required_hashes
 from training.ooc_cnn.weights import load_initial_weights
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +31,70 @@ def test_repository_cnn_config_is_self_consistent() -> None:
         config.train_validation_manifest_path
     )
     assert config.split_lock_sha256 == sha256_file(config.split_lock_path)
+
+
+def test_runtime_contract_requires_only_hashes_consumed_by_each_mode() -> None:
+    contract_path = (
+        PROJECT_ROOT / "backend/experiments/ooc-cnn/kaggle-runtime-contract.json"
+    )
+    contract_sha256 = sha256_file(contract_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    common_names = contract["required_hashes"]["all_modes"]
+    common = {name: "0" * 64 for name in common_names}
+
+    smoke = validate_required_hashes(
+        contract_path=contract_path,
+        expected_sha256=contract_sha256,
+        mode="smoke",
+        provided_hashes=common,
+    )
+    validation = validate_required_hashes(
+        contract_path=contract_path,
+        expected_sha256=contract_sha256,
+        mode="validation",
+        provided_hashes={**common, "initial_weights_sha256": "1" * 64},
+    )
+    final = validate_required_hashes(
+        contract_path=contract_path,
+        expected_sha256=contract_sha256,
+        mode="final-eval",
+        provided_hashes={
+            **common,
+            "frozen_manifest_sha256": "2" * 64,
+            "checkpoint_sha256": "3" * 64,
+            "test_manifest_sha256": "4" * 64,
+        },
+    )
+
+    assert set(smoke) == set(common_names)
+    assert set(validation) == {*common_names, "initial_weights_sha256"}
+    assert set(final) == {
+        *common_names,
+        "frozen_manifest_sha256",
+        "checkpoint_sha256",
+        "test_manifest_sha256",
+    }
+    assert contract["modes"]["final-eval"]["pretrained_weights_required"] is False
+    assert contract["local_inputs"]["initial_weights"]["required_for_modes"] == [
+        "validation"
+    ]
+    assert not {
+        "initial_weights_sha256",
+        "preprocessing_sha256",
+        "labels_sha256",
+    } & set(final)
+
+    with pytest.raises(RuntimeError, match="checkpoint_sha256"):
+        validate_required_hashes(
+            contract_path=contract_path,
+            expected_sha256=contract_sha256,
+            mode="final-eval",
+            provided_hashes={
+                **common,
+                "frozen_manifest_sha256": "2" * 64,
+                "test_manifest_sha256": "4" * 64,
+            },
+        )
 
 
 def test_initial_weights_require_the_pinned_torchvision_provenance(

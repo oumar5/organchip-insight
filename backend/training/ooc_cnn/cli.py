@@ -57,7 +57,10 @@ def _parser() -> argparse.ArgumentParser:
     freeze.add_argument("--checkpoint", type=Path, required=True)
     freeze.add_argument("--output", type=Path, required=True)
 
-    final = subparsers.add_parser("final-eval", help="Open the frozen test exactly once")
+    final = subparsers.add_parser(
+        "final-eval",
+        help="Open the frozen test after persisting a workspace-scoped receipt",
+    )
     _add_common_config(final)
     final.add_argument("--device", choices=("auto", "cuda"), default="auto")
     final.add_argument("--test-manifest", type=Path, required=True)

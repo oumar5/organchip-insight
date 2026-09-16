@@ -5,6 +5,7 @@
     "internet_required": false,
     "network_installation_allowed": false,
     "implicit_model_downloads_allowed": false,
+    "test_access_receipt_scope": "workspace",
     "test_manifest_access_modes": [
       "final-eval"
     ]
@@ -30,9 +31,10 @@
         "cuda"
       ],
       "gpu_required": true,
-      "pretrained_weights_required": true,
+      "pretrained_weights_required": false,
       "frozen_manifest_required": true,
-      "test_access_receipt_required": true
+      "test_access_receipt_required": true,
+      "test_access_receipt_scope": "workspace"
     }
   },
   "runtime": {
@@ -133,8 +135,7 @@
     "split_lock_required": true,
     "initial_weights": {
       "required_for_modes": [
-        "validation",
-        "final-eval"
+        "validation"
       ],
       "source": "explicit-local-file",
       "torchvision_default_weights_allowed": false,
@@ -161,12 +162,9 @@
       "initial_weights_sha256"
     ],
     "final-eval": [
-      "initial_weights_sha256",
       "frozen_manifest_sha256",
       "checkpoint_sha256",
-      "test_manifest_sha256",
-      "preprocessing_sha256",
-      "labels_sha256"
+      "test_manifest_sha256"
     ]
   },
   "preflight": {

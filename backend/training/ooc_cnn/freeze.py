@@ -172,7 +172,9 @@ def create_frozen_manifest(
             "selection_split": "validation",
             "test_used_for_selection": False,
             "test_manifest_opened_while_freezing": False,
-            "final_evaluation_requires_single_access_receipt": True,
+            "workspace_receipt_required_before_test_open": True,
+            "workspace_receipt_blocks_repeat_access": True,
+            "global_single_access_enforced": False,
         },
         "selection": {
             "checkpoint_metric": selection.get("checkpoint_metric"),
