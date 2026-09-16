@@ -18,9 +18,11 @@ Un seul dossier de préparation **local**, mais des entrées Kaggle distinctes :
 | Test gelé | Images et manifeste de la partition test campagne v2 | À ne joindre qu'après le gel de la sélection |
 
 Le notebook est un objet Kaggle séparé, **pas un quatrième dataset**. Pour la
-sonde actuelle, il n'utilise aucune entrée. Les outputs (checkpoints, rapports,
-ONNX) restent les sorties versionnées du notebook ; nul besoin de créer un
-dataset pour chaque fichier ou chaque run.
+sonde actuelle, il n'utilise aucune entrée. Un `Quick Save` ou un push GitHub
+enregistre le notebook, mais ne garantit pas la publication de
+`/kaggle/working`. La validation campagne v2 l'a confirmé : la CLI ne récupérait
+que la log de la version, pas les 87,3 MiB d'artefacts du workspace. Les sorties
+doivent donc être archivées explicitement avant l'arrêt de la session.
 
 On pourrait réunir code et ressources pour n'avoir que deux datasets. Ce n'est
 pas interdit, mais le code change plus souvent que les poids et les dépendances.
@@ -44,6 +46,47 @@ Chemins montés retenus pour la validation campagne v2 :
 
 Le notebook refuse un smoke ou une validation si
 `/kaggle/input/datasets/oumarbenlol/organchip-frozen-test-v2-zip` est présent.
+
+## Conservation des sorties
+
+La cellule `archive` du notebook appelle le CLI partagé après le gel de la
+validation. Elle crée :
+
+```text
+/kaggle/working/organchip-cnn-validation-campaign-v2-artifacts-v1.zip
+```
+
+Le ZIP est déterministe : ordre et dates internes fixes, dossier racine unique,
+permissions normalisées et `artifact-manifest.json` contenant taille et SHA-256
+de chaque fichier. Il contient uniquement le dossier du run — checkpoints,
+rapports, prédictions, figures, historique, gel et export ONNX — et jamais les
+images sous `/kaggle/input`. Le CLI refuse les liens symboliques, un ZIP vide,
+une destination située dans le run et l'écrasement silencieux d'une archive.
+
+Procédure obligatoire :
+
+1. exécuter la cellule `archive` après l'export ONNX et le gel ;
+2. noter la taille et le SHA-256 affichés ;
+3. télécharger le ZIP depuis le lien de cellule ou le panneau **Output** ;
+4. vérifier localement avec `shasum -a 256 NOM_DU_ZIP` ;
+5. déposer la copie locale dans `data/experiments/ooc-cnn/`, chemin ignoré par
+   Git ;
+6. créer une version privée Kaggle Model pour les artefacts déployables, après
+   décision explicite sur leur licence, et une version privée Kaggle Dataset
+   pour le bundle complet de preuve ;
+7. enregistrer leurs identifiants, versions et SHA-256 dans le REX et le registre
+   de modèles.
+
+GitHub reste la source du code, du notebook **propre et non exécuté**, des
+configurations, de la documentation et des manifests légers. Kaggle Models
+conserve les binaires destinés à l'inférence (`onnx`) et à la reprise
+(`pytorch`). Le Dataset privé conserve l'historique complet du run. Le ZIP local
+est une sauvegarde secondaire, pas la source de vérité du code.
+
+Tant que la licence des poids n'est pas décidée, le conteneur Kaggle Model peut
+rester privé et vide : on ne crée aucune variation, car Kaggle exige une licence
+pour celle-ci. Le Dataset privé, marqué `unknown`, reste alors la source de
+preuve binaire sans prétendre accorder des droits de réutilisation.
 
 ## Reprendre une validation interrompue
 
@@ -113,8 +156,11 @@ La publication de la release et le choix de licence restent des décisions sépa
 5. Sur confirmation, créer les datasets privés puis lancer le notebook de
    validation avec des versions identifiées. Ne pas importer deux copies du même
    notebook, l'une manuellement et l'autre par la CLI.
-6. Archiver les résultats. Après sélection gelée et décision explicite seulement,
-   joindre les entrées finales et ouvrir l'évaluation test.
+6. Exécuter la cellule `archive`, télécharger le ZIP et vérifier son SHA-256.
+7. Versionner les binaires dans Kaggle Models et le bundle de preuve dans un
+   Dataset privé, sans ajouter ces gros fichiers à GitHub.
+8. Après sélection gelée et décision explicite seulement, joindre les entrées
+   finales et ouvrir l'évaluation test.
 
 L'utilisateur n'a pas besoin de créer les notebooks manuellement tant que la CLI
 authentifiée fonctionne. Le dépôt peut rester privé pendant cette préparation.

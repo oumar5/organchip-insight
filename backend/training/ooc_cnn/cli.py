@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from training.ooc_cnn.archive import create_artifact_archive
 from training.ooc_cnn.configuration import ExperimentConfig, load_experiment_config
 from training.ooc_cnn.engine import (
     assert_run_destination_available,
@@ -80,6 +81,13 @@ def _parser() -> argparse.ArgumentParser:
     export.add_argument("--selection-report", type=Path, required=True)
     export.add_argument("--selection-report-sha256", required=True)
     export.add_argument("--output-directory", type=Path, required=True)
+
+    archive = subparsers.add_parser(
+        "archive", help="Create a deterministic ZIP of one completed run"
+    )
+    archive.add_argument("--run-directory", type=Path, required=True)
+    archive.add_argument("--output", type=Path, required=True)
+    archive.add_argument("--archive-root")
     return parser
 
 
@@ -269,6 +277,14 @@ def _run_export(arguments: argparse.Namespace, config: ExperimentConfig) -> dict
 
 def main() -> None:
     arguments = _parser().parse_args()
+    if arguments.command == "archive":
+        output = create_artifact_archive(
+            run_directory=arguments.run_directory,
+            output_path=arguments.output,
+            archive_root=arguments.archive_root,
+        )
+        print(json.dumps(output, indent=2, ensure_ascii=False, sort_keys=True))
+        return
     config_path = (
         arguments.config
         if arguments.config.is_absolute()

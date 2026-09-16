@@ -20,6 +20,7 @@ REQUIRED_TAGS = (
     "reporting",
     "export",
     "freeze",
+    "archive",
     "final-eval",
 )
 FORBIDDEN_FRAGMENTS = (
@@ -326,6 +327,25 @@ def check_notebook(path: Path) -> None:
         ),
         "freeze cell",
     )
+
+    archive = tagged_cells["archive"]
+    _require(
+        archive,
+        (
+            'if RUN_MODE == "validation"',
+            '"archive"',
+            '"--run-directory"',
+            '"--output"',
+            '"--archive-root"',
+            'Path("/kaggle/working")',
+            "organchip-cnn-validation-campaign-v2-artifacts-v1.zip",
+            "sha256_file(archive_path)",
+            "FileLink(str(archive_path))",
+        ),
+        "archive cell",
+    )
+    if "/kaggle/input" in archive or "TRAIN_VALIDATION_IMAGE_ROOT" in archive:
+        raise ValueError("Artifact archive must never include Kaggle input images")
 
     final = tagged_cells["final-eval"]
     _require(

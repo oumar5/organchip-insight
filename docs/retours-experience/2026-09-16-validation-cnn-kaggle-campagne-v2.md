@@ -160,3 +160,46 @@ la sélection source, sans réentraîner le modèle.
 - rapport brut : `validation-report.json`, SHA-256 documenté ci-dessus ;
 - figures : `learning-curves.png` et `validation-confusion.png` ;
 - prédictions : `validation-predictions.csv`.
+
+## Addendum — conservation et versionnement
+
+Le push GitHub réalisé depuis Kaggle a sauvegardé une copie exécutée du notebook
+mais n'a pas publié les fichiers de `/kaggle/working` : `kaggle kernels output`
+n'a récupéré que la log. Le notebook canonique a donc été restauré dans un
+commit séparé et doit rester non exécuté dans GitHub.
+
+Une commande `archive` partagée et testée produit désormais le bundle
+déterministe suivant directement dans Kaggle :
+
+```text
+/kaggle/working/organchip-cnn-validation-campaign-v2-artifacts-v1.zip
+```
+
+Le noyau du notebook principal ne répondant plus après l'entraînement, l'archive
+de sauvetage a été générée dans une console Python distincte attachée à la même
+session, sans modifier les artefacts scientifiques. Elle a ensuite été
+téléchargée et contrôlée localement :
+
+- 14 artefacts utiles, plus le manifeste interne ;
+- taille : `28 478 598` octets ;
+- SHA-256 du ZIP :
+  `36ad8c046695ea943e52de79f48a2d437a0f5cfac5c761701f389c3307ea4446` ;
+- SHA-256 du manifeste interne :
+  `5d563f18766b321f7b6b33b956f90a65a718afaa2ddcfa439e3e3633137e7fd9` ;
+- vérification locale : `unzip -t` sans erreur ;
+- copie locale ignorée par Git :
+  `data/experiments/ooc-cnn/organchip-cnn-validation-campaign-v2-artifacts-v1.zip`.
+
+Le Dataset privé Kaggle `oumarbenlol/organchip-cnn-validation-artifacts`
+(`datasetId=12053935`, version 1) est à l'état `ready`. Kaggle a décompressé le
+ZIP côté serveur et expose les 15 fichiers sous le dossier racine unique
+`organchip-cnn-validation-campaign-v2/`. Sa licence est temporairement
+`unknown`, car aucune licence de redistribution des artefacts n'a encore été
+arrêtée.
+
+Le conteneur Kaggle Model privé
+`oumarbenlol/organchip-image-quality-cnn` (`modelId=758515`) est créé. Il reste
+volontairement sans variation ni poids : Kaggle impose une licence au niveau de
+la variation, et cette décision ne doit pas être inventée. Après choix de la
+licence, les variantes `onnx` et `pytorch` recevront chacune une version issue
+de ce bundle vérifié. Aucun poids, checkpoint ou ZIP n'est commité dans GitHub.
