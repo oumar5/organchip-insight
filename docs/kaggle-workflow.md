@@ -84,8 +84,8 @@ La publication de la release et le choix de licence restent des décisions sépa
 ## Ordre concret
 
 1. Archiver le rapport GPU réel (fait pour la sonde v1).
-2. Préparer ONNX Runtime hors ligne et son bootstrap vérifié ; refaire une sonde
-   privée sans images et obtenir le succès du contrôle ONNX.
+2. Utiliser le bootstrap ONNX Runtime hors ligne vérifié du notebook, puis
+   confirmer le préflight privé sans accès réseau avant l'entraînement.
 3. Générer et contrôler le manifeste v2 (fait : 2 056/509/507 images), puis
    figer les ablations train/validation.
 4. Construire les trois bundles locaux et leurs hashes. Afficher leur contenu,
