@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "organchip-insight-api"
-version = "0.1.0"
+version = "0.2.0"
 description = "API and image-analysis foundation for OrganChip Insight"
 requires-python = ">=3.11"
 dependencies = [
@@ -13,6 +13,7 @@ dependencies = [
   "pillow>=11.0,<12.0",
   "pydantic-settings>=2.7,<3.0",
   "python-multipart>=0.0.20,<1.0",
+  "scikit-image>=0.25,<0.27",
   "uvicorn[standard]>=0.34,<1.0",
 ]
 
@@ -25,8 +26,13 @@ dev = [
 ml = [
   "pandas>=2.2,<3.0",
   "scikit-learn>=1.6,<2.0",
-  "torch>=2.5,<3.0",
 ]
+
+[project.scripts]
+organchip-infer = "inference:main"
+
+[tool.setuptools]
+py-modules = ["inference"]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -41,4 +47,3 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-

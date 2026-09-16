@@ -1,5 +1,6 @@
 services:
   backend:
+    init: true
     build:
       context: ./backend
     environment:
@@ -8,20 +9,26 @@ services:
       ORGANCHIP_DATA_DIR: /data
       ORGANCHIP_CORS_ORIGINS: ${ORGANCHIP_CORS_ORIGINS:-http://localhost:5173,http://localhost:8080}
     ports:
-      - "8000:8000"
+      - "${ORGANCHIP_BACKEND_PORT:-8000}:8000"
     volumes:
       - organchip_data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
   frontend:
+    init: true
     build:
       context: ./frontend
       args:
         VITE_API_BASE_URL: /api/v1
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
-      - "8080:80"
+      - "${ORGANCHIP_FRONTEND_PORT:-8080}:80"
 
 volumes:
   organchip_data:
-

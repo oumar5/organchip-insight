@@ -32,10 +32,42 @@ class UploadSummary(BaseModel):
     total_images: int
 
 
+class AnalysisEngine(BaseModel):
+    id: str
+    name: str
+    kind: Literal["zero-training", "pretrained", "trained"]
+    status: Literal["available", "planned", "license-review"]
+    description: str
+    training_required: bool
+    limitations: list[str]
+
+
+class AnalysisArtifact(BaseModel):
+    filename: str
+    kind: Literal["segmentation-overlay"]
+    media_type: str = "image/png"
+    url: str
+
+
+class ImageAnalysis(BaseModel):
+    filename: str
+    object_count: int
+    foreground_fraction: float
+    mean_object_area: float
+    median_object_area: float
+    mean_equivalent_diameter: float
+    threshold: float
+    foreground_polarity: Literal["bright", "dark"]
+    overlay_url: str
+
+
 class AnalysisResult(BaseModel):
     experiment_id: UUID
     analysis_version: str
+    engine: AnalysisEngine
     image_count: int
     metrics: dict[str, float]
+    image_results: list[ImageAnalysis]
+    artifacts: list[AnalysisArtifact]
     warnings: list[str]
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

@@ -1,7 +1,7 @@
 from io import BytesIO
 
 from fastapi.testclient import TestClient
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from app.main import app
 
@@ -48,7 +48,11 @@ def test_upload_and_analyze_real_image() -> None:
     experiment_id = create_response.json()["id"]
 
     image_buffer = BytesIO()
-    Image.new("L", (16, 16), color=128).save(image_buffer, format="PNG")
+    image = Image.new("L", (96, 96), color=8)
+    drawing = ImageDraw.Draw(image)
+    drawing.ellipse((12, 12, 36, 36), fill=230)
+    drawing.ellipse((55, 48, 84, 77), fill=210)
+    image.save(image_buffer, format="PNG")
     upload_response = client.post(
         f"/api/v1/experiments/{experiment_id}/images",
         files={"files": ("cell-field.png", image_buffer.getvalue(), "image/png")},
@@ -61,5 +65,38 @@ def test_upload_and_analyze_real_image() -> None:
     assert analysis_response.status_code == 200
     result = analysis_response.json()
     assert result["image_count"] == 1
-    assert result["analysis_version"] == "image-qc-baseline-0.1.0"
+    assert result["analysis_version"] == "adaptive-segmentation-1.0.0"
+    assert result["engine"]["kind"] == "zero-training"
+    assert result["metrics"]["object_count_total"] == 2
     assert result["metrics"]["mean_intensity"] > 0
+    assert len(result["artifacts"]) == 1
+
+    overlay_response = client.get(result["artifacts"][0]["url"])
+    assert overlay_response.status_code == 200
+    assert overlay_response.headers["content-type"] == "image/png"
+
+
+def test_upload_rejects_invalid_image() -> None:
+    create_response = client.post(
+        "/api/v1/experiments",
+        json={"name": "Invalid upload"},
+    )
+    experiment_id = create_response.json()["id"]
+    response = client.post(
+        f"/api/v1/experiments/{experiment_id}/images",
+        files={"files": ("not-an-image.png", b"invalid", "image/png")},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["accepted_files"] == []
+    assert response.json()["rejected_files"] == ["not-an-image.png"]
+
+
+def test_inference_engine_registry_is_transparent() -> None:
+    response = client.get("/api/v1/inference/engines")
+
+    assert response.status_code == 200
+    engines = response.json()
+    assert engines[0]["id"] == "adaptive-segmentation-v1"
+    assert engines[0]["status"] == "available"
+    assert any(engine["status"] == "license-review" for engine in engines)

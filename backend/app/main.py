@@ -8,8 +8,8 @@ settings = get_settings()
 
 app = FastAPI(
     title=settings.app_name,
-    version="0.1.0",
-    description="Reproducible microscopy analysis API for OrganChip Insight.",
+    version="0.2.0",
+    description="Reproducible zero-training microscopy inference API for OrganChip Insight.",
 )
 
 app.add_middleware(
@@ -30,4 +30,3 @@ def root() -> dict[str, str]:
         "documentation": "/docs",
         "health": f"{settings.api_v1_prefix}/health",
     }
-
