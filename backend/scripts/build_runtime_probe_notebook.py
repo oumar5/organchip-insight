@@ -62,7 +62,8 @@ def build_notebook() -> dict:
                 "outputs": [],
                 "source": [
                     f"CONTRACT = json.loads({contract.read_text(encoding='utf-8')!r})\n",
-                    "OFFLINE_WHEEL = Path('/kaggle/input/organchip-cnn-offline-resources-v1/"
+                    "OFFLINE_WHEEL = Path('/kaggle/input/"
+                    "organchip-cnn-offline-resources-v1/resources/"
                     "onnxruntime-1.22.1-cp312-cp312-manylinux_2_27_x86_64."
                     "manylinux_2_28_x86_64.whl')\n",
                     "OFFLINE_WHEEL_SHA256 = "

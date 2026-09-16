@@ -150,10 +150,21 @@ def check_notebook(path: Path) -> None:
             'EXPECTED_FINAL_EVAL_CONFIRMATION = "OPEN_FROZEN_TEST_ONCE"',
             'FINAL_EVAL_REASON = ""',
             'SOURCE_INPUT_DIR = Path("/kaggle/input/',
+            "organchip-insight-source-campaign-v2/organchip-insight",
             "EXPECTED_SOURCE_BUNDLE_SHA256",
             'TRAIN_VALIDATION_IMAGE_ROOT = Path("/kaggle/input/',
+            "organchip-train-validation-v2/train-validation/images",
+            'WEIGHTS_INPUT_DIR = Path("/kaggle/input/',
+            "organchip-cnn-offline-resources-v1/resources",
             'FINAL_IMAGE_ROOT = Path("/kaggle/input/',
+            'FROZEN_TEST_DATASET_ROOT = Path("/kaggle/input/organchip-frozen-test-v2-zip")',
             'WORKSPACE_ROOT = Path("/kaggle/working/',
+            'CONFIG_RELATIVE_PATH = Path("backend/training/configs/',
+            "ooc-cnn-mobilenet-v3-small-campaign-v2.json",
+            'TRAIN_VALIDATION_MANIFEST_RELATIVE = Path("data/splits/',
+            "ooc-campaign-v2-train-validation.csv",
+            'TEST_MANIFEST_RELATIVE = Path("data/splits/ooc-campaign-v2-test.csv")',
+            'EXPECTED_SPLIT_ID = "ooc-grouped-by-temporal-campaign-v2"',
             "INITIAL_WEIGHTS_SHA256",
             "FROZEN_MANIFEST_SHA256",
         ),
@@ -167,8 +178,8 @@ def check_notebook(path: Path) -> None:
             "shutil.copytree(SOURCE_INPUT_DIR, PROJECT_ROOT",
             "source_ignore",
             '"raw"',
-            '"ooc-grouped-v1-test.csv"',
-            '"ooc-grouped-v1.csv"',
+            '"ooc-campaign-v2-test.csv"',
+            '"ooc-campaign-v2.csv"',
             "SOURCE_BUNDLE_SHA256 = sha256_tree(PROJECT_ROOT)",
             "SOURCE_BUNDLE_SHA256 != validate_sha256(EXPECTED_SOURCE_BUNDLE_SHA256",
             "path.is_symlink()",
@@ -194,9 +205,10 @@ def check_notebook(path: Path) -> None:
         preflight,
         (
             "load_experiment_config",
-            "CANONICAL_SPLIT_SHA256",
             "load_split_lock",
-            "SPLIT_LOCK.source_sha256 != CANONICAL_SPLIT_SHA256",
+            "SPLIT_LOCK.split_id != EXPECTED_SPLIT_ID",
+            "SPLIT_LOCK.source_sha256 != EXPECTED_SPLIT_SOURCE_SHA256",
+            'RUN_MODE != "final-eval" and FROZEN_TEST_DATASET_ROOT.exists()',
             "validate_runtime_contract",
             "validate_required_hashes",
             "torch.cuda.is_available()",
@@ -217,6 +229,8 @@ def check_notebook(path: Path) -> None:
         ),
         "preflight cell",
     )
+    if "REPLACE_WITH_" in code:
+        raise ValueError("Notebook contains unresolved hash placeholders")
 
     smoke = tagged_cells["smoke"]
     _require(

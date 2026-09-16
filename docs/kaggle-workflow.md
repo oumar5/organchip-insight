@@ -1,9 +1,10 @@
 # Workflow Kaggle et GitHub
 
 État au 16 septembre 2026 : la [sonde privée v1](retours-experience/2026-09-16-sonde-kaggle.md)
-a tourné sur GPU ; ONNX Runtime manque. Aucun dataset OrganChip n'a été créé
-par cette opération. Les notebooks scientifiques ne sont pas encore prêts à
-lancer : split v2, préparation des bundles et résolution du runtime restent à faire.
+a tourné sur GPU. Les datasets privés train/validation, test gelé et ressources
+hors ligne sont créés. Le notebook d'entraînement est relié à `dev` et le bundle
+source campagne v2 est préparé localement ; il doit encore être téléversé et
+attaché avant le smoke Kaggle. Internet doit rester désactivé pendant les runs.
 
 ## Organisation recommandée
 
@@ -14,6 +15,7 @@ Un seul dossier de préparation **local**, mais des entrées Kaggle distinctes :
 | Images train/validation | Images sélectionnées par le manifeste retenu, chemins relatifs conservés | Gros volume stable : ne pas le transférer à chaque correction de code |
 | Source et protocole | Code CNN filtré, configuration, manifestes autorisés, environnement et provenance | Petit volume versionné à chaque changement pertinent |
 | Ressources du modèle | Poids ImageNet, provenance/licence, puis dépendances hors ligne approuvées et hashes | Ressources réutilisables, distinctes du code et des images |
+| Test gelé | Images et manifeste de la partition test campagne v2 | À ne joindre qu'après le gel de la sélection |
 
 Le notebook est un objet Kaggle séparé, **pas un quatrième dataset**. Pour la
 sonde actuelle, il n'utilise aucune entrée. Les outputs (checkpoints, rapports,
@@ -29,8 +31,19 @@ chemins et le bootstrap, pas de prétendre que c'est déjà disponible.
 
 Le test final reste dans une entrée distincte, jointe uniquement après gel des
 choix et autorisation de l'évaluation finale. L'organisation finale précise doit
-respecter les besoins de provenance du CLI ; les chemins finaux du notebook v1
-ne constituent pas encore un export v2 prêt à téléverser.
+respecter les besoins de provenance du CLI ; le bundle de sélection finale sera
+préparé seulement après le run de validation retenu.
+
+Chemins montés retenus pour la validation campagne v2 :
+
+```text
+/kaggle/input/organchip-insight-source-campaign-v2/organchip-insight
+/kaggle/input/organchip-train-validation-v2/train-validation/images
+/kaggle/input/organchip-cnn-offline-resources-v1/resources
+```
+
+Le notebook refuse un smoke ou une validation si
+`/kaggle/input/organchip-frozen-test-v2-zip` est présent.
 
 Ne jamais envoyer le dépôt entier : exclure `.git`, `.env`, clés, caches,
 expériences personnelles et artefacts de test. L'outil de staging doit utiliser

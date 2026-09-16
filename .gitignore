@@ -23,6 +23,7 @@ data/models/
 data/experiments/
 data/*.sqlite3
 artifacts/
+organchip-kaggle-uploads-v2/
 reports/generated/
 *.onnx
 *.pt

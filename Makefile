@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -50,6 +50,9 @@ train-ooc-baseline:
 
 cnn-build-manifests:
 	PYTHONPATH=backend uv run --project backend python -m training.ooc_cnn.build_manifests
+
+cnn-stage-kaggle-source:
+	uv run --project backend python backend/scripts/stage_ooc_kaggle_source.py --output "$(OUTPUT)"
 
 cnn-protocol-test:
 	uv run --project backend --extra dev pytest -q backend/tests/test_ooc_cnn_protocol.py backend/tests/test_ooc_cnn_data.py backend/tests/test_ooc_cnn_metrics.py backend/tests/test_ooc_cnn_runtime.py
