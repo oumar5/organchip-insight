@@ -100,19 +100,52 @@ def download_resource(resource: dict[str, Any], project_root: Path) -> Path:
     destination = project_root / resource["path"]
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(f"{destination.name}.part")
-    request = urllib.request.Request(
-        resource["url"],
-        headers={"User-Agent": "OrganChip-Insight/0.2 dataset acquisition"},
-    )
+    expected_size = resource.get("size_bytes")
+    partial_size = temporary.stat().st_size if temporary.exists() else 0
+
+    if expected_size is not None and partial_size > expected_size:
+        temporary.unlink()
+        partial_size = 0
+    if expected_size is not None and partial_size == expected_size:
+        os.replace(temporary, destination)
+        return destination
+
+    headers = {"User-Agent": "OrganChip-Insight/0.2 dataset acquisition"}
+    if partial_size:
+        headers["Range"] = f"bytes={partial_size}-"
+    request = urllib.request.Request(resource["url"], headers=headers)
 
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
-            with temporary.open("wb") as output:
+            response_status = getattr(response, "status", response.getcode())
+            content_range = response.headers.get("Content-Range", "")
+            resumed = (
+                partial_size > 0
+                and response_status == 206
+                and content_range.startswith(f"bytes {partial_size}-")
+            )
+            mode = "ab" if resumed else "wb"
+            if partial_size and not resumed:
+                partial_size = 0
+            with temporary.open(mode) as output:
                 shutil.copyfileobj(response, output, length=1024 * 1024)
+
+        actual_size = temporary.stat().st_size
+        if expected_size is not None and actual_size != expected_size:
+            raise DatasetError(
+                f"Incomplete download for {resource['id']}: "
+                f"expected {expected_size}, got {actual_size}. "
+                f"The partial file is preserved for retry."
+            )
         os.replace(temporary, destination)
+    except DatasetError:
+        raise
     except (OSError, urllib.error.URLError) as error:
-        temporary.unlink(missing_ok=True)
-        raise DatasetError(f"Download failed for {resource['id']}: {error}") from error
+        saved_bytes = temporary.stat().st_size if temporary.exists() else 0
+        raise DatasetError(
+            f"Download interrupted for {resource['id']} after {saved_bytes} bytes; "
+            f"retry the same command to resume: {error}"
+        ) from error
     return destination
 
 

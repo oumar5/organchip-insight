@@ -1,9 +1,10 @@
 import hashlib
+import io
 import zipfile
 
 import pytest
 
-from app.datasets import DatasetError, extract_resource, verify_resource
+from app.datasets import DatasetError, download_resource, extract_resource, verify_resource
 
 
 def test_verify_resource_checks_size_and_digest(tmp_path) -> None:
@@ -37,3 +38,43 @@ def test_safe_extraction_rejects_parent_traversal(tmp_path) -> None:
         extract_resource(resource, tmp_path)
 
     assert not (tmp_path.parent / "outside.txt").exists()
+
+
+def test_download_resource_resumes_partial_file(tmp_path, monkeypatch) -> None:
+    payload = b"reproducible microscopy data"
+    destination = tmp_path / "nested" / "fixture.bin"
+    destination.parent.mkdir()
+    partial = destination.with_name("fixture.bin.part")
+    partial.write_bytes(payload[:10])
+
+    class PartialResponse(io.BytesIO):
+        status = 206
+        headers = {"Content-Range": f"bytes 10-{len(payload) - 1}/{len(payload)}"}
+
+        def getcode(self) -> int:
+            return self.status
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            self.close()
+
+    def fake_urlopen(request, timeout):
+        assert timeout == 120
+        assert request.get_header("Range") == "bytes=10-"
+        return PartialResponse(payload[10:])
+
+    monkeypatch.setattr("app.datasets.urllib.request.urlopen", fake_urlopen)
+    resource = {
+        "id": "fixture",
+        "url": "https://example.test/fixture.bin",
+        "path": "nested/fixture.bin",
+        "size_bytes": len(payload),
+    }
+
+    result = download_resource(resource, tmp_path)
+
+    assert result == destination
+    assert result.read_bytes() == payload
+    assert not partial.exists()

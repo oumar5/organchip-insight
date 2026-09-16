@@ -24,8 +24,9 @@ uv run --project backend python backend/scripts/acquire_datasets.py \
   --resource ooc-images-v1 --allow-large
 ```
 
-Prévoir plus de 14 Go libres pour l'archive et son extraction. Ne pas lancer
-cette commande sur la machine actuelle sans libérer de l'espace.
+Prévoir plus de 14 Go libres pour l'archive et son extraction. Un téléchargement
+interrompu conserve le fichier suffixé `.part` ; relancer exactement la même
+commande reprend le transfert si le serveur accepte les requêtes HTTP `Range`.
 
 ## Vérification seule
 
