@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "experiment_id": "ooc-handcrafted-image-quality-v1",
+  "dataset": {
+    "id": "OOC-image-dataset",
+    "doi": "10.5281/zenodo.10203721",
+    "version": "2023-11-27",
+    "license": "CC-BY-4.0",
+    "archive_md5": "8f7e058996203d48eb03b2d86c0a2e4d"
+  },
+  "split_csv": "data/splits/ooc-grouped-v1.csv",
+  "feature_cache_csv": "data/processed/ooc-handcrafted-features-v1.csv",
+  "feature_cache_metadata": "data/processed/ooc-handcrafted-features-v1.meta.json",
+  "model_output": "data/models/ooc-handcrafted-image-quality-v1.joblib",
+  "predictions_output": "reports/predictions/ooc-handcrafted-image-quality-v1-test.csv",
+  "report_output": "reports/benchmarks/ooc-handcrafted-image-quality-v1.json",
+  "thumbnail_size": 256,
+  "workers": 8,
+  "seed": 20260916,
+  "bootstrap_iterations": 10000,
+  "models": {
+    "logistic_regression": {
+      "c_values": [0.01, 0.1, 1.0, 10.0]
+    },
+    "extra_trees": [
+      {
+        "n_estimators": 500,
+        "max_depth": 8,
+        "min_samples_leaf": 2
+      },
+      {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_leaf": 2
+      },
+      {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_leaf": 5
+      }
+    ],
+    "hist_gradient_boosting": [
+      {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_leaf_nodes": 15,
+        "l2_regularization": 1.0
+      },
+      {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_leaf_nodes": 31,
+        "l2_regularization": 3.0
+      }
+    ]
+  },
+  "historical_context": [
+    {
+      "model": "MobileNetV3",
+      "published_accuracy": 0.81,
+      "published_precision": 0.79,
+      "published_recall": 0.78,
+      "source": "https://doi.org/10.3390/data9020028",
+      "comparison_status": "context-only: all YYMMDD acquisition-prefix proxies span published splits, creating potential leakage"
+    }
+  ]
+}

@@ -14,9 +14,9 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.12"
-      - run: uv sync --project backend --extra dev --locked
+      - run: uv sync --project backend --extra dev --extra ml --locked
       - run: uv run --project backend ruff check backend/app backend/tests backend/inference.py backend/training backend/evaluation
-      - run: uv run --project backend pytest backend/tests
+      - run: uv run --project backend --extra dev --extra ml pytest backend/tests
 
   frontend:
     runs-on: ubuntu-latest

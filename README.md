@@ -83,7 +83,7 @@ Ou séparément :
 
 ```bash
 uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py
-uv run --project backend --extra dev pytest backend/tests
+uv run --project backend --extra dev --extra ml pytest backend/tests
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
 docker compose config --quiet

@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc benchmark-bbbc019 benchmark-bbbc019-microsam
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam
 
 MICROSAM_ENV ?= $(CURDIR)/data/cache/microsam-env
 
@@ -6,7 +6,7 @@ backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
 
 backend-test:
-	uv run --project backend --extra dev pytest backend/tests
+	uv run --project backend --extra dev --extra ml pytest backend/tests
 
 backend-lint:
 	uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py backend/training backend/evaluation backend/scripts
@@ -34,6 +34,9 @@ data-audit:
 
 split-ooc:
 	uv run --project backend python backend/training/split_ooc.py --config backend/training/configs/ooc-grouped-split-v1.json
+
+train-ooc-baseline:
+	uv run --project backend --extra ml python backend/training/train_ooc_baseline.py --config backend/training/configs/ooc-handcrafted-baseline-v1.json
 
 benchmark-bbbc019:
 	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json
