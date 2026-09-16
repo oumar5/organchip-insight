@@ -172,9 +172,13 @@ def check_notebook(path: Path) -> None:
             "SOURCE_BUNDLE_SHA256 = sha256_tree(PROJECT_ROOT)",
             "SOURCE_BUNDLE_SHA256 != validate_sha256(EXPECTED_SOURCE_BUNDLE_SHA256",
             "path.is_symlink()",
+            "Modifier WORKSPACE_ROOT ou repartir d'une session propre",
+            "changer RUN_ID ne déplace pas PROJECT_ROOT",
         ),
         "workspace-staging cell",
     )
+    if "choisir un nouveau RUN_ID" in staging:
+        raise ValueError("RUN_ID cannot resolve an existing PROJECT_ROOT")
     if code.count("shutil.copytree(") != 1:
         raise ValueError("Exactly one copytree is allowed, for the small source bundle only")
     if "dirs_exist_ok=True" in code:

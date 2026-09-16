@@ -28,6 +28,29 @@ ImageNet.
 | Accès test | aucun, `test_manifest_opened: false` |
 | Éligibilité benchmark | non, `benchmark_eligible: false` |
 
+### Traçabilité de l'environnement local
+
+L'interpréteur réellement utilisé pour cette preuve est le préfixe local
+préexistant `data/cache/microsam-env/bin/python`. Le smoke final n'a donc pas
+été exécuté dans l'environnement Conda nommé `organchip-ooc-cnn-cpu` proposé
+comme environnement par défaut dans le Makefile.
+
+Cette différence est explicitement traçable : le contrat runtime a validé les
+versions pertinentes de la pile CNN avant l'exécution, et le rapport ainsi que
+l'artefact d'environnement ont capturé la liste complète issue de
+`pip freeze`. La présence de paquets µSAM supplémentaires dans le préfixe ne
+doit pas être confondue avec la recette minimale du CNN.
+
+La recette minimale de reconstruction est
+`backend/experiments/ooc-cnn/environment.cpu.yml`, SHA-256
+`958c6e91a96b77cdcf7bb3912b27bab02224457287a985fa01cf94aa673f7aa1`.
+Elle fixe les dépendances CNN pertinentes mais n'est pas présentée comme un
+export exact du préfixe historique. Une exécution ultérieure dans
+`organchip-ooc-cnn-cpu` devra porter un autre identifiant de run et générer ses
+propres rapport, checkpoint, environnement et export ONNX : ce serait un
+artefact de reproductibilité distinct, et non une modification de cette
+preuve.
+
 Les modes `smoke` et `validation` ne reçoivent pas le manifeste test. Le mode
 `final-eval` exige un manifeste gelé, les hashes attendus, la confirmation
 exacte du protocole et un reçu d'accès local. Le test est destiné à être ouvert

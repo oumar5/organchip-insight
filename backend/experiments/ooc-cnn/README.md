@@ -29,6 +29,24 @@ du checkpoint et du rapport de sélection.
 L'environnement CPU sert aux tests, au smoke run et à la vérification ONNX. Il
 ne doit pas être utilisé pour annoncer un benchmark GPU.
 
+### Environnement réellement utilisé par le smoke de référence
+
+Le smoke `smoke-local-92bf217` n'a pas été exécuté dans l'environnement Conda
+nommé `organchip-ooc-cnn-cpu`. La commande a explicitement utilisé le préfixe
+local préexistant `data/cache/microsam-env/bin/python`. Avant le calcul, le
+contrat runtime a validé les versions pertinentes de la pile CNN ; le rapport
+et son artefact d'environnement ont également capturé le `pip freeze` complet
+de ce préfixe. Cette trace décrit donc l'exécution réellement effectuée, y
+compris les paquets supplémentaires présents dans ce préfixe.
+
+Le fichier `environment.cpu.yml`, SHA-256
+`958c6e91a96b77cdcf7bb3912b27bab02224457287a985fa01cf94aa673f7aa1`,
+est la recette minimale versionnée pour reconstruire la pile CPU. Il ne prétend
+pas être l'export exact du préfixe utilisé par le smoke. Un rerun dans
+`organchip-ooc-cnn-cpu` doit recevoir un nouvel identifiant et produire un
+rapport, un checkpoint et un export ONNX distincts ; il constituerait une
+nouvelle preuve, pas une réécriture des artefacts `smoke-local-92bf217`.
+
 Le smoke de référence du commit `92bf217fccb4784949411d2025a626bfbcea1015`
 a parcouru huit images train et quatre images de validation pendant une époque,
 avec la graine `20260916` et la vérification des hashes d'images. Il n'a jamais

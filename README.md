@@ -126,6 +126,14 @@ CNN_RUN_ID=smoke-local-manual-v1 make cnn-smoke
 Un interpréteur isolé équivalent peut être fourni explicitement, par exemple
 `make cnn-smoke CNN_PYTHON=/chemin/vers/python`.
 
+Le smoke de référence `smoke-local-92bf217` a précisément utilisé le préfixe
+local existant `data/cache/microsam-env/bin/python`, et non l'environnement
+nommé ci-dessus. Son rapport conserve le `pip freeze` complet et le contrat
+runtime a validé les versions pertinentes. `environment.cpu.yml` reste la
+recette minimale de reconstruction ; un nouveau run dans l'environnement nommé
+produirait des artefacts distincts. Les détails et le SHA-256 de cette recette
+sont consignés dans le retour d'expérience lié plus haut.
+
 L'export ONNX exige les identités exactes du checkpoint et du rapport de
 sélection ; aucune valeur n'est inférée :
 
