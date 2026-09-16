@@ -6,6 +6,7 @@ a été prise.
 
 ## Index
 
+- [Première sonde GPU Kaggle — 16 septembre 2026](2026-09-16-sonde-kaggle.md)
 - [Imports robustes et TIFF 16 bits — 16 septembre 2026](2026-09-16-imports-et-tiff.md)
 - [Stratégie Kaggle et choix des modèles — 16 septembre 2026](2026-09-16-strategie-kaggle-et-modeles.md)
 - [Audit des données et baseline BBBC019 — 16 septembre 2026](2026-09-16-audit-donnees-et-baseline-bbbc019.md)

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kernel_url": "https://www.kaggle.com/code/oumarbenlol/organchip-runtime-probe",
+  "kernel_id": 134580329,
+  "kernel_version": 1,
+  "kernel_status": "COMPLETE",
+  "cli_version": "2.0.1",
+  "source_git_commit": "163d255b7fa8b52e597230ef7f0642601751e2dd",
+  "source_worktree_clean": true,
+  "source_notebook": "notebooks/ooc-runtime-probe-kaggle.ipynb",
+  "source_notebook_sha256": "97b474cfea340fa2e26355cc66114a1e2d0f60d40478c020a5067fee0cc058f4",
+  "remote_notebook_sha256": "efed5afe4782c068d29598d42600538fd4fe698f3dca81410212f3676f2080f1",
+  "remote_cell_sources_match_local": true,
+  "runtime_contract_sha256": "3e8d1d34fdd7e853037ef2e8c3435ea2ef769a9f6bd5fffee03fec6c08d241ea",
+  "runtime_report_sha256": "49a32ba7ee93e227d1eadbd78ce1337b5aaf074d4e8fb0e3b7ecc0aa123603ba",
+  "requested_accelerator": "NvidiaTeslaT4",
+  "requested_timeout_seconds": 600,
+  "notes": "Server JSON serialization differs; all three cell types and sources were compared and match. COMPLETE means notebook execution completed, not that runtime checks passed. No dataset, model weights or personal images were uploaded."
+}

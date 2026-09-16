@@ -1,0 +1,67 @@
+[{"stream_name":"stderr","time":11.470295601,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.470356175,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.470360351,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.470362945,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":12.233509611,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":12.23354496,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":12.233550394,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":12.233554408,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":33.572231777,"data":"{\n"}
+,{"stream_name":"stdout","time":33.572270051,"data":"  \"benchmark_eligible\": false,\n"}
+,{"stream_name":"stdout","time":33.57227393,"data":"  \"checks\": {\n"}
+,{"stream_name":"stdout","time":33.572277095,"data":"    \"cpu_onnx_round_trip\": {\n"}
+,{"stream_name":"stdout","time":33.572280012,"data":"      \"error\": \"ModuleNotFoundError: No module named 'onnxruntime'\",\n"}
+,{"stream_name":"stdout","time":33.572283164,"data":"      \"passed\": false\n"}
+,{"stream_name":"stdout","time":33.572285908,"data":"    },\n"}
+,{"stream_name":"stdout","time":33.572293603,"data":"    \"cuda_mobilenet_forward\": {\n"}
+,{"stream_name":"stdout","time":33.572296329,"data":"      \"details\": {\n"}
+,{"stream_name":"stdout","time":33.57229904,"data":"        \"cudnn\": 91002,\n"}
+,{"stream_name":"stdout","time":33.572301892,"data":"        \"gpu_names\": [\n"}
+,{"stream_name":"stdout","time":33.572304684,"data":"          \"Tesla T4\",\n"}
+,{"stream_name":"stdout","time":33.572307333,"data":"          \"Tesla T4\"\n"}
+,{"stream_name":"stdout","time":33.572310108,"data":"        ],\n"}
+,{"stream_name":"stdout","time":33.572312732,"data":"        \"output_shape\": [\n"}
+,{"stream_name":"stdout","time":33.572315438,"data":"          1,\n"}
+,{"stream_name":"stdout","time":33.572318006,"data":"          2\n"}
+,{"stream_name":"stdout","time":33.572320718,"data":"        ],\n"}
+,{"stream_name":"stdout","time":33.572323272,"data":"        \"torch_cuda\": \"12.8\"\n"}
+,{"stream_name":"stdout","time":33.572326037,"data":"      },\n"}
+,{"stream_name":"stdout","time":33.572328612,"data":"      \"passed\": true\n"}
+,{"stream_name":"stdout","time":33.572331258,"data":"    }\n"}
+,{"stream_name":"stdout","time":33.572333815,"data":"  },\n"}
+,{"stream_name":"stdout","time":33.572336403,"data":"  \"contract_id\": \"organchip-ooc-cnn-kaggle-runtime-v1\",\n"}
+,{"stream_name":"stdout","time":33.572339277,"data":"  \"contract_semantic_sha256\": \"6aeb3656a4b2d89bcb47204fc26d8843ffc378ed482cdc95c59c057c87c89da8\",\n"}
+,{"stream_name":"stdout","time":33.572342183,"data":"  \"generated_at_utc\": \"2026-09-16T08:20:07.888171+00:00\",\n"}
+,{"stream_name":"stdout","time":33.572344953,"data":"  \"platform\": \"Linux\",\n"}
+,{"stream_name":"stdout","time":33.572347698,"data":"  \"runtime_checks_passed\": false,\n"}
+,{"stream_name":"stdout","time":33.572350392,"data":"  \"schema_version\": 1,\n"}
+,{"stream_name":"stdout","time":33.572353201,"data":"  \"scope\": \"runtime-only; synthetic inputs; random weights; no dataset or training\",\n"}
+,{"stream_name":"stdout","time":33.572366742,"data":"  \"versions\": {\n"}
+,{"stream_name":"stdout","time":33.572369778,"data":"    \"blockers\": [\n"}
+,{"stream_name":"stdout","time":33.572372478,"data":"      \"Missing package: onnxruntime\"\n"}
+,{"stream_name":"stdout","time":33.572375191,"data":"    ],\n"}
+,{"stream_name":"stdout","time":33.572377744,"data":"    \"packages\": {\n"}
+,{"stream_name":"stdout","time":33.572380501,"data":"      \"Pillow\": \"11.3.0\",\n"}
+,{"stream_name":"stdout","time":33.572383225,"data":"      \"matplotlib\": \"3.10.0\",\n"}
+,{"stream_name":"stdout","time":33.572385943,"data":"      \"numpy\": \"2.0.2\",\n"}
+,{"stream_name":"stdout","time":33.572388606,"data":"      \"onnx\": \"1.22.0\",\n"}
+,{"stream_name":"stdout","time":33.572391303,"data":"      \"onnxruntime\": null,\n"}
+,{"stream_name":"stdout","time":33.572393995,"data":"      \"packaging\": \"26.1\",\n"}
+,{"stream_name":"stdout","time":33.572396717,"data":"      \"pandas\": \"2.3.3\",\n"}
+,{"stream_name":"stdout","time":33.572400481,"data":"      \"scikit-learn\": \"1.6.1\",\n"}
+,{"stream_name":"stdout","time":33.572404612,"data":"      \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":33.572407577999996,"data":"      \"torchvision\": \"0.25.0+cu128\"\n"}
+,{"stream_name":"stdout","time":33.572410329,"data":"    },\n"}
+,{"stream_name":"stdout","time":33.572412869,"data":"    \"python\": \"3.12.13\"\n"}
+,{"stream_name":"stdout","time":33.572415654,"data":"  }\n"}
+,{"stream_name":"stdout","time":33.572418247,"data":"}\n"}
+,{"stream_name":"stdout","time":33.572420965,"data":"Report: /kaggle/working/organchip-runtime-probe-_h3_85k9/runtime-report.json\n"}
+,{"stream_name":"stderr","time":39.183597858,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":39.183627298,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":39.381765894,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":39.381796216,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":40.094476146,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":40.405108399,"data":"[NbConvertApp] Writing 18716 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":42.911617369,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":43.782716446,"data":"[NbConvertApp] Writing 327014 bytes to __results__.html\n"}
+]

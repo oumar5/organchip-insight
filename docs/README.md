@@ -17,6 +17,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 - [Stratégie de données](data-strategy.md)
 - [Plan de validation](validation.md)
 - [Protocole candidat de regroupement par campagne](protocole-campagnes-v2.md)
+- [Workflow Kaggle et GitHub](kaggle-workflow.md)
 - [Manifeste et acquisition des données](../data/README.md)
 
 ## Challenge AI4S

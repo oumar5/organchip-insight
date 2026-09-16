@@ -1,0 +1,49 @@
+{
+  "benchmark_eligible": false,
+  "checks": {
+    "cpu_onnx_round_trip": {
+      "error": "ModuleNotFoundError: No module named 'onnxruntime'",
+      "passed": false
+    },
+    "cuda_mobilenet_forward": {
+      "details": {
+        "cudnn": 91002,
+        "gpu_names": [
+          "Tesla T4",
+          "Tesla T4"
+        ],
+        "output_shape": [
+          1,
+          2
+        ],
+        "torch_cuda": "12.8"
+      },
+      "passed": true
+    }
+  },
+  "contract_id": "organchip-ooc-cnn-kaggle-runtime-v1",
+  "contract_semantic_sha256": "6aeb3656a4b2d89bcb47204fc26d8843ffc378ed482cdc95c59c057c87c89da8",
+  "generated_at_utc": "2026-09-16T08:20:07.888171+00:00",
+  "platform": "Linux",
+  "runtime_checks_passed": false,
+  "schema_version": 1,
+  "scope": "runtime-only; synthetic inputs; random weights; no dataset or training",
+  "versions": {
+    "blockers": [
+      "Missing package: onnxruntime"
+    ],
+    "packages": {
+      "Pillow": "11.3.0",
+      "matplotlib": "3.10.0",
+      "numpy": "2.0.2",
+      "onnx": "1.22.0",
+      "onnxruntime": null,
+      "packaging": "26.1",
+      "pandas": "2.3.3",
+      "scikit-learn": "1.6.1",
+      "torch": "2.10.0+cu128",
+      "torchvision": "0.25.0+cu128"
+    },
+    "python": "3.12.13"
+  }
+}
