@@ -83,6 +83,13 @@ rester visibles. Le préfixe est seulement une heuristique de date ; ce résulta
 mesure une généralisation à des dates tenues à l'écart, pas à des puces ou
 expériences indépendantes documentées.
 
+Lecture honnête de ces deux tableaux : sur le test groupé, la macro-F1 du
+baseline image-only (0,692) n'est pas distinguable de celle du raccourci
+mode + résolution (0,695) ; seule la ROC-AUC sépare les deux (0,803 contre
+0,714). Il n'existe donc pas encore de preuve qu'un modèle apprenne la
+qualité d'image au-delà des propriétés d'acquisition. Tout futur CNN doit
+être jugé d'abord **à mode d'acquisition égal**.
+
 Rapport :
 [`reports/benchmarks/ooc-handcrafted-image-quality-v1.json`](../reports/benchmarks/ooc-handcrafted-image-quality-v1.json).
 
