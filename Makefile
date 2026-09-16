@@ -1,8 +1,13 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
 
 MICROSAM_ENV ?= $(CURDIR)/data/cache/microsam-env
-CNN_PYTHON ?= $(MICROSAM_ENV)/bin/python
+CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
 CNN_RUN_ID ?= smoke-local-manual
+CNN_CHECKPOINT ?=
+CNN_CHECKPOINT_SHA256 ?=
+CNN_SELECTION_REPORT ?=
+CNN_SELECTION_REPORT_SHA256 ?=
+CNN_EXPORT_DIR ?=
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
@@ -48,6 +53,14 @@ cnn-protocol-test:
 
 cnn-smoke:
 	PYTHONPATH=backend $(CNN_PYTHON) -m training.ooc_cnn.cli train --mode smoke --device cpu --run-id $(CNN_RUN_ID)
+
+cnn-export:
+	@test -n "$(CNN_CHECKPOINT)" || (echo "CNN_CHECKPOINT is required"; exit 2)
+	@test -n "$(CNN_CHECKPOINT_SHA256)" || (echo "CNN_CHECKPOINT_SHA256 is required"; exit 2)
+	@test -n "$(CNN_SELECTION_REPORT)" || (echo "CNN_SELECTION_REPORT is required"; exit 2)
+	@test -n "$(CNN_SELECTION_REPORT_SHA256)" || (echo "CNN_SELECTION_REPORT_SHA256 is required"; exit 2)
+	@test -n "$(CNN_EXPORT_DIR)" || (echo "CNN_EXPORT_DIR is required"; exit 2)
+	PYTHONPATH=backend $(CNN_PYTHON) -m training.ooc_cnn.cli export --checkpoint "$(CNN_CHECKPOINT)" --checkpoint-sha256 "$(CNN_CHECKPOINT_SHA256)" --selection-report "$(CNN_SELECTION_REPORT)" --selection-report-sha256 "$(CNN_SELECTION_REPORT_SHA256)" --output-directory "$(CNN_EXPORT_DIR)"
 
 cnn-notebook-check:
 	uv run --project backend python backend/scripts/check_ooc_cnn_notebook.py

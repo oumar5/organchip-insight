@@ -31,7 +31,8 @@
 - [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
 - [x] smoke CPU avec hashes d'images vérifiés et export ONNX contrôlé ;
 - [ ] validation CNN complète sur GPU Kaggle ;
-- [ ] ouverture unique du test après gel de la sélection et des hashes.
+- [ ] ouverture unique du test après gel de la sélection et des hashes, avec
+  archivage externe du reçu local avant fermeture du workspace final.
 
 ## Jalon 3 — Expérience scientifique
 

@@ -91,7 +91,7 @@ Audit du split et des raccourcis :
 
 ### Contrôle technique du pipeline CNN
 
-Le runtime MobileNetV3 du commit `d39e5019632eec96d3f48c99c47c16558087d4cc`
+Le runtime MobileNetV3 du commit `dc41d2cdfa03d059193ac1aa5d8e930dfa53e6f1`
 a passé un smoke test CPU déterministe : huit images train, quatre images de
 validation, une époque et graine `20260916`. Les hashes des 12 images ont été
 vérifiés. Le manifeste test n'a jamais été ouvert et le rapport marque
@@ -104,8 +104,11 @@ ne doivent être comparées ni aux baselines ci-dessus, ni à un résultat publi
 L'export ONNX opset 18 accepte les lots dynamiques 1, 2 et 3. Son écart absolu
 maximal avec PyTorch est `1,862645149230957e-09`, sous la tolérance `1e-4`.
 La validation complète avec poids locaux vérifiés doit encore être exécutée sur
-GPU Kaggle. L'évaluation finale reste un accès test unique, autorisé seulement
-après gel du modèle, du seuil, du checkpoint et de tous leurs hashes.
+GPU Kaggle. Le protocole scientifique réserve un seul accès final au test,
+autorisé seulement après gel du modèle, du seuil, du checkpoint et de tous
+leurs hashes. Le verrou logiciel refuse une seconde tentative dans un workspace
+qui conserve son reçu ; ce reçu doit être archivé hors de tout workspace Kaggle
+éphémère, car le verrou n'est pas global entre deux environnements recréés.
 
 Détails, artefacts et hashes :
 [retour d'expérience du smoke CNN](retours-experience/2026-09-16-pipeline-cnn-smoke.md).

@@ -85,7 +85,7 @@ make check
 Ou séparément :
 
 ```bash
-uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py
+uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py backend/training backend/evaluation backend/scripts
 uv run --project backend --extra dev --extra ml pytest backend/tests
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
@@ -120,6 +120,24 @@ make cnn-notebook-check
 CNN_RUN_ID=smoke-local-manual-v1 make cnn-smoke
 ```
 
+`cnn-smoke` utilise par défaut l'environnement Conda
+`organchip-ooc-cnn-cpu` décrit dans
+[`backend/experiments/ooc-cnn/README.md`](backend/experiments/ooc-cnn/README.md).
+Un interpréteur isolé équivalent peut être fourni explicitement, par exemple
+`make cnn-smoke CNN_PYTHON=/chemin/vers/python`.
+
+L'export ONNX exige les identités exactes du checkpoint et du rapport de
+sélection ; aucune valeur n'est inférée :
+
+```bash
+make cnn-export \
+  CNN_CHECKPOINT=data/experiments/ooc-cnn/smoke-local-manual-v1/best-checkpoint.pt \
+  CNN_CHECKPOINT_SHA256=REPLACE_WITH_64_HEX_SHA256 \
+  CNN_SELECTION_REPORT=data/experiments/ooc-cnn/smoke-local-manual-v1/validation-report.json \
+  CNN_SELECTION_REPORT_SHA256=REPLACE_WITH_64_HEX_SHA256 \
+  CNN_EXPORT_DIR=data/experiments/ooc-cnn/smoke-local-manual-v1/onnx
+```
+
 Le [notebook Kaggle](notebooks/ooc-cnn-kaggle.ipynb) reste hors ligne par
 construction : aucune installation, aucun téléchargement implicite de poids et
 aucune action de publication Kaggle.
@@ -133,7 +151,7 @@ frontend React
         -> fichiers : images et overlays
         -> registre de moteurs
             -> segmentation adaptative v1 (disponible)
-            -> µSAM (planifié)
+            -> µSAM (expérimental, benchmark isolé)
             -> Cellpose (revue de licence)
 ```
 
@@ -153,6 +171,7 @@ Commencer par l'[index documentaire](docs/README.md), puis lire :
 Catégorie prévue : **Tool & Platform** pour le challenge
 [AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien).
 
-Le premier benchmark reproductible cible BBBC019 Microfluidics. La suite est la
-comparaison µSAM, puis la classification de qualité sur le dataset OoC après un
-split anti-fuite vérifié.
+Les benchmarks reproductibles adaptatif et µSAM ciblent BBBC019 Microfluidics.
+Le split OoC groupé, les baselines de qualité et de confondants, puis le smoke
+CNN sont terminés. La prochaine étape de modélisation est la validation CNN
+complète sur GPU, sans accès au test gelé.
