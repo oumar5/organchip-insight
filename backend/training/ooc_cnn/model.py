@@ -6,7 +6,7 @@ import hashlib
 import re
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
 
@@ -65,12 +65,17 @@ def build_mobilenet_v3_small(
     *,
     weights: str | Path = "none",
     expected_sha256: str | None = None,
+    weights_role: Literal["imagenet", "checkpoint"] | None = None,
     dropout: float = 0.2,
 ) -> Any:
     """Build a two-logit model without ever asking torchvision to download weights."""
     if not 0 <= dropout < 1:
         raise ValueError("dropout must be in the interval [0, 1)")
     weights_path = _validated_weights_path(weights, expected_sha256)
+    if weights_path is None and weights_role is not None:
+        raise ValueError("weights_role must be omitted when weights='none'")
+    if weights_path is not None and weights_role is None:
+        raise ValueError("weights_role is required for local weights")
 
     try:
         import torch
@@ -87,19 +92,20 @@ def build_mobilenet_v3_small(
     if not isinstance(final_layer, nn.Linear):
         raise TypeError("unexpected torchvision MobileNetV3 classifier layout")
 
+    output_classes: int | None = None
     if state_dict is not None:
         output_weight = state_dict.get("classifier.3.weight")
         output_classes = int(output_weight.shape[0]) if output_weight is not None else None
-        if output_classes == final_layer.out_features:
+        expected_classes = 1000 if weights_role == "imagenet" else 2
+        if output_classes != expected_classes:
+            raise ValueError(
+                f"local {weights_role} weights must have {expected_classes} output classes"
+            )
+        if weights_role == "imagenet":
             model.load_state_dict(state_dict, strict=True)
 
     model.classifier[-1] = nn.Linear(final_layer.in_features, 2)
 
-    if state_dict is not None and output_classes == 2:
+    if state_dict is not None and weights_role == "checkpoint":
         model.load_state_dict(state_dict, strict=True)
-    elif state_dict is not None and output_classes != final_layer.out_features:
-        raise ValueError(
-            "local weights must be torchvision ImageNet weights or a two-class "
-            "MobileNetV3 Small state dictionary"
-        )
     return model

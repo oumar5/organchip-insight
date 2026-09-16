@@ -76,6 +76,10 @@
       "onnxruntime": {
         "specifier": ">=1.20,<1.23",
         "locally_validated_version": "1.22.2"
+      },
+      "packaging": {
+        "specifier": ">=24,<27",
+        "locally_validated_version": "26.3"
       }
     },
     "tooling_packages": {

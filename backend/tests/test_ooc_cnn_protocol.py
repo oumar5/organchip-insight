@@ -84,16 +84,38 @@ def _fixture_project(tmp_path: Path) -> dict[str, Path]:
 def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
     config = paths["root"] / "data/experiments/config.json"
     checkpoint = paths["root"] / "data/experiments/checkpoint.bin"
+    validation_report = paths["root"] / "data/experiments/validation-report.json"
+    source_file = paths["root"] / "backend/training/ooc_cnn/runtime.py"
     config.parent.mkdir(parents=True, exist_ok=True)
     config.write_text('{"model":"fixture"}\n', encoding="utf-8")
     checkpoint.write_bytes(b"checkpoint")
+    validation_report.write_text('{"mode":"validation"}\n', encoding="utf-8")
+    source_file.parent.mkdir(parents=True, exist_ok=True)
+    source_file.write_text("# frozen fixture source\n", encoding="utf-8")
     frozen = paths["root"] / "data/experiments/frozen.json"
     frozen.write_text(
         json.dumps(
             {
                 "schema_version": 1,
                 "experiment_id": "fixture-cnn-v1",
-                "selection": {"threshold": 0.55},
+                "policy": {
+                    "selection_split": "validation",
+                    "test_used_for_selection": False,
+                    "test_manifest_opened_while_freezing": False,
+                    "final_evaluation_requires_single_access_receipt": True,
+                },
+                "selection": {
+                    "checkpoint_metric": "validation macro_f1 at threshold 0.5",
+                    "best_epoch": 1,
+                    "threshold": 0.55,
+                    "threshold_selected_on": "validation",
+                },
+                "source_files": [
+                    {
+                        "path": source_file.relative_to(paths["root"]).as_posix(),
+                        "sha256": sha256_file(source_file),
+                    }
+                ],
                 "artifacts": {
                     "config": {
                         "path": config.relative_to(paths["root"]).as_posix(),
@@ -103,6 +125,10 @@ def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
                         "path": checkpoint.relative_to(paths["root"]).as_posix(),
                         "sha256": sha256_file(checkpoint),
                     },
+                    "validation_report": {
+                        "path": validation_report.relative_to(paths["root"]).as_posix(),
+                        "sha256": sha256_file(validation_report),
+                    },
                     "train_validation_manifest": {
                         "path": paths["train_validation"].relative_to(paths["root"]).as_posix(),
                         "sha256": sha256_file(paths["train_validation"]),
@@ -110,6 +136,10 @@ def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
                     "test_manifest": {
                         "path": paths["test"].relative_to(paths["root"]).as_posix(),
                         "sha256": sha256_file(paths["test"]),
+                    },
+                    "split_lock": {
+                        "path": paths["lock"].relative_to(paths["root"]).as_posix(),
+                        "sha256": sha256_file(paths["lock"]),
                     },
                 },
             },
@@ -257,6 +287,13 @@ def test_final_eval_requires_all_authorizations(
         "confirmation": FINAL_EVAL_CONFIRMATION,
         "test_open_reason": "frozen model final evaluation",
         "receipt_directory": tmp_path / "reports/test-access",
+        "active_config_path": tmp_path / "data/experiments/config.json",
+        "active_config_sha256": sha256_file(
+            tmp_path / "data/experiments/config.json"
+        ),
+        "active_source_paths": (
+            tmp_path / "backend/training/ooc_cnn/runtime.py",
+        ),
     }
     arguments.update(overrides)
     with pytest.raises(ValueError, match=message):
@@ -264,7 +301,7 @@ def test_final_eval_requires_all_authorizations(
     assert not (tmp_path / "reports/test-access").exists()
 
 
-def test_final_eval_writes_receipt_before_test_open_and_chains_receipts(
+def test_final_eval_writes_receipt_before_test_open_and_refuses_second_access(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     paths = _fixture_project(tmp_path)
@@ -291,6 +328,13 @@ def test_final_eval_writes_receipt_before_test_open_and_chains_receipts(
         "confirmation": FINAL_EVAL_CONFIRMATION,
         "test_open_reason": "frozen model final evaluation",
         "receipt_directory": receipt_directory,
+        "active_config_path": tmp_path / "data/experiments/config.json",
+        "active_config_sha256": sha256_file(
+            tmp_path / "data/experiments/config.json"
+        ),
+        "active_source_paths": (
+            tmp_path / "backend/training/ooc_cnn/runtime.py",
+        ),
         "require_image_files": True,
         "verify_image_hashes": True,
     }
@@ -299,19 +343,19 @@ def test_final_eval_writes_receipt_before_test_open_and_chains_receipts(
         now=lambda: base_time,
         receipt_id_factory=lambda: "receipt-one",
     )
-    second = load_run_manifests(
-        **common,
-        now=lambda: base_time + timedelta(seconds=1),
-        receipt_id_factory=lambda: "receipt-two",
-    )
+    with pytest.raises(RuntimeError, match="already been authorized once"):
+        load_run_manifests(
+            **common,
+            now=lambda: base_time + timedelta(seconds=1),
+            receipt_id_factory=lambda: "receipt-two",
+        )
 
     assert first.test is not None
-    assert second.test is not None
     chain = validate_receipt_chain(receipt_directory)
-    assert len(chain) == 2
-    second_receipt = json.loads(chain[1].read_text(encoding="utf-8"))
-    assert second_receipt["previous_receipt_sha256"] == sha256_file(chain[0])
-    assert second_receipt["reason"] == "frozen model final evaluation"
+    assert len(chain) == 1
+    receipt = json.loads(chain[0].read_text(encoding="utf-8"))
+    assert receipt["previous_receipt_sha256"] is None
+    assert receipt["reason"] == "frozen model final evaluation"
 
 
 def test_final_eval_rejects_mutated_checkpoint_before_test_open(
@@ -343,6 +387,105 @@ def test_final_eval_rejects_mutated_checkpoint_before_test_open(
             confirmation=FINAL_EVAL_CONFIRMATION,
             test_open_reason="frozen model final evaluation",
             receipt_directory=receipt_directory,
+            active_config_path=tmp_path / "data/experiments/config.json",
+            active_config_sha256=sha256_file(
+                tmp_path / "data/experiments/config.json"
+            ),
+            active_source_paths=(
+                tmp_path / "backend/training/ooc_cnn/runtime.py",
+            ),
+        )
+    assert not receipt_directory.exists()
+
+
+def test_final_eval_rejects_test_manifest_alias_before_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    paths = _fixture_project(tmp_path)
+    frozen = _write_frozen_manifest(paths)
+    value = json.loads(frozen.read_text(encoding="utf-8"))
+    value["source_files"][0] = {
+        "path": paths["test"].relative_to(tmp_path).as_posix(),
+        "sha256": sha256_file(paths["test"]),
+    }
+    frozen.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    test_path = paths["test"].resolve()
+    original_open = Path.open
+
+    def tracked_open(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == test_path:
+            raise AssertionError("test manifest was opened through an alias")
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", tracked_open)
+    with pytest.raises(ValueError, match="aliases the test manifest"):
+        load_run_manifests(
+            mode=RunMode.FINAL_EVAL,
+            project_root=tmp_path,
+            split_lock_path=paths["lock"],
+            train_validation_manifest_path=paths["train_validation"],
+            test_manifest_path=paths["test"],
+            frozen_manifest_path=frozen,
+            frozen_manifest_sha256=sha256_file(frozen),
+            confirmation=FINAL_EVAL_CONFIRMATION,
+            test_open_reason="frozen model final evaluation",
+            receipt_directory=tmp_path / "reports/test-access",
+            active_config_path=tmp_path / "data/experiments/config.json",
+            active_config_sha256=sha256_file(
+                tmp_path / "data/experiments/config.json"
+            ),
+            active_source_paths=(
+                tmp_path / "backend/training/ooc_cnn/runtime.py",
+            ),
+        )
+
+
+@pytest.mark.parametrize("target", ["config", "source"])
+def test_final_eval_rejects_mutated_frozen_inputs_before_test_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    target: str,
+) -> None:
+    paths = _fixture_project(tmp_path)
+    frozen = _write_frozen_manifest(paths)
+    mutated = (
+        tmp_path / "data/experiments/config.json"
+        if target == "config"
+        else tmp_path / "backend/training/ooc_cnn/runtime.py"
+    )
+    mutated.write_text("mutated\n", encoding="utf-8")
+    test_path = paths["test"].resolve()
+    original_open = Path.open
+
+    def tracked_open(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == test_path:
+            raise AssertionError("test manifest was opened")
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", tracked_open)
+    receipt_directory = tmp_path / "reports/test-access"
+    with pytest.raises(ValueError, match="Frozen (artifact|source) checksum mismatch"):
+        load_run_manifests(
+            mode=RunMode.FINAL_EVAL,
+            project_root=tmp_path,
+            split_lock_path=paths["lock"],
+            train_validation_manifest_path=paths["train_validation"],
+            test_manifest_path=paths["test"],
+            frozen_manifest_path=frozen,
+            frozen_manifest_sha256=sha256_file(frozen),
+            confirmation=FINAL_EVAL_CONFIRMATION,
+            test_open_reason="frozen model final evaluation",
+            receipt_directory=receipt_directory,
+            active_config_path=tmp_path / "data/experiments/config.json",
+            active_config_sha256=(
+                "0" * 64
+                if target == "config"
+                else sha256_file(tmp_path / "data/experiments/config.json")
+            ),
+            active_source_paths=(
+                tmp_path / "backend/training/ooc_cnn/runtime.py",
+            ),
         )
     assert not receipt_directory.exists()
 
@@ -362,6 +505,11 @@ def test_receipt_chain_detects_tampering(tmp_path: Path) -> None:
         confirmation=FINAL_EVAL_CONFIRMATION,
         test_open_reason="frozen model final evaluation",
         receipt_directory=receipt_directory,
+        active_config_path=tmp_path / "data/experiments/config.json",
+        active_config_sha256=sha256_file(tmp_path / "data/experiments/config.json"),
+        active_source_paths=(
+            tmp_path / "backend/training/ooc_cnn/runtime.py",
+        ),
         now=lambda: datetime(2026, 9, 16, 12, 0, tzinfo=UTC),
         receipt_id_factory=lambda: "receipt-one",
     )

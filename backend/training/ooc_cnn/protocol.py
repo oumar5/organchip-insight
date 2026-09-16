@@ -30,8 +30,15 @@ from training.ooc_cnn.manifests import (
 )
 
 FINAL_EVAL_CONFIRMATION = "OPEN_FROZEN_TEST_ONCE"
-REQUIRED_FROZEN_ARTIFACTS = frozenset(
-    {"config", "train_validation_manifest", "test_manifest", "checkpoint"}
+FROZEN_ARTIFACT_NAMES = frozenset(
+    {
+        "config",
+        "validation_report",
+        "checkpoint",
+        "train_validation_manifest",
+        "test_manifest",
+        "split_lock",
+    }
 )
 RECEIPT_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]+$")
 
@@ -57,6 +64,7 @@ class FrozenManifest:
     experiment_id: str
     threshold: float
     artifacts: dict[str, FrozenArtifact]
+    source_files: tuple[FrozenArtifact, ...]
 
 
 @dataclass(frozen=True)
@@ -101,6 +109,7 @@ def load_frozen_manifest(
     project_root: Path,
     expected_sha256: str,
     deferred_artifacts: frozenset[str] = frozenset(),
+    expected_source_paths: tuple[Path, ...] | None = None,
 ) -> FrozenManifest:
     relative_project_path(project_root, path, field="frozen manifest path")
     expected_sha256 = validate_sha256(expected_sha256, "frozen manifest expected_sha256")
@@ -112,16 +121,43 @@ def load_frozen_manifest(
         raise ValueError("Frozen manifest must use schema_version 1")
     experiment_id = value.get("experiment_id")
     artifacts_value = value.get("artifacts")
+    source_files_value = value.get("source_files")
     selection = value.get("selection")
     if not isinstance(experiment_id, str) or not experiment_id.strip():
         raise ValueError("Frozen manifest experiment_id is invalid")
     if not isinstance(artifacts_value, dict):
         raise ValueError("Frozen manifest artifacts are invalid")
-    if not REQUIRED_FROZEN_ARTIFACTS <= set(artifacts_value):
-        missing = sorted(REQUIRED_FROZEN_ARTIFACTS - set(artifacts_value))
-        raise ValueError(f"Frozen manifest is missing artifacts: {', '.join(missing)}")
+    if not isinstance(source_files_value, list) or not source_files_value:
+        raise ValueError("Frozen manifest source_files are invalid")
+    artifact_names = set(artifacts_value)
+    if artifact_names != FROZEN_ARTIFACT_NAMES:
+        missing = sorted(FROZEN_ARTIFACT_NAMES - artifact_names)
+        unexpected = sorted(artifact_names - FROZEN_ARTIFACT_NAMES)
+        details = []
+        if missing:
+            details.append(f"missing: {', '.join(missing)}")
+        if unexpected:
+            details.append(f"unexpected: {', '.join(unexpected)}")
+        raise ValueError(f"Frozen manifest artifact set is invalid ({'; '.join(details)})")
+    if not deferred_artifacts <= FROZEN_ARTIFACT_NAMES:
+        raise ValueError("Frozen manifest has unknown deferred artifacts")
     if not isinstance(selection, dict):
         raise ValueError("Frozen manifest selection is invalid")
+    policy = value.get("policy")
+    if not isinstance(policy, dict) or policy != {
+        "selection_split": "validation",
+        "test_used_for_selection": False,
+        "test_manifest_opened_while_freezing": False,
+        "final_evaluation_requires_single_access_receipt": True,
+    }:
+        raise ValueError("Frozen manifest policy is invalid")
+    if selection.get("checkpoint_metric") != "validation macro_f1 at threshold 0.5":
+        raise ValueError("Frozen manifest checkpoint metric is invalid")
+    if selection.get("threshold_selected_on") != "validation":
+        raise ValueError("Frozen manifest threshold provenance is invalid")
+    best_epoch = selection.get("best_epoch")
+    if isinstance(best_epoch, bool) or not isinstance(best_epoch, int) or best_epoch <= 0:
+        raise ValueError("Frozen manifest best epoch is invalid")
     threshold = selection.get("threshold")
     if isinstance(threshold, bool) or not isinstance(threshold, int | float):
         raise ValueError("Frozen manifest threshold is invalid")
@@ -133,6 +169,27 @@ def load_frozen_manifest(
         name: _parse_frozen_artifact(name, artifact, project_root=project_root)
         for name, artifact in artifacts_value.items()
     }
+    source_files = tuple(
+        _parse_frozen_artifact(
+            f"source_files[{index}]", source_file, project_root=project_root
+        )
+        for index, source_file in enumerate(source_files_value)
+    )
+    if len({source.path for source in source_files}) != len(source_files):
+        raise ValueError("Frozen manifest contains duplicate source files")
+    test_path = artifacts["test_manifest"].path
+    aliased_artifacts = sorted(
+        name
+        for name, artifact in artifacts.items()
+        if name != "test_manifest" and artifact.path == test_path
+    )
+    if aliased_artifacts or any(source.path == test_path for source in source_files):
+        raise ValueError("Frozen manifest aliases the test manifest before authorization")
+    if expected_source_paths is not None:
+        expected_paths = {path.resolve() for path in expected_source_paths}
+        actual_paths = {source.path for source in source_files}
+        if actual_paths != expected_paths:
+            raise ValueError("Frozen source file set does not match the active runtime")
     for name, artifact in artifacts.items():
         if name in deferred_artifacts:
             continue
@@ -140,12 +197,16 @@ def load_frozen_manifest(
             raise ValueError(f"Frozen artifact is missing: {name}")
         if sha256_file(artifact.path) != artifact.sha256:
             raise ValueError(f"Frozen artifact checksum mismatch: {name}")
+    for source in source_files:
+        if not source.path.is_file() or sha256_file(source.path) != source.sha256:
+            raise ValueError(f"Frozen source checksum mismatch: {source.relative_path}")
     return FrozenManifest(
         path=path.resolve(),
         sha256=actual_sha256,
         experiment_id=experiment_id.strip(),
         threshold=threshold,
         artifacts=artifacts,
+        source_files=source_files,
     )
 
 
@@ -190,6 +251,10 @@ def append_test_access_receipt(
     with lock_path.open("a+", encoding="utf-8") as lock_file:
         fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
         previous_paths = validate_receipt_chain(receipt_directory)
+        if previous_paths:
+            raise RuntimeError(
+                "The frozen CNN test manifest has already been authorized once"
+            )
         previous_sha256 = sha256_file(previous_paths[-1]) if previous_paths else None
         receipt_id = (receipt_id_factory or (lambda: uuid.uuid4().hex))()
         if not RECEIPT_ID_PATTERN.fullmatch(receipt_id):
@@ -230,6 +295,11 @@ def append_test_access_receipt(
             destination.write(output)
             destination.flush()
             os.fsync(destination.fileno())
+        directory_descriptor = os.open(receipt_directory, os.O_RDONLY)
+        try:
+            os.fsync(directory_descriptor)
+        finally:
+            os.close(directory_descriptor)
         return output_path
 
 
@@ -239,9 +309,14 @@ def _assert_frozen_matches_protocol(
     train_validation: ManifestData,
     train_validation_spec: ManifestSpec,
     test_spec: ManifestSpec,
+    config_path: Path,
+    config_sha256: str,
+    split_lock: SplitLock,
 ) -> None:
     train_artifact = frozen.artifacts["train_validation_manifest"]
     test_artifact = frozen.artifacts["test_manifest"]
+    config_artifact = frozen.artifacts["config"]
+    split_lock_artifact = frozen.artifacts["split_lock"]
     if train_artifact.path != train_validation_spec.path:
         raise ValueError("Frozen train/validation manifest path does not match the split lock")
     if train_artifact.sha256 != train_validation.sha256:
@@ -250,6 +325,14 @@ def _assert_frozen_matches_protocol(
         raise ValueError("Frozen test manifest path does not match the split lock")
     if test_artifact.sha256 != test_spec.sha256:
         raise ValueError("Frozen test manifest checksum does not match the split lock")
+    if config_artifact.path != config_path.resolve():
+        raise ValueError("Frozen config path does not match the active config")
+    if config_artifact.sha256 != validate_sha256(config_sha256, "active config sha256"):
+        raise ValueError("Frozen config checksum does not match the active config")
+    if split_lock_artifact.path != split_lock.path:
+        raise ValueError("Frozen split lock path does not match the active split lock")
+    if split_lock_artifact.sha256 != split_lock.sha256:
+        raise ValueError("Frozen split lock checksum does not match the active split lock")
 
 
 def load_run_manifests(
@@ -265,6 +348,9 @@ def load_run_manifests(
     confirmation: str | None = None,
     test_open_reason: str | None = None,
     receipt_directory: Path | None = None,
+    active_config_path: Path | None = None,
+    active_config_sha256: str | None = None,
+    active_source_paths: tuple[Path, ...] | None = None,
     require_image_files: bool = False,
     verify_image_hashes: bool = False,
     now: Callable[[], datetime] | None = None,
@@ -280,6 +366,9 @@ def load_run_manifests(
         confirmation,
         test_open_reason,
         receipt_directory,
+        active_config_path,
+        active_config_sha256,
+        active_source_paths,
     )
     if run_mode is not RunMode.FINAL_EVAL and any(value is not None for value in final_only_values):
         raise ValueError("Non-final modes cannot receive test access capabilities")
@@ -295,6 +384,9 @@ def load_run_manifests(
                 frozen_manifest_path,
                 frozen_manifest_sha256,
                 receipt_directory,
+                active_config_path,
+                active_config_sha256,
+                active_source_paths,
             )
         ):
             raise ValueError(
@@ -332,6 +424,9 @@ def load_run_manifests(
     assert frozen_manifest_sha256 is not None
     assert test_open_reason is not None
     assert receipt_directory is not None
+    assert active_config_path is not None
+    assert active_config_sha256 is not None
+    assert active_source_paths is not None
     test_path = test_manifest_path.resolve()
     if test_path != split_lock.test.path:
         raise ValueError("Test manifest path does not match the split lock")
@@ -340,12 +435,16 @@ def load_run_manifests(
         project_root=root,
         expected_sha256=frozen_manifest_sha256,
         deferred_artifacts=frozenset({"test_manifest"}),
+        expected_source_paths=active_source_paths,
     )
     _assert_frozen_matches_protocol(
         frozen,
         train_validation=train_validation,
         train_validation_spec=split_lock.train_validation,
         test_spec=split_lock.test,
+        config_path=active_config_path,
+        config_sha256=active_config_sha256,
+        split_lock=split_lock,
     )
     receipt = append_test_access_receipt(
         receipt_directory=receipt_directory,

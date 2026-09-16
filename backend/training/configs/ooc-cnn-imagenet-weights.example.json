@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "file_name": "mobilenet_v3_small-imagenet1k-v1.pth",
+  "file_sha256": "REPLACE_WITH_THE_64_CHARACTER_SHA256_OF_THE_LOCAL_FILE",
+  "architecture": "mobilenet_v3_small",
+  "weight_enum": "MobileNet_V3_Small_Weights.IMAGENET1K_V1",
+  "source_url": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+  "license": "BSD-3-Clause (torchvision); ImageNet terms apply to the training data"
+}
