@@ -79,6 +79,54 @@ absolue maximale `1,862645149230957e-09`, pour une tolérance `1e-4`.
 
 ## Utilisation sur Kaggle
 
+### Sonde préalable, sans données
+
+Avant de transférer les données ou de lancer l'entraînement, utiliser le notebook
+autonome [ooc-runtime-probe-kaggle.ipynb](../../../notebooks/ooc-runtime-probe-kaggle.ipynb).
+Il embarque le contrat actuel et un diagnostic reproductible, sans dépendre du
+bundle source. Aucun poids n'est téléchargé, aucun dataset n'est lu, aucun
+entraînement n'est lancé. Le modèle aléatoire généré est un artefact de test,
+jamais un modèle à intégrer au produit.
+
+La création/importation sur Kaggle nécessite une confirmation explicite juste
+avant l'action externe. Réglages : GPU activé, Internet désactivé, aucune entrée
+dataset. Exécuter toutes les cellules puis récupérer `runtime-report.json` dans
+le sous-dossier `organchip-runtime-probe-*` des sorties. Ne pas publier le
+notebook ou créer un dataset pour cette simple vérification.
+
+Le rapport contient les versions, les incompatibilités avec le contrat, un
+forward MobileNetV3 sur CUDA et une vérification ONNX/PyTorch CPU pour les lots
+1, 2 et 3. Un succès des opérations ne lève pas une incompatibilité de version.
+Un succès global ne remplace pas le préflight complet de l'entraînement.
+
+La sonde reste exécutée pour diagnostic si le contrat refuse une version. Toute
+extension des bornes devra ensuite être vérifiée dans la pile réelle ; le contrat
+et les hashes de configuration ne sont pas modifiés automatiquement.
+
+Reproduction locale, dans un environnement CNN existant :
+
+```bash
+/chemin/vers/python backend/scripts/probe_cnn_runtime.py \
+  --contract backend/experiments/ooc-cnn/kaggle-runtime-contract.json \
+  --output-directory /tmp
+```
+
+Sans CUDA, le contrôle GPU échoue normalement et `runtime_checks_passed` reste
+faux, même si la parité ONNX passe. Ce n'est pas une mesure des versions Kaggle.
+Le notebook versionné est généré par
+`backend/scripts/build_runtime_probe_notebook.py` ; sa synchronisation fait
+partie de `make check`.
+
+Vérification locale du 16 septembre 2026 : le script puis toutes les cellules
+Python du notebook ont été exécutés dans `data/cache/microsam-env/bin/python`
+(Python 3.12.14, torch 2.10.0, torchvision 0.25.0). Les versions respectent le
+contrat ; la parité ONNX passe pour les trois tailles de lot (écart maximal
+`9.43689570931383e-16`, tolérance `1e-4`). Le contrôle CUDA échoue comme attendu
+sur ce Mac. Cette exécution des cellules n'est ni un run du kernel Jupyter, ni
+une exécution Kaggle. Les versions Kaggle restent à mesurer.
+
+### Entraînement après validation de l'environnement
+
 Activer un GPU puis joindre comme entrées locales le code source, les images,
 les manifestes verrouillés et le fichier de poids initial. Le notebook doit
 valider `kaggle-runtime-contract.json` avant tout calcul et enregistrer les

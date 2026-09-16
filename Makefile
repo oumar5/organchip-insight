@@ -64,6 +64,7 @@ cnn-export:
 
 cnn-notebook-check:
 	uv run --project backend python backend/scripts/check_ooc_cnn_notebook.py
+	uv run --project backend python backend/scripts/build_runtime_probe_notebook.py --check
 
 benchmark-bbbc019:
 	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json
