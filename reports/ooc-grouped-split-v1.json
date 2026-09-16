@@ -1,10 +1,14 @@
 {
   "schema_version": 1,
   "split_id": "ooc-grouped-by-acquisition-prefix-v1",
-  "generated_at_utc": "2026-09-16T04:16:32.508008+00:00",
-  "git_commit": "37d54cf1fd28280be28c2b3504966df9ed353bd4",
+  "generated_at_utc": "2026-09-16T05:04:20.019009+00:00",
+  "git_commit": "f9e3a785199dea53b4f2320cd51c8edfb521065a",
+  "implementation": {
+    "path": "backend/training/split_ooc.py",
+    "sha256": "ee06691413bfafd46f14dea0438d400b6b5fa836796d4248e827d080eb89c506"
+  },
   "config": "backend/training/configs/ooc-grouped-split-v1.json",
-  "config_sha256": "d65d77468d72767c1edd35c9c3e64742292a83c189d4a0339882f62794e9a8dd",
+  "config_sha256": "b5ddedf8dde13bb77cff5d49f8ffbdbd8cd8b404e341da8a94706213ac635239",
   "source_inventory": {
     "path": "reports/ooc-image-inventory-2026-09-16.csv",
     "sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
@@ -23,7 +27,8 @@
       "path_label": 4.0,
       "path_cell_type": 2.0,
       "path_day_bucket": 1.0
-    }
+    },
+    "near_duplicate_maximum_hamming_distance": 8
   },
   "results": {
     "record_counts": {
@@ -106,10 +111,612 @@
         "4_days": 53
       }
     },
-    "near_duplicate_policy": {
-      "audited_cross_split_candidates": 57,
-      "all_candidates_share_group_field": true,
-      "candidates_crossing_grouped_split": 0
+    "near_duplicate_audit": {
+      "scope": "all unordered image pairs assigned to different grouped splits",
+      "complete": true,
+      "method": "256-bit difference hash on a 17x16 grayscale thumbnail",
+      "maximum_hamming_distance": 8,
+      "cross_split_pair_count": 2216621,
+      "cross_split_candidate_pair_count": 0,
+      "same_acquisition_prefix_pair_count": 0,
+      "label_conflict_pair_count": 0,
+      "exact_file_match_pair_count": 0,
+      "distance_counts": {},
+      "split_pairs": {
+        "train_validation": {
+          "pairs_examined": 987294,
+          "candidate_pairs": 0
+        },
+        "train_test": {
+          "pairs_examined": 1010801,
+          "candidate_pairs": 0
+        },
+        "validation_test": {
+          "pairs_examined": 218526,
+          "candidate_pairs": 0
+        }
+      },
+      "examples": [],
+      "passed": true,
+      "warning": "This exhaustively screens the configured difference-hash distance; it does not prove the absence of duplicates under rotations, crops or other transformations."
+    },
+    "confounder_audit": {
+      "status": "potential acquisition shortcut detected",
+      "interpretation": "Mode and pixel dimensions are acquisition properties, not biological quality evidence. Predictive performance from these fields indicates a shortcut risk for image models.",
+      "distributions": {
+        "mode": {
+          "categories": [
+            "L",
+            "RGB"
+          ],
+          "by_split": {
+            "train": {
+              "L": {
+                "bad": 759,
+                "good": 721,
+                "total": 1480,
+                "good_rate": 0.487162
+              },
+              "RGB": {
+                "bad": 187,
+                "good": 470,
+                "total": 657,
+                "good_rate": 0.715373
+              }
+            },
+            "validation": {
+              "L": {
+                "bad": 166,
+                "good": 115,
+                "total": 281,
+                "good_rate": 0.409253
+              },
+              "RGB": {
+                "bad": 28,
+                "good": 153,
+                "total": 181,
+                "good_rate": 0.845304
+              }
+            },
+            "test": {
+              "L": {
+                "bad": 174,
+                "good": 113,
+                "total": 287,
+                "good_rate": 0.393728
+              },
+              "RGB": {
+                "bad": 31,
+                "good": 155,
+                "total": 186,
+                "good_rate": 0.833333
+              }
+            }
+          }
+        },
+        "resolution": {
+          "categories": [
+            "1536x2048",
+            "2048x1536",
+            "2056x1542",
+            "640x480"
+          ],
+          "by_split": {
+            "train": {
+              "1536x2048": {
+                "bad": 2,
+                "good": 1,
+                "total": 3,
+                "good_rate": 0.333333
+              },
+              "2048x1536": {
+                "bad": 184,
+                "good": 437,
+                "total": 621,
+                "good_rate": 0.703704
+              },
+              "2056x1542": {
+                "bad": 759,
+                "good": 721,
+                "total": 1480,
+                "good_rate": 0.487162
+              },
+              "640x480": {
+                "bad": 1,
+                "good": 32,
+                "total": 33,
+                "good_rate": 0.969697
+              }
+            },
+            "validation": {
+              "1536x2048": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              },
+              "2048x1536": {
+                "bad": 23,
+                "good": 104,
+                "total": 127,
+                "good_rate": 0.818898
+              },
+              "2056x1542": {
+                "bad": 166,
+                "good": 115,
+                "total": 281,
+                "good_rate": 0.409253
+              },
+              "640x480": {
+                "bad": 5,
+                "good": 49,
+                "total": 54,
+                "good_rate": 0.907407
+              }
+            },
+            "test": {
+              "1536x2048": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              },
+              "2048x1536": {
+                "bad": 31,
+                "good": 155,
+                "total": 186,
+                "good_rate": 0.833333
+              },
+              "2056x1542": {
+                "bad": 174,
+                "good": 113,
+                "total": 287,
+                "good_rate": 0.393728
+              },
+              "640x480": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              }
+            }
+          }
+        },
+        "mode_resolution": {
+          "categories": [
+            "L/2056x1542",
+            "RGB/1536x2048",
+            "RGB/2048x1536",
+            "RGB/640x480"
+          ],
+          "by_split": {
+            "train": {
+              "L/2056x1542": {
+                "bad": 759,
+                "good": 721,
+                "total": 1480,
+                "good_rate": 0.487162
+              },
+              "RGB/1536x2048": {
+                "bad": 2,
+                "good": 1,
+                "total": 3,
+                "good_rate": 0.333333
+              },
+              "RGB/2048x1536": {
+                "bad": 184,
+                "good": 437,
+                "total": 621,
+                "good_rate": 0.703704
+              },
+              "RGB/640x480": {
+                "bad": 1,
+                "good": 32,
+                "total": 33,
+                "good_rate": 0.969697
+              }
+            },
+            "validation": {
+              "L/2056x1542": {
+                "bad": 166,
+                "good": 115,
+                "total": 281,
+                "good_rate": 0.409253
+              },
+              "RGB/1536x2048": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              },
+              "RGB/2048x1536": {
+                "bad": 23,
+                "good": 104,
+                "total": 127,
+                "good_rate": 0.818898
+              },
+              "RGB/640x480": {
+                "bad": 5,
+                "good": 49,
+                "total": 54,
+                "good_rate": 0.907407
+              }
+            },
+            "test": {
+              "L/2056x1542": {
+                "bad": 174,
+                "good": 113,
+                "total": 287,
+                "good_rate": 0.393728
+              },
+              "RGB/1536x2048": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              },
+              "RGB/2048x1536": {
+                "bad": 31,
+                "good": 155,
+                "total": 186,
+                "good_rate": 0.833333
+              },
+              "RGB/640x480": {
+                "bad": 0,
+                "good": 0,
+                "total": 0,
+                "good_rate": null
+              }
+            }
+          }
+        }
+      },
+      "train_only_categorical_baselines": {
+        "mode": {
+          "feature": "mode",
+          "fit_split": "train",
+          "label": "good",
+          "smoothing": "Laplace alpha=1",
+          "threshold": 0.5,
+          "threshold_selection": "fixed a priori; no validation or test selection",
+          "unseen_category_policy": "smoothed global training-label rate",
+          "global_train_probability_good": 0.55727,
+          "train_categories": {
+            "L": {
+              "bad": 759,
+              "good": 721,
+              "probability_good": 0.487179
+            },
+            "RGB": {
+              "bad": 187,
+              "good": 470,
+              "probability_good": 0.714719
+            }
+          },
+          "metrics": {
+            "train": {
+              "count": 2137,
+              "class_counts": {
+                "bad": 946,
+                "good": 1191
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    759,
+                    187
+                  ],
+                  [
+                    721,
+                    470
+                  ]
+                ]
+              },
+              "accuracy": 0.575105,
+              "balanced_accuracy": 0.598476,
+              "macro_f1": 0.56719,
+              "roc_auc": 0.598476,
+              "unseen_categories": []
+            },
+            "validation": {
+              "count": 462,
+              "class_counts": {
+                "bad": 194,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    166,
+                    28
+                  ],
+                  [
+                    115,
+                    153
+                  ]
+                ]
+              },
+              "accuracy": 0.690476,
+              "balanced_accuracy": 0.713283,
+              "macro_f1": 0.690231,
+              "roc_auc": 0.713283,
+              "unseen_categories": []
+            },
+            "test": {
+              "count": 473,
+              "class_counts": {
+                "bad": 205,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    174,
+                    31
+                  ],
+                  [
+                    113,
+                    155
+                  ]
+                ]
+              },
+              "accuracy": 0.69556,
+              "balanced_accuracy": 0.713569,
+              "macro_f1": 0.695068,
+              "roc_auc": 0.713569,
+              "unseen_categories": []
+            }
+          }
+        },
+        "resolution": {
+          "feature": "resolution",
+          "fit_split": "train",
+          "label": "good",
+          "smoothing": "Laplace alpha=1",
+          "threshold": 0.5,
+          "threshold_selection": "fixed a priori; no validation or test selection",
+          "unseen_category_policy": "smoothed global training-label rate",
+          "global_train_probability_good": 0.55727,
+          "train_categories": {
+            "1536x2048": {
+              "bad": 2,
+              "good": 1,
+              "probability_good": 0.4
+            },
+            "2048x1536": {
+              "bad": 184,
+              "good": 437,
+              "probability_good": 0.70305
+            },
+            "2056x1542": {
+              "bad": 759,
+              "good": 721,
+              "probability_good": 0.487179
+            },
+            "640x480": {
+              "bad": 1,
+              "good": 32,
+              "probability_good": 0.942857
+            }
+          },
+          "metrics": {
+            "train": {
+              "count": 2137,
+              "class_counts": {
+                "bad": 946,
+                "good": 1191
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    761,
+                    185
+                  ],
+                  [
+                    722,
+                    469
+                  ]
+                ]
+              },
+              "accuracy": 0.575573,
+              "balanced_accuracy": 0.599113,
+              "macro_f1": 0.567498,
+              "roc_auc": 0.601835,
+              "unseen_categories": []
+            },
+            "validation": {
+              "count": 462,
+              "class_counts": {
+                "bad": 194,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    166,
+                    28
+                  ],
+                  [
+                    115,
+                    153
+                  ]
+                ]
+              },
+              "accuracy": 0.690476,
+              "balanced_accuracy": 0.713283,
+              "macro_f1": 0.690231,
+              "roc_auc": 0.71912,
+              "unseen_categories": []
+            },
+            "test": {
+              "count": 473,
+              "class_counts": {
+                "bad": 205,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    174,
+                    31
+                  ],
+                  [
+                    113,
+                    155
+                  ]
+                ]
+              },
+              "accuracy": 0.69556,
+              "balanced_accuracy": 0.713569,
+              "macro_f1": 0.695068,
+              "roc_auc": 0.713569,
+              "unseen_categories": []
+            }
+          }
+        },
+        "mode_resolution": {
+          "feature": "mode_resolution",
+          "fit_split": "train",
+          "label": "good",
+          "smoothing": "Laplace alpha=1",
+          "threshold": 0.5,
+          "threshold_selection": "fixed a priori; no validation or test selection",
+          "unseen_category_policy": "smoothed global training-label rate",
+          "global_train_probability_good": 0.55727,
+          "train_categories": {
+            "L/2056x1542": {
+              "bad": 759,
+              "good": 721,
+              "probability_good": 0.487179
+            },
+            "RGB/1536x2048": {
+              "bad": 2,
+              "good": 1,
+              "probability_good": 0.4
+            },
+            "RGB/2048x1536": {
+              "bad": 184,
+              "good": 437,
+              "probability_good": 0.70305
+            },
+            "RGB/640x480": {
+              "bad": 1,
+              "good": 32,
+              "probability_good": 0.942857
+            }
+          },
+          "metrics": {
+            "train": {
+              "count": 2137,
+              "class_counts": {
+                "bad": 946,
+                "good": 1191
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    761,
+                    185
+                  ],
+                  [
+                    722,
+                    469
+                  ]
+                ]
+              },
+              "accuracy": 0.575573,
+              "balanced_accuracy": 0.599113,
+              "macro_f1": 0.567498,
+              "roc_auc": 0.601835,
+              "unseen_categories": []
+            },
+            "validation": {
+              "count": 462,
+              "class_counts": {
+                "bad": 194,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    166,
+                    28
+                  ],
+                  [
+                    115,
+                    153
+                  ]
+                ]
+              },
+              "accuracy": 0.690476,
+              "balanced_accuracy": 0.713283,
+              "macro_f1": 0.690231,
+              "roc_auc": 0.71912,
+              "unseen_categories": []
+            },
+            "test": {
+              "count": 473,
+              "class_counts": {
+                "bad": 205,
+                "good": 268
+              },
+              "confusion_matrix": {
+                "labels": [
+                  "bad",
+                  "good"
+                ],
+                "values": [
+                  [
+                    174,
+                    31
+                  ],
+                  [
+                    113,
+                    155
+                  ]
+                ]
+              },
+              "accuracy": 0.69556,
+              "balanced_accuracy": 0.713569,
+              "macro_f1": 0.695068,
+              "roc_auc": 0.713569,
+              "unseen_categories": []
+            }
+          }
+        }
+      }
     }
   },
   "diagnostics": {
@@ -252,6 +859,8 @@
   },
   "limitations": [
     "The acquisition prefix is a YYMMDD heuristic, not a documented chip, well, donor, or experiment id.",
-    "A future release should replace the heuristic when stronger biological grouping metadata is available."
+    "A future release should replace the heuristic when stronger biological grouping metadata is available.",
+    "The exhaustive near-duplicate claim is limited to the configured difference-hash distance and does not cover every possible image transformation.",
+    "Mode and resolution are strongly associated with the target label; CNN results must be compared with the train-only categorical shortcut baselines in this report."
   ]
 }

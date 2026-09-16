@@ -47,6 +47,26 @@ Sur le dataset Zenodo OoC :
 
 ### Classification de qualité d'image
 
+Avant tout CNN, le split groupé a été réaudité sur les **2 216 621** paires
+d'images appartenant à deux splits différents. L'écran dHash 256 bits à
+distance de Hamming maximale 8 ne trouve aucun candidat inter-split. Cette
+preuve est exhaustive pour ce critère précis, mais ne couvre pas toutes les
+rotations, recadrages ou transformations possibles.
+
+Les propriétés d'acquisition constituent en revanche un raccourci mesurable.
+Une baseline catégorielle ajustée uniquement sur le train, avec lissage de
+Laplace et seuil fixé à 0,5, obtient :
+
+| Entrées mode + résolution | Macro-F1 | Balanced accuracy | ROC-AUC |
+|---|---:|---:|---:|
+| Validation | 0,690231 | 0,713283 | 0,719120 |
+| Test groupé | 0,695068 | 0,713569 | 0,713569 |
+
+Ce résultat n'est pas une baseline visuelle utile au produit : il quantifie le
+risque qu'un modèle apprenne le dispositif ou le format d'acquisition. Tout CNN
+doit donc publier ses tranches `L`/`RGB` et par résolution, puis démontrer un
+gain au-delà de ce raccourci.
+
 Le premier baseline image-only utilise 50 caractéristiques déterministes, sans
 poids externe. Le modèle et le seuil sont sélectionnés uniquement sur la
 validation groupée par préfixe `YYMMDD` ; le test contient neuf préfixes tenus à
@@ -65,6 +85,9 @@ expériences indépendantes documentées.
 
 Rapport :
 [`reports/benchmarks/ooc-handcrafted-image-quality-v1.json`](../reports/benchmarks/ooc-handcrafted-image-quality-v1.json).
+
+Audit du split et des raccourcis :
+[`reports/ooc-grouped-split-v1.json`](../reports/ooc-grouped-split-v1.json).
 
 ## Intervalles et répétabilité
 

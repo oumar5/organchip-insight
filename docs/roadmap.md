@@ -26,8 +26,8 @@
 - [x] baseline OoC image-only avec test tenu à l'écart ;
 - [x] comparaison segmentation adaptative / µSAM sur BBBC019 ;
 - [x] décision produit : aperçu adaptatif, analyse µSAM asynchrone ;
-- [ ] audit exhaustif des quasi-doublons sur le nouveau split ;
-- [ ] baseline de confondants mode/résolution avant CNN.
+- [x] audit exhaustif des quasi-doublons sur le nouveau split ;
+- [x] baseline de confondants mode/résolution avant CNN.
 
 ## Jalon 3 — Expérience scientifique
 

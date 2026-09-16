@@ -15,7 +15,8 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - expériences et résultats persistés dans SQLite ;
 - vérification de contenu et limite de taille des uploads ;
 - inférence CPU sans poids : Otsu, morphologie, composantes connexes ;
-- comptage, surfaces, diamètre, intensité, contraste et score qualité ;
+- comptage, surfaces, diamètre, intensité, contraste et indice de contraste
+  relatif explicitement heuristique ;
 - overlays de segmentation inspectables ;
 - registre transparent des moteurs disponibles et candidats ;
 - même pipeline depuis l'interface, l'API ou `inference.py` ;

@@ -24,7 +24,8 @@ make benchmark-bbbc019
 - `benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.json` et `.csv` :
   benchmark zero-shot µSAM sur les mêmes 13 images et masques ;
 - `ooc-grouped-split-v1.json` et `../data/splits/ooc-grouped-v1.csv` : split
-  OoC groupé par préfixe d'acquisition ;
+  OoC groupé par préfixe d'acquisition, audit exhaustif des quasi-doublons et
+  baseline de raccourcis mode/résolution ;
 - `benchmarks/ooc-handcrafted-image-quality-v1.json` : sélection sur validation,
   évaluation test groupée, intervalles et tranches du baseline image-only ;
 - `predictions/ooc-handcrafted-image-quality-v1-test.csv` : 473 prédictions test

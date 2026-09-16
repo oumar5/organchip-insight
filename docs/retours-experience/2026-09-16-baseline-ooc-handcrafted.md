@@ -147,3 +147,19 @@ d'erreurs du futur CNN.
 
 Le modèle devra être joint à une release ou reconstruit depuis le code et les
 données avant la soumission publique.
+
+## Addendum du 16 septembre 2026 — audit du split terminé
+
+L'audit exhaustif annoncé au point 4 des limites a depuis été exécuté. Les
+**2 216 621** paires appartenant à deux splits groupés différents ont été
+comparées : aucun candidat n'est trouvé à distance dHash 256 bits inférieure ou
+égale à 8. Le SHA-256 du CSV de split reste inchangé.
+
+L'audit confirme toutefois un raccourci d'acquisition majeur : le mode et la
+résolution seuls atteignent une macro-F1 de `0,690231` sur la validation et de
+`0,695068` sur le test. Ce dernier chiffre dépasse légèrement la macro-F1 test
+du baseline handcrafted ; un futur CNN ne sera donc crédible qu'avec des
+résultats par mode/résolution et un gain net face à cette baseline.
+
+Voir le [retour d'expérience dédié](2026-09-16-audit-split-ooc-et-confondants.md)
+et le [rapport généré](../../reports/ooc-grouped-split-v1.json).
