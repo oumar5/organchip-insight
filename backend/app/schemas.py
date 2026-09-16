@@ -30,6 +30,8 @@ class UploadSummary(BaseModel):
     accepted_files: list[str]
     rejected_files: list[str]
     total_images: int
+    duplicate_files: list[str] = Field(default_factory=list)
+    rejection_reasons: dict[str, str] = Field(default_factory=dict)
 
 
 class AnalysisEngine(BaseModel):

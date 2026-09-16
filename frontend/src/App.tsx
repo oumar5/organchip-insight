@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
   analyzeExperiment,
@@ -6,7 +6,8 @@ import {
   getExperimentResults,
   listExperiments,
   listInferenceEngines,
-  uploadImages,
+  uploadImage,
+  getUploadLimits,
 } from "./api/client";
 import type {
   AnalysisEngine,
@@ -15,6 +16,8 @@ import type {
   ExperimentCreate,
   ExperimentStatus,
   KnownMetricKey,
+  UploadSummary,
+  UploadLimits,
 } from "./types";
 
 const initialForm: ExperimentCreate = {
@@ -103,7 +106,11 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEngineId, setSelectedEngineId] = useState("");
   const [form, setForm] = useState<ExperimentCreate>(initialForm);
-  const [files, setFiles] = useState<FileList | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploadSummary, setUploadSummary] = useState<UploadSummary | null>(null);
+  const [uploadLimits, setUploadLimits] = useState<UploadLimits | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+  const resultRequest = useRef(0);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -136,6 +143,7 @@ export default function App() {
 
   useEffect(() => {
     Promise.all([
+      getUploadLimits().then(setUploadLimits),
       refreshExperiments(),
       listInferenceEngines()
         .then((items) => {
@@ -153,14 +161,65 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const requestId = ++resultRequest.current;
+    setResult(null);
     if (!selectedId) {
-      setResult(null);
       return;
     }
     getExperimentResults(selectedId)
-      .then(setResult)
-      .catch(() => setResult(null));
+      .then((value) => { if (requestId === resultRequest.current) setResult(value); })
+      .catch(() => { if (requestId === resultRequest.current) setResult(null); });
+    return () => { resultRequest.current++; };
   }, [selectedId]);
+
+  function selectExperiment(id: string) {
+    if (id === selectedId) return;
+    resultRequest.current++;
+    setSelectedId(id);
+    setResult(null);
+    setFiles([]);
+    setUploadSummary(null);
+    setError(null);
+  }
+
+  async function handleUpload() {
+    if (!selectedExperiment || !files.length || !uploadLimits) return;
+    const pending = [...files];
+    const summary: UploadSummary = {
+      experiment_id: selectedExperiment.id, accepted_files: [], rejected_files: [],
+      duplicate_files: [], rejection_reasons: {}, total_images: selectedExperiment.image_count,
+    };
+    setBusy(true);
+    setError(null);
+    setUploadSummary(null);
+    resultRequest.current++;
+    try {
+      for (const [index, file] of pending.entries()) {
+        setUploadProgress(`Import ${index + 1} / ${pending.length}`);
+        if (file.size > uploadLimits.max_upload_bytes) {
+          summary.rejected_files.push(file.name);
+          summary.rejection_reasons[file.name] = "La taille dépasse la limite par fichier.";
+        } else {
+          const current = await uploadImage(selectedExperiment.id, file);
+          summary.accepted_files.push(...current.accepted_files);
+          summary.rejected_files.push(...current.rejected_files);
+          summary.duplicate_files.push(...current.duplicate_files);
+          Object.assign(summary.rejection_reasons, current.rejection_reasons);
+          summary.total_images = current.total_images;
+          if (current.accepted_files.length) setResult(null);
+        }
+        setFiles(pending.slice(index + 1));
+        setUploadSummary({ ...summary });
+      }
+    } catch (requestError) {
+      setError(`${(requestError as Error).message} Les imports déjà confirmés sont conservés. Vous pouvez reprendre les fichiers restants.`);
+    } finally {
+      setUploadProgress(null);
+      try { await refreshExperiments(selectedExperiment.id); }
+      catch (requestError) { setError((requestError as Error).message); }
+      setBusy(false);
+    }
+  }
 
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
@@ -168,6 +227,7 @@ export default function App() {
     setError(null);
     try {
       const created = await createExperiment(form);
+      selectExperiment(created.id);
       setForm(initialForm);
       setResult(null);
       await refreshExperiments(created.id);
@@ -187,26 +247,24 @@ export default function App() {
       setError("Sélectionnez un moteur disponible avant l’analyse.");
       return;
     }
-    const hasNewFiles = Boolean(files?.length);
-    if (!hasNewFiles && selectedExperiment.image_count === 0) {
-      setError("Ajoutez au moins une image de microscopie.");
+    if (files.length || selectedExperiment.image_count === 0) {
+      setError("Importez les images sélectionnées avant de lancer l’analyse.");
       return;
     }
 
     setBusy(true);
     setError(null);
+    resultRequest.current++;
+    setResult(null);
     try {
-      if (files?.length) {
-        await uploadImages(selectedExperiment.id, files);
-      }
       const analysis = await analyzeExperiment(selectedExperiment.id, selectedEngine.id);
       setResult(analysis);
-      setFiles(null);
-      await refreshExperiments(selectedExperiment.id);
       document.querySelector("#results")?.scrollIntoView({ behavior: "smooth" });
     } catch (requestError) {
       setError((requestError as Error).message);
     } finally {
+      try { await refreshExperiments(selectedExperiment.id); }
+      catch (requestError) { setError((requestError as Error).message); }
       setBusy(false);
     }
   }
@@ -249,7 +307,8 @@ export default function App() {
               <button
                 className={`experiment-item ${experiment.id === selectedId ? "selected" : ""}`}
                 key={experiment.id}
-                onClick={() => setSelectedId(experiment.id)}
+                onClick={() => selectExperiment(experiment.id)}
+                disabled={busy}
                 type="button"
               >
                 <span className={`status-dot ${experiment.status}`} />
@@ -329,6 +388,7 @@ export default function App() {
                 <input
                   required
                   minLength={2}
+                  maxLength={120}
                   value={form.name}
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
                   placeholder="Réponse au composé A"
@@ -337,6 +397,7 @@ export default function App() {
               <label>
                 Hypothèse ou objectif
                 <textarea
+                  maxLength={1000}
                   value={form.description}
                   onChange={(event) => setForm({ ...form, description: event.target.value })}
                   placeholder="Décrire la comparaison et le signal attendu…"
@@ -347,6 +408,8 @@ export default function App() {
                   Groupe témoin
                   <input
                     value={form.control_label}
+                    required
+                    maxLength={80}
                     onChange={(event) => setForm({ ...form, control_label: event.target.value })}
                   />
                 </label>
@@ -354,6 +417,8 @@ export default function App() {
                   Groupe traité
                   <input
                     value={form.treatment_label}
+                    required
+                    maxLength={80}
                     onChange={(event) => setForm({ ...form, treatment_label: event.target.value })}
                   />
                 </label>
@@ -378,7 +443,8 @@ export default function App() {
                 Expérience active
                 <select
                   value={selectedId ?? ""}
-                  onChange={(event) => setSelectedId(event.target.value)}
+                  disabled={busy}
+                  onChange={(event) => selectExperiment(event.target.value)}
                 >
                   <option value="" disabled>Sélectionner une expérience</option>
                   {experiments.map((experiment) => (
@@ -390,12 +456,13 @@ export default function App() {
                 Moteur
                 <select
                   value={selectedEngineId}
+                  disabled={busy}
                   onChange={(event) => setSelectedEngineId(event.target.value)}
                 >
                   {!engines.some((engine) => engine.status === "available") && (
                     <option value="">Aucun moteur disponible</option>
                   )}
-                  {engines.map((engine) => (
+                  {engines.filter((engine) => engine.status === "available").map((engine) => (
                     <option
                       disabled={engine.status !== "available"}
                       key={engine.id}
@@ -410,8 +477,8 @@ export default function App() {
 
             <section className="engine-catalog" aria-labelledby="engine-catalog-title">
               <div className="engine-catalog-heading">
-                <strong id="engine-catalog-title">Registre des moteurs</strong>
-                <small>Seul un moteur « Disponible » peut lancer une inférence.</small>
+                <strong id="engine-catalog-title">Moteur actif et candidats</strong>
+                <small>Les candidats expérimentaux ou en revue de licence ne sont pas encore utilisables.</small>
               </div>
               <div className="engine-catalog-list">
                 {engines.map((engine) => (
@@ -444,14 +511,20 @@ export default function App() {
 
             <label className="drop-zone">
               <span className="drop-icon" aria-hidden="true">⌁</span>
-              <strong>Déposer les images de microscopie</strong>
-              <small>PNG, JPEG ou TIFF · 25 Mo maximum par fichier</small>
+              <strong>Sélectionner les images de microscopie</strong>
+              <small>PNG, JPEG ou TIFF monopage · couleur 8 bits ou gris 8/16 bits</small>
+              <small>{uploadLimits ? `${uploadLimits.max_upload_bytes / 1024 / 1024} Mio par fichier · ${(uploadLimits.max_image_pixels / 1_000_000).toFixed(1)} mégapixels maximum` : "Chargement des limites d’import…"}</small>
               <span className="secondary-button">Choisir les fichiers</span>
               <input
                 type="file"
                 accept=".png,.jpg,.jpeg,.tif,.tiff"
                 multiple
-                onChange={(event) => setFiles(event.target.files)}
+                disabled={busy}
+                onChange={(event) => {
+                  setFiles(Array.from(event.target.files ?? []));
+                  setUploadSummary(null);
+                  event.target.value = "";
+                }}
               />
             </label>
 
@@ -471,13 +544,30 @@ export default function App() {
               ) : null
             )}
 
+            {uploadSummary && (
+              <div className="upload-summary" role="status">
+                <strong>{uploadSummary.accepted_files.length} importé(s) · {uploadSummary.duplicate_files.length} déjà présent(s) · {uploadSummary.rejected_files.length} rejeté(s)</strong>
+                {uploadSummary.rejected_files.length > 0 && <ul>{uploadSummary.rejected_files.map((name, index) => <li key={`${name}-${index}`}>{name} : {uploadSummary.rejection_reasons[name] ?? "Fichier non pris en charge."}</li>)}</ul>}
+              </div>
+            )}
+
+            <button
+              className="secondary-button upload-button"
+              disabled={busy || !selectedExperiment || !files.length || !uploadLimits}
+              onClick={handleUpload}
+              type="button"
+            >
+              {uploadProgress ?? `Importer les images${files.length ? ` (${files.length})` : ""}`}
+            </button>
+            {files.length > 0 && <p className="existing-files">Les fichiers sélectionnés doivent être importés avant l’analyse.</p>}
+
             <button
               className="primary-button analyze-button"
-              disabled={busy || !selectedExperiment || selectedEngine?.status !== "available"}
+              disabled={busy || !selectedExperiment?.image_count || files.length > 0 || selectedEngine?.status !== "available"}
               onClick={handleAnalyze}
               type="button"
             >
-              {busy ? <><span className="spinner" /> Analyse en cours…</> : <>Lancer l’inférence <span>→</span></>}
+              {busy && !uploadProgress ? <><span className="spinner" /> Traitement en cours…</> : <>Lancer l’inférence <span>→</span></>}
             </button>
           </article>
         </section>
@@ -487,6 +577,7 @@ export default function App() {
             <div>
               <p className="section-kicker">Contrôle visuel obligatoire</p>
               <h2>Résultats et provenance</h2>
+              {selectedExperiment && <p>Expérience : {selectedExperiment.name}</p>}
             </div>
             {result && (
               <div className="result-meta">
@@ -520,7 +611,7 @@ export default function App() {
                 <div className="overlay-grid">
                   {result.image_results.map((imageResult) => (
                     <figure key={imageResult.overlay_url}>
-                      <img src={imageResult.overlay_url} alt={`Segmentation de ${readableFilename(imageResult.filename)}`} />
+                      <img src={`${imageResult.overlay_url}?v=${encodeURIComponent(result.generated_at)}`} alt={`Segmentation de ${readableFilename(imageResult.filename)}`} />
                       <figcaption>
                         <div><strong>{readableFilename(imageResult.filename)}</strong><span>{imageResult.object_count} objets</span></div>
                         <small>Premier plan {imageResult.foreground_polarity === "bright" ? "clair" : "sombre"} · seuil {imageResult.threshold}</small>

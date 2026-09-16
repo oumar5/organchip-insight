@@ -1,5 +1,7 @@
 import json
 import sqlite3
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from threading import RLock
 from uuid import UUID
@@ -17,10 +19,16 @@ class ExperimentRepository:
         self._lock = RLock()
         self._initialize()
 
-    def _connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def _connect(self) -> Iterator[sqlite3.Connection]:
         connection = sqlite3.connect(self.database_path, timeout=10)
         connection.row_factory = sqlite3.Row
-        return connection
+        connection.execute("PRAGMA foreign_keys = ON")
+        try:
+            with connection:
+                yield connection
+        finally:
+            connection.close()
 
     def _initialize(self) -> None:
         with self._connect() as connection:
@@ -90,14 +98,40 @@ class ExperimentRepository:
         next_status = "ready" if image_count else "draft"
         with self._lock, self._connect() as connection:
             connection.execute(
+                "DELETE FROM analysis_results WHERE experiment_id = ?", (str(experiment_id),)
+            )
+            connection.execute(
                 "UPDATE experiments SET image_count = ?, status = ? WHERE id = ?",
                 (image_count, next_status, str(experiment_id)),
             )
         return self.get(experiment_id)
 
-    def update_status(
-        self, experiment_id: UUID, status: ExperimentStatus
-    ) -> Experiment | None:
+    def start_analysis(self, experiment_id: UUID) -> bool:
+        with self._lock, self._connect() as connection:
+            updated = connection.execute(
+                "UPDATE experiments SET status = 'analyzing' "
+                "WHERE id = ? AND status != 'analyzing' AND image_count > 0",
+                (str(experiment_id),),
+            )
+            if updated.rowcount != 1:
+                return False
+            connection.execute(
+                "DELETE FROM analysis_results WHERE experiment_id = ?", (str(experiment_id),)
+            )
+        return True
+
+    def recover_interrupted_analyses(self) -> None:
+        """Single API process: no analysis survives its restart."""
+        with self._lock, self._connect() as connection:
+            connection.execute(
+                "DELETE FROM analysis_results WHERE experiment_id IN "
+                "(SELECT id FROM experiments WHERE status = 'analyzing')"
+            )
+            connection.execute(
+                "UPDATE experiments SET status = 'failed' WHERE status = 'analyzing'"
+            )
+
+    def update_status(self, experiment_id: UUID, status: ExperimentStatus) -> Experiment | None:
         with self._lock, self._connect() as connection:
             connection.execute(
                 "UPDATE experiments SET status = ? WHERE id = ?",

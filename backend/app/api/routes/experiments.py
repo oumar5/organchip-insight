@@ -1,4 +1,7 @@
+import hashlib
+import logging
 from pathlib import Path
+from threading import RLock
 from typing import Annotated
 from uuid import UUID, uuid4
 
@@ -7,12 +10,17 @@ from fastapi.responses import FileResponse
 from PIL import Image, UnidentifiedImageError
 
 from app.config import get_settings
+from app.ml.image_io import validate_image
 from app.ml.runtime import get_available_runtime
 from app.repository import repository
 from app.schemas import AnalysisResult, Experiment, ExperimentCreate, UploadSummary
 
 router = APIRouter()
 settings = get_settings()
+logger = logging.getLogger(__name__)
+# Serialize uploads and analysis starts; inference runs outside this lock.
+# The shipped deployment uses one API process. Multi-worker execution needs a job queue.
+mutation_lock = RLock()
 
 ALLOWED_SUFFIXES = {".png", ".jpg", ".jpeg", ".tif", ".tiff"}
 
@@ -36,22 +44,24 @@ def _experiment_artifact_dir(experiment_id: UUID) -> Path:
     return artifact_dir
 
 
-def _write_upload(uploaded_file: UploadFile, destination: Path) -> bool:
+def _write_upload(uploaded_file: UploadFile, destination: Path) -> str:
     total_size = 0
+    digest = hashlib.sha256()
     try:
         with destination.open("wb") as output:
             while chunk := uploaded_file.file.read(1024 * 1024):
                 total_size += len(chunk)
                 if total_size > settings.max_upload_bytes:
-                    return False
+                    raise ValueError(
+                        f"Fichier trop volumineux : {settings.max_upload_mb} Mio maximum."
+                    )
                 output.write(chunk)
+                digest.update(chunk)
         with Image.open(destination) as image:
-            image.verify()
-    except (OSError, UnidentifiedImageError):
-        return False
+            validate_image(image, settings.max_image_pixels)
     finally:
         uploaded_file.file.close()
-    return True
+    return digest.hexdigest()
 
 
 @router.post("", response_model=Experiment, status_code=status.HTTP_201_CREATED)
@@ -74,33 +84,71 @@ def upload_images(
     experiment_id: UUID,
     files: Annotated[list[UploadFile], File(...)],
 ) -> UploadSummary:
-    _get_experiment_or_404(experiment_id)
+    try:
+        with mutation_lock:
+            return _store_images(experiment_id, files)
+    finally:
+        for uploaded_file in files:
+            uploaded_file.file.close()
+
+
+def _store_images(experiment_id: UUID, files: list[UploadFile]) -> UploadSummary:
+    experiment = _get_experiment_or_404(experiment_id)
+    if experiment.status == "analyzing":
+        raise HTTPException(
+            status_code=409, detail="Une analyse est déjà en cours pour cette expérience."
+        )
     image_dir = _experiment_image_dir(experiment_id)
     accepted: list[str] = []
     rejected: list[str] = []
+    duplicates: list[str] = []
+    reasons: dict[str, str] = {}
+    known_hashes: set[str] = set()
+    for path in image_dir.iterdir():
+        if path.is_file() and path.suffix.lower() in ALLOWED_SUFFIXES:
+            with path.open("rb") as source:
+                known_hashes.add(hashlib.file_digest(source, "sha256").hexdigest())
 
     for uploaded_file in files:
         safe_name = Path(uploaded_file.filename or "unnamed").name
         if Path(safe_name).suffix.lower() not in ALLOWED_SUFFIXES:
             rejected.append(safe_name)
+            reasons[safe_name] = "Extension non prise en charge."
             continue
 
-        destination = image_dir / f"{uuid4().hex[:12]}-{safe_name}"
-        if _write_upload(uploaded_file, destination):
-            accepted.append(safe_name)
-        else:
+        # Bound the UTF-8 filename, keeping the extension and uniqueness prefix.
+        stem = Path(safe_name).stem.encode("utf-8")[:160].decode("utf-8", errors="ignore")
+        stored_name = f"{uuid4().hex[:12]}-{stem}{Path(safe_name).suffix.lower()}"
+        destination = image_dir / stored_name
+        try:
+            digest = _write_upload(uploaded_file, destination)
+            if digest in known_hashes:
+                destination.unlink(missing_ok=True)
+                duplicates.append(safe_name)
+            else:
+                known_hashes.add(digest)
+                accepted.append(safe_name)
+        except (OSError, ValueError, Image.DecompressionBombError, UnidentifiedImageError) as error:
             destination.unlink(missing_ok=True)
             rejected.append(safe_name)
+            reasons[safe_name] = (
+                str(error)
+                if isinstance(error, ValueError)
+                else "Image illisible, endommagée ou dimensions non prises en charge."
+            )
 
     total_images = len(
         [path for path in image_dir.iterdir() if path.suffix.lower() in ALLOWED_SUFFIXES]
     )
-    repository.update_image_count(experiment_id, total_images)
+    if accepted:
+        repository.update_image_count(experiment_id, total_images)
     return UploadSummary(
         experiment_id=experiment_id,
         accepted_files=accepted,
         rejected_files=rejected,
         total_images=total_images,
+        duplicate_files=duplicates,
+        rejection_reasons=reasons,
     )
 
 
@@ -125,42 +173,54 @@ def analyze_experiment(
         ) from error
 
     image_dir = _experiment_image_dir(experiment_id)
-    image_paths = [
-        path for path in sorted(image_dir.iterdir()) if path.suffix.lower() in ALLOWED_SUFFIXES
-    ]
-    repository.update_status(experiment_id, "analyzing")
+    with mutation_lock:
+        if not repository.start_analysis(experiment_id):
+            raise HTTPException(status_code=409, detail="Une analyse est déjà en cours.")
 
     try:
+        image_paths = [
+            path for path in sorted(image_dir.iterdir()) if path.suffix.lower() in ALLOWED_SUFFIXES
+        ]
         output = analyzer.analyze(
             image_paths,
             artifact_dir=_experiment_artifact_dir(experiment_id),
             artifact_url_prefix=f"{settings.api_v1_prefix}/experiments/{experiment_id}/artifacts",
         )
+        result = AnalysisResult(
+            experiment_id=experiment_id,
+            analysis_version=analyzer.version,
+            engine=engine,
+            image_count=len(output.image_results),
+            metrics=output.metrics,
+            image_results=output.image_results,
+            artifacts=output.artifacts,
+            warnings=output.warnings,
+        )
+        repository.save_result(result)
+        repository.update_status(experiment_id, "complete")
     except ValueError as error:
         repository.update_status(experiment_id, "failed")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=str(error),
         ) from error
-
-    result = AnalysisResult(
-        experiment_id=experiment_id,
-        analysis_version=analyzer.version,
-        engine=engine,
-        image_count=len(output.image_results),
-        metrics=output.metrics,
-        image_results=output.image_results,
-        artifacts=output.artifacts,
-        warnings=output.warnings,
-    )
-    repository.save_result(result)
-    repository.update_status(experiment_id, "complete")
+    except Exception as error:
+        repository.update_status(experiment_id, "failed")
+        logger.exception("Analysis failed for experiment %s", experiment_id)
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "L’analyse a échoué. Les images importées sont conservées ; vous pouvez réessayer."
+            ),
+        ) from error
     return result
 
 
 @router.get("/{experiment_id}/results", response_model=AnalysisResult)
 def get_results(experiment_id: UUID) -> AnalysisResult:
-    _get_experiment_or_404(experiment_id)
+    experiment = _get_experiment_or_404(experiment_id)
+    if experiment.status != "complete":
+        raise HTTPException(status_code=404, detail="No completed analysis for the current images")
     result = repository.get_result(experiment_id)
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Results not found")

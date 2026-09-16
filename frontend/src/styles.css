@@ -1215,3 +1215,8 @@ footer {
   .empty-results { flex-direction: column; text-align: center; }
   footer { flex-direction: column; }
 }
+.upload-button { width: 100%; margin: 12px 0; }
+.upload-summary { padding: 14px; margin-top: 12px; color: #183b34; background: #e7f3ef; border-radius: 10px; font-size: 14px; overflow-wrap: anywhere; }
+.upload-summary ul { padding-left: 20px; }
+.drop-zone:focus-within { outline: 3px solid #16644f; outline-offset: 3px; }
+button:disabled { cursor: not-allowed; opacity: 0.6; }

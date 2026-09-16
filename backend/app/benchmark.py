@@ -18,6 +18,7 @@ from typing import Any
 import numpy as np
 from PIL import Image
 
+from app.ml.image_io import read_image
 from app.ml.pipeline import AdaptiveSegmentationAnalyzer
 
 PredictionFunction = Callable[
@@ -282,9 +283,7 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
         if not mask_path.is_file():
             raise FileNotFoundError(f"Missing ground-truth mask for {image_path.name}: {mask_path}")
 
-        with Image.open(image_path) as source:
-            rgb = np.asarray(source.convert("RGB"), dtype=np.uint8)
-            grayscale = np.asarray(source.convert("L"), dtype=np.float32) / 255.0
+        rgb, grayscale = read_image(image_path)
         truth = _load_truth(mask_path)
 
         image_started = time.perf_counter()

@@ -3,6 +3,8 @@ import type {
   AnalysisResult,
   Experiment,
   ExperimentCreate,
+  UploadSummary,
+  UploadLimits,
 } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api/v1";
@@ -10,8 +12,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api/v1";
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, init);
   if (!response.ok) {
-    const payload = (await response.json().catch(() => null)) as { detail?: string } | null;
-    throw new Error(payload?.detail ?? `Request failed with status ${response.status}`);
+    const payload = (await response.json().catch(() => null)) as { detail?: unknown } | null;
+    const detail = payload?.detail;
+    const message = typeof detail === "string" ? detail : Array.isArray(detail)
+      ? detail.map((item) => `${item.loc?.slice(1).join(".") ?? "Champ"} : ${item.msg ?? "Valeur invalide"}`).join(" ; ")
+      : response.status === 413 ? "Fichier trop volumineux pour le serveur."
+        : `La requête a échoué (HTTP ${response.status}).`;
+    throw new Error(message);
   }
   return response.json() as Promise<T>;
 }
@@ -32,10 +39,14 @@ export function createExperiment(payload: ExperimentCreate): Promise<Experiment>
   });
 }
 
-export async function uploadImages(experimentId: string, files: FileList): Promise<void> {
+export function getUploadLimits(): Promise<UploadLimits> {
+  return request<UploadLimits>("/inference/upload-limits");
+}
+
+export async function uploadImage(experimentId: string, file: File): Promise<UploadSummary> {
   const formData = new FormData();
-  Array.from(files).forEach((file) => formData.append("files", file));
-  await request(`/experiments/${experimentId}/images`, {
+  formData.append("files", file);
+  return request<UploadSummary>(`/experiments/${experimentId}/images`, {
     method: "POST",
     body: formData,
   });

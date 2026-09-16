@@ -13,7 +13,8 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - interface React/TypeScript en français et responsive ;
 - API FastAPI documentée par OpenAPI ;
 - expériences et résultats persistés dans SQLite ;
-- vérification de contenu et limite de taille des uploads ;
+- décodage des uploads, limites de taille/pixels et détection des doublons binaires ;
+- imports séparés de l'analyse, rejets détaillés et TIFF gris 16 bits pris en charge ;
 - inférence CPU sans poids : Otsu, morphologie, composantes connexes ;
 - comptage, surfaces, diamètre, intensité, contraste et indice de contraste
   relatif explicitement heuristique ;

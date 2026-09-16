@@ -8,6 +8,13 @@ baseline exécutable et non une preuve de performance biologique.
 
 ## Pipeline actuel
 
+Depuis `adaptive-segmentation-1.1.0`, les niveaux de gris 16 bits sont lus sans
+conversion écrêtante en 8 bits : division par 65535 pour les mesures et mise à
+l'échelle pour l'overlay. Le seuillage conserve sa normalisation P1/P99.
+L'échelle d'intensité est celle du conteneur entier, pas une calibration physique
+du capteur (notamment pour du 12 bits stocké dans un TIFF 16 bits).
+Le chemin 8 bits est inchangé. Les anciens rapports restent ceux du moteur 1.0.0.
+
 Pour chaque image :
 
 1. conversion en intensité et normalisation robuste entre les percentiles 1 et 99 ;

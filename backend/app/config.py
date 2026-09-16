@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,7 +11,8 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
     data_dir: Path = Path("data")
     cors_origins: str = "http://localhost:5173,http://localhost:8080"
-    max_upload_mb: int = 25
+    max_upload_mb: int = Field(default=25, ge=1, le=25)
+    max_image_pixels: int = Field(default=16_777_216, ge=1, le=16_777_216)
 
     model_config = SettingsConfigDict(
         env_file=".env",

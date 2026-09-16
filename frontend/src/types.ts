@@ -23,6 +23,20 @@ export interface ExperimentCreate {
   treatment_label: string;
 }
 
+export interface UploadSummary {
+  experiment_id: string;
+  accepted_files: string[];
+  rejected_files: string[];
+  duplicate_files: string[];
+  rejection_reasons: Record<string, string>;
+  total_images: number;
+}
+
+export interface UploadLimits {
+  max_upload_bytes: number;
+  max_image_pixels: number;
+}
+
 export interface AnalysisEngine {
   id: string;
   name: string;

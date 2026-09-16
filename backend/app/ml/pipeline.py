@@ -8,6 +8,7 @@ from skimage.measure import label, regionprops
 from skimage.morphology import closing, disk, remove_small_holes, remove_small_objects
 from skimage.segmentation import find_boundaries
 
+from app.ml.image_io import read_image
 from app.ml.registry import ADAPTIVE_SEGMENTATION_ENGINE
 from app.schemas import AnalysisArtifact, ImageAnalysis
 
@@ -31,7 +32,7 @@ class SegmentationOutput:
 class AdaptiveSegmentationAnalyzer:
     """Transparent zero-training inference for microscopy image exploration."""
 
-    version = "adaptive-segmentation-1.0.0"
+    version = "adaptive-segmentation-1.1.0"
     engine = ADAPTIVE_SEGMENTATION_ENGINE
 
     @staticmethod
@@ -102,10 +103,13 @@ class AdaptiveSegmentationAnalyzer:
 
         for image_path in image_paths:
             try:
-                with Image.open(image_path) as source_image:
-                    rgb = np.asarray(source_image.convert("RGB"), dtype=np.uint8)
-                    grayscale = np.asarray(source_image.convert("L"), dtype=np.float32) / 255.0
-            except (OSError, UnidentifiedImageError) as error:
+                rgb, grayscale = read_image(image_path)
+            except (
+                OSError,
+                ValueError,
+                Image.DecompressionBombError,
+                UnidentifiedImageError,
+            ) as error:
                 warnings.append(f"Image illisible {image_path.name} : {error}")
                 continue
 

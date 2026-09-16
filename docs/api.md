@@ -46,9 +46,20 @@ POST /experiments/{experiment_id}/images
 Content-Type: multipart/form-data
 ```
 
-Formats acceptés : PNG, JPEG, TIFF. Taille maximale par défaut : 25 Mo. Le
-suffixe seul ne suffit pas : Pillow vérifie également que le contenu est une
-image lisible.
+Formats acceptés : PNG, JPEG, TIFF monopage. Couleur 8 bits et niveaux de gris
+entiers 8/16 bits. Les images flottantes et multipages sont rejetées explicitement.
+Le contenu est décodé avant acceptation. Limites par défaut : 25 Mio par fichier
+et 16 777 216 pixels ; configurables à la baisse. `GET /inference/upload-limits`
+retourne les limites effectives utilisées par l'interface.
+
+L'interface envoie un fichier par requête puis affiche `accepted_files`,
+`rejected_files`, `rejection_reasons` et `duplicate_files`. Les doublons binaires
+au sein d'une expérience sont ignorés, même sous un autre nom. Leur détection
+ne constitue pas une détection des quasi-doublons scientifiques.
+
+L'ajout effectif d'une image invalide le résultat précédent. Un rejet ou un
+doublon seul conserve un résultat encore applicable. Import et analyse sont
+deux actions séparées : une relance d'analyse ne téléverse rien.
 
 ## Inférence
 
@@ -72,5 +83,12 @@ Le résultat contient :
 | Code | Signification |
 |---:|---|
 | 404 | expérience, résultat ou artefact absent |
-| 409 | aucune image disponible pour l'analyse |
+| 409 | aucune image disponible, ou analyse déjà en cours |
 | 422 | moteur indisponible ou aucune image exploitable |
+| 500 | échec inattendu : statut `failed`, images conservées pour réessayer |
+
+Le déploiement actuel utilise **un seul processus API**. Les imports et débuts
+d'analyse sont sérialisés ; une analyse en cours bloque les mutations de son
+expérience. Au redémarrage, les analyses interrompues passent à `failed`.
+Le passage à plusieurs workers exige une file de tâches et une coordination
+interprocessus ; ce changement n'est pas couvert par ces garanties.

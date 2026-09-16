@@ -67,7 +67,7 @@ def test_upload_and_analyze_real_image() -> None:
     assert analysis_response.status_code == 200
     result = analysis_response.json()
     assert result["image_count"] == 1
-    assert result["analysis_version"] == "adaptive-segmentation-1.0.0"
+    assert result["analysis_version"] == "adaptive-segmentation-1.1.0"
     assert result["engine"]["kind"] == "zero-training"
     assert result["metrics"]["object_count_total"] == 2
     assert result["metrics"]["mean_intensity"] > 0
