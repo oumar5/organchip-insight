@@ -19,14 +19,27 @@ def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def test_repository_cnn_config_is_self_consistent() -> None:
-    config_path = (
-        PROJECT_ROOT / "backend/training/configs/ooc-cnn-mobilenet-v3-small-v1.json"
-    )
+@pytest.mark.parametrize(
+    ("file_name", "experiment_id"),
+    (
+        (
+            "ooc-cnn-mobilenet-v3-small-v1.json",
+            "ooc-cnn-mobilenet-v3-small-v1",
+        ),
+        (
+            "ooc-cnn-mobilenet-v3-small-campaign-v2.json",
+            "ooc-cnn-mobilenet-v3-small-campaign-v2",
+        ),
+    ),
+)
+def test_repository_cnn_config_is_self_consistent(
+    file_name: str, experiment_id: str
+) -> None:
+    config_path = PROJECT_ROOT / "backend/training/configs" / file_name
 
     config = load_experiment_config(config_path, project_root=PROJECT_ROOT)
 
-    assert config.experiment_id == "ooc-cnn-mobilenet-v3-small-v1"
+    assert config.experiment_id == experiment_id
     assert config.train_validation_manifest_sha256 == sha256_file(
         config.train_validation_manifest_path
     )

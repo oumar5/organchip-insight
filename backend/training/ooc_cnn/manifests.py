@@ -26,6 +26,19 @@ MANIFEST_COLUMNS = (
     "published_split",
     "sha256",
 )
+CAMPAIGN_MANIFEST_COLUMNS = (
+    "path",
+    "image_id",
+    "acquisition_prefix",
+    "group_id",
+    "grouped_split",
+    "target_label",
+    "target_index",
+    "cell_type",
+    "day_bucket",
+    "published_split",
+    "sha256",
+)
 VALID_SPLITS = frozenset({"train", "validation", "test"})
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
@@ -42,6 +55,7 @@ class ManifestRecord:
     day_bucket: str
     published_split: str
     sha256: str
+    group_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -121,7 +135,8 @@ def relative_project_path(project_root: Path, path: Path, *, field: str) -> str:
 
 
 def _parse_record(row: dict[str, str], row_number: int) -> ManifestRecord:
-    missing_values = [column for column in MANIFEST_COLUMNS if not row.get(column, "").strip()]
+    required_columns = MANIFEST_COLUMNS + (("group_id",) if "group_id" in row else ())
+    missing_values = [column for column in required_columns if not row.get(column, "").strip()]
     if missing_values:
         raise ValueError(
             f"Manifest row {row_number} has empty fields: {', '.join(missing_values)}"
@@ -150,6 +165,7 @@ def _parse_record(row: dict[str, str], row_number: int) -> ManifestRecord:
         day_bucket=row["day_bucket"],
         published_split=row["published_split"],
         sha256=validate_sha256(row["sha256"], f"row {row_number} sha256"),
+        group_id=row.get("group_id") or None,
     )
 
 
@@ -161,7 +177,7 @@ def _summaries(
     groups_by_split = {
         split: tuple(
             sorted(
-                record.acquisition_prefix
+                record.group_id or record.acquisition_prefix
                 for record in record_list
                 if record.grouped_split == split
             )
@@ -211,7 +227,8 @@ def load_manifest(
         raise ValueError(f"Manifest checksum mismatch: {path}")
     with path.open(encoding="utf-8", newline="") as source:
         reader = csv.DictReader(source)
-        if tuple(reader.fieldnames or ()) != MANIFEST_COLUMNS:
+        fieldnames = tuple(reader.fieldnames or ())
+        if fieldnames not in {MANIFEST_COLUMNS, CAMPAIGN_MANIFEST_COLUMNS}:
             raise ValueError(f"Manifest columns or order are invalid: {path}")
         records = tuple(_parse_record(row, row_number) for row_number, row in enumerate(reader, 2))
     if not records:
@@ -266,11 +283,21 @@ def load_manifest(
 
 
 def _records_to_csv_bytes(records: Iterable[ManifestRecord]) -> bytes:
+    record_list = tuple(records)
+    has_campaign_groups = {record.group_id is not None for record in record_list}
+    if len(has_campaign_groups) > 1:
+        raise ValueError("Manifest mixes campaign-aware and legacy records")
+    fieldnames = (
+        CAMPAIGN_MANIFEST_COLUMNS if has_campaign_groups == {True} else MANIFEST_COLUMNS
+    )
     output = io.StringIO(newline="")
-    writer = csv.DictWriter(output, fieldnames=MANIFEST_COLUMNS, lineterminator="\n")
+    writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
     writer.writeheader()
-    for record in records:
-        writer.writerow(asdict(record))
+    for record in record_list:
+        row = asdict(record)
+        if fieldnames == MANIFEST_COLUMNS:
+            row.pop("group_id")
+        writer.writerow(row)
     return output.getvalue().encode("utf-8")
 
 

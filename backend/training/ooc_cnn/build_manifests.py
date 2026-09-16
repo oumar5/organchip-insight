@@ -37,6 +37,10 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         default=PROJECT_ROOT / "data/splits/ooc-grouped-v1-lock.json",
     )
+    parser.add_argument(
+        "--split-id",
+        default="ooc-grouped-by-acquisition-prefix-v1",
+    )
     return parser
 
 
@@ -49,6 +53,7 @@ def main() -> None:
         train_validation_path=args.train_validation_output,
         test_path=args.test_output,
         lock_path=args.lock_output,
+        split_id=args.split_id,
     )
     print(json.dumps(lock, indent=2, sort_keys=True))
 

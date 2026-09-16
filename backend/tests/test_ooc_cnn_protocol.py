@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from training.ooc_cnn.manifests import (
+    CAMPAIGN_MANIFEST_COLUMNS,
     MANIFEST_COLUMNS,
     build_separated_manifests,
     sha256_file,
@@ -27,6 +28,56 @@ def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer = csv.DictWriter(output, fieldnames=MANIFEST_COLUMNS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def test_campaign_manifest_lock_uses_campaign_groups(tmp_path: Path) -> None:
+    rows: list[dict[str, str]] = []
+    for index, (split, acquisition, campaign) in enumerate(
+        (
+            ("train", "230101", "campaign-train"),
+            ("validation", "230201", "campaign-validation"),
+            ("test", "230301", "campaign-test"),
+        )
+    ):
+        rows.append(
+            {
+                "path": f"data/raw/ooc/image-{index}.png",
+                "image_id": f"image-{index}",
+                "acquisition_prefix": acquisition,
+                "group_id": campaign,
+                "grouped_split": split,
+                "target_label": "good",
+                "target_index": "1",
+                "cell_type": "A549",
+                "day_bucket": "0-1_days",
+                "published_split": "train",
+                "sha256": str(index + 1) * 64,
+            }
+        )
+    source = tmp_path / "data/splits/campaign.csv"
+    source.parent.mkdir(parents=True)
+    with source.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(
+            output, fieldnames=CAMPAIGN_MANIFEST_COLUMNS, lineterminator="\n"
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+
+    lock = build_separated_manifests(
+        project_root=tmp_path,
+        source_path=source,
+        expected_source_sha256=sha256_file(source),
+        train_validation_path=tmp_path / "data/splits/train-validation.csv",
+        test_path=tmp_path / "data/splits/test.csv",
+        lock_path=tmp_path / "data/splits/lock.json",
+        split_id="campaign-v2",
+    )
+
+    assert lock["manifests"]["train_validation"]["groups"] == {
+        "train": ["campaign-train"],
+        "validation": ["campaign-validation"],
+    }
+    assert lock["manifests"]["test"]["groups"] == {"test": ["campaign-test"]}
 
 
 def _fixture_project(tmp_path: Path) -> dict[str, Path]:

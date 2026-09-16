@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "experiment_id": "ooc-cnn-mobilenet-v3-small-campaign-v2",
+  "dataset": {
+    "name": "OOC Image Dataset",
+    "doi": "10.5281/zenodo.10203721",
+    "license": "CC-BY-4.0",
+    "target": "expert good/bad image-quality label"
+  },
+  "split": {
+    "lock_path": "data/splits/ooc-campaign-v2-lock.json",
+    "lock_sha256": "6d8474483a3f43acbf46cd9bffe5d20205d906da2ea8330fb8993d68dcd8769a",
+    "train_validation_manifest": "data/splits/ooc-campaign-v2-train-validation.csv",
+    "train_validation_sha256": "b191947b892bfa7e9442aca0051c3b2246343a289715073fd17eefabcf8ea4a3"
+  },
+  "provenance": {
+    "inventory_path": "reports/ooc-image-inventory-2026-09-16.csv",
+    "inventory_sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+    "runtime_contract_path": "backend/experiments/ooc-cnn/kaggle-runtime-contract.json",
+    "runtime_contract_sha256": "3e8d1d34fdd7e853037ef2e8c3435ea2ef769a9f6bd5fffee03fec6c08d241ea"
+  },
+  "model": {
+    "architecture": "mobilenet_v3_small",
+    "num_classes": 2,
+    "label_mapping": {
+      "0": "bad",
+      "1": "good"
+    },
+    "validation_initialization": "local ImageNet state_dict with an explicit SHA-256",
+    "implicit_weight_downloads": false
+  },
+  "preprocessing": {
+    "input_size": 224,
+    "resize": "preserve aspect ratio and pad to square",
+    "interpolation": "bilinear",
+    "force_rgb": true,
+    "pad_value": 0,
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "train_augmentations": [
+      "horizontal_flip",
+      "vertical_flip"
+    ]
+  },
+  "training": {
+    "seed": 20260916,
+    "epochs": 20,
+    "batch_size": 32,
+    "workers": 2,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "class_weighting": "balanced from train only",
+    "checkpoint_metric": "validation macro_f1 at threshold 0.5",
+    "threshold_selection": "validation macro_f1 after restoring the best checkpoint",
+    "early_stopping_patience": 6,
+    "amp_on_cuda": true,
+    "deterministic_algorithms": true
+  },
+  "smoke": {
+    "epochs": 1,
+    "batch_size": 4,
+    "workers": 0,
+    "max_train_images": 8,
+    "max_validation_images": 4,
+    "initialization": "none",
+    "benchmark_eligible": false
+  },
+  "evaluation": {
+    "threshold_grid_start": 0.05,
+    "threshold_grid_stop": 0.95,
+    "threshold_grid_steps": 181,
+    "ece_bins": 10,
+    "bootstrap_iterations": 2000,
+    "slices": [
+      "cell_type",
+      "day_bucket",
+      "image_mode",
+      "resolution"
+    ]
+  },
+  "export": {
+    "onnx_opset": 18,
+    "dynamic_batch": true,
+    "fixed_spatial_size": 224,
+    "parity_absolute_tolerance": 0.0001
+  },
+  "outputs": {
+    "runs_directory": "data/experiments/ooc-cnn",
+    "generated_reports_directory": "reports/generated/ooc-cnn",
+    "test_receipts_directory": "reports/test-access/ooc-cnn"
+  }
+}
