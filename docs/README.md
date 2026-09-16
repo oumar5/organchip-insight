@@ -22,10 +22,10 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 - [Expérience utilisateur](ux.md)
 - [Sécurité et données](security-and-data.md)
 - [Roadmap](roadmap.md)
+- [Retours d'expérience](retours-experience/README.md)
 
 ## Règle documentaire
 
 Une performance, une licence ou une capacité n'est annoncée comme acquise que si
 elle est reliée à une source, un script ou un test versionné. Les intentions
 restent marquées comme `planifié`, `candidat` ou `à valider`.
-
