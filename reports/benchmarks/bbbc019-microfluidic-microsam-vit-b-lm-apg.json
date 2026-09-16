@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "bbbc019-microfluidic-micro-sam-vit-b-lm-apg",
+  "generated_at_utc": "2026-09-16T03:27:22.201915+00:00",
+  "git_commit": "b440d2795bdeea7e89b424de2b112d1df9e29274",
+  "config": "backend/evaluation/configs/bbbc019-microfluidic-microsam-vit-b-lm-apg.json",
+  "config_sha256": "df5b1017a1cb03bcf2e01751c7e48f256e1c8492338f05c551bda5f0809f5976",
+  "dataset": {
+    "id": "BBBC019v2-Microfluidic",
+    "version": "2",
+    "archive_sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f",
+    "license": "CC-BY-3.0",
+    "source": "https://bbbc.broadinstitute.org/BBBC019"
+  },
+  "engine": {
+    "id": "micro-sam-vit-b-lm-apg",
+    "version": "1.8.14",
+    "training_required": false,
+    "model_type": "vit_b_lm",
+    "segmentation_mode": "apg",
+    "device": "cpu",
+    "is_tiled": false,
+    "generate_kwargs": {
+      "min_size": 25,
+      "center_distance_threshold": 0.5,
+      "boundary_distance_threshold": 0.5,
+      "foreground_threshold": 0.5,
+      "multimasking": false,
+      "batch_size": 32,
+      "nms_threshold": 0.9,
+      "intersection_over_min": false,
+      "refine_with_box_prompts": false
+    },
+    "code_license": "MIT",
+    "weights_license": "CC-BY-4.0",
+    "weights_source": "https://bioimage.io/#/?id=diplomatic-bug",
+    "weights": [
+      {
+        "path": "data/models/micro-sam/models/vit_b_lm",
+        "size_bytes": 375023499,
+        "sha256": "ffe862fa5b58d78375506041faf0eb3927ced5b5391e8be383e6d7ac07aed924"
+      },
+      {
+        "path": "data/models/micro-sam/models/vit_b_lm_decoder",
+        "size_bytes": 38393613,
+        "sha256": "3a1566aada52e24299286527ec60c966d213db86ee656c67439c71c1b4182c26"
+      }
+    ],
+    "torch_version": "2.10.0",
+    "runtime": "isolated Conda environment"
+  },
+  "methodology": {
+    "ground_truth": "non-zero pixels in the official manual PNG masks",
+    "aggregation": "macro is the unweighted mean across images; micro pools pixels",
+    "parameter_selection": "Unmodified µSAM 1.8.14 APG defaults, fixed before viewing BBBC019 metrics; no mask-based tuning.",
+    "bootstrap": {
+      "unit": "image",
+      "iterations": 10000,
+      "seed": 20260916,
+      "confidence": 0.95
+    }
+  },
+  "results": {
+    "image_count": 13,
+    "macro": {
+      "precision": 0.832314,
+      "recall": 0.819924,
+      "f1": 0.815542,
+      "iou": 0.698535
+    },
+    "micro": {
+      "true_positive": 1390444,
+      "false_positive": 253162,
+      "false_negative": 483407,
+      "true_negative": 11504475,
+      "precision": 0.845972,
+      "recall": 0.742025,
+      "f1": 0.790596,
+      "iou": 0.653707
+    },
+    "macro_bootstrap_95_percent": {
+      "precision": [
+        0.800877,
+        0.858353
+      ],
+      "recall": [
+        0.728631,
+        0.89063
+      ],
+      "f1": [
+        0.758206,
+        0.861862
+      ],
+      "iou": [
+        0.627289,
+        0.758468
+      ]
+    },
+    "median_f1": 0.861344
+  },
+  "performance": {
+    "engine_load_seconds": 18.610024,
+    "total_megapixels": 13.631488,
+    "total_seconds_including_overlays": 560.935463,
+    "mean_inference_seconds_per_image": 42.843791,
+    "mean_inference_seconds_per_megapixel": 40.859023,
+    "process_max_rss_mb": 8702.957
+  },
+  "environment": {
+    "python": "3.12.14",
+    "platform": "macOS-26.6.2-x86_64-i386-64bit",
+    "machine": "x86_64"
+  },
+  "historical_references": [
+    {
+      "algorithm": "TScratch",
+      "mean_precision": 0.35,
+      "mean_recall": 0.79,
+      "mean_f1": 0.42,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "MultiCellSeg",
+      "mean_precision": 0.23,
+      "mean_recall": 0.98,
+      "mean_f1": 0.35,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "Topman",
+      "mean_precision": 0.47,
+      "mean_recall": 0.99,
+      "mean_f1": 0.63,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    }
+  ],
+  "warnings": [
+    "This external dataset is DIC microfluidics, not the challenge's OoC dataset.",
+    "The 95% intervals resample images, not independent biological experiments.",
+    "Historical values are contextual unless preprocessing and masks are identical.",
+    "µSAM produces instance masks while BBBC019 provides a binary foreground mask; instances are merged before scoring.",
+    "This is a strict zero-shot run with package defaults, not a tuned estimate of best achievable µSAM performance."
+  ],
+  "per_image": [
+    {
+      "image": "SN90_C_1_000_dic.tif",
+      "true_positive": 142257,
+      "false_positive": 29083,
+      "false_negative": 14467,
+      "true_negative": 862769,
+      "precision": 0.830261,
+      "recall": 0.907691,
+      "f1": 0.867252,
+      "iou": 0.765617,
+      "truth_foreground_fraction": 0.149464,
+      "predicted_foreground_fraction": 0.163403,
+      "instance_count": 211,
+      "megapixels": 1.048576,
+      "inference_seconds": 44.105349,
+      "seconds_per_megapixel": 42.062138
+    },
+    {
+      "image": "SN90_C_1_075_dic.tif",
+      "true_positive": 184684,
+      "false_positive": 34600,
+      "false_negative": 24524,
+      "true_negative": 804768,
+      "precision": 0.842214,
+      "recall": 0.882777,
+      "f1": 0.862018,
+      "iou": 0.757498,
+      "truth_foreground_fraction": 0.199516,
+      "predicted_foreground_fraction": 0.209126,
+      "instance_count": 131,
+      "megapixels": 1.048576,
+      "inference_seconds": 47.257891,
+      "seconds_per_megapixel": 45.068637
+    },
+    {
+      "image": "SN90_C_2_000_dic.tif",
+      "true_positive": 87553,
+      "false_positive": 19434,
+      "false_negative": 6223,
+      "true_negative": 935366,
+      "precision": 0.818352,
+      "recall": 0.93364,
+      "f1": 0.872203,
+      "iou": 0.773368,
+      "truth_foreground_fraction": 0.089432,
+      "predicted_foreground_fraction": 0.102031,
+      "instance_count": 132,
+      "megapixels": 1.048576,
+      "inference_seconds": 46.229764,
+      "seconds_per_megapixel": 44.088139
+    },
+    {
+      "image": "SN90_C_2_075_dic.tif",
+      "true_positive": 100493,
+      "false_positive": 24557,
+      "false_negative": 7797,
+      "true_negative": 915729,
+      "precision": 0.803623,
+      "recall": 0.927999,
+      "f1": 0.861344,
+      "iou": 0.756457,
+      "truth_foreground_fraction": 0.103273,
+      "predicted_foreground_fraction": 0.119257,
+      "instance_count": 96,
+      "megapixels": 1.048576,
+      "inference_seconds": 41.509195,
+      "seconds_per_megapixel": 39.586253
+    },
+    {
+      "image": "SN90_C_3_000_dic.tif",
+      "true_positive": 18803,
+      "false_positive": 2724,
+      "false_negative": 3886,
+      "true_negative": 1023163,
+      "precision": 0.873461,
+      "recall": 0.828728,
+      "f1": 0.850507,
+      "iou": 0.739897,
+      "truth_foreground_fraction": 0.021638,
+      "predicted_foreground_fraction": 0.02053,
+      "instance_count": 24,
+      "megapixels": 1.048576,
+      "inference_seconds": 30.125013,
+      "seconds_per_megapixel": 28.729451
+    },
+    {
+      "image": "SN90_C_3_075_dic.tif",
+      "true_positive": 13249,
+      "false_positive": 6328,
+      "false_negative": 3801,
+      "true_negative": 1025198,
+      "precision": 0.676764,
+      "recall": 0.777067,
+      "f1": 0.723455,
+      "iou": 0.566729,
+      "truth_foreground_fraction": 0.01626,
+      "predicted_foreground_fraction": 0.01867,
+      "instance_count": 24,
+      "megapixels": 1.048576,
+      "inference_seconds": 29.366255,
+      "seconds_per_megapixel": 28.005844
+    },
+    {
+      "image": "SN90_C_4_000_dic.tif",
+      "true_positive": 49167,
+      "false_positive": 8350,
+      "false_negative": 4907,
+      "true_negative": 986152,
+      "precision": 0.854826,
+      "recall": 0.909254,
+      "f1": 0.8812,
+      "iou": 0.78763,
+      "truth_foreground_fraction": 0.051569,
+      "predicted_foreground_fraction": 0.054852,
+      "instance_count": 67,
+      "megapixels": 1.048576,
+      "inference_seconds": 34.752697,
+      "seconds_per_megapixel": 33.142754
+    },
+    {
+      "image": "SN90_C_4_075_dic.tif",
+      "true_positive": 79410,
+      "false_positive": 20546,
+      "false_negative": 15330,
+      "true_negative": 933290,
+      "precision": 0.79445,
+      "recall": 0.838189,
+      "f1": 0.815733,
+      "iou": 0.688809,
+      "truth_foreground_fraction": 0.090351,
+      "predicted_foreground_fraction": 0.095325,
+      "instance_count": 88,
+      "megapixels": 1.048576,
+      "inference_seconds": 37.463627,
+      "seconds_per_megapixel": 35.728099
+    },
+    {
+      "image": "SN90_C_5_000_dic.tif",
+      "true_positive": 95583,
+      "false_positive": 14779,
+      "false_negative": 10950,
+      "true_negative": 927264,
+      "precision": 0.866086,
+      "recall": 0.897215,
+      "f1": 0.881376,
+      "iou": 0.787911,
+      "truth_foreground_fraction": 0.101598,
+      "predicted_foreground_fraction": 0.105249,
+      "instance_count": 108,
+      "megapixels": 1.048576,
+      "inference_seconds": 39.744922,
+      "seconds_per_megapixel": 37.903711
+    },
+    {
+      "image": "SN90_C_5_075_dic.tif",
+      "true_positive": 176299,
+      "false_positive": 25067,
+      "false_negative": 130845,
+      "true_negative": 716365,
+      "precision": 0.875515,
+      "recall": 0.573995,
+      "f1": 0.693394,
+      "iou": 0.530684,
+      "truth_foreground_fraction": 0.292915,
+      "predicted_foreground_fraction": 0.192038,
+      "instance_count": 155,
+      "megapixels": 1.048576,
+      "inference_seconds": 47.059189,
+      "seconds_per_megapixel": 44.87914
+    },
+    {
+      "image": "SN90_C_6_000_dic.tif",
+      "true_positive": 186108,
+      "false_positive": 22251,
+      "false_negative": 22314,
+      "true_negative": 817903,
+      "precision": 0.893208,
+      "recall": 0.892938,
+      "f1": 0.893073,
+      "iou": 0.806804,
+      "truth_foreground_fraction": 0.198767,
+      "predicted_foreground_fraction": 0.198707,
+      "instance_count": 234,
+      "megapixels": 1.048576,
+      "inference_seconds": 58.292706,
+      "seconds_per_megapixel": 55.592256
+    },
+    {
+      "image": "SN90_C_7_000_dic.tif",
+      "true_positive": 106587,
+      "false_positive": 24000,
+      "false_negative": 13280,
+      "true_negative": 904709,
+      "precision": 0.816214,
+      "recall": 0.889211,
+      "f1": 0.85115,
+      "iou": 0.740872,
+      "truth_foreground_fraction": 0.114314,
+      "predicted_foreground_fraction": 0.124537,
+      "instance_count": 176,
+      "megapixels": 1.048576,
+      "inference_seconds": 49.838353,
+      "seconds_per_megapixel": 47.529557
+    },
+    {
+      "image": "SN90_C_7_075_dic.tif",
+      "true_positive": 150251,
+      "false_positive": 21443,
+      "false_negative": 225083,
+      "true_negative": 651799,
+      "precision": 0.875109,
+      "recall": 0.400313,
+      "f1": 0.549336,
+      "iou": 0.378679,
+      "truth_foreground_fraction": 0.357946,
+      "predicted_foreground_fraction": 0.16374,
+      "instance_count": 164,
+      "megapixels": 1.048576,
+      "inference_seconds": 51.224323,
+      "seconds_per_megapixel": 48.851321
+    }
+  ]
+}
