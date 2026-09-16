@@ -18,8 +18,8 @@ DATASET_SOURCES = (
 )
 VARIANTS = {
     "a": {
-        "slug": "organchip-cnn-ablation-a-gray224",
-        "title": "OrganChip CNN Ablation A - Grayscale 224",
+        "slug": "organchip-cnn-ablation-a-grayscale-224",
+        "title": "OrganChip CNN Ablation A Grayscale 224",
         "run_id": "kaggle-validation-campaign-v2-gray224",
         "config": (
             "backend/training/configs/"
@@ -28,7 +28,7 @@ VARIANTS = {
     },
     "b": {
         "slug": "organchip-cnn-ablation-b-gray448",
-        "title": "OrganChip CNN Ablation B - Grayscale 448",
+        "title": "OrganChip CNN Ablation B Gray448",
         "run_id": "kaggle-validation-campaign-v2-gray448",
         "config": (
             "backend/training/configs/"
