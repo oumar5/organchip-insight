@@ -13,10 +13,16 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 ## Recherche scientifique
 
 - [Recherche et décisions](research.md)
+- [État de l'art et paysage concurrentiel](etat-de-l-art.md)
 - [Stratégie de données](data-strategy.md)
 - [Plan de validation](validation.md)
-- [Exigences du challenge](competition-requirements.md)
 - [Manifeste et acquisition des données](../data/README.md)
+
+## Challenge AI4S
+
+- [Exigences officielles du challenge](competition-requirements.md)
+- [Plan de soumission et de finale](plan-soumission.md)
+- [Audit du projet au 16 septembre 2026](audit-2026-09-16.md)
 
 ## Produit et exploitation
 
