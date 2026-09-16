@@ -14,7 +14,7 @@ FastAPI ---------------------------------------------------+
        +--> registre de moteurs                            |
                |                                           |
                +--> segmentation adaptative (disponible)  |
-               +--> µSAM (planifié)                        |
+               +--> µSAM (expérimental, benchmark isolé)  |
                +--> Cellpose (revue de licence)            |
                                                            |
 CLI inference.py ------------------------------------------+
@@ -42,7 +42,7 @@ backend/
 │   └── main.py            application FastAPI
 ├── inference.py           entrée CLI recommandée par Kaggle
 ├── tests/                 tests API et persistance
-├── training/              futur entraînement contrôlé
+├── training/              entraînement contrôlé et protocoles CNN
 └── evaluation/            futur benchmark figé
 ```
 
@@ -103,4 +103,3 @@ par `uv.lock` et `package-lock.json`.
 - export PDF/CSV ;
 - stockage d'artefacts adressé par hash ;
 - observabilité et authentification pour une démo publique.
-

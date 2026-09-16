@@ -44,14 +44,14 @@ Il ne peut pas encore servir à :
 | Moteur | État | Usage | Décision |
 |---|---|---|---|
 | Segmentation adaptative v1 | disponible | baseline CPU locale | moteur par défaut |
-| µSAM | planifié | segmentation interactive/préentraînée | benchmark et audit des poids requis |
+| µSAM | expérimental | benchmark isolé préentraîné | meilleur sur BBBC019, non activé dans le chemin produit |
 | Cellpose | revue de licence | segmentation généraliste | non activé par défaut |
 
 Le code Cellpose est sous licence BSD, mais le dépôt officiel indique que les
 modèles ont été entraînés sur des données CC-BY-NC. L'usage dans un challenge à
 prix doit donc être clarifié avant intégration. µSAM est publié sous licence MIT,
-mais les licences exactes des poids et jeux ayant servi au modèle choisi devront
-être enregistrées séparément.
+et le checkpoint BBBC019 évalué est enregistré avec sa licence CC-BY-4.0 et ses
+SHA-256. Tout autre checkpoint devra refaire cette vérification de provenance.
 
 Sources :
 
@@ -94,4 +94,3 @@ Un moteur préentraîné ne remplace la baseline que s'il :
 3. est évalué sur un split figé de BBBC038 et BBBC019 ;
 4. améliore les métriques principales avec intervalles de confiance ;
 5. conserve overlays, provenance et limites dans l'interface.
-

@@ -41,7 +41,7 @@ MICRO_SAM_ENGINE = AnalysisEngine(
     training_required=False,
     limitations=[
         "Pas encore activé dans le chemin d'inférence de production.",
-        "Benchmark BBBC019 zéro-shot requis avant décision de promotion.",
+        "Benchmark BBBC019 zéro-shot réalisé ; promotion produit encore à intégrer.",
         "Empreinte mémoire plus élevée que la baseline adaptative.",
     ],
 )

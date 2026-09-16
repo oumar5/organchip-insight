@@ -16,8 +16,9 @@ GET /health
 GET /inference/engines
 ```
 
-Retourne les moteurs disponibles, planifiés ou bloqués par une revue de licence.
-Une présence dans le registre ne signifie pas qu'un moteur est exécutable.
+Retourne les moteurs disponibles, expérimentaux ou bloqués par une revue de
+licence. Une présence dans le registre ne signifie pas qu'un moteur est
+exécutable dans le chemin produit.
 
 ## Expériences
 
@@ -73,4 +74,3 @@ Le résultat contient :
 | 404 | expérience, résultat ou artefact absent |
 | 409 | aucune image disponible pour l'analyse |
 | 422 | moteur indisponible ou aucune image exploitable |
-
