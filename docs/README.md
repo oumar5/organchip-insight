@@ -16,6 +16,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 - [État de l'art et paysage concurrentiel](etat-de-l-art.md)
 - [Stratégie de données](data-strategy.md)
 - [Plan de validation](validation.md)
+- [Protocole candidat de regroupement par campagne](protocole-campagnes-v2.md)
 - [Manifeste et acquisition des données](../data/README.md)
 
 ## Challenge AI4S

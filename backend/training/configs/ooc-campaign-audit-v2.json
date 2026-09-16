@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "protocol_id": "ooc-campaign-structure-v2",
+  "primary_gap_days": 3,
+  "structural_sensitivity_gap_days": [1, 7],
+  "edge_requires_shared_cell_type": true,
+  "grouping": "connected-components-of-acquisition-dates",
+  "assignment_or_model_evaluation": false
+}

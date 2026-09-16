@@ -1,0 +1,3689 @@
+{
+  "manifest_sha256": "5ffcf7ff0d69901f7362903d2532462c2758386dfbee2d6265b7a11d61b30d8c",
+  "primary": {
+    "campaign_count": 29,
+    "campaigns": [
+      {
+        "campaign_id": "campaign-220429",
+        "cell_types": [
+          "CACO",
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "220429",
+          "220502",
+          "220503",
+          "220506"
+        ],
+        "image_count": 62,
+        "span_days": 7,
+        "v1_split_counts": {
+          "train": 54,
+          "validation": 8
+        }
+      },
+      {
+        "campaign_id": "campaign-220512",
+        "cell_types": [
+          "CACO",
+          "HSAEC"
+        ],
+        "dates": [
+          "220512",
+          "220515"
+        ],
+        "image_count": 27,
+        "span_days": 3,
+        "v1_split_counts": {
+          "train": 12,
+          "validation": 15
+        }
+      },
+      {
+        "campaign_id": "campaign-220526",
+        "cell_types": [
+          "HSAEC"
+        ],
+        "dates": [
+          "220526"
+        ],
+        "image_count": 6,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 6
+        }
+      },
+      {
+        "campaign_id": "campaign-220606",
+        "cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "dates": [
+          "220606",
+          "220608",
+          "220609",
+          "220610",
+          "220611",
+          "220612"
+        ],
+        "image_count": 132,
+        "span_days": 6,
+        "v1_split_counts": {
+          "train": 108,
+          "validation": 24
+        }
+      },
+      {
+        "campaign_id": "campaign-220620",
+        "cell_types": [
+          "A549"
+        ],
+        "dates": [
+          "220620"
+        ],
+        "image_count": 12,
+        "span_days": 0,
+        "v1_split_counts": {
+          "test": 12
+        }
+      },
+      {
+        "campaign_id": "campaign-220626",
+        "cell_types": [
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "220626"
+        ],
+        "image_count": 16,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 16
+        }
+      },
+      {
+        "campaign_id": "campaign-220630",
+        "cell_types": [
+          "HSAEC"
+        ],
+        "dates": [
+          "220630"
+        ],
+        "image_count": 19,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 19
+        }
+      },
+      {
+        "campaign_id": "campaign-220706",
+        "cell_types": [
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "220706",
+          "220708"
+        ],
+        "image_count": 23,
+        "span_days": 2,
+        "v1_split_counts": {
+          "train": 23
+        }
+      },
+      {
+        "campaign_id": "campaign-220715",
+        "cell_types": [
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "220715",
+          "220716",
+          "220718",
+          "220721",
+          "220722",
+          "220724"
+        ],
+        "image_count": 57,
+        "span_days": 9,
+        "v1_split_counts": {
+          "test": 9,
+          "train": 48
+        }
+      },
+      {
+        "campaign_id": "campaign-221010",
+        "cell_types": [
+          "A549",
+          "HPMEC",
+          "HSAEC",
+          "HUVEC"
+        ],
+        "dates": [
+          "221010",
+          "221012"
+        ],
+        "image_count": 123,
+        "span_days": 2,
+        "v1_split_counts": {
+          "test": 99,
+          "train": 24
+        }
+      },
+      {
+        "campaign_id": "campaign-221123",
+        "cell_types": [
+          "A549"
+        ],
+        "dates": [
+          "221123"
+        ],
+        "image_count": 12,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 12
+        }
+      },
+      {
+        "campaign_id": "campaign-221214",
+        "cell_types": [
+          "HPMEC"
+        ],
+        "dates": [
+          "221214"
+        ],
+        "image_count": 18,
+        "span_days": 0,
+        "v1_split_counts": {
+          "validation": 18
+        }
+      },
+      {
+        "campaign_id": "campaign-221215",
+        "cell_types": [
+          "A549",
+          "CACO",
+          "HUVEC"
+        ],
+        "dates": [
+          "221215"
+        ],
+        "image_count": 22,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 22
+        }
+      },
+      {
+        "campaign_id": "campaign-221219",
+        "cell_types": [
+          "A549"
+        ],
+        "dates": [
+          "221219"
+        ],
+        "image_count": 17,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 17
+        }
+      },
+      {
+        "campaign_id": "campaign-230109",
+        "cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "dates": [
+          "230109",
+          "230110"
+        ],
+        "image_count": 124,
+        "span_days": 1,
+        "v1_split_counts": {
+          "train": 124
+        }
+      },
+      {
+        "campaign_id": "campaign-230119",
+        "cell_types": [
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "230119"
+        ],
+        "image_count": 70,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 70
+        }
+      },
+      {
+        "campaign_id": "campaign-230123",
+        "cell_types": [
+          "HPMEC",
+          "HSAEC"
+        ],
+        "dates": [
+          "230123"
+        ],
+        "image_count": 26,
+        "span_days": 0,
+        "v1_split_counts": {
+          "test": 26
+        }
+      },
+      {
+        "campaign_id": "campaign-230206",
+        "cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "dates": [
+          "230206"
+        ],
+        "image_count": 57,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 57
+        }
+      },
+      {
+        "campaign_id": "campaign-230214",
+        "cell_types": [
+          "HPMEC"
+        ],
+        "dates": [
+          "230214",
+          "230215",
+          "230216"
+        ],
+        "image_count": 78,
+        "span_days": 2,
+        "v1_split_counts": {
+          "train": 6,
+          "validation": 72
+        }
+      },
+      {
+        "campaign_id": "campaign-230314",
+        "cell_types": [
+          "A549",
+          "HPMEC",
+          "NHBE"
+        ],
+        "dates": [
+          "230314",
+          "230315",
+          "230316",
+          "230317",
+          "230320",
+          "230321"
+        ],
+        "image_count": 533,
+        "span_days": 7,
+        "v1_split_counts": {
+          "test": 16,
+          "train": 473,
+          "validation": 44
+        }
+      },
+      {
+        "campaign_id": "campaign-230328",
+        "cell_types": [
+          "CACO"
+        ],
+        "dates": [
+          "230328",
+          "230329"
+        ],
+        "image_count": 36,
+        "span_days": 1,
+        "v1_split_counts": {
+          "test": 24,
+          "train": 12
+        }
+      },
+      {
+        "campaign_id": "campaign-230403",
+        "cell_types": [
+          "CACO",
+          "HUVEC"
+        ],
+        "dates": [
+          "230403",
+          "230405"
+        ],
+        "image_count": 150,
+        "span_days": 2,
+        "v1_split_counts": {
+          "train": 150
+        }
+      },
+      {
+        "campaign_id": "campaign-230411",
+        "cell_types": [
+          "CACO",
+          "HUVEC"
+        ],
+        "dates": [
+          "230411"
+        ],
+        "image_count": 79,
+        "span_days": 0,
+        "v1_split_counts": {
+          "validation": 79
+        }
+      },
+      {
+        "campaign_id": "campaign-230419",
+        "cell_types": [
+          "CACO",
+          "HPMEC"
+        ],
+        "dates": [
+          "230419"
+        ],
+        "image_count": 124,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 124
+        }
+      },
+      {
+        "campaign_id": "campaign-230424",
+        "cell_types": [
+          "A549",
+          "CACO",
+          "HPMEC"
+        ],
+        "dates": [
+          "230424",
+          "230425"
+        ],
+        "image_count": 323,
+        "span_days": 1,
+        "v1_split_counts": {
+          "train": 215,
+          "validation": 108
+        }
+      },
+      {
+        "campaign_id": "campaign-230510",
+        "cell_types": [
+          "A549",
+          "HPMEC",
+          "NHBE"
+        ],
+        "dates": [
+          "230510",
+          "230512"
+        ],
+        "image_count": 183,
+        "span_days": 2,
+        "v1_split_counts": {
+          "test": 89,
+          "validation": 94
+        }
+      },
+      {
+        "campaign_id": "campaign-230517",
+        "cell_types": [
+          "A549",
+          "HPMEC",
+          "NHBE"
+        ],
+        "dates": [
+          "230517"
+        ],
+        "image_count": 90,
+        "span_days": 0,
+        "v1_split_counts": {
+          "test": 90
+        }
+      },
+      {
+        "campaign_id": "campaign-230523",
+        "cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "dates": [
+          "230523",
+          "230524",
+          "230525"
+        ],
+        "image_count": 437,
+        "span_days": 2,
+        "v1_split_counts": {
+          "test": 108,
+          "train": 329
+        }
+      },
+      {
+        "campaign_id": "campaign-230529",
+        "cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "dates": [
+          "230529"
+        ],
+        "image_count": 216,
+        "span_days": 0,
+        "v1_split_counts": {
+          "train": 216
+        }
+      }
+    ],
+    "cross_v1_split_edge_count": 21,
+    "date_count": 59,
+    "edges": [
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220429",
+          "220502"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220502",
+          "220503"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220503",
+          "220506"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220512",
+          "220515"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "CACO",
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220606",
+          "220608"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220606",
+          "220609"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220608",
+          "220609"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220608",
+          "220610"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220608",
+          "220611"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220609",
+          "220610"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220609",
+          "220611"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220609",
+          "220612"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220610",
+          "220611"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220610",
+          "220612"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220611",
+          "220612"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220706",
+          "220708"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220715",
+          "220716"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220715",
+          "220718"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220716",
+          "220718"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220718",
+          "220721"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "220721",
+          "220722"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220721",
+          "220724"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "test"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "220722",
+          "220724"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "train",
+          "test"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "221010",
+          "221012"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HSAEC"
+        ],
+        "v1_splits": [
+          "test",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230109",
+          "230110"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230214",
+          "230215"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230214",
+          "230216"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230215",
+          "230216"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230314",
+          "230315"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230314",
+          "230316"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230314",
+          "230317"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230315",
+          "230316"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "validation"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230315",
+          "230317"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230316",
+          "230317"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC",
+          "NHBE"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230317",
+          "230320"
+        ],
+        "gap_days": 3,
+        "shared_cell_types": [
+          "HPMEC",
+          "NHBE"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230320",
+          "230321"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "test"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230328",
+          "230329"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "CACO"
+        ],
+        "v1_splits": [
+          "test",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230403",
+          "230405"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "CACO"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230424",
+          "230425"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "A549",
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "validation",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230510",
+          "230512"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "A549",
+          "HPMEC",
+          "NHBE"
+        ],
+        "v1_splits": [
+          "validation",
+          "test"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230523",
+          "230524"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "test"
+        ]
+      },
+      {
+        "crosses_v1_split": false,
+        "dates": [
+          "230523",
+          "230525"
+        ],
+        "gap_days": 2,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "train",
+          "train"
+        ]
+      },
+      {
+        "crosses_v1_split": true,
+        "dates": [
+          "230524",
+          "230525"
+        ],
+        "gap_days": 1,
+        "shared_cell_types": [
+          "HPMEC"
+        ],
+        "v1_splits": [
+          "test",
+          "train"
+        ]
+      }
+    ],
+    "gap_days": 3,
+    "image_count": 3072,
+    "test_images_on_cross_split_neighbor_dates": 345,
+    "test_images_with_matching_neighbor_cell_type": 270
+  },
+  "protocol": {
+    "assignment_or_model_evaluation": false,
+    "edge_requires_shared_cell_type": true,
+    "grouping": "connected-components-of-acquisition-dates",
+    "primary_gap_days": 3,
+    "protocol_id": "ooc-campaign-structure-v2",
+    "schema_version": 1,
+    "structural_sensitivity_gap_days": [
+      1,
+      7
+    ]
+  },
+  "protocol_sha256": "b741bec4b204f2df6a3a498b9be01bb55d20988f8b3c3c92efcbba7cfa226c36",
+  "schema_version": 1,
+  "scope": "structural-audit-only; biological independence not established",
+  "script_sha256": "618b48645f43d202f6ef8cf32f68fa252c31f0cbcf4f4520683c67a660155b09",
+  "structural_sensitivity_only": [
+    {
+      "campaign_count": 41,
+      "campaigns": [
+        {
+          "campaign_id": "campaign-220429",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220429"
+          ],
+          "image_count": 31,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 31
+          }
+        },
+        {
+          "campaign_id": "campaign-220502",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220502",
+            "220503"
+          ],
+          "image_count": 16,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 8,
+            "validation": 8
+          }
+        },
+        {
+          "campaign_id": "campaign-220506",
+          "cell_types": [
+            "CACO",
+            "HSAEC"
+          ],
+          "dates": [
+            "220506"
+          ],
+          "image_count": 15,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 15
+          }
+        },
+        {
+          "campaign_id": "campaign-220512",
+          "cell_types": [
+            "CACO",
+            "HSAEC"
+          ],
+          "dates": [
+            "220512"
+          ],
+          "image_count": 15,
+          "span_days": 0,
+          "v1_split_counts": {
+            "validation": 15
+          }
+        },
+        {
+          "campaign_id": "campaign-220515",
+          "cell_types": [
+            "CACO",
+            "HSAEC"
+          ],
+          "dates": [
+            "220515"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-220526",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220526"
+          ],
+          "image_count": 6,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 6
+          }
+        },
+        {
+          "campaign_id": "campaign-220606",
+          "cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "dates": [
+            "220606"
+          ],
+          "image_count": 21,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 21
+          }
+        },
+        {
+          "campaign_id": "campaign-220608",
+          "cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "dates": [
+            "220608",
+            "220609",
+            "220610",
+            "220611",
+            "220612"
+          ],
+          "image_count": 111,
+          "span_days": 4,
+          "v1_split_counts": {
+            "train": 87,
+            "validation": 24
+          }
+        },
+        {
+          "campaign_id": "campaign-220620",
+          "cell_types": [
+            "A549"
+          ],
+          "dates": [
+            "220620"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-220626",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220626"
+          ],
+          "image_count": 16,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 16
+          }
+        },
+        {
+          "campaign_id": "campaign-220630",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220630"
+          ],
+          "image_count": 19,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 19
+          }
+        },
+        {
+          "campaign_id": "campaign-220706",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220706"
+          ],
+          "image_count": 10,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 10
+          }
+        },
+        {
+          "campaign_id": "campaign-220708",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220708"
+          ],
+          "image_count": 13,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 13
+          }
+        },
+        {
+          "campaign_id": "campaign-220715",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220715",
+            "220716"
+          ],
+          "image_count": 24,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 24
+          }
+        },
+        {
+          "campaign_id": "campaign-220718",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220718"
+          ],
+          "image_count": 9,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 9
+          }
+        },
+        {
+          "campaign_id": "campaign-220721",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220721",
+            "220722"
+          ],
+          "image_count": 15,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 15
+          }
+        },
+        {
+          "campaign_id": "campaign-220724",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220724"
+          ],
+          "image_count": 9,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 9
+          }
+        },
+        {
+          "campaign_id": "campaign-221010",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "HSAEC",
+            "HUVEC"
+          ],
+          "dates": [
+            "221010"
+          ],
+          "image_count": 99,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 99
+          }
+        },
+        {
+          "campaign_id": "campaign-221012",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "221012"
+          ],
+          "image_count": 24,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 24
+          }
+        },
+        {
+          "campaign_id": "campaign-221123",
+          "cell_types": [
+            "A549"
+          ],
+          "dates": [
+            "221123"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-221214",
+          "cell_types": [
+            "HPMEC"
+          ],
+          "dates": [
+            "221214"
+          ],
+          "image_count": 18,
+          "span_days": 0,
+          "v1_split_counts": {
+            "validation": 18
+          }
+        },
+        {
+          "campaign_id": "campaign-221215",
+          "cell_types": [
+            "A549",
+            "CACO",
+            "HUVEC"
+          ],
+          "dates": [
+            "221215"
+          ],
+          "image_count": 22,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 22
+          }
+        },
+        {
+          "campaign_id": "campaign-221219",
+          "cell_types": [
+            "A549"
+          ],
+          "dates": [
+            "221219"
+          ],
+          "image_count": 17,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 17
+          }
+        },
+        {
+          "campaign_id": "campaign-230109",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230109",
+            "230110"
+          ],
+          "image_count": 124,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 124
+          }
+        },
+        {
+          "campaign_id": "campaign-230119",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "230119"
+          ],
+          "image_count": 70,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 70
+          }
+        },
+        {
+          "campaign_id": "campaign-230123",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "230123"
+          ],
+          "image_count": 26,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 26
+          }
+        },
+        {
+          "campaign_id": "campaign-230206",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230206"
+          ],
+          "image_count": 57,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 57
+          }
+        },
+        {
+          "campaign_id": "campaign-230214",
+          "cell_types": [
+            "HPMEC"
+          ],
+          "dates": [
+            "230214",
+            "230215",
+            "230216"
+          ],
+          "image_count": 78,
+          "span_days": 2,
+          "v1_split_counts": {
+            "train": 6,
+            "validation": 72
+          }
+        },
+        {
+          "campaign_id": "campaign-230314",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230314",
+            "230315",
+            "230316",
+            "230317"
+          ],
+          "image_count": 288,
+          "span_days": 3,
+          "v1_split_counts": {
+            "train": 244,
+            "validation": 44
+          }
+        },
+        {
+          "campaign_id": "campaign-230320",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230320",
+            "230321"
+          ],
+          "image_count": 245,
+          "span_days": 1,
+          "v1_split_counts": {
+            "test": 16,
+            "train": 229
+          }
+        },
+        {
+          "campaign_id": "campaign-230328",
+          "cell_types": [
+            "CACO"
+          ],
+          "dates": [
+            "230328",
+            "230329"
+          ],
+          "image_count": 36,
+          "span_days": 1,
+          "v1_split_counts": {
+            "test": 24,
+            "train": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-230403",
+          "cell_types": [
+            "CACO"
+          ],
+          "dates": [
+            "230403"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-230405",
+          "cell_types": [
+            "CACO",
+            "HUVEC"
+          ],
+          "dates": [
+            "230405"
+          ],
+          "image_count": 138,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 138
+          }
+        },
+        {
+          "campaign_id": "campaign-230411",
+          "cell_types": [
+            "CACO",
+            "HUVEC"
+          ],
+          "dates": [
+            "230411"
+          ],
+          "image_count": 79,
+          "span_days": 0,
+          "v1_split_counts": {
+            "validation": 79
+          }
+        },
+        {
+          "campaign_id": "campaign-230419",
+          "cell_types": [
+            "CACO",
+            "HPMEC"
+          ],
+          "dates": [
+            "230419"
+          ],
+          "image_count": 124,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 124
+          }
+        },
+        {
+          "campaign_id": "campaign-230424",
+          "cell_types": [
+            "A549",
+            "CACO",
+            "HPMEC"
+          ],
+          "dates": [
+            "230424",
+            "230425"
+          ],
+          "image_count": 323,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 215,
+            "validation": 108
+          }
+        },
+        {
+          "campaign_id": "campaign-230510",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230510"
+          ],
+          "image_count": 94,
+          "span_days": 0,
+          "v1_split_counts": {
+            "validation": 94
+          }
+        },
+        {
+          "campaign_id": "campaign-230512",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230512"
+          ],
+          "image_count": 89,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 89
+          }
+        },
+        {
+          "campaign_id": "campaign-230517",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230517"
+          ],
+          "image_count": 90,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 90
+          }
+        },
+        {
+          "campaign_id": "campaign-230523",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230523",
+            "230524",
+            "230525"
+          ],
+          "image_count": 437,
+          "span_days": 2,
+          "v1_split_counts": {
+            "test": 108,
+            "train": 329
+          }
+        },
+        {
+          "campaign_id": "campaign-230529",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230529"
+          ],
+          "image_count": 216,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 216
+          }
+        }
+      ],
+      "cross_v1_split_edge_count": 11,
+      "date_count": 59,
+      "edges": [
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220502",
+            "220503"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220608",
+            "220609"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220609",
+            "220610"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220610",
+            "220611"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220611",
+            "220612"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220715",
+            "220716"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220721",
+            "220722"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230109",
+            "230110"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230214",
+            "230215"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230215",
+            "230216"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230314",
+            "230315"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230315",
+            "230316"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230316",
+            "230317"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230320",
+            "230321"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230328",
+            "230329"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230424",
+            "230425"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230523",
+            "230524"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230524",
+            "230525"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        }
+      ],
+      "gap_days": 1,
+      "image_count": 3072,
+      "test_images_on_cross_split_neighbor_dates": 148,
+      "test_images_with_matching_neighbor_cell_type": 148
+    },
+    {
+      "campaign_count": 17,
+      "campaigns": [
+        {
+          "campaign_id": "campaign-220429",
+          "cell_types": [
+            "CACO",
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220429",
+            "220502",
+            "220503",
+            "220506",
+            "220512",
+            "220515"
+          ],
+          "image_count": 89,
+          "span_days": 16,
+          "v1_split_counts": {
+            "train": 66,
+            "validation": 23
+          }
+        },
+        {
+          "campaign_id": "campaign-220526",
+          "cell_types": [
+            "HSAEC"
+          ],
+          "dates": [
+            "220526"
+          ],
+          "image_count": 6,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 6
+          }
+        },
+        {
+          "campaign_id": "campaign-220606",
+          "cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "dates": [
+            "220606",
+            "220608",
+            "220609",
+            "220610",
+            "220611",
+            "220612"
+          ],
+          "image_count": 132,
+          "span_days": 6,
+          "v1_split_counts": {
+            "train": 108,
+            "validation": 24
+          }
+        },
+        {
+          "campaign_id": "campaign-220620",
+          "cell_types": [
+            "A549"
+          ],
+          "dates": [
+            "220620"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "test": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-220626",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "220626",
+            "220630",
+            "220706",
+            "220708",
+            "220715",
+            "220716",
+            "220718",
+            "220721",
+            "220722",
+            "220724"
+          ],
+          "image_count": 115,
+          "span_days": 28,
+          "v1_split_counts": {
+            "test": 9,
+            "train": 106
+          }
+        },
+        {
+          "campaign_id": "campaign-221010",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "HSAEC",
+            "HUVEC"
+          ],
+          "dates": [
+            "221010",
+            "221012"
+          ],
+          "image_count": 123,
+          "span_days": 2,
+          "v1_split_counts": {
+            "test": 99,
+            "train": 24
+          }
+        },
+        {
+          "campaign_id": "campaign-221123",
+          "cell_types": [
+            "A549"
+          ],
+          "dates": [
+            "221123"
+          ],
+          "image_count": 12,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 12
+          }
+        },
+        {
+          "campaign_id": "campaign-221214",
+          "cell_types": [
+            "HPMEC"
+          ],
+          "dates": [
+            "221214"
+          ],
+          "image_count": 18,
+          "span_days": 0,
+          "v1_split_counts": {
+            "validation": 18
+          }
+        },
+        {
+          "campaign_id": "campaign-221215",
+          "cell_types": [
+            "A549",
+            "CACO",
+            "HUVEC"
+          ],
+          "dates": [
+            "221215",
+            "221219"
+          ],
+          "image_count": 39,
+          "span_days": 4,
+          "v1_split_counts": {
+            "train": 39
+          }
+        },
+        {
+          "campaign_id": "campaign-230109",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230109",
+            "230110"
+          ],
+          "image_count": 124,
+          "span_days": 1,
+          "v1_split_counts": {
+            "train": 124
+          }
+        },
+        {
+          "campaign_id": "campaign-230119",
+          "cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "dates": [
+            "230119",
+            "230123"
+          ],
+          "image_count": 96,
+          "span_days": 4,
+          "v1_split_counts": {
+            "test": 26,
+            "train": 70
+          }
+        },
+        {
+          "campaign_id": "campaign-230206",
+          "cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "dates": [
+            "230206"
+          ],
+          "image_count": 57,
+          "span_days": 0,
+          "v1_split_counts": {
+            "train": 57
+          }
+        },
+        {
+          "campaign_id": "campaign-230214",
+          "cell_types": [
+            "HPMEC"
+          ],
+          "dates": [
+            "230214",
+            "230215",
+            "230216"
+          ],
+          "image_count": 78,
+          "span_days": 2,
+          "v1_split_counts": {
+            "train": 6,
+            "validation": 72
+          }
+        },
+        {
+          "campaign_id": "campaign-230314",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230314",
+            "230315",
+            "230316",
+            "230317",
+            "230320",
+            "230321"
+          ],
+          "image_count": 533,
+          "span_days": 7,
+          "v1_split_counts": {
+            "test": 16,
+            "train": 473,
+            "validation": 44
+          }
+        },
+        {
+          "campaign_id": "campaign-230328",
+          "cell_types": [
+            "CACO",
+            "HUVEC"
+          ],
+          "dates": [
+            "230328",
+            "230329",
+            "230403",
+            "230405",
+            "230411"
+          ],
+          "image_count": 265,
+          "span_days": 14,
+          "v1_split_counts": {
+            "test": 24,
+            "train": 162,
+            "validation": 79
+          }
+        },
+        {
+          "campaign_id": "campaign-230419",
+          "cell_types": [
+            "A549",
+            "CACO",
+            "HPMEC"
+          ],
+          "dates": [
+            "230419",
+            "230424",
+            "230425"
+          ],
+          "image_count": 447,
+          "span_days": 6,
+          "v1_split_counts": {
+            "train": 339,
+            "validation": 108
+          }
+        },
+        {
+          "campaign_id": "campaign-230510",
+          "cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "dates": [
+            "230510",
+            "230512",
+            "230517",
+            "230523",
+            "230524",
+            "230525",
+            "230529"
+          ],
+          "image_count": 926,
+          "span_days": 19,
+          "v1_split_counts": {
+            "test": 287,
+            "train": 545,
+            "validation": 94
+          }
+        }
+      ],
+      "cross_v1_split_edge_count": 37,
+      "date_count": 59,
+      "edges": [
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220429",
+            "220502"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220429",
+            "220503"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220429",
+            "220506"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220502",
+            "220503"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220502",
+            "220506"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220503",
+            "220506"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220506",
+            "220512"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "CACO",
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220512",
+            "220515"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "CACO",
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220606",
+            "220608"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220606",
+            "220609"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220606",
+            "220610"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220606",
+            "220611"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220606",
+            "220612"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220608",
+            "220609"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220608",
+            "220610"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220608",
+            "220611"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220608",
+            "220612"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220609",
+            "220610"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220609",
+            "220611"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220609",
+            "220612"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220610",
+            "220611"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220610",
+            "220612"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220611",
+            "220612"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220626",
+            "220630"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220630",
+            "220706"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220706",
+            "220708"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220708",
+            "220715"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220715",
+            "220716"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220715",
+            "220718"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220715",
+            "220721"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220715",
+            "220722"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220716",
+            "220718"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220716",
+            "220721"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220716",
+            "220722"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220718",
+            "220721"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220718",
+            "220722"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220718",
+            "220724"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "220721",
+            "220722"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220721",
+            "220724"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "220722",
+            "220724"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "221010",
+            "221012"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "221215",
+            "221219"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "A549"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230109",
+            "230110"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230119",
+            "230123"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HPMEC",
+            "HSAEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230214",
+            "230215"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230214",
+            "230216"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230215",
+            "230216"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230314",
+            "230315"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230314",
+            "230316"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230314",
+            "230317"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230314",
+            "230320"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230314",
+            "230321"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230315",
+            "230316"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230315",
+            "230317"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230315",
+            "230320"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230315",
+            "230321"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230316",
+            "230317"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230316",
+            "230320"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230316",
+            "230321"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230317",
+            "230320"
+          ],
+          "gap_days": 3,
+          "shared_cell_types": [
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230317",
+            "230321"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230320",
+            "230321"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230328",
+            "230329"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230328",
+            "230403"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230329",
+            "230403"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230329",
+            "230405"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230403",
+            "230405"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "CACO"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230405",
+            "230411"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "CACO",
+            "HUVEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230419",
+            "230424"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230419",
+            "230425"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "CACO",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230424",
+            "230425"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "validation",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230510",
+            "230512"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "validation",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230510",
+            "230517"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "validation",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230512",
+            "230517"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC",
+            "NHBE"
+          ],
+          "v1_splits": [
+            "test",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230517",
+            "230523"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230517",
+            "230524"
+          ],
+          "gap_days": 7,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "test",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230523",
+            "230524"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "test"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230523",
+            "230525"
+          ],
+          "gap_days": 2,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230523",
+            "230529"
+          ],
+          "gap_days": 6,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230524",
+            "230525"
+          ],
+          "gap_days": 1,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": true,
+          "dates": [
+            "230524",
+            "230529"
+          ],
+          "gap_days": 5,
+          "shared_cell_types": [
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "test",
+            "train"
+          ]
+        },
+        {
+          "crosses_v1_split": false,
+          "dates": [
+            "230525",
+            "230529"
+          ],
+          "gap_days": 4,
+          "shared_cell_types": [
+            "A549",
+            "HPMEC"
+          ],
+          "v1_splits": [
+            "train",
+            "train"
+          ]
+        }
+      ],
+      "gap_days": 7,
+      "image_count": 3072,
+      "test_images_on_cross_split_neighbor_dates": 461,
+      "test_images_with_matching_neighbor_cell_type": 386
+    }
+  ]
+}
