@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -12,6 +12,7 @@ CNN_RUN_DIRECTORY ?=
 CNN_ARCHIVE_OUTPUT ?=
 CNN_SOURCE_BUNDLE_SHA256 ?=
 CNN_SOURCE_COMMIT ?=
+CNN_ABLATION ?=
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
@@ -60,6 +61,12 @@ cnn-build-manifests:
 
 cnn-stage-kaggle-source:
 	uv run --project backend python backend/scripts/stage_ooc_kaggle_source.py --output "$(OUTPUT)"
+
+cnn-stage-kaggle-ablation:
+	@test -n "$(OUTPUT)" || (echo "OUTPUT is required"; exit 2)
+	@test -n "$(CNN_ABLATION)" || (echo "CNN_ABLATION is required (a or b)"; exit 2)
+	@test -n "$(CNN_SOURCE_BUNDLE_SHA256)" || (echo "CNN_SOURCE_BUNDLE_SHA256 is required"; exit 2)
+	uv run --project backend python backend/scripts/stage_ooc_kaggle_ablation.py --variant "$(CNN_ABLATION)" --source-bundle-sha256 "$(CNN_SOURCE_BUNDLE_SHA256)" --output "$(OUTPUT)"
 
 cnn-protocol-test:
 	uv run --project backend --extra dev pytest -q backend/tests/test_ooc_cnn_protocol.py backend/tests/test_ooc_cnn_data.py backend/tests/test_ooc_cnn_metrics.py backend/tests/test_ooc_cnn_runtime.py

@@ -167,7 +167,6 @@ def check_notebook(path: Path) -> None:
             'organchip-frozen-test-v2-zip")',
             'WORKSPACE_ROOT = Path("/kaggle/working/',
             'CONFIG_RELATIVE_PATH = Path("backend/training/configs/',
-            "ooc-cnn-mobilenet-v3-small-campaign-v2.json",
             'TRAIN_VALIDATION_MANIFEST_RELATIVE = Path("data/splits/',
             "ooc-campaign-v2-train-validation.csv",
             'TEST_MANIFEST_RELATIVE = Path("data/splits/ooc-campaign-v2-test.csv")',
@@ -177,6 +176,13 @@ def check_notebook(path: Path) -> None:
         ),
         "parameters cell",
     )
+    config_match = re.search(
+        r'CONFIG_RELATIVE_PATH = Path\("(backend/training/configs/'
+        r'ooc-cnn-mobilenet-v3-small-campaign-v2(?:-gray(?:224|448))?\.json)"\)',
+        parameters,
+    )
+    if config_match is None:
+        raise ValueError("parameters cell contains an unauthorized CNN config path")
 
     staging = tagged_cells["workspace-staging"]
     _require(
