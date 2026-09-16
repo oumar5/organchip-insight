@@ -152,6 +152,21 @@ Le chargeur refuse tout lien symbolique dont la cible sort de la racine
 autorisée. Il ne faut donc pas relier `/kaggle/working` à `/kaggle/input` par
 symlink ; `--image-root` fournit explicitement la racine read-only des images.
 
+Pendant une validation, le moteur écrit atomiquement `last-checkpoint.pt` après
+chaque époque terminée, en plus de `best-checkpoint.pt`. Le checkpoint de reprise
+contient le modèle, AdamW, le scheduler, le scaler AMP, l'historique, l'état de
+l'early stopping et les générateurs aléatoires. Une reprise utilise le même
+`run-id` et `--resume-from <run>/last-checkpoint.pt`; elle est refusée si le
+rapport final existe déjà ou si le code, la configuration, le manifeste, les
+poids initiaux ou le meilleur checkpoint ont changé. Une interruption au milieu
+d'une époque repart au début de cette époque ; une interruption après l'époque
+10 repart à l'époque 11. La persistance des fichiers Kaggle doit rester active.
+
+Chaque époque écrit aussi sur stderr une ligne immédiatement visible avec les
+pertes train/validation, macro-F1, balanced accuracy, learning rate, meilleure
+époque et compteur de patience. Les courbes Matplotlib et `history.csv` restent
+les artefacts de référence produits à la fin.
+
 La prochaine étape est une exécution `validation` complète sur GPU, avec les
 poids locaux et leur SHA-256 explicite. Elle ne débloque pas automatiquement le
 test : `final-eval` reste une opération distincte, destinée à n'être lancée

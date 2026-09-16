@@ -48,6 +48,7 @@ def _parser() -> argparse.ArgumentParser:
     train.add_argument("--weights-sha256")
     train.add_argument("--weights-metadata", type=Path)
     train.add_argument("--run-id")
+    train.add_argument("--resume-from", type=Path)
     train.add_argument("--image-root", type=Path, default=PROJECT_ROOT)
     train.add_argument("--skip-image-hash-verification", action="store_true")
 
@@ -140,6 +141,8 @@ def _weights_for_training(
 
 def _run_train(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[str, Any]:
     mode = RunMode(arguments.mode)
+    if arguments.resume_from is not None and mode is not RunMode.VALIDATION:
+        raise ValueError("--resume-from is restricted to validation mode")
     if mode is RunMode.VALIDATION and arguments.skip_image_hash_verification:
         raise ValueError("Validation cannot skip image hash verification")
     resolved_device, runtime = _contract(config, mode, arguments.device)
@@ -157,6 +160,9 @@ def _run_train(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
         initial_weights=weights,
         run_id=arguments.run_id,
         verify_image_hashes=not arguments.skip_image_hash_verification,
+        resume_checkpoint=(
+            arguments.resume_from.resolve() if arguments.resume_from is not None else None
+        ),
     )
     return {
         "mode": report["mode"],

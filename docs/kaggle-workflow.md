@@ -1,10 +1,10 @@
 # Workflow Kaggle et GitHub
 
 État au 16 septembre 2026 : la [sonde privée v1](retours-experience/2026-09-16-sonde-kaggle.md)
-a tourné sur GPU. Les datasets privés train/validation, test gelé et ressources
-hors ligne sont créés. Le notebook d'entraînement est relié à `dev` et le bundle
-source campagne v2 est préparé localement ; il doit encore être téléversé et
-attaché avant le smoke Kaggle. Internet doit rester désactivé pendant les runs.
+a tourné sur GPU et le smoke privé complet passe, y compris l'export ONNX. Les
+datasets privés train/validation, test gelé et ressources hors ligne sont créés.
+Le notebook d'entraînement est relié à `dev`. Internet doit rester désactivé
+pendant les runs.
 
 ## Organisation recommandée
 
@@ -44,6 +44,26 @@ Chemins montés retenus pour la validation campagne v2 :
 
 Le notebook refuse un smoke ou une validation si
 `/kaggle/input/datasets/oumarbenlol/organchip-frozen-test-v2-zip` est présent.
+
+## Reprendre une validation interrompue
+
+La persistance Kaggle conserve les fichiers, mais la reprise reste explicite et
+vérifiée par le moteur. Après chaque époque terminée, le run contient
+`last-checkpoint.pt`. Pour reprendre, conserver le même `RUN_ID` et définir :
+
+```python
+RESUME_VALIDATION_FROM = (
+    "data/experiments/ooc-cnn/kaggle-validation-campaign-v2/last-checkpoint.pt"
+)
+```
+
+Le notebook réutilise alors le workspace persistant sans recopier le projet et
+vérifie ses fichiers contre le bundle source attaché. Le CLI contrôle aussi les
+hashes du code, de la configuration, du manifeste, des poids initiaux et du
+meilleur checkpoint avant de restaurer modèle, optimiseur, scheduler, AMP,
+historique, patience et états aléatoires. Une reprise est refusée après création
+du rapport final. Si l'interruption arrive au milieu d'une époque, seule cette
+époque est recommencée.
 
 Ne jamais envoyer le dépôt entier : exclure `.git`, `.env`, clés, caches,
 expériences personnelles et artefacts de test. L'outil de staging doit utiliser

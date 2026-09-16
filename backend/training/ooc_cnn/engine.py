@@ -6,6 +6,7 @@ import csv
 import os
 import random
 import re
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -15,7 +16,7 @@ from PIL import Image
 
 from training.ooc_cnn.configuration import ExperimentConfig
 from training.ooc_cnn.dataset import ManifestImageDataset, select_smoke_records
-from training.ooc_cnn.manifests import ManifestRecord, relative_project_path
+from training.ooc_cnn.manifests import ManifestRecord, relative_project_path, sha256_file
 from training.ooc_cnn.metrics import (
     binary_metrics,
     bootstrap_metrics_by_group,
@@ -173,7 +174,9 @@ def _make_loader(
         pin_memory=torch.cuda.is_available(),
         worker_init_fn=_seed_worker if workers else None,
         generator=generator,
-        persistent_workers=workers > 0,
+        # Restart workers at every epoch so that the saved generator state is enough
+        # to reproduce the next epoch after a process interruption.
+        persistent_workers=False,
     )
 
 
@@ -222,6 +225,136 @@ def _save_checkpoint(path: Path, payload: dict[str, Any], torch: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     torch.save(payload, temporary)
     temporary.replace(path)
+
+
+def _capture_rng_state(torch: Any) -> dict[str, Any]:
+    numpy_state = np.random.get_state()
+    return {
+        "python": random.getstate(),
+        "numpy": {
+            "bit_generator": numpy_state[0],
+            "state": numpy_state[1].tolist(),
+            "position": int(numpy_state[2]),
+            "has_gauss": int(numpy_state[3]),
+            "cached_gaussian": float(numpy_state[4]),
+        },
+        "torch_cpu": torch.get_rng_state(),
+        "torch_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else [],
+    }
+
+
+def _restore_rng_state(torch: Any, state: dict[str, Any]) -> None:
+    numpy_state = state["numpy"]
+    random.setstate(state["python"])
+    np.random.set_state(
+        (
+            numpy_state["bit_generator"],
+            np.asarray(numpy_state["state"], dtype=np.uint32),
+            int(numpy_state["position"]),
+            int(numpy_state["has_gauss"]),
+            float(numpy_state["cached_gaussian"]),
+        )
+    )
+    torch.set_rng_state(state["torch_cpu"])
+    if torch.cuda.is_available():
+        torch.cuda.set_rng_state_all(state["torch_cuda"])
+
+
+def _resume_runtime_identity(snapshot: dict[str, Any]) -> dict[str, Any]:
+    names = (
+        "contract_sha256",
+        "python",
+        "packages",
+        "torch_cuda_version",
+        "cudnn_version",
+        "gpu_count",
+        "gpu_names",
+        "resolved_device",
+    )
+    return {name: snapshot.get(name) for name in names}
+
+
+def _resume_run_directory(
+    config: ExperimentConfig,
+    mode: RunMode,
+    run_id: str | None,
+    resume_checkpoint: Path,
+) -> Path:
+    if mode is not RunMode.VALIDATION:
+        raise ValueError("Only validation training can be resumed")
+    if run_id is None:
+        raise ValueError("Resume requires the original explicit run_id")
+    run_directory = config.runs_directory / _run_id(mode, run_id)
+    expected = (run_directory / "last-checkpoint.pt").resolve()
+    supplied = resume_checkpoint.resolve(strict=True)
+    if supplied != expected:
+        raise ValueError(f"Resume checkpoint must be the run last checkpoint: {expected}")
+    if (run_directory / "validation-report.json").exists():
+        raise ValueError("Completed CNN runs cannot be resumed")
+    return run_directory
+
+
+def _validate_resume_payload(
+    payload: dict[str, Any],
+    *,
+    config: ExperimentConfig,
+    manifests: RunManifests,
+    run_id: str,
+    initial_weights: InitialWeights,
+    source_files: list[dict[str, Any]],
+    runtime_identity: dict[str, Any],
+    epochs: int,
+    best_checkpoint_path: Path,
+) -> None:
+    expected = {
+        "schema_version": 2,
+        "checkpoint_kind": "training-resume",
+        "experiment_id": config.experiment_id,
+        "architecture": "mobilenet_v3_small",
+        "mode": RunMode.VALIDATION.value,
+        "run_id": run_id,
+        "config_sha256": config.sha256,
+        "train_validation_manifest_sha256": manifests.train_validation.sha256,
+        "initial_weights_sha256": initial_weights.sha256,
+        "source_files": source_files,
+        "runtime_identity": runtime_identity,
+    }
+    mismatches = [name for name, value in expected.items() if payload.get(name) != value]
+    if mismatches:
+        raise ValueError(f"Resume checkpoint provenance mismatch: {', '.join(mismatches)}")
+    completed_epoch = payload.get("completed_epoch")
+    if (
+        isinstance(completed_epoch, bool)
+        or not isinstance(completed_epoch, int)
+        or not 1 <= completed_epoch <= epochs
+    ):
+        raise ValueError("Resume checkpoint completed_epoch is invalid")
+    history = payload.get("history")
+    if not isinstance(history, list) or len(history) != completed_epoch:
+        raise ValueError("Resume checkpoint history is incomplete")
+    if [row.get("epoch") for row in history if isinstance(row, dict)] != list(
+        range(1, completed_epoch + 1)
+    ):
+        raise ValueError("Resume checkpoint history epochs are invalid")
+    required_state = (
+        "model_state_dict",
+        "optimizer_state_dict",
+        "scheduler_state_dict",
+        "scaler_state_dict",
+        "best_key",
+        "best_epoch",
+        "epochs_without_improvement",
+        "rng_state",
+        "train_generator_state",
+        "validation_generator_state",
+    )
+    missing_state = [name for name in required_state if name not in payload]
+    if missing_state:
+        raise ValueError(f"Resume checkpoint state is incomplete: {', '.join(missing_state)}")
+    if not best_checkpoint_path.is_file():
+        raise FileNotFoundError(best_checkpoint_path)
+    if sha256_file(best_checkpoint_path) != payload.get("best_checkpoint_sha256"):
+        raise ValueError("Resume checkpoint does not match the best checkpoint")
 
 
 def _write_history(path: Path, history: list[dict[str, Any]]) -> None:
@@ -338,6 +471,7 @@ def run_training(
     initial_weights: InitialWeights | None,
     run_id: str | None = None,
     verify_image_hashes: bool = True,
+    resume_checkpoint: Path | None = None,
 ) -> dict[str, Any]:
     if mode not in {RunMode.SMOKE, RunMode.VALIDATION}:
         raise ValueError("run_training supports only smoke and validation")
@@ -349,6 +483,8 @@ def run_training(
         raise ValueError("Benchmark-eligible validation requires image hash verification")
     if mode is RunMode.SMOKE and initial_weights is not None:
         raise ValueError("Smoke mode must use initialization='none'")
+    if resume_checkpoint is not None and mode is not RunMode.VALIDATION:
+        raise ValueError("Only validation training can be resumed")
 
     root = project_root.resolve()
     resolved_image_root = (image_root or root).resolve()
@@ -358,7 +494,11 @@ def run_training(
     seed = int(config.raw["training"]["seed"])
     _seed_everything(torch, seed)
     device = torch.device(device_name)
-    run_directory = _prepare_run_directory(config, mode, run_id)
+    run_directory = (
+        _resume_run_directory(config, mode, run_id, resume_checkpoint)
+        if resume_checkpoint is not None
+        else _prepare_run_directory(config, mode, run_id)
+    )
     train_records, validation_records = _visible_records(manifests, config, mode)
     settings = config.raw["smoke"] if mode is RunMode.SMOKE else config.raw["training"]
     epochs = int(settings["epochs"])
@@ -404,13 +544,70 @@ def run_training(
         torch.cuda.reset_peak_memory_stats(device)
 
     checkpoint_path = run_directory / "best-checkpoint.pt"
+    last_checkpoint_path = run_directory / "last-checkpoint.pt"
+    active_source_hashes = source_hashes(root, _source_paths(root))
+    runtime_identity = _resume_runtime_identity(runtime_snapshot)
     history: list[dict[str, Any]] = []
     best_key: tuple[float, float, float] | None = None
     best_epoch = 0
     epochs_without_improvement = 0
+    completed_epoch = 0
+    previous_training_seconds = 0.0
+    resumed_from_epoch: int | None = None
     patience = int(config.raw["training"]["early_stopping_patience"])
+    if resume_checkpoint is not None:
+        if initial_weights is None or run_id is None:
+            raise AssertionError("Validated resume inputs are missing")
+        resume_payload = torch.load(
+            resume_checkpoint.resolve(strict=True), map_location="cpu", weights_only=True
+        )
+        if not isinstance(resume_payload, dict):
+            raise ValueError("Resume checkpoint payload must be an object")
+        _validate_resume_payload(
+            resume_payload,
+            config=config,
+            manifests=manifests,
+            run_id=run_id,
+            initial_weights=initial_weights,
+            source_files=active_source_hashes,
+            runtime_identity=runtime_identity,
+            epochs=epochs,
+            best_checkpoint_path=checkpoint_path,
+        )
+        model.load_state_dict(resume_payload["model_state_dict"], strict=True)
+        optimizer.load_state_dict(resume_payload["optimizer_state_dict"])
+        scheduler.load_state_dict(resume_payload["scheduler_state_dict"])
+        scaler.load_state_dict(resume_payload["scaler_state_dict"])
+        history = list(resume_payload["history"])
+        raw_best_key = resume_payload["best_key"]
+        best_key = tuple(float(value) for value in raw_best_key)
+        if len(best_key) != 3:
+            raise ValueError("Resume checkpoint best_key is invalid")
+        best_epoch = int(resume_payload["best_epoch"])
+        epochs_without_improvement = int(
+            resume_payload["epochs_without_improvement"]
+        )
+        completed_epoch = int(resume_payload["completed_epoch"])
+        previous_training_seconds = float(
+            resume_payload.get("training_seconds_completed", 0.0)
+        )
+        _restore_rng_state(torch, resume_payload["rng_state"])
+        train_loader.generator.set_state(resume_payload["train_generator_state"])
+        validation_loader.generator.set_state(
+            resume_payload["validation_generator_state"]
+        )
+        resumed_from_epoch = completed_epoch
+        print(
+            f"Reprise validée après l'époque {completed_epoch}; "
+            f"prochaine époque: {completed_epoch + 1}/{epochs}",
+            file=sys.stderr,
+            flush=True,
+        )
+
     started = time.perf_counter()
-    for epoch in range(1, epochs + 1):
+    for epoch in range(completed_epoch + 1, epochs + 1):
+        if mode is RunMode.VALIDATION and epochs_without_improvement >= patience:
+            break
         model.train()
         train_losses: list[float] = []
         for images, targets in train_loader:
@@ -446,7 +643,8 @@ def run_training(
                 "validation_balanced_accuracy_at_0_5": balanced,
             }
         )
-        if best_key is None or key > best_key:
+        improved = best_key is None or key > best_key
+        if improved:
             best_key = key
             best_epoch = epoch
             epochs_without_improvement = 0
@@ -470,10 +668,63 @@ def run_training(
         else:
             epochs_without_improvement += 1
         scheduler.step()
+        completed_epoch = epoch
+        training_seconds_completed = (
+            previous_training_seconds + time.perf_counter() - started
+        )
+        _save_checkpoint(
+            last_checkpoint_path,
+            {
+                "schema_version": 2,
+                "checkpoint_kind": "training-resume",
+                "experiment_id": config.experiment_id,
+                "architecture": "mobilenet_v3_small",
+                "mode": mode.value,
+                "run_id": run_directory.name,
+                "config_sha256": config.sha256,
+                "train_validation_manifest_sha256": manifests.train_validation.sha256,
+                "initial_weights_sha256": (
+                    initial_weights.sha256 if initial_weights else None
+                ),
+                "source_files": active_source_hashes,
+                "runtime_identity": runtime_identity,
+                "completed_epoch": completed_epoch,
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "scheduler_state_dict": scheduler.state_dict(),
+                "scaler_state_dict": scaler.state_dict(),
+                "history": history,
+                "best_key": best_key,
+                "best_epoch": best_epoch,
+                "best_checkpoint_sha256": sha256_file(checkpoint_path),
+                "epochs_without_improvement": epochs_without_improvement,
+                "training_seconds_completed": training_seconds_completed,
+                "rng_state": _capture_rng_state(torch),
+                "train_generator_state": train_loader.generator.get_state(),
+                "validation_generator_state": validation_loader.generator.get_state(),
+            },
+            torch,
+        )
+        print(
+            f"Époque {epoch:02d}/{epochs} | "
+            f"train_loss={history[-1]['train_loss']:.6f} | "
+            f"val_loss={validation_loss:.6f} | macro_f1={macro_f1:.4f} | "
+            f"balanced_acc={balanced:.4f} | "
+            f"lr={history[-1]['learning_rate']:.7f} | "
+            f"meilleure={best_epoch} | patience={epochs_without_improvement}/{patience}",
+            file=sys.stderr,
+            flush=True,
+        )
         if mode is RunMode.VALIDATION and epochs_without_improvement >= patience:
+            print(
+                f"Early stopping après l'époque {epoch}: "
+                f"aucune amélioration pendant {patience} époques.",
+                file=sys.stderr,
+                flush=True,
+            )
             break
 
-    training_seconds = time.perf_counter() - started
+    training_seconds = previous_training_seconds + time.perf_counter() - started
     checkpoint = torch.load(
         checkpoint_path, map_location="cpu", weights_only=True
     )
@@ -542,7 +793,7 @@ def run_training(
         "git": git_state(root),
     }
     write_json_atomic(environment_path, runtime_details)
-    hashed_sources = source_hashes(root, _source_paths(root))
+    hashed_sources = active_source_hashes
     write_json_atomic(source_hashes_path, hashed_sources)
     peak_memory = (
         int(torch.cuda.max_memory_allocated(device)) if device.type == "cuda" else None
@@ -585,6 +836,8 @@ def run_training(
             "amp": use_amp,
             "duration_seconds": training_seconds,
             "peak_cuda_memory_bytes": peak_memory,
+            "resumed": resumed_from_epoch is not None,
+            "resumed_from_epoch": resumed_from_epoch,
         },
         "selection": {
             "checkpoint_metric": "validation macro_f1 at threshold 0.5",
@@ -614,6 +867,7 @@ def run_training(
         ],
         "artifacts": {
             "checkpoint": artifact_record(root, checkpoint_path),
+            "resume_checkpoint": artifact_record(root, last_checkpoint_path),
             "history": artifact_record(root, history_path),
             "predictions": artifact_record(root, predictions_path),
             "learning_curves": artifact_record(root, curves_path),
