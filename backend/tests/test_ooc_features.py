@@ -141,7 +141,7 @@ def test_feature_cache_checks_hash_and_split_metadata(tmp_path) -> None:
     _write_split(split_path, split_rows)
     cache_path = tmp_path / "cache" / "features.csv"
     metadata_path = tmp_path / "metadata" / "features.json"
-    rows = [{**split_rows[0], "feature_a": 1.25}]
+    rows = [{**split_rows[0], "group_id": "campaign-240101", "feature_a": 1.25}]
     write_feature_cache(
         rows,
         ["feature_a"],
@@ -163,6 +163,7 @@ def test_feature_cache_checks_hash_and_split_metadata(tmp_path) -> None:
     assert loaded is not None
     loaded_rows, feature_names = loaded
     assert loaded_rows[0]["feature_a"] == "1.25"
+    assert "group_id" not in loaded_rows[0]
     assert feature_names == ["feature_a"]
 
     changed_split_rows = [{**split_rows[0], "target_label": "bad", "target_index": "0"}]

@@ -257,7 +257,7 @@ def write_feature_cache(
         *feature_names,
     ]
     with csv_path.open("w", encoding="utf-8", newline="") as output:
-        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
     metadata_path.write_text(
