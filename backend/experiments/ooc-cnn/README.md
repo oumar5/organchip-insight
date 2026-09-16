@@ -29,7 +29,7 @@ du checkpoint et du rapport de sélection.
 L'environnement CPU sert aux tests, au smoke run et à la vérification ONNX. Il
 ne doit pas être utilisé pour annoncer un benchmark GPU.
 
-Le smoke de référence du commit `dc41d2cdfa03d059193ac1aa5d8e930dfa53e6f1`
+Le smoke de référence du commit `92bf217fccb4784949411d2025a626bfbcea1015`
 a parcouru huit images train et quatre images de validation pendant une époque,
 avec la graine `20260916` et la vérification des hashes d'images. Il n'a jamais
 ouvert le manifeste test et son rapport porte `benchmark_eligible: false`.
@@ -39,17 +39,22 @@ valident seulement l'exécution de bout en bout.
 Artefacts locaux de ce contrôle :
 
 - checkpoint :
-  `data/experiments/ooc-cnn/smoke-local-dc41d2c/best-checkpoint.pt`, SHA-256
-  `45b058b91f772e8baeafd06da5e5b6618b2b1831e89dab4484ab4717974d653f` ;
+  `data/experiments/ooc-cnn/smoke-local-92bf217/best-checkpoint.pt`, SHA-256
+  `eaf8ebdae4a73e706c2266294d6436dca17d904dd4a8da781dff49d663f79ec6` ;
 - rapport de sélection :
-  `data/experiments/ooc-cnn/smoke-local-dc41d2c/validation-report.json`, SHA-256
-  `b821c6fdf345d45ed8d5788d74f2358494634f1c20510ed95940e1af69ae9d11` ;
+  `data/experiments/ooc-cnn/smoke-local-92bf217/validation-report.json`, SHA-256
+  `0626128ce599ac6580861744071de729e143e7e78876229a5cbc1a4ee14cae8e` ;
 - modèle ONNX opset 18 :
-  `data/experiments/ooc-cnn/smoke-local-dc41d2c/onnx/model.onnx`, SHA-256
+  `data/experiments/ooc-cnn/smoke-local-92bf217/onnx/model.onnx`, SHA-256
   `57badbeae247c241797ebe4094deeb6b25e71a79ca76429a832b9f92e6adc1c9`.
 
 Le rapport d'export associé porte le SHA-256
-`264ee47a4b0f467330faf72e3b1237e4d038fbc62cf32be2559f40884d8c4a74`.
+`575431d9119eca85a83c1c1c2162b2091b2af1e1ae32182494d2303c4baeca0f`.
+
+La configuration porte le SHA-256
+`4c01910c1df49fc8b9a129b32b890015086b21ce09d1830eabd24fbd82cffe59`
+et le contrat runtime le SHA-256
+`3e8d1d34fdd7e853037ef2e8c3435ea2ef769a9f6bd5fffee03fec6c08d241ea`.
 
 La parité ONNX/PyTorch passe pour les lots dynamiques 1, 2 et 3 : erreur
 absolue maximale `1,862645149230957e-09`, pour une tolérance `1e-4`.

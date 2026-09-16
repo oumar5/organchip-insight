@@ -91,7 +91,7 @@ Audit du split et des raccourcis :
 
 ### Contrôle technique du pipeline CNN
 
-Le runtime MobileNetV3 du commit `dc41d2cdfa03d059193ac1aa5d8e930dfa53e6f1`
+Le runtime MobileNetV3 du commit `92bf217fccb4784949411d2025a626bfbcea1015`
 a passé un smoke test CPU déterministe : huit images train, quatre images de
 validation, une époque et graine `20260916`. Les hashes des 12 images ont été
 vérifiés. Le manifeste test n'a jamais été ouvert et le rapport marque

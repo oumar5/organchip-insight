@@ -43,7 +43,7 @@ backend/
 ├── inference.py           entrée CLI recommandée par Kaggle
 ├── tests/                 tests API et persistance
 ├── training/              entraînement contrôlé et protocoles CNN
-└── evaluation/            futur benchmark figé
+└── evaluation/            benchmarks reproductibles et configurations figées
 ```
 
 Le pipeline est synchrone et FastAPI l'exécute dans son pool de threads. C'est
@@ -81,8 +81,8 @@ Un moteur fournit :
 - des avertissements ;
 - une version immuable.
 
-La fiche sépare `available`, `planned` et `license-review`. Un moteur bloqué ne
-peut pas être invoqué par l'API.
+La fiche sépare `available`, `experimental`, `planned` et `license-review`. Un
+moteur non disponible ne peut pas être invoqué par l'API.
 
 ## Déploiement
 

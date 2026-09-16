@@ -18,7 +18,7 @@ ImageNet.
 
 | Élément | Valeur |
 |---|---|
-| Code évalué | commit `dc41d2cdfa03d059193ac1aa5d8e930dfa53e6f1` |
+| Code évalué | commit `92bf217fccb4784949411d2025a626bfbcea1015` |
 | Architecture | MobileNetV3 Small, deux classes `bad` / `good` |
 | Matériel | CPU |
 | Échantillon | 8 images train / 4 images validation |
@@ -54,20 +54,36 @@ comparés à la baseline de raccourcis ni à la baseline handcrafted.
 Le checkpoint retenu est :
 
 ```text
-data/experiments/ooc-cnn/smoke-local-dc41d2c/best-checkpoint.pt
-SHA-256 45b058b91f772e8baeafd06da5e5b6618b2b1831e89dab4484ab4717974d653f
+data/experiments/ooc-cnn/smoke-local-92bf217/best-checkpoint.pt
+SHA-256 eaf8ebdae4a73e706c2266294d6436dca17d904dd4a8da781dff49d663f79ec6
 ```
 
 Le rapport qui fixe la sélection est :
 
 ```text
-data/experiments/ooc-cnn/smoke-local-dc41d2c/validation-report.json
-SHA-256 b821c6fdf345d45ed8d5788d74f2358494634f1c20510ed95940e1af69ae9d11
+data/experiments/ooc-cnn/smoke-local-92bf217/validation-report.json
+SHA-256 0626128ce599ac6580861744071de729e143e7e78876229a5cbc1a4ee14cae8e
 ```
 
 Ces fichiers sont des artefacts locaux ignorés par Git. Les hashes permettent
 de vérifier leur identité, mais ils ne rendent pas ce smoke publiable comme
 résultat scientifique.
+
+Commandes exactes de cette preuve locale :
+
+```bash
+PYTHONPATH=backend data/cache/microsam-env/bin/python \
+  -m training.ooc_cnn.cli train --mode smoke --device cpu \
+  --image-root . --run-id smoke-local-92bf217
+
+make cnn-export \
+  CNN_PYTHON=data/cache/microsam-env/bin/python \
+  CNN_CHECKPOINT=data/experiments/ooc-cnn/smoke-local-92bf217/best-checkpoint.pt \
+  CNN_CHECKPOINT_SHA256=eaf8ebdae4a73e706c2266294d6436dca17d904dd4a8da781dff49d663f79ec6 \
+  CNN_SELECTION_REPORT=data/experiments/ooc-cnn/smoke-local-92bf217/validation-report.json \
+  CNN_SELECTION_REPORT_SHA256=0626128ce599ac6580861744071de729e143e7e78876229a5cbc1a4ee14cae8e \
+  CNN_EXPORT_DIR=data/experiments/ooc-cnn/smoke-local-92bf217/onnx
+```
 
 ## Export ONNX
 
@@ -84,15 +100,24 @@ dynamique. La parité a été vérifiée sur des lots de 1, 2 et 3, soit six
 Modèle exporté :
 
 ```text
-data/experiments/ooc-cnn/smoke-local-dc41d2c/onnx/model.onnx
+data/experiments/ooc-cnn/smoke-local-92bf217/onnx/model.onnx
 SHA-256 57badbeae247c241797ebe4094deeb6b25e71a79ca76429a832b9f92e6adc1c9
 ```
 
 Rapport d'export :
 
 ```text
-data/experiments/ooc-cnn/smoke-local-dc41d2c/onnx/export-report.json
-SHA-256 264ee47a4b0f467330faf72e3b1237e4d038fbc62cf32be2559f40884d8c4a74
+data/experiments/ooc-cnn/smoke-local-92bf217/onnx/export-report.json
+SHA-256 575431d9119eca85a83c1c1c2162b2091b2af1e1ae32182494d2303c4baeca0f
+```
+
+Configuration et contrat runtime évalués :
+
+```text
+backend/training/configs/ooc-cnn-mobilenet-v3-small-v1.json
+SHA-256 4c01910c1df49fc8b9a129b32b890015086b21ce09d1830eabd24fbd82cffe59
+backend/experiments/ooc-cnn/kaggle-runtime-contract.json
+SHA-256 3e8d1d34fdd7e853037ef2e8c3435ea2ef769a9f6bd5fffee03fec6c08d241ea
 ```
 
 Ce résultat valide le chemin d'export et la cohérence numérique pour cet
@@ -143,10 +168,10 @@ processus local.
 
 ## Artefacts locaux
 
-- rapport miroir : `reports/generated/ooc-cnn/smoke-local-dc41d2c.json` ;
-- dossier du run : `data/experiments/ooc-cnn/smoke-local-dc41d2c/` ;
+- rapport miroir : `reports/generated/ooc-cnn/smoke-local-92bf217.json` ;
+- dossier du run : `data/experiments/ooc-cnn/smoke-local-92bf217/` ;
 - rapport d'export :
-  `data/experiments/ooc-cnn/smoke-local-dc41d2c/onnx/export-report.json`.
+  `data/experiments/ooc-cnn/smoke-local-92bf217/onnx/export-report.json`.
 
 Les artefacts locaux ne sont pas versionnés. Le présent retour d'expérience
 conserve les conditions, les limites et les hashes nécessaires à leur audit.
