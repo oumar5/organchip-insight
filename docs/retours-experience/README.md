@@ -7,6 +7,7 @@ a été prise.
 ## Index
 
 - [Stratégie Kaggle et choix des modèles — 16 septembre 2026](2026-09-16-strategie-kaggle-et-modeles.md)
+- [Audit des données et baseline BBBC019 — 16 septembre 2026](2026-09-16-audit-donnees-et-baseline-bbbc019.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles

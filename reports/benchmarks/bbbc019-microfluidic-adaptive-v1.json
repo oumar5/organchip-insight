@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "bbbc019-microfluidic-adaptive-segmentation-v1",
+  "generated_at_utc": "2026-09-16T02:29:16.250671+00:00",
+  "git_commit": "0bdee0ccc02d5a430331f7e698a189360a1be2f2",
+  "config": "backend/evaluation/configs/bbbc019-microfluidic.json",
+  "config_sha256": "ef1b5709d7efa87854f25db1d58d9eb28aac4f298f62340ae2419c4bd5d66ec2",
+  "dataset": {
+    "id": "BBBC019v2-Microfluidic",
+    "version": "2",
+    "archive_sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f",
+    "license": "CC-BY-3.0",
+    "source": "https://bbbc.broadinstitute.org/BBBC019"
+  },
+  "engine": {
+    "id": "adaptive-segmentation-v1",
+    "version": "adaptive-segmentation-1.0.0",
+    "training_required": false
+  },
+  "methodology": {
+    "ground_truth": "non-zero pixels in the official manual PNG masks",
+    "aggregation": "macro is the unweighted mean across images; micro pools pixels",
+    "bootstrap": {
+      "unit": "image",
+      "iterations": 10000,
+      "seed": 20260916,
+      "confidence": 0.95
+    }
+  },
+  "results": {
+    "image_count": 13,
+    "macro": {
+      "precision": 0.52131,
+      "recall": 0.42683,
+      "f1": 0.424892,
+      "iou": 0.273632
+    },
+    "micro": {
+      "true_positive": 734892,
+      "false_positive": 701837,
+      "false_negative": 1138959,
+      "true_negative": 11055800,
+      "precision": 0.511504,
+      "recall": 0.392183,
+      "f1": 0.443966,
+      "iou": 0.285319
+    },
+    "macro_bootstrap_95_percent": {
+      "precision": [
+        0.419029,
+        0.610348
+      ],
+      "recall": [
+        0.367141,
+        0.501803
+      ],
+      "f1": [
+        0.369769,
+        0.467653
+      ],
+      "iou": [
+        0.233589,
+        0.30625
+      ]
+    },
+    "median_f1": 0.445442
+  },
+  "performance": {
+    "total_megapixels": 13.631488,
+    "total_seconds_including_overlays": 8.514448,
+    "mean_inference_seconds_per_image": 0.112333,
+    "mean_inference_seconds_per_megapixel": 0.107129,
+    "process_max_rss_mb": 324.668
+  },
+  "environment": {
+    "python": "3.13.5",
+    "platform": "macOS-26.6.2-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64"
+  },
+  "historical_references": [
+    {
+      "algorithm": "TScratch",
+      "mean_precision": 0.35,
+      "mean_recall": 0.79,
+      "mean_f1": 0.42,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "MultiCellSeg",
+      "mean_precision": 0.23,
+      "mean_recall": 0.98,
+      "mean_f1": 0.35,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "Topman",
+      "mean_precision": 0.47,
+      "mean_recall": 0.99,
+      "mean_f1": 0.63,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    }
+  ],
+  "warnings": [
+    "This external dataset is DIC microfluidics, not the challenge's OoC dataset.",
+    "The 95% intervals resample images, not independent biological experiments.",
+    "Historical values are contextual unless preprocessing and masks are identical."
+  ],
+  "per_image": [
+    {
+      "image": "SN90_C_1_000_dic.tif",
+      "true_positive": 52979,
+      "false_positive": 38751,
+      "false_negative": 103745,
+      "true_negative": 853101,
+      "precision": 0.577554,
+      "recall": 0.33804,
+      "f1": 0.426469,
+      "iou": 0.271027,
+      "truth_foreground_fraction": 0.149464,
+      "predicted_foreground_fraction": 0.087481,
+      "threshold": 0.470703,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.118223,
+      "seconds_per_megapixel": 0.112747
+    },
+    {
+      "image": "SN90_C_1_075_dic.tif",
+      "true_positive": 100914,
+      "false_positive": 82497,
+      "false_negative": 108294,
+      "true_negative": 756871,
+      "precision": 0.550207,
+      "recall": 0.482362,
+      "f1": 0.514056,
+      "iou": 0.345945,
+      "truth_foreground_fraction": 0.199516,
+      "predicted_foreground_fraction": 0.174914,
+      "threshold": 0.447266,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.110599,
+      "seconds_per_megapixel": 0.105475
+    },
+    {
+      "image": "SN90_C_2_000_dic.tif",
+      "true_positive": 36315,
+      "false_positive": 16671,
+      "false_negative": 57461,
+      "true_negative": 938129,
+      "precision": 0.68537,
+      "recall": 0.387253,
+      "f1": 0.494883,
+      "iou": 0.3288,
+      "truth_foreground_fraction": 0.089432,
+      "predicted_foreground_fraction": 0.050531,
+      "threshold": 0.544922,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.104825,
+      "seconds_per_megapixel": 0.099969
+    },
+    {
+      "image": "SN90_C_2_075_dic.tif",
+      "true_positive": 57050,
+      "false_positive": 63106,
+      "false_negative": 51240,
+      "true_negative": 877180,
+      "precision": 0.474799,
+      "recall": 0.526826,
+      "f1": 0.499462,
+      "iou": 0.332855,
+      "truth_foreground_fraction": 0.103273,
+      "predicted_foreground_fraction": 0.11459,
+      "threshold": 0.474609,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.118415,
+      "seconds_per_megapixel": 0.112929
+    },
+    {
+      "image": "SN90_C_3_000_dic.tif",
+      "true_positive": 18028,
+      "false_positive": 194017,
+      "false_negative": 4661,
+      "true_negative": 831870,
+      "precision": 0.08502,
+      "recall": 0.79457,
+      "f1": 0.153604,
+      "iou": 0.083191,
+      "truth_foreground_fraction": 0.021638,
+      "predicted_foreground_fraction": 0.202222,
+      "threshold": 0.654297,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.099299,
+      "seconds_per_megapixel": 0.094699
+    },
+    {
+      "image": "SN90_C_3_075_dic.tif",
+      "true_positive": 8992,
+      "false_positive": 24035,
+      "false_negative": 8058,
+      "true_negative": 1007491,
+      "precision": 0.272262,
+      "recall": 0.52739,
+      "f1": 0.359127,
+      "iou": 0.218863,
+      "truth_foreground_fraction": 0.01626,
+      "predicted_foreground_fraction": 0.031497,
+      "threshold": 0.521484,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.103165,
+      "seconds_per_megapixel": 0.098386
+    },
+    {
+      "image": "SN90_C_4_000_dic.tif",
+      "true_positive": 18231,
+      "false_positive": 17440,
+      "false_negative": 35843,
+      "true_negative": 977062,
+      "precision": 0.511087,
+      "recall": 0.337149,
+      "f1": 0.406284,
+      "iou": 0.254929,
+      "truth_foreground_fraction": 0.051569,
+      "predicted_foreground_fraction": 0.034019,
+      "threshold": 0.470703,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.117228,
+      "seconds_per_megapixel": 0.111798
+    },
+    {
+      "image": "SN90_C_4_075_dic.tif",
+      "true_positive": 35436,
+      "false_positive": 50634,
+      "false_negative": 59304,
+      "true_negative": 903202,
+      "precision": 0.411711,
+      "recall": 0.374034,
+      "f1": 0.391969,
+      "iou": 0.243757,
+      "truth_foreground_fraction": 0.090351,
+      "predicted_foreground_fraction": 0.082083,
+      "threshold": 0.419922,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.105991,
+      "seconds_per_megapixel": 0.101081
+    },
+    {
+      "image": "SN90_C_5_000_dic.tif",
+      "true_positive": 37791,
+      "false_positive": 25172,
+      "false_negative": 68742,
+      "true_negative": 916871,
+      "precision": 0.60021,
+      "recall": 0.354735,
+      "f1": 0.445922,
+      "iou": 0.286937,
+      "truth_foreground_fraction": 0.101598,
+      "predicted_foreground_fraction": 0.060046,
+      "threshold": 0.423828,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.112854,
+      "seconds_per_megapixel": 0.107626
+    },
+    {
+      "image": "SN90_C_5_075_dic.tif",
+      "true_positive": 106215,
+      "false_positive": 63538,
+      "false_negative": 200929,
+      "true_negative": 677894,
+      "precision": 0.625703,
+      "recall": 0.345815,
+      "f1": 0.445442,
+      "iou": 0.286539,
+      "truth_foreground_fraction": 0.292915,
+      "predicted_foreground_fraction": 0.161889,
+      "threshold": 0.419922,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.108031,
+      "seconds_per_megapixel": 0.103026
+    },
+    {
+      "image": "SN90_C_6_000_dic.tif",
+      "true_positive": 66263,
+      "false_positive": 20452,
+      "false_negative": 142159,
+      "true_negative": 819702,
+      "precision": 0.764147,
+      "recall": 0.317927,
+      "f1": 0.449032,
+      "iou": 0.289517,
+      "truth_foreground_fraction": 0.198767,
+      "predicted_foreground_fraction": 0.082698,
+      "threshold": 0.521484,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.114483,
+      "seconds_per_megapixel": 0.109179
+    },
+    {
+      "image": "SN90_C_7_000_dic.tif",
+      "true_positive": 42035,
+      "false_positive": 38686,
+      "false_negative": 77832,
+      "true_negative": 890023,
+      "precision": 0.520744,
+      "recall": 0.35068,
+      "f1": 0.419118,
+      "iou": 0.265116,
+      "truth_foreground_fraction": 0.114314,
+      "predicted_foreground_fraction": 0.076982,
+      "threshold": 0.423828,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.116496,
+      "seconds_per_megapixel": 0.111099
+    },
+    {
+      "image": "SN90_C_7_075_dic.tif",
+      "true_positive": 154643,
+      "false_positive": 66838,
+      "false_negative": 220691,
+      "true_negative": 606404,
+      "precision": 0.698222,
+      "recall": 0.412014,
+      "f1": 0.518228,
+      "iou": 0.349735,
+      "truth_foreground_fraction": 0.357946,
+      "predicted_foreground_fraction": 0.211221,
+      "threshold": 0.408203,
+      "polarity": "dark",
+      "megapixels": 1.048576,
+      "inference_seconds": 0.13072,
+      "seconds_per_megapixel": 0.124664
+    }
+  ]
+}

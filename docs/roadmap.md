@@ -17,11 +17,11 @@
 
 ## Jalon 2 — Données et benchmark
 
-- [ ] manifeste BBBC019 Microfluidics avec checksum ;
-- [ ] script de téléchargement reproductible ;
-- [ ] métriques premier plan et rapport d'erreurs ;
+- [x] manifeste BBBC019 Microfluidics avec checksum ;
+- [x] script de téléchargement reproductible ;
+- [x] métriques premier plan et rapport d'erreurs ;
 - [ ] benchmark BBBC038 ;
-- [ ] audit métadonnées du dataset OoC ;
+- [x] audit métadonnées du dataset OoC ;
 - [ ] comparaison baseline / µSAM / alternative admissible ;
 - [ ] décision de moteur documentée.
 
@@ -57,4 +57,3 @@
 Le projet est prêt à soumettre lorsque chaque chiffre vient d'un script versionné,
 les licences sont vérifiées, Docker fonctionne sur une machine propre, les limites
 sont visibles et un évaluateur peut reproduire l'inférence sans service payant.
-

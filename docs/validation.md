@@ -5,8 +5,8 @@
 | Niveau | Définition | État |
 |---|---|---|
 | L0 | chemin technique testé sur images synthétiques | atteint |
-| L1 | contrôle qualitatif sur données publiques réelles | à réaliser |
-| L2 | métriques figées sur vérité terrain externe | à réaliser |
+| L1 | contrôle qualitatif sur données publiques réelles | atteint le 16 septembre 2026 |
+| L2 | métriques figées sur vérité terrain externe | atteint pour BBBC019 le 16 septembre 2026 |
 | L3 | comparaison témoin/traitement avec réplications | à réaliser |
 | L4 | validation sur données OoC externes | cible de soumission |
 
@@ -29,6 +29,12 @@ biologique.
 - précision, rappel, F1 et IoU ;
 - analyse d'erreur image par image ;
 - comparaison avec les résultats historiques publiés uniquement à protocole égal.
+
+La première mesure figée de `adaptive-segmentation-v1` donne un macro-F1 de
+0,424892 et un macro-IoU de 0,273632. Le rapport complet, les intervalles et les
+13 lignes image par image sont dans
+[`reports/benchmarks/bbbc019-microfluidic-adaptive-v1.json`](../reports/benchmarks/bbbc019-microfluidic-adaptive-v1.json).
+Ce résultat valide le protocole, pas la qualité suffisante du moteur.
 
 ## Validation OoC
 
@@ -63,4 +69,3 @@ Sur le dataset Zenodo OoC :
 - upload corrompu rejeté ;
 - résultat reproductible sur CPU ;
 - documentation alignée sur l'API effective.
-

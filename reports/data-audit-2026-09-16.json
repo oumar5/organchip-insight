@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-16T02:29:00.817346+00:00",
+  "git_commit": "0bdee0ccc02d5a430331f7e698a189360a1be2f2",
+  "manifest": "data/manifests/datasets.json",
+  "resources": [
+    {
+      "id": "ooc-datasheet-v1",
+      "path": "data/raw/ooc/OOC_datasheet.xlsx",
+      "size_bytes": 119712,
+      "checksums": {
+        "md5": "a3d4875e3da4da83bac45c0ce727cb40",
+        "sha256": "863fc133f8be825c010c41ea26168fedb75af8d2722646f61402779583073eba"
+      },
+      "status": "verified"
+    },
+    {
+      "id": "ooc-images-v1",
+      "path": "data/raw/ooc/OOC_image_dataset.zip",
+      "status": "not_downloaded",
+      "large": true
+    },
+    {
+      "id": "bbbc019-microfluidic-v2",
+      "path": "data/raw/bbbc019/Microfluidic.zip",
+      "size_bytes": 10746718,
+      "checksums": {
+        "md5": "a19cfd45e94cf6c57ad7ddd0fb4c6f9c",
+        "sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f"
+      },
+      "status": "verified"
+    }
+  ],
+  "ooc_metadata": {
+    "path": "data/raw/ooc/OOC_datasheet.xlsx",
+    "workbook_sheets": [
+      "Main"
+    ],
+    "active_sheet": "Main",
+    "excel_rows_after_header": 3118,
+    "blank_rows": 46,
+    "records": 3072,
+    "columns": [
+      "imageID",
+      "cell type",
+      "seeding density, cells/ml",
+      "time after seeding, h",
+      "day",
+      "Decision 1/2 (good/bad)",
+      "flow rate"
+    ],
+    "missing_by_column": {
+      "imageID": 0,
+      "cell type": 0,
+      "seeding density, cells/ml": 344,
+      "time after seeding, h": 2244,
+      "day": 0,
+      "Decision 1/2 (good/bad)": 0,
+      "flow rate": 859
+    },
+    "duplicate_image_ids": [],
+    "label_counts_raw": {
+      "1": 1727,
+      "2": 1345
+    },
+    "cell_type_counts": {
+      "A549": 775,
+      "CACO": 346,
+      "HPMEC": 1462,
+      "HSAEC": 244,
+      "HUVEC": 107,
+      "NHBE": 138
+    },
+    "day_counts": {
+      "0": 93,
+      "1": 759,
+      "10": 36,
+      "11": 22,
+      "16": 12,
+      "2": 597,
+      "22": 6,
+      "3": 201,
+      "4": 223,
+      "5": 400,
+      "6": 46,
+      "7": 338,
+      "8": 241,
+      "9": 98
+    },
+    "time_after_seeding_hours_counts": {
+      "0": 345,
+      "1": 115,
+      "2": 368,
+      "<missing>": 2244
+    },
+    "seeding_density": {
+      "raw_distinct_non_missing": 20,
+      "numeric_distinct_non_missing": [
+        1000000.0,
+        1470000.0,
+        1500000.0,
+        2000000.0,
+        2600000.0,
+        5000000.0,
+        6000000.0,
+        9000000.0,
+        9400000.0,
+        10000000.0
+      ],
+      "unparseable_non_missing": 0
+    },
+    "flow_rate_ul_per_minute": {
+      "raw_counts": {
+        "1.66uL/min": 131,
+        "1.71uL/min": 100,
+        "1.74 uL/min": 572,
+        "2 uL/min": 390,
+        "2.33 uL/min": 109,
+        "2.77 uL/min": 38,
+        "2uL/min": 865,
+        "2ul/min": 8,
+        "<missing>": 859
+      },
+      "numeric_distinct_non_missing": [
+        1.66,
+        1.71,
+        1.74,
+        2.0,
+        2.33,
+        2.77
+      ],
+      "unparseable_non_missing": 0
+    },
+    "candidate_image_id_prefixes": {
+      "count": 59,
+      "largest_groups": {
+        "230320": 229,
+        "230525": 218,
+        "230529": 216,
+        "230425": 215,
+        "230405": 138,
+        "230419": 124,
+        "230523": 111,
+        "230424": 108,
+        "230524": 108,
+        "230109": 107
+      },
+      "warning": "Prefixes look like acquisition dates, but the dataset does not document them as independent experiment, chip, well, or donor identifiers."
+    },
+    "split_audit": {
+      "status": "blocked_without_image_archive",
+      "reason": "The datasheet has no train/validation/test or biological group column. Published split membership only exists in the 6.7 GB image archive."
+    }
+  },
+  "bbbc019_microfluidic": {
+    "root": "data/raw/bbbc019/Microfluidic",
+    "image_count": 13,
+    "manual_mask_count": 13,
+    "complete_pair_count": 13,
+    "missing_masks": [],
+    "masks_without_images": [],
+    "all_shapes_match": true,
+    "duplicate_image_hashes": [],
+    "alternate_reannotation_masks": 13,
+    "pairs": [
+      {
+        "stem": "SN90_C_1_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "cd139f943e26b550d1274563b8288ff3b77a5d9298192f425a7cd82b66d37701",
+        "mask_sha256": "f4d969af076c095c3caece7bc4f883b21766eef46d7c94c58a6718b8a402ea71"
+      },
+      {
+        "stem": "SN90_C_1_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "fbd4c15402f611c260110b84dbcebc7963d139a7c3349775aaa302ebb8c3ba61",
+        "mask_sha256": "048d509797cea8b91ba172d1b9013582182f7b584ef82091a3141d82e6dfb056"
+      },
+      {
+        "stem": "SN90_C_2_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "222e85a0b3014ea9798e3c45daa77d5870e9d11877433107705896bf285ab0d3",
+        "mask_sha256": "6e620df2e446f643b41e7fb174ca32bd3e0325b75c0dd0d5d0dc3de6352e66d3"
+      },
+      {
+        "stem": "SN90_C_2_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "5b0ee037889364d362e2615d00e9d284182c837f298643e48414d55afba24511",
+        "mask_sha256": "a6df05bd7c825a8263422d9337b148e8e737d64bcbb2bdaa82035f1128abce12"
+      },
+      {
+        "stem": "SN90_C_3_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "180a22e00261c785c9239ff2e12a3db6776b4477b051d67cde4ce54c06541569",
+        "mask_sha256": "b120137c3385b691566971e72661f825b144c49263f7927b6e62c6ce8f4a2d56"
+      },
+      {
+        "stem": "SN90_C_3_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "4383131f3124979c3cd972b788e0d83b26314d1c2a543347e454af71d6ed0c19",
+        "mask_sha256": "61d3bdf28338db7e8eaaa2eb5b2e654e613c574f0589e50de919109c03187ceb"
+      },
+      {
+        "stem": "SN90_C_4_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "104dac881194e9308f453bd09554823b2f05b78d3b4ef311e656af325ff402c5",
+        "mask_sha256": "4497267f761f9946a0637cbb38e61036f239f1579d2f6a476e1cb966e23918ec"
+      },
+      {
+        "stem": "SN90_C_4_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "7853dcdaaee75d4b9bfccf12be0663d20f11d844416288790ea327123be49ceb",
+        "mask_sha256": "7dc8845a31792c96f1c3e8927341771c0b3a3ab86dc781e0346f89d136f9c5f5"
+      },
+      {
+        "stem": "SN90_C_5_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "4ff7166308bf936e90ce7eacbe48d595facdecd4b76138d02a880c615db10611",
+        "mask_sha256": "b77deb7f665a9bad33d4b0d3e81a351fb0d812fa42f1b229944faf3087fdf29a"
+      },
+      {
+        "stem": "SN90_C_5_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "24416d2f01f96b8dd55bb01cd4bde39d43d6fcb8cb3267f4be0b133150aade47",
+        "mask_sha256": "3b782b9cd5550508e37de260e388ae43e89cc5b4bc3381718baebf13f04f9593"
+      },
+      {
+        "stem": "SN90_C_6_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "a16a891fb83bfa8f5ff125b86f9408c3368d3b5c03101c131bc6279d48f2b8cf",
+        "mask_sha256": "7cc79b9469d7a1afae04fe19d396738ca9915fe8ea8103beb800d33e7afe7c62"
+      },
+      {
+        "stem": "SN90_C_7_000_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "7eadd831d4e6ebf893f798f2db7cefe5f11655c6c5dea21ce6dd61e325c1ad8c",
+        "mask_sha256": "fb803d2466e0949745a475bdc5e597925a818afe05f929b21acddcdf3e82dc07"
+      },
+      {
+        "stem": "SN90_C_7_075_dic",
+        "image_size": [
+          1024,
+          1024
+        ],
+        "image_mode": "L",
+        "mask_size": [
+          1024,
+          1024
+        ],
+        "mask_mode": "1",
+        "mask_values": [
+          0,
+          1
+        ],
+        "shape_matches": true,
+        "image_sha256": "dfe712df5559df4b8064844f38f5f0e92b618337e16769bed7a22dbfe429f297",
+        "mask_sha256": "80d5637885cd6ce554ee66ad94daca0c841e980d8919270902860a2938570f9a"
+      }
+    ]
+  },
+  "decision": {
+    "safe_to_benchmark_bbbc019": true,
+    "safe_to_train_ooc_classifier": false,
+    "reason": "BBBC019 image/mask pairs are complete. OoC split leakage cannot be audited until image paths or an explicit experiment/chip grouping are available."
+  }
+}

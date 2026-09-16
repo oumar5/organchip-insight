@@ -28,7 +28,7 @@ pas de dataset imposé. La date limite publiée est le **10 octobre 2026**.
 
 - 3 072 images bright-field issues d'un dispositif OoC ;
 - métadonnées partielles : type cellulaire, densité, temps et débit ;
-- licence annoncée CC-BY-SA ;
+- licence Zenodo vérifiée CC-BY-4.0 ;
 - usage : démonstration principale et analyse de robustesse par condition.
 
 Source : [article et description du dataset](https://doi.org/10.3390/data9020028),
@@ -91,4 +91,3 @@ Le premier résultat défendable sera :
 
 La prédiction de toxicité demeure une extension. Elle ne sera annoncée que si un
 dataset relie réellement images, dose, réplication et mesure de viabilité.
-
