@@ -177,7 +177,14 @@ Commencer par l'[index documentaire](docs/README.md), puis lire :
 ## Positionnement challenge
 
 Catégorie prévue : **Tool & Platform** pour le challenge
-[AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien).
+[AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien),
+volet international du 5ᵉ Pazhou Algorithm Competition. Le règlement officiel,
+la grille (innovation 30 %, achèvement 25 %, valeur 20 %, complétude 15 %,
+crédibilité 10 %) et le calendrier (soumission le 10 octobre 2026, finale
+avec soutenance du 20 au 30 octobre) sont résumés dans
+[docs/competition-requirements.md](docs/competition-requirements.md). Le plan
+de travail jusqu'à la finale est dans
+[docs/plan-soumission.md](docs/plan-soumission.md).
 
 Les benchmarks reproductibles adaptatif et µSAM ciblent BBBC019 Microfluidics.
 Le split OoC groupé, les baselines de qualité et de confondants, puis le smoke

@@ -1,6 +1,15 @@
 # Roadmap vers la soumission
 
-État au 16 septembre 2026. La date limite publiée est le 10 octobre 2026.
+État au 16 septembre 2026. Calendrier officiel de l'organisateur :
+soumission du Writeup jusqu'au **10 octobre 2026 (17 h 59 à Paris)**,
+présélection de 20 équipes du 10 au 20 octobre, **finale en ligne avec
+soutenance du 20 au 30 octobre**, résultats avant novembre. Le plan détaillé
+par semaine est dans [plan-soumission.md](plan-soumission.md).
+
+## Blocages administratifs
+
+- [ ] dépôt GitHub public (privé au 16 septembre 2026) ;
+- [ ] fichier `LICENSE` (aucune licence détectée).
 
 ## Jalon 1 — Socle démontrable
 
@@ -20,7 +29,7 @@
 - [x] manifeste BBBC019 Microfluidics avec checksum ;
 - [x] script de téléchargement reproductible ;
 - [x] métriques premier plan et rapport d'erreurs ;
-- [ ] benchmark BBBC038 ;
+- [ ] benchmark BBBC038 (optionnel, non bloquant) ;
 - [x] audit métadonnées du dataset OoC ;
 - [x] split OoC groupé par préfixe d'acquisition ;
 - [x] baseline OoC image-only avec test tenu à l'écart ;
@@ -30,36 +39,56 @@
 - [x] baseline de confondants mode/résolution avant CNN ;
 - [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
 - [x] smoke CPU avec hashes d'images vérifiés et export ONNX contrôlé ;
-- [ ] validation CNN complète sur GPU Kaggle ;
+- [ ] vérification des versions réelles de l'image Kaggle (PyTorch 2.11
+  attendu) et extension du contrat runtime après smoke local ;
+- [ ] prétraitement CNN v2 neutralisant le raccourci d'acquisition
+  (recadrage commun, niveaux de gris, résolution ≥ 512 px ou tuiles) ;
+- [ ] validation CNN complète sur GPU Kaggle avec tranches par mode,
+  résolution, lignée et jour, métrique primaire par mode ;
+- [ ] split v2 par « campagnes » de dates consécutives partageant une lignée,
+  avant tout run GPU, et documentation du bruit de labels intra-groupe ;
 - [ ] ouverture unique du test après gel de la sélection et des hashes, avec
   archivage externe du reçu local avant fermeture du workspace final.
 
 ## Jalon 3 — Expérience scientifique
 
-- [ ] rattacher chaque image à contrôle/traitement, puce, puits et temps ;
-- [ ] agrégation par unité expérimentale ;
-- [ ] comparaison avec tailles d'effet et intervalles ;
-- [ ] caractéristiques morphologiques plus riches ;
-- [ ] export CSV/JSON et rapport ;
-- [ ] analyse d'erreurs et cas hors distribution.
+- [ ] moteur CNN de contrôle qualité dans le registre, inférence ONNX Runtime,
+  seuil gelé, abstention « à vérifier » ;
+- [ ] vue de comparaison des moteurs alimentée par les rapports versionnés ;
+- [ ] rattacher chaque image à contrôle/traitement à l'import, agrégation par
+  groupe avec intervalles, ou masquer les champs non livrés ;
+- [ ] export CSV/JSON depuis l'interface et tableau par image ;
+- [ ] analyse d'erreurs et cas hors distribution ;
+- [ ] caractéristiques morphologiques plus riches (optionnel).
 
 ## Jalon 4 — Stabilisation produit
 
-- [ ] file de tâches et progression ;
-- [ ] limites de pixels et sécurité renforcée ;
-- [ ] tests end-to-end navigateur ;
+- [ ] import séparé de l'analyse, récapitulatif acceptés/rejetés, erreurs
+  lisibles, verrou de sélection pendant l'analyse ;
+- [ ] limite nginx cohérente avec la limite par fichier ;
+- [ ] plancher typographique et contraste AA sur tout texte informatif ;
+- [ ] file de tâches et progression (si µSAM devient un moteur produit) ;
+- [ ] limites de pixels et en-têtes de sécurité ;
+- [ ] test end-to-end navigateur ;
 - [ ] test sur machine propre CPU ;
-- [ ] déploiement public ou démonstration enregistrée de secours ;
-- [ ] audit accessibilité et performance.
+- [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
 
-## Jalon 5 — Remise
+## Jalon 5 — Remise (avant le 9 octobre)
 
 - [ ] figer données, code, résultats et citations ;
-- [ ] rapport 15–20 pages ;
-- [ ] vidéo ≤ 5 minutes ;
-- [ ] dépôt public et release ;
-- [ ] Writeup Kaggle ;
-- [ ] présentation de finale.
+- [ ] release taguée avec checksums, DOI Zenodo optionnel ;
+- [ ] rapport technique 15–20 pages selon le plan de l'organisateur ;
+- [ ] vidéo ≤ 5 minutes montrant le produit réel ;
+- [ ] Writeup Kaggle : catégorie, résumé 200–300 mots, liens, limites,
+  déclarations IA et licences ;
+- [ ] vérification de tous les liens en navigation privée.
+
+## Jalon 6 — Finale (20 au 30 octobre)
+
+- [ ] diapositives de 10 minutes et démo en direct de 3 minutes ;
+- [ ] démo de secours hors ligne ;
+- [ ] réponses préparées sur fuite, calibration, licences, généralisation et
+  standardisation des données.
 
 ## Définition de terminé
 

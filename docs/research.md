@@ -4,23 +4,13 @@ Dernière revue : **16 septembre 2026**.
 
 ## Challenge
 
-La page officielle [AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien)
-autorise modèles, outils, plateformes et systèmes complets. Le livrable officiel
-est un Writeup Kaggle comprenant vidéo, dépôt public et rapport technique.
-
-La notation annoncée est :
-
-| Critère | Poids | Réponse du projet |
-|---|---:|---|
-| Importance et impact | 30 % | workflow OoC concret, réduction du temps d'analyse |
-| Approche et innovation | 30 % | registre de moteurs, inférence avant entraînement, provenance |
-| Résultats et validation | 20 % | benchmarks publics, overlays, intervalles et erreurs |
-| Reproductibilité | 10 % | Docker, CLI, API, tests, données ouvertes |
-| Présentation | 10 % | parcours en trois étapes et vidéo réelle |
-
-Le challenge recommande explicitement l'analyse d'images cellulaires, la
-prédiction de réponse aux médicaments et l'analyse de phénotypes. Il ne fournit
-pas de dataset imposé. La date limite publiée est le **10 octobre 2026**.
+Le règlement officiel, la grille d'évaluation, le calendrier et les livrables
+sont tenus à jour dans
+[competition-requirements.md](competition-requirements.md) ; le paysage
+scientifique et concurrentiel est dans [etat-de-l-art.md](etat-de-l-art.md).
+En résumé : Writeup Kaggle unique avec vidéo ≤ 5 min, dépôt public et rapport
+technique ; aucune donnée ni tâche imposée ; date limite le **10 octobre
+2026**, puis finale avec soutenance du 20 au 30 octobre.
 
 ## Jeux de données retenus pour l'audit
 
