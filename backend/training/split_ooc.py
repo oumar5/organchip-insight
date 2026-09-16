@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import bisect
 import csv
 import hashlib
 import json
 import random
+import re
 import subprocess
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
@@ -14,6 +16,9 @@ from pathlib import Path
 from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SPLITS = ("train", "validation", "test")
+LABELS = ("bad", "good")
+HEX_256_PATTERN = re.compile(r"[0-9a-fA-F]{64}")
 
 
 def _sha256(path: Path) -> str:
@@ -49,16 +54,48 @@ def _load_inventory(path: Path) -> list[dict[str, str]]:
         "path_label",
         "path_cell_type",
         "path_day_bucket",
+        "width",
+        "height",
+        "mode",
+        "sha256",
+        "dhash256",
     }
     missing = sorted(required - records[0].keys())
     if missing:
         raise ValueError(f"Inventory is missing columns: {', '.join(missing)}")
+
+    paths = [record["path"] for record in records]
+    duplicate_paths = sorted(path for path, count in Counter(paths).items() if count > 1)
+    if duplicate_paths:
+        raise ValueError(f"Inventory contains duplicate paths: {duplicate_paths[0]}")
+
+    for row_number, record in enumerate(records, start=2):
+        for field in required:
+            value = record.get(field)
+            if value is None or not value.strip():
+                raise ValueError(f"Inventory row {row_number} has an empty {field}")
+        if record["path_label"] not in LABELS:
+            raise ValueError(
+                f"Inventory row {row_number} has an unsupported label: {record['path_label']}"
+            )
+        for field in ("sha256", "dhash256"):
+            if HEX_256_PATTERN.fullmatch(record[field]) is None:
+                raise ValueError(
+                    f"Inventory row {row_number} has an invalid {field}: {record[field]}"
+                )
+        for field in ("width", "height"):
+            try:
+                value = int(record[field])
+            except ValueError as error:
+                raise ValueError(
+                    f"Inventory row {row_number} has an invalid {field}: {record[field]}"
+                ) from error
+            if value <= 0:
+                raise ValueError(f"Inventory row {row_number} has a non-positive {field}: {value}")
     return records
 
 
-def _field_counts(
-    records: list[dict[str, str]], fields: list[str]
-) -> dict[str, Counter[str]]:
+def _field_counts(records: list[dict[str, str]], fields: list[str]) -> dict[str, Counter[str]]:
     return {field: Counter(record[field] for record in records) for field in fields}
 
 
@@ -161,8 +198,7 @@ def build_grouped_assignment(
 ) -> tuple[dict[str, str], dict[str, Any]]:
     group_field = config["group_field"]
     category_weights = {
-        str(field): float(weight)
-        for field, weight in config["category_weights"].items()
+        str(field): float(weight) for field, weight in config["category_weights"].items()
     }
     test_fraction = float(config["test_fraction"])
     validation_fraction = float(config["validation_fraction"])
@@ -212,8 +248,7 @@ def build_grouped_assignment(
     for split in ("train", "validation", "test"):
         split_records = [record for record in records if assignment[record["path"]] == split]
         coverage[split] = {
-            field: sorted({record[field] for record in split_records})
-            for field in required_fields
+            field: sorted({record[field] for record in split_records}) for field in required_fields
         }
         for field in required_fields:
             expected = {record[field] for record in records}
@@ -238,17 +273,311 @@ def _nested_counts(
     field: str,
 ) -> dict[str, dict[str, int]]:
     output: dict[str, dict[str, int]] = {}
-    for split in ("train", "validation", "test"):
+    for split in SPLITS:
         output[split] = dict(
             sorted(
                 Counter(
-                    record[field]
-                    for record in records
-                    if assignment[record["path"]] == split
+                    record[field] for record in records if assignment[record["path"]] == split
                 ).items()
             )
         )
     return output
+
+
+def _audit_grouped_near_duplicates(
+    records: list[dict[str, str]],
+    assignment: dict[str, str],
+    *,
+    maximum_distance: int,
+    example_limit: int = 30,
+) -> dict[str, Any]:
+    if (
+        isinstance(maximum_distance, bool)
+        or not isinstance(maximum_distance, int)
+        or not 0 <= maximum_distance <= 256
+    ):
+        raise ValueError("maximum_distance must be an integer between zero and 256")
+    if isinstance(example_limit, bool) or not isinstance(example_limit, int) or example_limit < 0:
+        raise ValueError("example_limit must be non-negative")
+
+    grouped: dict[str, list[tuple[dict[str, str], int]]] = {split: [] for split in SPLITS}
+    for record in sorted(records, key=lambda item: item["path"]):
+        split = assignment.get(record["path"])
+        if split not in grouped:
+            raise ValueError(f"Missing or unsupported grouped split for {record['path']}")
+        grouped[split].append((record, int(record["dhash256"], 16)))
+
+    pair_count = 0
+    candidate_count = 0
+    same_prefix_count = 0
+    label_conflict_count = 0
+    exact_file_match_count = 0
+    distance_counts: Counter[int] = Counter()
+    split_pairs: dict[str, dict[str, int]] = {}
+    ranked_examples: list[tuple[tuple[bool, int, str, str], dict[str, Any]]] = []
+
+    for left_index, left_split in enumerate(SPLITS):
+        for right_split in SPLITS[left_index + 1 :]:
+            split_pair = f"{left_split}_{right_split}"
+            compared = len(grouped[left_split]) * len(grouped[right_split])
+            pair_count += compared
+            split_candidate_count = 0
+            for left, left_hash in grouped[left_split]:
+                for right, right_hash in grouped[right_split]:
+                    distance = (left_hash ^ right_hash).bit_count()
+                    if distance > maximum_distance:
+                        continue
+                    split_candidate_count += 1
+                    candidate_count += 1
+                    distance_counts[distance] += 1
+                    same_prefix = left["acquisition_prefix"] == right["acquisition_prefix"]
+                    label_conflict = left["path_label"] != right["path_label"]
+                    exact_file_match = left["sha256"] == right["sha256"]
+                    same_prefix_count += int(same_prefix)
+                    label_conflict_count += int(label_conflict)
+                    exact_file_match_count += int(exact_file_match)
+                    example = {
+                        "distance": distance,
+                        "label_conflict": label_conflict,
+                        "same_acquisition_prefix": same_prefix,
+                        "exact_file_match": exact_file_match,
+                        "left_split": left_split,
+                        "right_split": right_split,
+                        "left": left["path"],
+                        "right": right["path"],
+                    }
+                    if example_limit:
+                        rank = (
+                            not label_conflict,
+                            distance,
+                            left["path"],
+                            right["path"],
+                        )
+                        bisect.insort(ranked_examples, (rank, example))
+                        del ranked_examples[example_limit:]
+            split_pairs[split_pair] = {
+                "pairs_examined": compared,
+                "candidate_pairs": split_candidate_count,
+            }
+
+    return {
+        "scope": "all unordered image pairs assigned to different grouped splits",
+        "complete": True,
+        "method": "256-bit difference hash on a 17x16 grayscale thumbnail",
+        "maximum_hamming_distance": maximum_distance,
+        "cross_split_pair_count": pair_count,
+        "cross_split_candidate_pair_count": candidate_count,
+        "same_acquisition_prefix_pair_count": same_prefix_count,
+        "label_conflict_pair_count": label_conflict_count,
+        "exact_file_match_pair_count": exact_file_match_count,
+        "distance_counts": {
+            str(distance): count for distance, count in sorted(distance_counts.items())
+        },
+        "split_pairs": split_pairs,
+        "examples": [example for _rank, example in ranked_examples],
+        "passed": candidate_count == 0,
+        "warning": (
+            "This exhaustively screens the configured difference-hash distance; it "
+            "does not prove the absence of duplicates under rotations, crops or other "
+            "transformations."
+        ),
+    }
+
+
+def _confounder_category(record: dict[str, str], feature: str) -> str:
+    resolution = f"{record['width']}x{record['height']}"
+    if feature == "mode":
+        return record["mode"]
+    if feature == "resolution":
+        return resolution
+    if feature == "mode_resolution":
+        return f"{record['mode']}/{resolution}"
+    raise ValueError(f"Unsupported confounder feature: {feature}")
+
+
+def _roc_auc(labels: list[int], probabilities: list[float]) -> float | None:
+    positive_count = sum(labels)
+    negative_count = len(labels) - positive_count
+    if positive_count == 0 or negative_count == 0:
+        return None
+
+    ranked = sorted(zip(probabilities, labels, strict=True))
+    positive_rank_sum = 0.0
+    start = 0
+    while start < len(ranked):
+        end = start + 1
+        while end < len(ranked) and ranked[end][0] == ranked[start][0]:
+            end += 1
+        average_rank = ((start + 1) + end) / 2.0
+        positive_rank_sum += average_rank * sum(label for _probability, label in ranked[start:end])
+        start = end
+    return (positive_rank_sum - positive_count * (positive_count + 1) / 2.0) / (
+        positive_count * negative_count
+    )
+
+
+def _binary_metrics(labels: list[int], probabilities: list[float]) -> dict[str, Any]:
+    if not labels or len(labels) != len(probabilities):
+        raise ValueError("Labels and probabilities must have the same non-zero length")
+    predictions = [int(probability >= 0.5) for probability in probabilities]
+    true_negative = sum(
+        label == 0 and prediction == 0
+        for label, prediction in zip(labels, predictions, strict=True)
+    )
+    false_positive = sum(
+        label == 0 and prediction == 1
+        for label, prediction in zip(labels, predictions, strict=True)
+    )
+    false_negative = sum(
+        label == 1 and prediction == 0
+        for label, prediction in zip(labels, predictions, strict=True)
+    )
+    true_positive = sum(
+        label == 1 and prediction == 1
+        for label, prediction in zip(labels, predictions, strict=True)
+    )
+    both_classes = (true_negative + false_positive) > 0 and (false_negative + true_positive) > 0
+    balanced_accuracy: float | None = None
+    macro_f1: float | None = None
+    if both_classes:
+        specificity = true_negative / (true_negative + false_positive)
+        sensitivity = true_positive / (true_positive + false_negative)
+        balanced_accuracy = (specificity + sensitivity) / 2.0
+        bad_denominator = 2 * true_negative + false_positive + false_negative
+        good_denominator = 2 * true_positive + false_positive + false_negative
+        bad_f1 = 2 * true_negative / bad_denominator if bad_denominator else 0.0
+        good_f1 = 2 * true_positive / good_denominator if good_denominator else 0.0
+        macro_f1 = (bad_f1 + good_f1) / 2.0
+
+    def rounded(value: float | None) -> float | None:
+        return round(value, 6) if value is not None else None
+
+    return {
+        "count": len(labels),
+        "class_counts": {
+            "bad": true_negative + false_positive,
+            "good": false_negative + true_positive,
+        },
+        "confusion_matrix": {
+            "labels": list(LABELS),
+            "values": [[true_negative, false_positive], [false_negative, true_positive]],
+        },
+        "accuracy": round((true_negative + true_positive) / len(labels), 6),
+        "balanced_accuracy": rounded(balanced_accuracy),
+        "macro_f1": rounded(macro_f1),
+        "roc_auc": rounded(_roc_auc(labels, probabilities)),
+    }
+
+
+def _categorical_shortcut_baseline(
+    records: list[dict[str, str]],
+    assignment: dict[str, str],
+    *,
+    feature: str,
+) -> dict[str, Any]:
+    train_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    global_train_counts: Counter[str] = Counter()
+    for record in records:
+        if assignment[record["path"]] != "train":
+            continue
+        label = record["path_label"]
+        category = _confounder_category(record, feature)
+        train_counts[category][label] += 1
+        global_train_counts[label] += 1
+    if not global_train_counts:
+        raise ValueError("The grouped assignment contains no training records")
+
+    def probability_good(counts: Counter[str]) -> float:
+        return (counts["good"] + 1.0) / (sum(counts.values()) + 2.0)
+
+    global_probability = probability_good(global_train_counts)
+    category_probabilities = {
+        category: probability_good(counts) for category, counts in sorted(train_counts.items())
+    }
+    evaluations: dict[str, Any] = {}
+    for split in SPLITS:
+        split_records = sorted(
+            (record for record in records if assignment[record["path"]] == split),
+            key=lambda item: item["path"],
+        )
+        labels = [int(record["path_label"] == "good") for record in split_records]
+        categories = [_confounder_category(record, feature) for record in split_records]
+        probabilities = [
+            category_probabilities.get(category, global_probability) for category in categories
+        ]
+        evaluations[split] = {
+            **_binary_metrics(labels, probabilities),
+            "unseen_categories": sorted(set(categories) - set(category_probabilities)),
+        }
+
+    return {
+        "feature": feature,
+        "fit_split": "train",
+        "label": "good",
+        "smoothing": "Laplace alpha=1",
+        "threshold": 0.5,
+        "threshold_selection": "fixed a priori; no validation or test selection",
+        "unseen_category_policy": "smoothed global training-label rate",
+        "global_train_probability_good": round(global_probability, 6),
+        "train_categories": {
+            category: {
+                "bad": train_counts[category]["bad"],
+                "good": train_counts[category]["good"],
+                "probability_good": round(category_probabilities[category], 6),
+            }
+            for category in sorted(train_counts)
+        },
+        "metrics": evaluations,
+    }
+
+
+def _build_confounder_audit(
+    records: list[dict[str, str]], assignment: dict[str, str]
+) -> dict[str, Any]:
+    features = ("mode", "resolution", "mode_resolution")
+    distributions: dict[str, Any] = {}
+    for feature in features:
+        categories = sorted({_confounder_category(record, feature) for record in records})
+        by_split: dict[str, Any] = {}
+        for split in SPLITS:
+            counts: dict[str, Counter[str]] = defaultdict(Counter)
+            for record in records:
+                if assignment[record["path"]] == split:
+                    counts[_confounder_category(record, feature)][record["path_label"]] += 1
+            by_split[split] = {
+                category: {
+                    "bad": counts[category]["bad"],
+                    "good": counts[category]["good"],
+                    "total": sum(counts[category].values()),
+                    "good_rate": (
+                        round(
+                            counts[category]["good"] / sum(counts[category].values()),
+                            6,
+                        )
+                        if counts[category]
+                        else None
+                    ),
+                }
+                for category in categories
+            }
+        distributions[feature] = {
+            "categories": categories,
+            "by_split": by_split,
+        }
+
+    return {
+        "status": "potential acquisition shortcut detected",
+        "interpretation": (
+            "Mode and pixel dimensions are acquisition properties, not biological "
+            "quality evidence. Predictive performance from these fields indicates a "
+            "shortcut risk for image models."
+        ),
+        "distributions": distributions,
+        "train_only_categorical_baselines": {
+            feature: _categorical_shortcut_baseline(records, assignment, feature=feature)
+            for feature in features
+        },
+    }
 
 
 def run(config_path: Path) -> dict[str, Any]:
@@ -265,6 +594,15 @@ def run(config_path: Path) -> dict[str, Any]:
         raise ValueError("Inventory checksum does not match the audited artifact")
 
     assignment, diagnostics = build_grouped_assignment(records, config)
+    maximum_distance = config.get("near_duplicate_maximum_hamming_distance")
+    if isinstance(maximum_distance, bool) or not isinstance(maximum_distance, int):
+        raise ValueError("near_duplicate_maximum_hamming_distance must be an integer")
+    near_duplicate_audit = _audit_grouped_near_duplicates(
+        records,
+        assignment,
+        maximum_distance=maximum_distance,
+    )
+    confounder_audit = _build_confounder_audit(records, assignment)
     output_path = PROJECT_ROOT / config["output_csv"]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_fields = [
@@ -302,18 +640,18 @@ def run(config_path: Path) -> dict[str, Any]:
     split_counts = Counter(assignment.values())
     group_field = config["group_field"]
     group_sets = {
-        split: {
-            record[group_field]
-            for record in records
-            if assignment[record["path"]] == split
-        }
-        for split in ("train", "validation", "test")
+        split: {record[group_field] for record in records if assignment[record["path"]] == split}
+        for split in SPLITS
     }
     report = {
         "schema_version": 1,
         "split_id": config["split_id"],
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "git_commit": _git_commit(),
+        "implementation": {
+            "path": str(Path(__file__).resolve().relative_to(PROJECT_ROOT)),
+            "sha256": _sha256(Path(__file__).resolve()),
+        },
         "config": str(config_path.relative_to(PROJECT_ROOT)),
         "config_sha256": _sha256(config_path),
         "source_inventory": {
@@ -333,6 +671,7 @@ def run(config_path: Path) -> dict[str, Any]:
                 "test": config["test_fraction"],
             },
             "category_weights": config["category_weights"],
+            "near_duplicate_maximum_hamming_distance": maximum_distance,
         },
         "results": {
             "record_counts": dict(sorted(split_counts.items())),
@@ -349,20 +688,8 @@ def run(config_path: Path) -> dict[str, Any]:
             "label_counts": _nested_counts(records, assignment, "path_label"),
             "cell_type_counts": _nested_counts(records, assignment, "path_cell_type"),
             "day_bucket_counts": _nested_counts(records, assignment, "path_day_bucket"),
-            "near_duplicate_policy": {
-                "audited_cross_split_candidates": audit["ooc_archive"][
-                    "near_duplicate_screen"
-                ]["cross_split_candidate_pair_count"],
-                "all_candidates_share_group_field": (
-                    audit["ooc_archive"]["near_duplicate_screen"][
-                        "cross_split_candidate_pair_count"
-                    ]
-                    == audit["ooc_archive"]["near_duplicate_screen"][
-                        "same_acquisition_prefix_pair_count"
-                    ]
-                ),
-                "candidates_crossing_grouped_split": 0,
-            },
+            "near_duplicate_audit": near_duplicate_audit,
+            "confounder_audit": confounder_audit,
         },
         "diagnostics": diagnostics,
         "output": {
@@ -378,6 +705,16 @@ def run(config_path: Path) -> dict[str, Any]:
             (
                 "A future release should replace the heuristic when stronger biological "
                 "grouping metadata is available."
+            ),
+            (
+                "The exhaustive near-duplicate claim is limited to the configured "
+                "difference-hash distance and does not cover every possible image "
+                "transformation."
+            ),
+            (
+                "Mode and resolution are strongly associated with the target label; CNN "
+                "results must be compared with the train-only categorical shortcut "
+                "baselines in this report."
             ),
         ],
     }

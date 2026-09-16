@@ -8,6 +8,7 @@
   "group_field": "acquisition_prefix",
   "seed": 20260916,
   "search_attempts": 20000,
+  "near_duplicate_maximum_hamming_distance": 8,
   "validation_fraction": 0.15,
   "test_fraction": 0.15,
   "category_weights": {
