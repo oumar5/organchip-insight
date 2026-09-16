@@ -12,6 +12,20 @@ make data-audit
 make split-ooc
 make train-ooc-baseline
 make benchmark-bbbc019
+
+# À créer une fois pour le benchmark µSAM isolé.
+conda env create --file backend/experiments/micro-sam/environment.yml
+make benchmark-bbbc019-microsam
+```
+
+La cible µSAM utilise par défaut l'environnement Conda nommé
+`organchip-microsam`, déclaré dans
+`backend/experiments/micro-sam/environment.yml`. Le lanceur reste surchargeable,
+par exemple pour un environnement existant identifié par son préfixe :
+
+```bash
+make MICROSAM_PYTHON='conda run --prefix /chemin/vers/env python' \
+  benchmark-bbbc019-microsam
 ```
 
 ## Contenu

@@ -16,6 +16,21 @@ Le préfixe reste un proxy de date, pas un identifiant documenté de puce, puits
 donneur ou expérience. Le nouveau test réduit un risque de fuite sans devenir
 pour autant une validation biologique indépendante.
 
+## Addendum du 16 septembre 2026 — benchmark µSAM exécuté
+
+L'expérience `µSAM + APG` annoncée ci-dessous a depuis été exécutée sans
+ajustement sur les 13 masques BBBC019. Elle atteint une macro-F1 de `0,815542`
+et une macro-IoU de `0,698535`, contre respectivement `0,424892` et `0,273632`
+pour la baseline adaptative. Son coût CPU local est toutefois très supérieur.
+
+Le protocole, les hashes, les métriques, les coûts et la décision produit sont
+consignés dans le
+[retour d'expérience dédié au benchmark µSAM](2026-09-16-benchmark-microsam-bbbc019.md).
+Ce résultat sur un petit dataset DIC externe ne constitue ni une validation sur
+les images OoC du challenge, ni une validation biologique indépendante. Les
+phrases « prochaine expérience » et la suite ordonnée plus bas sont conservées
+comme état historique au moment du premier audit.
+
 ## Résumé de la décision
 
 Le chemin complet fonctionne : téléchargement borné, checksum, extraction sûre,

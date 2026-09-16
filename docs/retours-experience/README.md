@@ -8,6 +8,7 @@ a été prise.
 
 - [Stratégie Kaggle et choix des modèles — 16 septembre 2026](2026-09-16-strategie-kaggle-et-modeles.md)
 - [Audit des données et baseline BBBC019 — 16 septembre 2026](2026-09-16-audit-donnees-et-baseline-bbbc019.md)
+- [Benchmark zero-shot µSAM sur BBBC019 — 16 septembre 2026](2026-09-16-benchmark-microsam-bbbc019.md)
 - [Baseline OoC handcrafted sur split groupé — 16 septembre 2026](2026-09-16-baseline-ooc-handcrafted.md)
 - [Audit exhaustif du split OoC et des raccourcis — 16 septembre 2026](2026-09-16-audit-split-ooc-et-confondants.md)
 - [Pipeline CNN et smoke CPU — 16 septembre 2026](2026-09-16-pipeline-cnn-smoke.md)
