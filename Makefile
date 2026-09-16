@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit benchmark-bbbc019 benchmark-bbbc019-microsam
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc benchmark-bbbc019 benchmark-bbbc019-microsam
 
 MICROSAM_ENV ?= $(CURDIR)/data/cache/microsam-env
 
@@ -31,6 +31,9 @@ data-verify:
 
 data-audit:
 	uv run --project backend --extra ml python backend/evaluation/audit_data.py
+
+split-ooc:
+	uv run --project backend python backend/training/split_ooc.py --config backend/training/configs/ooc-grouped-split-v1.json
 
 benchmark-bbbc019:
 	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "split_id": "ooc-grouped-by-acquisition-prefix-v1",
+  "inventory": "reports/ooc-image-inventory-2026-09-16.csv",
+  "audit_report": "reports/data-audit-2026-09-16.json",
+  "output_csv": "data/splits/ooc-grouped-v1.csv",
+  "output_report": "reports/ooc-grouped-split-v1.json",
+  "group_field": "acquisition_prefix",
+  "seed": 20260916,
+  "search_attempts": 20000,
+  "validation_fraction": 0.15,
+  "test_fraction": 0.15,
+  "category_weights": {
+    "path_label": 4.0,
+    "path_cell_type": 2.0,
+    "path_day_bucket": 1.0
+  },
+  "required_coverage_fields": [
+    "path_label",
+    "path_cell_type",
+    "path_day_bucket"
+  ]
+}
