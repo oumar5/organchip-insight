@@ -208,6 +208,7 @@ def load_frozen_manifest(
     report_artifacts = validation_report.get("artifacts")
     report_config = validation_report.get("config")
     report_split = validation_report.get("split")
+    report_sources = validation_report.get("source_files")
     if (
         validation_report.get("schema_version") != 1
         or validation_report.get("mode") != "validation"
@@ -217,6 +218,7 @@ def load_frozen_manifest(
         or not isinstance(report_artifacts, dict)
         or not isinstance(report_config, dict)
         or not isinstance(report_split, dict)
+        or not isinstance(report_sources, list)
     ):
         raise ValueError("Frozen validation report provenance is invalid")
     report_checkpoint = report_artifacts.get("checkpoint")
@@ -236,6 +238,18 @@ def load_frozen_manifest(
     )
     if any(actual != expected for actual, expected in expected_report_values):
         raise ValueError("Frozen selection does not match the validation report")
+    report_source_pairs = {
+        (item.get("path"), item.get("sha256"))
+        for item in report_sources
+        if isinstance(item, dict)
+    }
+    frozen_source_pairs = {
+        (source.relative_path, source.sha256) for source in source_files
+    }
+    if len(report_source_pairs) != len(report_sources) or (
+        report_source_pairs != frozen_source_pairs
+    ):
+        raise ValueError("Frozen sources do not match the validation report")
     return FrozenManifest(
         path=path.resolve(),
         sha256=actual_sha256,

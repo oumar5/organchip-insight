@@ -115,6 +115,12 @@ def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
                     "threshold": 0.55,
                     "threshold_selected_on": "validation",
                 },
+                "source_files": [
+                    {
+                        "path": source_file.relative_to(paths["root"]).as_posix(),
+                        "sha256": sha256_file(source_file),
+                    }
+                ],
                 "artifacts": {
                     "checkpoint": {
                         "path": checkpoint.relative_to(paths["root"]).as_posix(),
@@ -480,6 +486,46 @@ def test_final_eval_rejects_test_manifest_alias_before_open(
 
     monkeypatch.setattr(Path, "open", tracked_open)
     with pytest.raises(ValueError, match="aliases the test manifest"):
+        load_run_manifests(
+            mode=RunMode.FINAL_EVAL,
+            project_root=tmp_path,
+            split_lock_path=paths["lock"],
+            train_validation_manifest_path=paths["train_validation"],
+            test_manifest_path=paths["test"],
+            frozen_manifest_path=frozen,
+            frozen_manifest_sha256=sha256_file(frozen),
+            confirmation=FINAL_EVAL_CONFIRMATION,
+            test_open_reason="frozen model final evaluation",
+            receipt_directory=tmp_path / "reports/test-access",
+            active_config_path=tmp_path / "data/experiments/config.json",
+            active_config_sha256=sha256_file(
+                tmp_path / "data/experiments/config.json"
+            ),
+            active_source_paths=(
+                tmp_path / "backend/training/ooc_cnn/runtime.py",
+            ),
+        )
+
+
+def test_final_eval_rejects_selection_changed_after_validation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    paths = _fixture_project(tmp_path)
+    frozen = _write_frozen_manifest(paths)
+    value = json.loads(frozen.read_text(encoding="utf-8"))
+    value["selection"]["threshold"] = 0.65
+    frozen.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    test_path = paths["test"].resolve()
+    original_open = Path.open
+
+    def tracked_open(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == test_path:
+            raise AssertionError("test manifest was opened")
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", tracked_open)
+    with pytest.raises(ValueError, match="selection does not match"):
         load_run_manifests(
             mode=RunMode.FINAL_EVAL,
             project_root=tmp_path,
