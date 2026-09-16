@@ -34,6 +34,7 @@
     "resize": "preserve aspect ratio and pad to square",
     "interpolation": "bilinear",
     "force_rgb": true,
+    "color_mode": "rgb",
     "pad_value": 0,
     "mean": [
       0.485,

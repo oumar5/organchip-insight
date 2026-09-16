@@ -104,8 +104,12 @@ def load_experiment_config(path: Path, *, project_root: Path) -> ExperimentConfi
         raise ValueError("CNN config must forbid implicit weight downloads")
 
     input_size = _positive_integer(preprocessing, "input_size")
-    if input_size != 224 or preprocessing.get("force_rgb") is not True:
-        raise ValueError("CNN preprocessing must use RGB and a 224-pixel input")
+    if input_size not in {224, 448}:
+        raise ValueError("CNN preprocessing input_size must be 224 or 448")
+    if preprocessing.get("force_rgb") is not True:
+        raise ValueError("CNN preprocessing must produce three-channel model inputs")
+    if preprocessing.get("color_mode") not in {"rgb", "grayscale_rgb"}:
+        raise ValueError("CNN preprocessing color_mode must be rgb or grayscale_rgb")
     if preprocessing.get("resize") != "preserve aspect ratio and pad to square":
         raise ValueError("CNN preprocessing must preserve aspect ratio and pad")
     if preprocessing.get("interpolation") != "bilinear":

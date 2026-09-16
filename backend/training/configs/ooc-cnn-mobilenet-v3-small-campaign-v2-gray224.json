@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment_id": "ooc-cnn-mobilenet-v3-small-campaign-v2",
+  "experiment_id": "ooc-cnn-mobilenet-v3-small-campaign-v2-gray224",
   "dataset": {
     "name": "OOC Image Dataset",
     "doi": "10.5281/zenodo.10203721",
@@ -22,10 +22,7 @@
   "model": {
     "architecture": "mobilenet_v3_small",
     "num_classes": 2,
-    "label_mapping": {
-      "0": "bad",
-      "1": "good"
-    },
+    "label_mapping": {"0": "bad", "1": "good"},
     "validation_initialization": "local ImageNet state_dict with an explicit SHA-256",
     "implicit_weight_downloads": false
   },
@@ -34,22 +31,11 @@
     "resize": "preserve aspect ratio and pad to square",
     "interpolation": "bilinear",
     "force_rgb": true,
-    "color_mode": "rgb",
+    "color_mode": "grayscale_rgb",
     "pad_value": 0,
-    "mean": [
-      0.485,
-      0.456,
-      0.406
-    ],
-    "std": [
-      0.229,
-      0.224,
-      0.225
-    ],
-    "train_augmentations": [
-      "horizontal_flip",
-      "vertical_flip"
-    ]
+    "mean": [0.485, 0.456, 0.406],
+    "std": [0.229, 0.224, 0.225],
+    "train_augmentations": ["horizontal_flip", "vertical_flip"]
   },
   "training": {
     "seed": 20260916,
@@ -80,12 +66,7 @@
     "threshold_grid_steps": 181,
     "ece_bins": 10,
     "bootstrap_iterations": 2000,
-    "slices": [
-      "cell_type",
-      "day_bucket",
-      "image_mode",
-      "resolution"
-    ]
+    "slices": ["cell_type", "day_bucket", "image_mode", "resolution"]
   },
   "export": {
     "onnx_opset": 18,

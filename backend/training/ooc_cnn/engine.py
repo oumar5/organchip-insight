@@ -156,12 +156,18 @@ def _make_loader(
     workers: int,
     seed: int,
     verify_hashes: bool,
+    image_size: int,
+    color_mode: str,
 ) -> Any:
     torch, _nn, DataLoader = _import_torch()
     dataset = ManifestImageDataset(
         records,
         image_root,
-        transform=build_image_transform(training=training),
+        transform=build_image_transform(
+            training=training,
+            image_size=image_size,
+            color_mode=color_mode,
+        ),
         verify_hashes=verify_hashes,
     )
     generator = torch.Generator()
@@ -504,6 +510,9 @@ def run_training(
     epochs = int(settings["epochs"])
     batch_size = int(settings["batch_size"])
     workers = int(settings["workers"])
+    preprocessing = config.raw["preprocessing"]
+    image_size = int(preprocessing["input_size"])
+    color_mode = str(preprocessing["color_mode"])
 
     train_loader = _make_loader(
         train_records,
@@ -513,6 +522,8 @@ def run_training(
         workers=workers,
         seed=seed,
         verify_hashes=verify_image_hashes,
+        image_size=image_size,
+        color_mode=color_mode,
     )
     validation_loader = _make_loader(
         validation_records,
@@ -522,6 +533,8 @@ def run_training(
         workers=workers,
         seed=seed + 1,
         verify_hashes=verify_image_hashes,
+        image_size=image_size,
+        color_mode=color_mode,
     )
     model = build_mobilenet_v3_small(
         weights=initial_weights.path if initial_weights else "none",
@@ -936,6 +949,8 @@ def run_final_evaluation(
         workers=int(config.raw["training"]["workers"]),
         seed=seed,
         verify_hashes=verify_image_hashes,
+        image_size=int(config.raw["preprocessing"]["input_size"]),
+        color_mode=str(config.raw["preprocessing"]["color_mode"]),
     )
     checkpoint = frozen.artifacts["checkpoint"]
     model = build_mobilenet_v3_small(

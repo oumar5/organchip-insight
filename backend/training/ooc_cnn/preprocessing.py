@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from PIL import Image
 
@@ -12,6 +12,7 @@ IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 IMAGENET_MEAN_RGB = tuple(round(channel * 255) for channel in IMAGENET_MEAN)
 PADDING_RGB = (0, 0, 0)
+ColorMode = Literal["rgb", "grayscale_rgb"]
 
 
 def force_rgb(image: Image.Image) -> Image.Image:
@@ -19,6 +20,13 @@ def force_rgb(image: Image.Image) -> Image.Image:
     if not isinstance(image, Image.Image):
         raise TypeError("image must be a PIL image")
     return image.convert("RGB")
+
+
+def force_grayscale_rgb(image: Image.Image) -> Image.Image:
+    """Remove chroma deterministically while retaining the model's three channels."""
+    if not isinstance(image, Image.Image):
+        raise TypeError("image must be a PIL image")
+    return image.convert("L").convert("RGB")
 
 
 def resize_and_pad(
@@ -66,7 +74,12 @@ class ResizeAndPad:
         )
 
 
-def build_image_transform(*, training: bool, image_size: int = IMAGE_SIZE) -> Any:
+def build_image_transform(
+    *,
+    training: bool,
+    image_size: int = IMAGE_SIZE,
+    color_mode: ColorMode = "rgb",
+) -> Any:
     """Build torchvision transforms, importing the optional dependency lazily."""
     try:
         from torchvision import transforms
@@ -75,7 +88,10 @@ def build_image_transform(*, training: bool, image_size: int = IMAGE_SIZE) -> An
             "torchvision is required to build CNN image transforms"
         ) from error
 
-    operations: list[Any] = [transforms.Lambda(force_rgb)]
+    if color_mode not in {"rgb", "grayscale_rgb"}:
+        raise ValueError("color_mode must be rgb or grayscale_rgb")
+    color_transform = force_rgb if color_mode == "rgb" else force_grayscale_rgb
+    operations: list[Any] = [transforms.Lambda(color_transform)]
     if training:
         operations.extend(
             (

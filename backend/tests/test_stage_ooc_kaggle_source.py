@@ -19,6 +19,8 @@ def _source_fixture(root):
         "backend/training/ooc_cnn/cli.py",
         "backend/experiments/ooc-cnn/kaggle-runtime-contract.json",
         "backend/training/configs/ooc-cnn-mobilenet-v3-small-campaign-v2.json",
+        "backend/training/configs/ooc-cnn-mobilenet-v3-small-campaign-v2-gray224.json",
+        "backend/training/configs/ooc-cnn-mobilenet-v3-small-campaign-v2-gray448.json",
         "data/splits/ooc-campaign-v2-lock.json",
         "data/splits/ooc-campaign-v2-train-validation.csv",
         "reports/ooc-image-inventory-2026-09-16.csv",
@@ -50,6 +52,8 @@ def test_source_bundle_is_allowlisted_and_deterministic(tmp_path):
     with zipfile.ZipFile(tmp_path / "first/organchip-insight-source-campaign-v2.zip") as archive:
         names = archive.namelist()
         assert "organchip-insight/backend/training/ooc_cnn/cli.py" in names
+        assert any(name.endswith("campaign-v2-gray224.json") for name in names)
+        assert any(name.endswith("campaign-v2-gray448.json") for name in names)
         assert not any("ooc-campaign-v2-test.csv" in name for name in names)
         assert not any("ooc-image-inventory-2026-09-16.csv" in name for name in names)
         assert not any("data/raw" in name for name in names)

@@ -13,7 +13,11 @@ from training.ooc_cnn.dataset import (
 )
 from training.ooc_cnn.manifests import ManifestRecord
 from training.ooc_cnn.model import build_mobilenet_v3_small
-from training.ooc_cnn.preprocessing import PADDING_RGB, resize_and_pad
+from training.ooc_cnn.preprocessing import (
+    PADDING_RGB,
+    force_grayscale_rgb,
+    resize_and_pad,
+)
 
 
 def _record(
@@ -49,6 +53,18 @@ def test_resize_and_pad_preserves_complete_landscape_image() -> None:
     assert result.getpixel((112, 56)) == (255, 255, 255)
     assert result.getpixel((112, 167)) == (255, 255, 255)
     assert result.getpixel((112, 168)) == PADDING_RGB
+
+
+def test_grayscale_ablation_removes_chroma_but_keeps_three_channels() -> None:
+    source = Image.new("RGB", (2, 1))
+    source.putdata([(255, 0, 0), (0, 255, 0)])
+
+    result = force_grayscale_rgb(source)
+
+    assert result.mode == "RGB"
+    assert result.getpixel((0, 0))[0] == result.getpixel((0, 0))[1]
+    assert result.getpixel((0, 0))[1] == result.getpixel((0, 0))[2]
+    assert result.getpixel((0, 0)) != result.getpixel((1, 0))
 
 
 def test_manifest_dataset_forces_rgb_and_validates_checksum(tmp_path: Path) -> None:

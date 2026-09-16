@@ -34,16 +34,21 @@ def sha256_tree(root: Path) -> str:
 
 
 def source_paths(root: Path) -> tuple[Path, ...]:
+    configs = tuple(
+        sorted(
+            (root / "backend/training/configs").glob(
+                "ooc-cnn-mobilenet-v3-small-campaign-v2*.json"
+            )
+        )
+    )
     fixed = (
         root / "backend/training/__init__.py",
         root / "backend/experiments/ooc-cnn/kaggle-runtime-contract.json",
-        root
-        / "backend/training/configs/ooc-cnn-mobilenet-v3-small-campaign-v2.json",
         root / "data/splits/ooc-campaign-v2-lock.json",
         root / "data/splits/ooc-campaign-v2-train-validation.csv",
     )
     modules = tuple(sorted((root / "backend/training/ooc_cnn").glob("*.py")))
-    paths = fixed + modules
+    paths = fixed + configs + modules
     missing = [path for path in paths if not path.is_file() or path.is_symlink()]
     if missing:
         raise ValueError(f"Missing or linked source file: {missing[0]}")

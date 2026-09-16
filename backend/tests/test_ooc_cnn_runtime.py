@@ -30,6 +30,14 @@ def _write_json(path: Path, value: object) -> None:
             "ooc-cnn-mobilenet-v3-small-campaign-v2.json",
             "ooc-cnn-mobilenet-v3-small-campaign-v2",
         ),
+        (
+            "ooc-cnn-mobilenet-v3-small-campaign-v2-gray224.json",
+            "ooc-cnn-mobilenet-v3-small-campaign-v2-gray224",
+        ),
+        (
+            "ooc-cnn-mobilenet-v3-small-campaign-v2-gray448.json",
+            "ooc-cnn-mobilenet-v3-small-campaign-v2-gray448",
+        ),
     ),
 )
 def test_repository_cnn_config_is_self_consistent(
