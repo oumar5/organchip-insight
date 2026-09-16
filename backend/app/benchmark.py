@@ -3,11 +3,14 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import platform
 import resource
 import subprocess
 import sys
 import time
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -16,6 +19,152 @@ import numpy as np
 from PIL import Image
 
 from app.ml.pipeline import AdaptiveSegmentationAnalyzer
+
+PredictionFunction = Callable[
+    [Path, np.ndarray, np.ndarray], tuple[np.ndarray, dict[str, Any]]
+]
+
+
+@dataclass(frozen=True)
+class _EngineRuntime:
+    metadata: dict[str, Any]
+    predict: PredictionFunction
+    load_seconds: float
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _load_engine(config: dict[str, Any], project_root: Path) -> _EngineRuntime:
+    engine_id = config.get("engine")
+    load_started = time.perf_counter()
+
+    if engine_id == "adaptive-segmentation-v1":
+        analyzer = AdaptiveSegmentationAnalyzer()
+
+        def predict_adaptive(
+            _image_path: Path,
+            grayscale: np.ndarray,
+            _rgb: np.ndarray,
+        ) -> tuple[np.ndarray, dict[str, Any]]:
+            segmentation = analyzer.segment(grayscale)
+            return segmentation.mask, {
+                "threshold": round(segmentation.threshold, 6),
+                "polarity": segmentation.polarity,
+            }
+
+        return _EngineRuntime(
+            metadata={
+                "id": engine_id,
+                "version": analyzer.version,
+                "training_required": False,
+                "runtime": "native project environment",
+            },
+            predict=predict_adaptive,
+            load_seconds=time.perf_counter() - load_started,
+        )
+
+    if engine_id == "micro-sam-vit-b-lm-apg":
+        settings = config.get("engine_config", {})
+        required = {"model_type", "segmentation_mode", "device", "cache_dir"}
+        missing = sorted(required - settings.keys())
+        if missing:
+            raise ValueError(f"Missing µSAM engine settings: {', '.join(missing)}")
+
+        model_cache = project_root / settings["cache_dir"]
+        runtime_cache = project_root / settings.get(
+            "runtime_cache_dir", "data/cache/micro-sam-runtime"
+        )
+        matplotlib_cache = runtime_cache / "matplotlib"
+        numba_cache = runtime_cache / "numba"
+        for path in (model_cache, matplotlib_cache, numba_cache):
+            path.mkdir(parents=True, exist_ok=True)
+
+        os.environ["MICROSAM_CACHEDIR"] = str(model_cache)
+        os.environ["MPLCONFIGDIR"] = str(matplotlib_cache)
+        os.environ["NUMBA_CACHE_DIR"] = str(numba_cache)
+
+        try:
+            import micro_sam
+            import torch
+            from micro_sam.automatic_segmentation import (
+                automatic_instance_segmentation,
+                get_predictor_and_segmenter,
+            )
+        except ImportError as error:
+            raise RuntimeError(
+                "µSAM is not installed in this Python environment. "
+                "Use the isolated Conda environment documented in "
+                "backend/experiments/micro-sam/environment.yml."
+            ) from error
+
+        predictor, segmenter = get_predictor_and_segmenter(
+            model_type=settings["model_type"],
+            checkpoint=None,
+            device=settings["device"],
+            segmentation_mode=settings["segmentation_mode"],
+            is_tiled=bool(settings.get("is_tiled", False)),
+        )
+        generate_kwargs = settings.get("generate_kwargs", {})
+
+        def predict_micro_sam(
+            _image_path: Path,
+            _grayscale: np.ndarray,
+            rgb: np.ndarray,
+        ) -> tuple[np.ndarray, dict[str, Any]]:
+            instances = automatic_instance_segmentation(
+                predictor=predictor,
+                segmenter=segmenter,
+                input_path=rgb,
+                ndim=2,
+                verbose=False,
+                **generate_kwargs,
+            )
+            return instances > 0, {"instance_count": int(instances.max(initial=0))}
+
+        model_files: list[dict[str, Any]] = []
+        models_dir = model_cache / "models"
+        for filename in (
+            settings["model_type"],
+            f"{settings['model_type']}_decoder",
+        ):
+            path = models_dir / filename
+            if path.is_file():
+                model_files.append(
+                    {
+                        "path": str(path.relative_to(project_root)),
+                        "size_bytes": path.stat().st_size,
+                        "sha256": _sha256_file(path),
+                    }
+                )
+
+        return _EngineRuntime(
+            metadata={
+                "id": engine_id,
+                "version": micro_sam.__version__,
+                "training_required": False,
+                "model_type": settings["model_type"],
+                "segmentation_mode": settings["segmentation_mode"],
+                "device": settings["device"],
+                "is_tiled": bool(settings.get("is_tiled", False)),
+                "generate_kwargs": generate_kwargs,
+                "code_license": "MIT",
+                "weights_license": settings.get("weights_license"),
+                "weights_source": settings.get("weights_source"),
+                "weights": model_files,
+                "torch_version": torch.__version__,
+                "runtime": "isolated Conda environment",
+            },
+            predict=predict_micro_sam,
+            load_seconds=time.perf_counter() - load_started,
+        )
+
+    raise ValueError(f"Unsupported engine: {engine_id}")
 
 
 def _ratio(numerator: int, denominator: int) -> float:
@@ -114,8 +263,6 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     if config.get("schema_version") != 1:
         raise ValueError("Evaluation config must use schema_version 1")
-    if config.get("engine") != "adaptive-segmentation-v1":
-        raise ValueError(f"Unsupported engine: {config.get('engine')}")
 
     images_dir = project_root / config["images_dir"]
     masks_dir = project_root / config["masks_dir"]
@@ -123,7 +270,7 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
     if not image_paths:
         raise FileNotFoundError(f"No evaluation images found in {images_dir}")
 
-    analyzer = AdaptiveSegmentationAnalyzer()
+    runtime = _load_engine(config, project_root)
     overlay_dir = project_root / config["overlay_dir"] if config.get("overlay_dir") else None
     rows: list[dict[str, Any]] = []
     started = time.perf_counter()
@@ -141,18 +288,18 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
         truth = _load_truth(mask_path)
 
         image_started = time.perf_counter()
-        segmentation = analyzer.segment(grayscale)
+        prediction, prediction_metadata = runtime.predict(image_path, grayscale, rgb)
         elapsed = time.perf_counter() - image_started
-        metrics = foreground_metrics(segmentation.mask, truth)
+        prediction = prediction.astype(bool, copy=False)
+        metrics = foreground_metrics(prediction, truth)
         megapixels = float(grayscale.size / 1_000_000)
         total_pixels += grayscale.size
         row = {
             "image": image_path.name,
             **_rounded(metrics),
             "truth_foreground_fraction": round(float(truth.mean()), 6),
-            "predicted_foreground_fraction": round(float(segmentation.mask.mean()), 6),
-            "threshold": round(segmentation.threshold, 6),
-            "polarity": segmentation.polarity,
+            "predicted_foreground_fraction": round(float(prediction.mean()), 6),
+            **prediction_metadata,
             "megapixels": round(megapixels, 6),
             "inference_seconds": round(elapsed, 6),
             "seconds_per_megapixel": round(elapsed / megapixels, 6),
@@ -162,7 +309,7 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
         if overlay_dir:
             _save_error_overlay(
                 rgb,
-                segmentation.mask,
+                prediction,
                 truth,
                 overlay_dir / f"{image_path.stem}-errors.png",
             )
@@ -217,14 +364,14 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
         "config": str(config_path.relative_to(project_root)),
         "config_sha256": config_sha256,
         "dataset": config["dataset"],
-        "engine": {
-            "id": config["engine"],
-            "version": analyzer.version,
-            "training_required": False,
-        },
+        "engine": runtime.metadata,
         "methodology": {
             "ground_truth": "non-zero pixels in the official manual PNG masks",
             "aggregation": "macro is the unweighted mean across images; micro pools pixels",
+            "parameter_selection": config.get(
+                "parameter_selection",
+                "Parameters fixed before evaluation; no ground-truth tuning.",
+            ),
             "bootstrap": {
                 "unit": "image",
                 "iterations": iterations,
@@ -243,6 +390,7 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
             "median_f1": round(float(np.median([row["f1"] for row in rows])), 6),
         },
         "performance": {
+            "engine_load_seconds": round(runtime.load_seconds, 6),
             "total_megapixels": round(total_pixels / 1_000_000, 6),
             "total_seconds_including_overlays": round(total_seconds, 6),
             "mean_inference_seconds_per_image": round(
@@ -263,6 +411,7 @@ def evaluate_config(config_path: Path, project_root: Path) -> dict[str, Any]:
             "This external dataset is DIC microfluidics, not the challenge's OoC dataset.",
             "The 95% intervals resample images, not independent biological experiments.",
             "Historical values are contextual unless preprocessing and masks are identical.",
+            *config.get("warnings", []),
         ],
         "per_image": rows,
     }

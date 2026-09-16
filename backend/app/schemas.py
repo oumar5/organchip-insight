@@ -36,7 +36,7 @@ class AnalysisEngine(BaseModel):
     id: str
     name: str
     kind: Literal["zero-training", "pretrained", "trained"]
-    status: Literal["available", "planned", "license-review"]
+    status: Literal["available", "experimental", "planned", "license-review"]
     description: str
     training_required: bool
     limitations: list[str]

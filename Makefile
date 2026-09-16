@@ -1,4 +1,6 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit benchmark-bbbc019
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit benchmark-bbbc019 benchmark-bbbc019-microsam
+
+MICROSAM_ENV ?= $(CURDIR)/data/cache/microsam-env
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
@@ -32,6 +34,9 @@ data-audit:
 
 benchmark-bbbc019:
 	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json
+
+benchmark-bbbc019-microsam:
+	cd backend && conda run -p $(MICROSAM_ENV) python -m evaluation.evaluate --config backend/evaluation/configs/bbbc019-microfluidic-microsam-vit-b-lm-apg.json
 
 docker-up:
 	docker compose up --build

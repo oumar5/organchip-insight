@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-16",
+  "models": [
+    {
+      "id": "micro-sam-vit-b-lm",
+      "purpose": "Zero-shot light-microscopy instance segmentation",
+      "runtime": {
+        "package": "micro_sam",
+        "version": "1.8.14",
+        "code_license": "MIT",
+        "source": "https://github.com/computational-cell-analytics/micro-sam"
+      },
+      "weights": {
+        "model_type": "vit_b_lm",
+        "bioimageio_id": "diplomatic-bug",
+        "bioimageio_version": "1.2",
+        "zenodo_doi": "10.5281/zenodo.11103798",
+        "license": "CC-BY-4.0",
+        "encoder": {
+          "url": "https://uk1s3.embassy.ebi.ac.uk/public-datasets/bioimage.io/diplomatic-bug/1.2/files/vit_b.pt",
+          "size_bytes": 375023499,
+          "xxh128": "fe9252a29f3f4ea53c15a06de471e186",
+          "sha256": "ffe862fa5b58d78375506041faf0eb3927ced5b5391e8be383e6d7ac07aed924"
+        },
+        "decoder": {
+          "url": "https://uk1s3.embassy.ebi.ac.uk/public-datasets/bioimage.io/diplomatic-bug/1.2/files/vit_b_decoder.pt",
+          "size_bytes": 38393613,
+          "xxh128": "708b15ac620e235f90bb38612c4929ba",
+          "sha256": "3a1566aada52e24299286527ec60c966d213db86ee656c67439c71c1b4182c26"
+        }
+      },
+      "evaluation_policy": "Run APG defaults without inspecting BBBC019 masks for parameter selection."
+    }
+  ]
+}

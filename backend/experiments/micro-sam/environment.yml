@@ -1,0 +1,6 @@
+name: organchip-microsam
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - micro_sam=1.8.14

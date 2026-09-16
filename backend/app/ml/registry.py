@@ -34,11 +34,14 @@ MICRO_SAM_ENGINE = AnalysisEngine(
     id="micro-sam-pretrained",
     name="µSAM préentraîné",
     kind="pretrained",
-    status="planned",
-    description="Candidat permissif pour segmentation interactive et automatique en microscopie.",
+    status="experimental",
+    description=(
+        "Moteur spécialisé en microscopie, intégré dans un environnement de benchmark isolé."
+    ),
     training_required=False,
     limitations=[
-        "Intégration et benchmark sur le jeu de validation encore nécessaires.",
+        "Pas encore activé dans le chemin d'inférence de production.",
+        "Benchmark BBBC019 zéro-shot requis avant décision de promotion.",
         "Empreinte mémoire plus élevée que la baseline adaptative.",
     ],
 )

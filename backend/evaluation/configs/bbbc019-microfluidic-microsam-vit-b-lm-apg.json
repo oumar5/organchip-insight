@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "bbbc019-microfluidic-micro-sam-vit-b-lm-apg",
+  "dataset": {
+    "id": "BBBC019v2-Microfluidic",
+    "version": "2",
+    "archive_sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f",
+    "license": "CC-BY-3.0",
+    "source": "https://bbbc.broadinstitute.org/BBBC019"
+  },
+  "engine": "micro-sam-vit-b-lm-apg",
+  "engine_config": {
+    "model_type": "vit_b_lm",
+    "segmentation_mode": "apg",
+    "device": "cpu",
+    "is_tiled": false,
+    "cache_dir": "data/models/micro-sam",
+    "runtime_cache_dir": "data/cache/micro-sam-runtime",
+    "weights_license": "CC-BY-4.0",
+    "weights_source": "https://bioimage.io/#/?id=diplomatic-bug",
+    "generate_kwargs": {
+      "min_size": 25,
+      "center_distance_threshold": 0.5,
+      "boundary_distance_threshold": 0.5,
+      "foreground_threshold": 0.5,
+      "multimasking": false,
+      "batch_size": 32,
+      "nms_threshold": 0.9,
+      "intersection_over_min": false,
+      "refine_with_box_prompts": false
+    }
+  },
+  "parameter_selection": "Unmodified µSAM 1.8.14 APG defaults, fixed before viewing BBBC019 metrics; no mask-based tuning.",
+  "images_dir": "data/raw/bbbc019/Microfluidic/images",
+  "masks_dir": "data/raw/bbbc019/Microfluidic/manual",
+  "image_glob": "*.tif",
+  "mask_template": "{stem}_manual.png",
+  "bootstrap_iterations": 10000,
+  "seed": 20260916,
+  "output_json": "reports/benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.json",
+  "output_csv": "reports/benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.csv",
+  "overlay_dir": "reports/generated/bbbc019-microfluidic-microsam-vit-b-lm-apg/overlays",
+  "historical_references": [
+    {
+      "algorithm": "TScratch",
+      "mean_precision": 0.35,
+      "mean_recall": 0.79,
+      "mean_f1": 0.42,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "MultiCellSeg",
+      "mean_precision": 0.23,
+      "mean_recall": 0.98,
+      "mean_f1": 0.35,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "Topman",
+      "mean_precision": 0.47,
+      "mean_recall": 0.99,
+      "mean_f1": 0.63,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    }
+  ],
+  "warnings": [
+    "µSAM produces instance masks while BBBC019 provides a binary foreground mask; instances are merged before scoring.",
+    "This is a strict zero-shot run with package defaults, not a tuned estimate of best achievable µSAM performance."
+  ]
+}
