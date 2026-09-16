@@ -110,15 +110,37 @@ ne doivent être comparées ni aux baselines ci-dessus, ni à un résultat publi
 
 L'export ONNX opset 18 accepte les lots dynamiques 1, 2 et 3. Son écart absolu
 maximal avec PyTorch est `1,862645149230957e-09`, sous la tolérance `1e-4`.
-La validation complète avec poids locaux vérifiés doit encore être exécutée sur
-GPU Kaggle. Le protocole scientifique réserve un seul accès final au test,
-autorisé seulement après gel du modèle, du seuil, du checkpoint et de tous
-leurs hashes. Le verrou logiciel refuse une seconde tentative dans un workspace
-qui conserve son reçu ; ce reçu doit être archivé hors de tout workspace Kaggle
-éphémère, car le verrou n'est pas global entre deux environnements recréés.
+La validation complète avec poids ImageNet locaux vérifiés a ensuite été
+exécutée sur GPU Kaggle dans le run `kaggle-validation-campaign-v2`. Le meilleur
+checkpoint est celui de l'époque 3. À seuil fixe 0,5, il atteint une macro-F1 de
+`0,736102` et une balanced accuracy de `0,740072` sur 509 images de validation.
+Après sélection du seuil sur cette même validation, le seuil gelé `0,42` donne
+une macro-F1 de `0,762687` et une balanced accuracy de `0,761943`.
+
+La baisse continue de la perte train et la dégradation de la perte validation
+après l'époque 3 signalent un surapprentissage ; l'arrêt anticipé a été
+déclenché à l'époque 9 après six époques sans amélioration. Le test n'a pas été
+ouvert. La sélection gelée porte le SHA-256
+`852692b5d4ccc51573b0c94cb98f5c5603d4ed0f09ace2d38afbe803be5d6a9d`.
+
+L'export ONNX opset 18 passe la parité avec une erreur absolue maximale de
+`2,0265579223632812e-06`, sous la tolérance `1e-4`. Son instantané runtime porte
+toutefois le libellé ambigu `mode: smoke` alors qu'il réutilise le checkpoint
+de validation vérifié ; cette provenance doit être corrigée avant soumission.
+
+Avant tout accès final au test, il reste obligatoire d'auditer le bootstrap
+groupé et les tranches par mode, résolution, type cellulaire et jour, puis de
+réaliser les ablations pré-enregistrées. Le protocole scientifique réserve un
+seul accès final au test après cette revue. Le verrou logiciel refuse une
+seconde tentative dans un workspace qui conserve son reçu ; ce reçu devra être
+archivé hors de tout workspace Kaggle éphémère, car le verrou n'est pas global
+entre deux environnements recréés.
 
 Détails, artefacts et hashes :
 [retour d'expérience du smoke CNN](retours-experience/2026-09-16-pipeline-cnn-smoke.md).
+
+Validation GPU complète :
+[retour d'expérience de la campagne v2 Kaggle](retours-experience/2026-09-16-validation-cnn-kaggle-campagne-v2.md).
 
 ## Intervalles et répétabilité
 
