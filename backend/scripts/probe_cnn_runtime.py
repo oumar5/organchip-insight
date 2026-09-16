@@ -7,10 +7,45 @@ import hashlib
 import importlib.metadata
 import json
 import platform
+import stat
+import sys
 import tempfile
+import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def bootstrap_offline_wheel(wheel: Path, *, expected_sha256: str, target: Path) -> dict[str, Any]:
+    if sha256_file(wheel) != expected_sha256:
+        raise RuntimeError("Offline wheel checksum mismatch")
+    if target.exists():
+        raise RuntimeError("Offline wheel target already exists")
+    target.mkdir(parents=True)
+    with zipfile.ZipFile(wheel) as archive:
+        members = archive.infolist()
+        for member in members:
+            path = Path(member.filename)
+            mode = member.external_attr >> 16
+            if path.is_absolute() or ".." in path.parts or stat.S_ISLNK(mode) or not path.parts:
+                raise RuntimeError(f"Unsafe offline wheel member: {member.filename}")
+        archive.extractall(target)
+    sys.path.insert(0, str(target))
+    importlib.invalidate_caches()
+    return {
+        "wheel": wheel.name,
+        "sha256": expected_sha256,
+        "target": str(target),
+        "member_count": len(members),
+    }
 
 
 def inspect_versions(contract: dict[str, Any]) -> dict[str, Any]:
@@ -49,7 +84,13 @@ def inspect_versions(contract: dict[str, Any]) -> dict[str, Any]:
     return {"python": platform.python_version(), "packages": versions, "blockers": blockers}
 
 
-def probe_runtime(contract: dict[str, Any], output_directory: Path) -> dict[str, Any]:
+def probe_runtime(
+    contract: dict[str, Any],
+    output_directory: Path,
+    *,
+    offline_wheel: Path | None = None,
+    offline_wheel_sha256: str | None = None,
+) -> dict[str, Any]:
     output_directory.mkdir(parents=True, exist_ok=True)
     run_directory = Path(tempfile.mkdtemp(prefix="organchip-runtime-probe-", dir=output_directory))
     report: dict[str, Any] = {
@@ -65,6 +106,15 @@ def probe_runtime(contract: dict[str, Any], output_directory: Path) -> dict[str,
         "versions": inspect_versions(contract),
         "checks": {},
     }
+
+    if (offline_wheel is None) != (offline_wheel_sha256 is None):
+        raise ValueError("Offline wheel path and SHA-256 must be supplied together")
+    if offline_wheel is not None and offline_wheel_sha256 is not None:
+        report["offline_bootstrap"] = bootstrap_offline_wheel(
+            offline_wheel,
+            expected_sha256=offline_wheel_sha256,
+            target=run_directory / "offline-site-packages",
+        )
 
     def check(name, operation):
         try:
@@ -148,8 +198,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contract", type=Path, required=True)
     parser.add_argument("--output-directory", type=Path, required=True)
+    parser.add_argument("--offline-wheel", type=Path)
+    parser.add_argument("--offline-wheel-sha256")
     args = parser.parse_args()
-    probe_runtime(json.loads(args.contract.read_text(encoding="utf-8")), args.output_directory)
+    probe_runtime(
+        json.loads(args.contract.read_text(encoding="utf-8")),
+        args.output_directory,
+        offline_wheel=args.offline_wheel,
+        offline_wheel_sha256=args.offline_wheel_sha256,
+    )
 
 
 if __name__ == "__main__":

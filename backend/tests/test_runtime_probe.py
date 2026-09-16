@@ -2,6 +2,7 @@ import importlib.metadata
 import importlib.util
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -83,3 +84,31 @@ def test_probe_saves_report_even_when_functional_checks_fail(runtime, monkeypatc
     saved = list(tmp_path.glob("organchip-runtime-probe-*/runtime-report.json"))
     assert len(saved) == 1
     assert json.loads(saved[0].read_text()) == report
+
+
+def test_offline_wheel_bootstrap_checks_hash_and_members(tmp_path):
+    wheel = tmp_path / "dependency.whl"
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr("example_dependency.py", "VALUE = 42\n")
+    digest = probe.sha256_file(wheel)
+    result = probe.bootstrap_offline_wheel(
+        wheel, expected_sha256=digest, target=tmp_path / "site-packages"
+    )
+    assert result["member_count"] == 1
+    assert (tmp_path / "site-packages/example_dependency.py").read_text() == "VALUE = 42\n"
+    with pytest.raises(RuntimeError, match="checksum"):
+        probe.bootstrap_offline_wheel(
+            wheel, expected_sha256="0" * 64, target=tmp_path / "bad-target"
+        )
+
+
+def test_offline_wheel_bootstrap_rejects_traversal(tmp_path):
+    wheel = tmp_path / "unsafe.whl"
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr("../outside.py", "bad")
+    with pytest.raises(RuntimeError, match="Unsafe"):
+        probe.bootstrap_offline_wheel(
+            wheel,
+            expected_sha256=probe.sha256_file(wheel),
+            target=tmp_path / "site-packages",
+        )
