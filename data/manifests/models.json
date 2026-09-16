@@ -31,6 +31,40 @@
         }
       },
       "evaluation_policy": "Run APG defaults without inspecting BBBC019 masks for parameter selection."
+    },
+    {
+      "id": "organchip-image-quality-cnn-campaign-v2",
+      "purpose": "Image-quality classification candidate for OrganChip Insight",
+      "status": "validation-frozen; Kaggle model container has no variation yet",
+      "architecture": {
+        "name": "mobilenet_v3_small",
+        "input_size": 224,
+        "initialization": "torchvision ImageNet state_dict",
+        "full_backbone_trainable": true
+      },
+      "validation": {
+        "run_id": "kaggle-validation-campaign-v2",
+        "split_id": "ooc-grouped-by-temporal-campaign-v2",
+        "selected_threshold": 0.42,
+        "macro_f1": 0.7626872279489258,
+        "balanced_accuracy": 0.7619427000343675,
+        "roc_auc": 0.7996375792795327,
+        "test_manifest_opened": false
+      },
+      "kaggle": {
+        "model_id": 758515,
+        "model_slug": "oumarbenlol/organchip-image-quality-cnn",
+        "private": true,
+        "variation_status": "blocked-pending-license-decision",
+        "artifact_dataset_id": 12053935,
+        "artifact_dataset_slug": "oumarbenlol/organchip-cnn-validation-artifacts",
+        "artifact_dataset_version": 1
+      },
+      "license": {
+        "status": "pending-explicit-decision",
+        "dataset_declared_license": "CC-BY-4.0",
+        "initial_weights_declared_license": "BSD-3-Clause"
+      }
     }
   ]
 }

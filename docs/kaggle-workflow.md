@@ -50,18 +50,27 @@ Le notebook refuse un smoke ou une validation si
 ## Conservation des sorties
 
 La cellule `archive` du notebook appelle le CLI partagé après le gel de la
-validation. Elle crée :
+validation. Le nom est dérivé du `RUN_ID` :
 
 ```text
-/kaggle/working/organchip-cnn-validation-campaign-v2-artifacts-v1.zip
+/kaggle/working/{RUN_ID}-artifacts.zip
 ```
 
-Le ZIP est déterministe : ordre et dates internes fixes, dossier racine unique,
-permissions normalisées et `artifact-manifest.json` contenant taille et SHA-256
-de chaque fichier. Il contient uniquement le dossier du run — checkpoints,
+Le ZIP est déterministe dans un même environnement : ordre et dates internes
+fixes, dossier racine unique, permissions normalisées et
+`artifact-manifest.json` contenant taille et SHA-256 de chaque fichier. Le
+manifeste lit le `run_id` dans le rapport scientifique et enregistre aussi le
+commit source, le SHA-256 du bundle, la configuration et le rapport racine. Son
+SHA-256 et les empreintes des fichiers sont l'identité canonique ; le hash du
+ZIP est seulement un contrôle de transport, car DEFLATE peut varier entre
+versions de zlib. Il contient uniquement le dossier du run — checkpoints,
 rapports, prédictions, figures, historique, gel et export ONNX — et jamais les
 images sous `/kaggle/input`. Le CLI refuse les liens symboliques, un ZIP vide,
 une destination située dans le run et l'écrasement silencieux d'une archive.
+
+En `final-eval`, le reçu d'accès test est d'abord copié dans le dossier du run,
+puis le rapport final, les prédictions, la figure et ce reçu sont archivés sous
+le même contrat. L'archive finale n'est donc plus une opération manuelle séparée.
 
 Procédure obligatoire :
 
@@ -76,6 +85,17 @@ Procédure obligatoire :
    pour le bundle complet de preuve ;
 7. enregistrer leurs identifiants, versions et SHA-256 dans le REX et le registre
    de modèles.
+
+Commande de secours depuis une console séparée si le noyau du notebook ne
+répond plus :
+
+```bash
+make cnn-archive \
+  CNN_RUN_DIRECTORY=data/experiments/ooc-cnn/ID_DU_RUN \
+  CNN_ARCHIVE_OUTPUT=/kaggle/working/ID_DU_RUN-artifacts.zip \
+  CNN_SOURCE_BUNDLE_SHA256=SHA256_DU_BUNDLE \
+  CNN_SOURCE_COMMIT=COMMIT_COMPLET
+```
 
 GitHub reste la source du code, du notebook **propre et non exécuté**, des
 configurations, de la documentation et des manifests légers. Kaggle Models

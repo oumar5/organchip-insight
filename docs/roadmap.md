@@ -39,12 +39,13 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] baseline de confondants mode/résolution avant CNN ;
 - [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
 - [x] smoke CPU avec hashes d'images vérifiés et export ONNX contrôlé ;
-- [ ] exécution de la sonde Kaggle prête (`notebooks/ooc-runtime-probe-kaggle.ipynb`)
-  avec GPU, puis extension éventuelle du contrat runtime après smoke local ;
-- [ ] protocole d'ablation CNN pré-enregistré (couleur/gris, résolution,
-  seeds, budget) testé sur train/validation ;
-- [ ] validation CNN complète sur GPU Kaggle avec tranches par mode,
-  résolution, lignée et jour, métrique primaire par mode ;
+- [x] exécution de la sonde Kaggle et validation du runtime hors ligne ;
+- [x] protocole d'ablation CNN pré-enregistré (couleur/gris, résolution,
+  seed, budget et règle d'arrêt) ;
+- [x] validation CNN complète sur GPU Kaggle avec tranches par mode,
+  résolution, lignée et jour ;
+- [ ] recalcul des comparateurs majorité, mode/résolution et handcrafted sur v2 ;
+- [ ] exécution des ablations A/B puis C conditionnelle sur train/validation ;
 - [x] audit structurel des campagnes (3 jours, lignée commune) : 29 campagnes,
   270 images test exposées ;
 - [ ] décision et génération éventuelle du manifeste v2 avec paramètres figés,

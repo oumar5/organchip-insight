@@ -87,6 +87,8 @@ def _parser() -> argparse.ArgumentParser:
     )
     archive.add_argument("--run-directory", type=Path, required=True)
     archive.add_argument("--output", type=Path, required=True)
+    archive.add_argument("--source-bundle-sha256", required=True)
+    archive.add_argument("--source-commit", required=True)
     archive.add_argument("--archive-root")
     return parser
 
@@ -263,6 +265,13 @@ def _run_final(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
 
 def _run_export(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[str, Any]:
     _device, runtime = _contract(config, RunMode.SMOKE, "cpu")
+    contract_validation_mode = runtime.pop("mode")
+    runtime = {
+        **runtime,
+        "contract_validation_mode": contract_validation_mode,
+        "operation": "onnx-export",
+        "execution_device": "cpu",
+    }
     return export_checkpoint(
         project_root=PROJECT_ROOT,
         config=config,
@@ -281,6 +290,8 @@ def main() -> None:
         output = create_artifact_archive(
             run_directory=arguments.run_directory,
             output_path=arguments.output,
+            source_bundle_sha256=arguments.source_bundle_sha256,
+            source_commit=arguments.source_commit,
             archive_root=arguments.archive_root,
         )
         print(json.dumps(output, indent=2, ensure_ascii=False, sort_keys=True))

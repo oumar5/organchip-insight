@@ -34,17 +34,24 @@ def _source_fixture(root):
 def test_source_bundle_is_allowlisted_and_deterministic(tmp_path):
     root = tmp_path / "project"
     _source_fixture(root)
-    first = stage.write_bundle(output=tmp_path / "first", root=root)
-    second = stage.write_bundle(output=tmp_path / "second", root=root)
+    source_commit = "a" * 40
+    first = stage.write_bundle(
+        output=tmp_path / "first", root=root, source_git_commit=source_commit
+    )
+    second = stage.write_bundle(
+        output=tmp_path / "second", root=root, source_git_commit=source_commit
+    )
 
     assert first["source_tree_sha256"] == second["source_tree_sha256"]
     assert first["archive"]["sha256"] == second["archive"]["sha256"]
+    assert first["source_commit"] == source_commit
     assert first["privacy"] == "private"
     assert json.loads((tmp_path / "first/upload-manifest.json").read_text()) == first
     with zipfile.ZipFile(tmp_path / "first/organchip-insight-source-campaign-v2.zip") as archive:
         names = archive.namelist()
         assert "organchip-insight/backend/training/ooc_cnn/cli.py" in names
         assert not any("ooc-campaign-v2-test.csv" in name for name in names)
+        assert not any("ooc-image-inventory-2026-09-16.csv" in name for name in names)
         assert not any("data/raw" in name for name in names)
         manifest = json.loads(archive.read("source-bundle-manifest.json"))
         assert manifest["source_tree_sha256"] == first["source_tree_sha256"]
@@ -54,10 +61,14 @@ def test_source_bundle_refuses_overwrite_and_missing_inputs(tmp_path):
     root = tmp_path / "project"
     _source_fixture(root)
     output = tmp_path / "bundle"
-    stage.write_bundle(output=output, root=root)
+    stage.write_bundle(output=output, root=root, source_git_commit="a" * 40)
     with pytest.raises(FileExistsError, match="overwrite"):
-        stage.write_bundle(output=output, root=root)
+        stage.write_bundle(
+            output=output, root=root, source_git_commit="a" * 40
+        )
 
     (root / "data/splits/ooc-campaign-v2-lock.json").unlink()
     with pytest.raises(ValueError, match="Missing"):
-        stage.write_bundle(output=tmp_path / "missing", root=root)
+        stage.write_bundle(
+            output=tmp_path / "missing", root=root, source_git_commit="a" * 40
+        )

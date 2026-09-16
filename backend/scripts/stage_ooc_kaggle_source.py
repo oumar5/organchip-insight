@@ -5,13 +5,16 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
+import subprocess
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXED_ZIP_TIME = (2026, 9, 16, 0, 0, 0)
 DATASET_ID = "oumarbenlol/organchip-insight-source-campaign-v2"
+COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}(?:[0-9a-f]{24})?$")
 
 
 def sha256_file(path: Path) -> str:
@@ -38,7 +41,6 @@ def source_paths(root: Path) -> tuple[Path, ...]:
         / "backend/training/configs/ooc-cnn-mobilenet-v3-small-campaign-v2.json",
         root / "data/splits/ooc-campaign-v2-lock.json",
         root / "data/splits/ooc-campaign-v2-train-validation.csv",
-        root / "reports/ooc-image-inventory-2026-09-16.csv",
     )
     modules = tuple(sorted((root / "backend/training/ooc_cnn").glob("*.py")))
     paths = fixed + modules
@@ -48,9 +50,37 @@ def source_paths(root: Path) -> tuple[Path, ...]:
     return paths
 
 
-def write_bundle(*, output: Path, root: Path = ROOT) -> dict[str, object]:
+def source_commit(root: Path) -> str:
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=root,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        dirty = subprocess.check_output(
+            ["git", "status", "--porcelain=v1", "--untracked-files=no"],
+            cwd=root,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise ValueError("Source bundle requires an available Git commit") from error
+    if not COMMIT_PATTERN.fullmatch(commit):
+        raise ValueError("Source bundle Git commit is invalid")
+    if dirty:
+        raise ValueError("Source bundle refuses tracked changes outside the Git commit")
+    return commit
+
+
+def write_bundle(
+    *, output: Path, root: Path = ROOT, source_git_commit: str | None = None
+) -> dict[str, object]:
     if output.exists():
         raise FileExistsError(f"Refusing to overwrite staging directory: {output}")
+    commit = source_git_commit or source_commit(root)
+    if not COMMIT_PATTERN.fullmatch(commit):
+        raise ValueError("Source bundle Git commit is invalid")
     output.mkdir(parents=True)
     project = output / "organchip-insight"
     records: list[dict[str, object]] = []
@@ -84,6 +114,7 @@ def write_bundle(*, output: Path, root: Path = ROOT) -> dict[str, object]:
         "dataset_id": DATASET_ID,
         "privacy": "private",
         "project_directory": "organchip-insight",
+        "source_commit": commit,
         "source_tree_sha256": tree_hash,
         "file_count": len(records),
         "files": records,

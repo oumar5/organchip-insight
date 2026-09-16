@@ -203,3 +203,26 @@ volontairement sans variation ni poids : Kaggle impose une licence au niveau de
 la variation, et cette décision ne doit pas être inventée. Après choix de la
 licence, les variantes `onnx` et `pytorch` recevront chacune une version issue
 de ce bundle vérifié. Aucun poids, checkpoint ou ZIP n'est commité dans GitHub.
+
+## Lecture par mode d'acquisition
+
+Le rapport archivé contient une différence structurante qui doit gouverner les
+expériences suivantes :
+
+| Mode | Bad / good | Balanced accuracy | ROC-AUC |
+| --- | ---: | ---: | ---: |
+| L, 2056×1542 | 152 / 62 | 0,7729 | 0,8521 |
+| RGB, 2048×1536 | 75 / 220 | 0,6315 | 0,6309 |
+
+Le modèle apprend donc un signal utile dans la tranche L, alors que sa
+discrimination RGB reste faible. Contrôler le mode empêche le raccourci global
+mode/résolution d'expliquer à lui seul le score L, sans démontrer pour autant
+l'indépendance biologique : d'autres facteurs de campagne peuvent rester
+corrélés au label. La prochaine décision se prend sur les comparateurs v2 puis
+sur les ablations pré-enregistrées dans
+`docs/protocole-classification-campagne-v2.md`, jamais sur le test.
+
+Les corrections appliquées avant le prochain run sont : nom d'archive dérivé du
+`RUN_ID`, identifiant lu dans le rapport, provenance commit/bundle/config dans le
+manifeste, étiquette explicite `onnx-export`, archivage du reçu final et retrait
+de l'inventaire complet contenant les lignes test du bundle source.

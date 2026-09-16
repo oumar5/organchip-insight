@@ -14,8 +14,8 @@
     "train_validation_sha256": "b191947b892bfa7e9442aca0051c3b2246343a289715073fd17eefabcf8ea4a3"
   },
   "provenance": {
-    "inventory_path": "reports/ooc-image-inventory-2026-09-16.csv",
-    "inventory_sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0",
+    "inventory_path": "data/splits/ooc-campaign-v2-train-validation.csv",
+    "inventory_sha256": "b191947b892bfa7e9442aca0051c3b2246343a289715073fd17eefabcf8ea4a3",
     "runtime_contract_path": "backend/experiments/ooc-cnn/kaggle-runtime-contract.json",
     "runtime_contract_sha256": "3e8d1d34fdd7e853037ef2e8c3435ea2ef769a9f6bd5fffee03fec6c08d241ea"
   },

@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-protocol-test cnn-smoke cnn-export cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -8,6 +8,10 @@ CNN_CHECKPOINT_SHA256 ?=
 CNN_SELECTION_REPORT ?=
 CNN_SELECTION_REPORT_SHA256 ?=
 CNN_EXPORT_DIR ?=
+CNN_RUN_DIRECTORY ?=
+CNN_ARCHIVE_OUTPUT ?=
+CNN_SOURCE_BUNDLE_SHA256 ?=
+CNN_SOURCE_COMMIT ?=
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
@@ -67,6 +71,13 @@ cnn-export:
 	@test -n "$(CNN_SELECTION_REPORT_SHA256)" || (echo "CNN_SELECTION_REPORT_SHA256 is required"; exit 2)
 	@test -n "$(CNN_EXPORT_DIR)" || (echo "CNN_EXPORT_DIR is required"; exit 2)
 	PYTHONPATH=backend $(CNN_PYTHON) -m training.ooc_cnn.cli export --checkpoint "$(CNN_CHECKPOINT)" --checkpoint-sha256 "$(CNN_CHECKPOINT_SHA256)" --selection-report "$(CNN_SELECTION_REPORT)" --selection-report-sha256 "$(CNN_SELECTION_REPORT_SHA256)" --output-directory "$(CNN_EXPORT_DIR)"
+
+cnn-archive:
+	@test -n "$(CNN_RUN_DIRECTORY)" || (echo "CNN_RUN_DIRECTORY is required"; exit 2)
+	@test -n "$(CNN_ARCHIVE_OUTPUT)" || (echo "CNN_ARCHIVE_OUTPUT is required"; exit 2)
+	@test -n "$(CNN_SOURCE_BUNDLE_SHA256)" || (echo "CNN_SOURCE_BUNDLE_SHA256 is required"; exit 2)
+	@test -n "$(CNN_SOURCE_COMMIT)" || (echo "CNN_SOURCE_COMMIT is required"; exit 2)
+	PYTHONPATH=backend uv run --project backend python -m training.ooc_cnn.cli archive --run-directory "$(CNN_RUN_DIRECTORY)" --output "$(CNN_ARCHIVE_OUTPUT)" --source-bundle-sha256 "$(CNN_SOURCE_BUNDLE_SHA256)" --source-commit "$(CNN_SOURCE_COMMIT)"
 
 cnn-notebook-check:
 	uv run --project backend python backend/scripts/check_ooc_cnn_notebook.py
