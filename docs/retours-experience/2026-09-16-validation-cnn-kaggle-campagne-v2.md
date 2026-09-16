@@ -130,11 +130,12 @@ data/experiments/ooc-cnn/kaggle-validation-campaign-v2/onnx/export-report.json
 SHA-256 72357dc8391978630bc3db7c7ebe58440341e17daaa916a74c43a7e062ec5b5a
 ```
 
-Point à corriger avant soumission : l'instantané runtime du rapport d'export
-porte `mode: smoke` et `requested_device: cpu`. L'export réutilise bien le
-checkpoint de validation vérifié et la parité est correcte, mais ce libellé
-rend la provenance ambiguë. Il faut faire porter au rapport d'export le mode de
-la sélection source, sans réentraîner le modèle.
+Le rapport historique archivé porte `mode: smoke` et `requested_device: cpu` :
+l'export réutilise bien le checkpoint de validation vérifié et sa parité est
+correcte, mais ce libellé est ambigu. Le code a été corrigé pour les prochains
+exports avec `operation: onnx-export`, `execution_device: cpu` et un champ
+séparé `contract_validation_mode`. L'artefact historique reste volontairement
+inchangé afin de conserver son hash et sa traçabilité.
 
 ## Décision
 

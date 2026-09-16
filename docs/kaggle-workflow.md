@@ -44,6 +44,15 @@ Chemins montés retenus pour la validation campagne v2 :
 /kaggle/input/datasets/oumarbenlol/organchip-cnn-offline-resources-v1/resources
 ```
 
+La version source privée publiée après le durcissement de provenance est la
+version 5. Son manifeste logique porte le SHA-256
+`2fef17b49d73c5b8480bca4afeb97e5259a61871baeab7559dbcaf4b4b8ffcba` et le
+commit source complet `acc92e96afad74c048c5764de6db0dc864538c4b`. Le ZIP de
+transport porte le SHA-256
+`05d3fd7faeb0f3858aa5fa5db824f17acb3c73ab42a8ce7a7e9fd926b111701a`.
+Le notebook vérifie le manifeste logique et le commit avant toute reprise ou
+nouvelle exécution.
+
 Le notebook refuse un smoke ou une validation si
 `/kaggle/input/datasets/oumarbenlol/organchip-frozen-test-v2-zip` est présent.
 
@@ -129,12 +138,11 @@ du rapport final. Si l'interruption arrive au milieu d'une époque, seule cette
 époque est recommencée.
 
 Ne jamais envoyer le dépôt entier : exclure `.git`, `.env`, clés, caches,
-expériences personnelles et artefacts de test. L'outil de staging doit utiliser
-une liste autorisée de fichiers, vérifier les hashes et vérifier l'absence des
-labels/rapports test dans le bundle de sélection. Le filtre de copie actuel du
-notebook ne suffit pas à garantir cela : l'inventaire historique complet et
-certains rapports contiennent des informations test. Il faudra adapter la
-provenance à un inventaire autorisé, sans casser silencieusement les hashes v1.
+expériences personnelles et artefacts de test. L'outil de staging utilise une
+liste autorisée de fichiers, vérifie les hashes et exclut l'inventaire historique
+complet qui contient des lignes test. La provenance des prochains runs repose
+sur le manifeste train/validation v2 autorisé. Les hashes des anciens runs
+restent inchangés et continuent d'identifier leurs bundles historiques.
 
 Créer un dataset dans son compte ne signifie pas qu'il contient des « données
 personnelles » : les images OoC ici viennent du dataset de recherche déjà acquis.
