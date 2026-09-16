@@ -197,6 +197,11 @@ def check_notebook(path: Path) -> None:
             "sys.path.insert(0, str(target))",
             'importlib.metadata.version("onnxruntime")',
             "ONNXRUNTIME_BOOTSTRAP = bootstrap_offline_wheel(",
+            "python_paths = [backend_path, str(OFFLINE_SITE_PACKAGES)]",
+            'environment["PYTHONPATH"] = os.pathsep.join(python_paths)',
+            "check=False",
+            "print(completed.stderr, file=sys.stderr)",
+            "completed.check_returncode()",
         ),
         "workspace-staging cell",
     )
