@@ -44,7 +44,7 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   seed, budget et règle d'arrêt) ;
 - [x] validation CNN complète sur GPU Kaggle avec tranches par mode,
   résolution, lignée et jour ;
-- [ ] recalcul des comparateurs majorité, mode/résolution et handcrafted sur v2 ;
+- [x] recalcul des comparateurs majorité, mode/résolution et handcrafted sur v2 ;
 - [ ] exécution des ablations A/B puis C conditionnelle sur train/validation ;
 - [x] audit structurel des campagnes (3 jours, lignée commune) : 29 campagnes,
   270 images test exposées ;

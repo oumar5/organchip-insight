@@ -36,6 +36,15 @@ sélectionné, puis les tranches L/RGB. Cette étape décide si le CNN apporte u
 information au-delà des métadonnées d'acquisition. Les scores v1 restent du
 contexte et ne sont jamais comparés numériquement au CNN v2.
 
+Statut : **terminé** au commit `5667633`. Au seuil sélectionné sur validation,
+le raccourci mode+résolution atteint une macro-F1 de `0,7260`, une balanced
+accuracy de `0,7249` et une ROC-AUC de `0,7249`. Le handcrafted sélectionné
+atteint respectivement `0,6876`, `0,6867` et `0,7074`. Le CNN les dépasse sur la
+même validation (`0,7627`, `0,7619`, `0,7996`) et dépasse aussi leur balanced
+accuracy dans chaque mode. Cette comparaison autorise les ablations, mais elle
+ne remplace pas le test final et ne rend pas le CNN actuel éligible : sa tranche
+RGB reste à `0,6315`, sous le plancher pré-enregistré de `0,65`.
+
 ## Étape 2 — ablations GPU bornées
 
 Paramètres communs : split v2 inchangé, poids initiaux identiques, seed
