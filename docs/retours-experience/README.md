@@ -16,6 +16,7 @@ a été prise.
 - [Audit exhaustif du split OoC et des raccourcis — 16 septembre 2026](2026-09-16-audit-split-ooc-et-confondants.md)
 - [Pipeline CNN et smoke CPU — 16 septembre 2026](2026-09-16-pipeline-cnn-smoke.md)
 - [Validation CNN GPU Kaggle, campagne v2 — 16 septembre 2026](2026-09-16-validation-cnn-kaggle-campagne-v2.md)
+- [Ablations CNN A/B, campagne v2 — 17 septembre 2026](2026-09-17-ablations-cnn-campagne-v2.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles
