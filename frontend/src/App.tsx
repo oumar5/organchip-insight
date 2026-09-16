@@ -3,28 +3,63 @@ import type { FormEvent } from "react";
 import {
   analyzeExperiment,
   createExperiment,
+  getExperimentResults,
   listExperiments,
+  listInferenceEngines,
   uploadImages,
 } from "./api/client";
-import type { AnalysisResult, Experiment, ExperimentCreate } from "./types";
+import type {
+  AnalysisEngine,
+  AnalysisResult,
+  Experiment,
+  ExperimentCreate,
+  ExperimentStatus,
+} from "./types";
 
 const initialForm: ExperimentCreate = {
   name: "",
   description: "",
-  control_label: "Control",
-  treatment_label: "Treatment",
+  control_label: "Contrôle",
+  treatment_label: "Traitement",
 };
 
-function formatMetric(key: string): string {
-  return key
-    .split("_")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
+const metricLabels: Record<string, string> = {
+  object_count_total: "Objets détectés",
+  objects_per_image: "Objets / image",
+  mean_foreground_fraction: "Surface segmentée",
+  mean_object_area: "Surface moyenne",
+  mean_intensity: "Intensité moyenne",
+  mean_contrast: "Contraste moyen",
+  quality_score: "Score qualité",
+};
+
+const statusLabels: Record<ExperimentStatus, string> = {
+  draft: "Brouillon",
+  ready: "Prêt",
+  analyzing: "Analyse",
+  complete: "Terminé",
+  failed: "Échec",
+};
+
+function formatMetric(key: string, value: number): string {
+  if (key === "mean_foreground_fraction" || key === "quality_score") {
+    return `${(value * 100).toFixed(1)} %`;
+  }
+  if (key === "object_count_total") {
+    return Math.round(value).toLocaleString("fr-FR");
+  }
+  return value.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+}
+
+function readableFilename(filename: string): string {
+  return filename.replace(/^[a-f0-9]{12}-/, "");
 }
 
 export default function App() {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [engines, setEngines] = useState<AnalysisEngine[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedEngineId, setSelectedEngineId] = useState("adaptive-segmentation-v1");
   const [form, setForm] = useState<ExperimentCreate>(initialForm);
   const [files, setFiles] = useState<FileList | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -35,18 +70,32 @@ export default function App() {
     () => experiments.find((experiment) => experiment.id === selectedId) ?? null,
     [experiments, selectedId],
   );
+  const selectedEngine = useMemo(
+    () => engines.find((engine) => engine.id === selectedEngineId) ?? null,
+    [engines, selectedEngineId],
+  );
 
-  async function refreshExperiments() {
+  async function refreshExperiments(preferredId?: string) {
     const items = await listExperiments();
     setExperiments(items);
-    if (!selectedId && items.length > 0) {
-      setSelectedId(items[0].id);
-    }
+    setSelectedId((currentId) => preferredId ?? currentId ?? items[0]?.id ?? null);
   }
 
   useEffect(() => {
-    refreshExperiments().catch((requestError: Error) => setError(requestError.message));
+    Promise.all([refreshExperiments(), listInferenceEngines().then(setEngines)]).catch(
+      (requestError: Error) => setError(requestError.message),
+    );
   }, []);
+
+  useEffect(() => {
+    if (!selectedId) {
+      setResult(null);
+      return;
+    }
+    getExperimentResults(selectedId)
+      .then(setResult)
+      .catch(() => setResult(null));
+  }, [selectedId]);
 
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
@@ -55,9 +104,8 @@ export default function App() {
     try {
       const created = await createExperiment(form);
       setForm(initialForm);
-      await refreshExperiments();
-      setSelectedId(created.id);
       setResult(null);
+      await refreshExperiments(created.id);
     } catch (requestError) {
       setError((requestError as Error).message);
     } finally {
@@ -66,18 +114,27 @@ export default function App() {
   }
 
   async function handleAnalyze() {
-    if (!selectedExperiment || !files || files.length === 0) {
-      setError("Choose an experiment and at least one microscopy image.");
+    if (!selectedExperiment) {
+      setError("Créez ou sélectionnez une expérience avant l’analyse.");
+      return;
+    }
+    const hasNewFiles = Boolean(files?.length);
+    if (!hasNewFiles && selectedExperiment.image_count === 0) {
+      setError("Ajoutez au moins une image de microscopie.");
       return;
     }
 
     setBusy(true);
     setError(null);
     try {
-      await uploadImages(selectedExperiment.id, files);
-      const analysis = await analyzeExperiment(selectedExperiment.id);
+      if (files?.length) {
+        await uploadImages(selectedExperiment.id, files);
+      }
+      const analysis = await analyzeExperiment(selectedExperiment.id, selectedEngineId);
       setResult(analysis);
-      await refreshExperiments();
+      setFiles(null);
+      await refreshExperiments(selectedExperiment.id);
+      document.querySelector("#results")?.scrollIntoView({ behavior: "smooth" });
     } catch (requestError) {
       setError((requestError as Error).message);
     } finally {
@@ -86,177 +143,317 @@ export default function App() {
   }
 
   return (
-    <main>
-      <header className="hero">
-        <div className="brand-mark" aria-hidden="true">
-          OI
-        </div>
-        <div>
-          <p className="eyebrow">AI4S · Reproducible microscopy intelligence</p>
-          <h1>OrganChip Insight</h1>
-          <p className="hero-copy">
-            Turn microscopy images into traceable quality signals, phenotype evidence and
-            experiment-ready reports.
-          </p>
-        </div>
-        <div className="status-pill">
-          <span /> Local-first
-        </div>
-      </header>
-
-      {error && <div className="alert">{error}</div>}
-
-      <section className="workspace-grid">
-        <article className="panel create-panel">
-          <div className="panel-heading">
-            <div>
-              <p className="step">01</p>
-              <h2>Define the experiment</h2>
-            </div>
-            <span className="panel-tag">Metadata</span>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-mark" aria-hidden="true">
+            <span />
           </div>
+          <div>
+            <strong>OrganChip</strong>
+            <small>Insight</small>
+          </div>
+        </div>
 
-          <form onSubmit={handleCreate}>
-            <label>
-              Experiment name
-              <input
-                required
-                minLength={2}
-                value={form.name}
-                onChange={(event) => setForm({ ...form, name: event.target.value })}
-                placeholder="Drug response pilot"
-              />
-            </label>
-            <label>
-              Scientific objective
-              <textarea
-                value={form.description}
-                onChange={(event) => setForm({ ...form, description: event.target.value })}
-                placeholder="Compare cellular morphology after treatment..."
-              />
-            </label>
-            <div className="two-columns">
-              <label>
-                Control
-                <input
-                  value={form.control_label}
-                  onChange={(event) => setForm({ ...form, control_label: event.target.value })}
-                />
-              </label>
-              <label>
-                Treatment
-                <input
-                  value={form.treatment_label}
-                  onChange={(event) => setForm({ ...form, treatment_label: event.target.value })}
-                />
-              </label>
-            </div>
-            <button className="primary-button" disabled={busy} type="submit">
-              Create experiment
+        <nav aria-label="Navigation principale">
+          <a className="nav-item active" href="#workspace">
+            <span>01</span> Expérience
+          </a>
+          <a className="nav-item" href="#inference">
+            <span>02</span> Inférence
+          </a>
+          <a className="nav-item" href="#results">
+            <span>03</span> Résultats
+          </a>
+        </nav>
+
+        <div className="sidebar-section">
+          <div className="sidebar-heading">
+            <span>Expériences</span>
+            <span className="count-badge">{experiments.length}</span>
+          </div>
+          <div className="experiment-list">
+            {experiments.length === 0 && (
+              <p className="sidebar-empty">Votre première expérience apparaîtra ici.</p>
+            )}
+            {experiments.map((experiment) => (
+              <button
+                className={`experiment-item ${experiment.id === selectedId ? "selected" : ""}`}
+                key={experiment.id}
+                onClick={() => setSelectedId(experiment.id)}
+                type="button"
+              >
+                <span className={`status-dot ${experiment.status}`} />
+                <span className="experiment-copy">
+                  <strong>{experiment.name}</strong>
+                  <small>
+                    {experiment.image_count} image{experiment.image_count > 1 ? "s" : ""}
+                  </small>
+                </span>
+                <small>{statusLabels[experiment.status]}</small>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="trust-card">
+          <span className="trust-icon">✓</span>
+          <div>
+            <strong>Données locales</strong>
+            <p>Les images restent dans votre environnement.</p>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <header className="topbar">
+          <div>
+            <p className="eyebrow">AI for life science · espace de travail</p>
+            <h1>Transformer les images en preuves mesurables.</h1>
+          </div>
+          <div className="system-status">
+            <span /> Inférence disponible
+          </div>
+        </header>
+
+        {error && (
+          <div className="alert" role="alert">
+            <strong>Action interrompue</strong>
+            <span>{error}</span>
+            <button onClick={() => setError(null)} type="button" aria-label="Fermer">
+              ×
             </button>
-          </form>
-        </article>
-
-        <article className="panel analysis-panel">
-          <div className="panel-heading">
-            <div>
-              <p className="step">02</p>
-              <h2>Analyze microscopy</h2>
-            </div>
-            <span className="panel-tag">Image QC baseline</span>
           </div>
+        )}
 
-          <label>
-            Active experiment
-            <select
-              value={selectedId ?? ""}
-              onChange={(event) => {
-                setSelectedId(event.target.value);
-                setResult(null);
-              }}
-            >
-              <option value="" disabled>
-                Select an experiment
-              </option>
-              {experiments.map((experiment) => (
-                <option key={experiment.id} value={experiment.id}>
-                  {experiment.name}
-                </option>
-              ))}
-            </select>
-          </label>
+        <section className="intro-strip" aria-label="Résumé du workflow">
+          <div>
+            <span className="intro-index">01</span>
+            <p><strong>Définir</strong><small>Contexte et groupes</small></p>
+          </div>
+          <i />
+          <div>
+            <span className="intro-index">02</span>
+            <p><strong>Segmenter</strong><small>Sans entraînement</small></p>
+          </div>
+          <i />
+          <div>
+            <span className="intro-index">03</span>
+            <p><strong>Vérifier</strong><small>Overlays et métriques</small></p>
+          </div>
+          <div className="evidence-chip">Exploratoire · traçable</div>
+        </section>
 
-          <label className="drop-zone">
-            <span className="drop-icon">+</span>
-            <strong>Choose microscopy images</strong>
-            <small>PNG, JPEG or TIFF · multiple files accepted</small>
-            <input
-              type="file"
-              accept=".png,.jpg,.jpeg,.tif,.tiff"
-              multiple
-              onChange={(event) => setFiles(event.target.files)}
-            />
-          </label>
-          <p className="file-summary">
-            {files?.length ? `${files.length} image(s) ready` : "No local image selected"}
-          </p>
-
-          <button
-            className="primary-button"
-            disabled={busy || !selectedExperiment}
-            onClick={handleAnalyze}
-          >
-            {busy ? "Processing..." : "Run reproducible analysis"}
-          </button>
-        </article>
-
-        <article className="panel results-panel">
-          <div className="panel-heading">
-            <div>
-              <p className="step">03</p>
-              <h2>Review the evidence</h2>
+        <section className="workspace-grid" id="workspace">
+          <article className="panel create-panel">
+            <div className="panel-heading">
+              <div>
+                <p className="section-kicker">Nouvelle étude</p>
+                <h2>Cadre expérimental</h2>
+              </div>
+              <span className="panel-number">01</span>
             </div>
-            {result && <span className="panel-tag success">Complete</span>}
+
+            <form onSubmit={handleCreate}>
+              <label>
+                Nom de l’expérience
+                <input
+                  required
+                  minLength={2}
+                  value={form.name}
+                  onChange={(event) => setForm({ ...form, name: event.target.value })}
+                  placeholder="Réponse au composé A"
+                />
+              </label>
+              <label>
+                Hypothèse ou objectif
+                <textarea
+                  value={form.description}
+                  onChange={(event) => setForm({ ...form, description: event.target.value })}
+                  placeholder="Décrire la comparaison et le signal attendu…"
+                />
+              </label>
+              <div className="two-columns">
+                <label>
+                  Groupe témoin
+                  <input
+                    value={form.control_label}
+                    onChange={(event) => setForm({ ...form, control_label: event.target.value })}
+                  />
+                </label>
+                <label>
+                  Groupe traité
+                  <input
+                    value={form.treatment_label}
+                    onChange={(event) => setForm({ ...form, treatment_label: event.target.value })}
+                  />
+                </label>
+              </div>
+              <button className="primary-button" disabled={busy} type="submit">
+                Créer l’expérience <span>→</span>
+              </button>
+            </form>
+          </article>
+
+          <article className="panel inference-panel" id="inference">
+            <div className="panel-heading">
+              <div>
+                <p className="section-kicker">Analyse immédiate</p>
+                <h2>Inférence sur vos images</h2>
+              </div>
+              <span className="panel-number">02</span>
+            </div>
+
+            <div className="field-grid">
+              <label>
+                Expérience active
+                <select
+                  value={selectedId ?? ""}
+                  onChange={(event) => setSelectedId(event.target.value)}
+                >
+                  <option value="" disabled>Sélectionner une expérience</option>
+                  {experiments.map((experiment) => (
+                    <option key={experiment.id} value={experiment.id}>{experiment.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Moteur
+                <select
+                  value={selectedEngineId}
+                  onChange={(event) => setSelectedEngineId(event.target.value)}
+                >
+                  {engines.filter((engine) => engine.status === "available").map((engine) => (
+                    <option key={engine.id} value={engine.id}>{engine.name}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            {selectedEngine && (
+              <div className="engine-card">
+                <div>
+                  <span className="engine-pulse" />
+                  <strong>{selectedEngine.name}</strong>
+                  <small>Zéro entraînement</small>
+                </div>
+                <p>{selectedEngine.description}</p>
+              </div>
+            )}
+
+            <label className="drop-zone">
+              <span className="drop-icon" aria-hidden="true">⌁</span>
+              <strong>Déposer les images de microscopie</strong>
+              <small>PNG, JPEG ou TIFF · 25 Mo maximum par fichier</small>
+              <span className="secondary-button">Choisir les fichiers</span>
+              <input
+                type="file"
+                accept=".png,.jpg,.jpeg,.tif,.tiff"
+                multiple
+                onChange={(event) => setFiles(event.target.files)}
+              />
+            </label>
+
+            {files?.length ? (
+              <div className="file-list">
+                {Array.from(files).slice(0, 3).map((file) => (
+                  <div key={`${file.name}-${file.size}`}>
+                    <span className="file-icon">IMG</span>
+                    <p><strong>{file.name}</strong><small>{(file.size / 1024 / 1024).toFixed(2)} Mo</small></p>
+                  </div>
+                ))}
+                {files.length > 3 && <small>+ {files.length - 3} autre(s) image(s)</small>}
+              </div>
+            ) : (
+              selectedExperiment?.image_count ? (
+                <p className="existing-files">✓ {selectedExperiment.image_count} image(s) déjà disponible(s)</p>
+              ) : null
+            )}
+
+            <button
+              className="primary-button analyze-button"
+              disabled={busy || !selectedExperiment}
+              onClick={handleAnalyze}
+              type="button"
+            >
+              {busy ? <><span className="spinner" /> Analyse en cours…</> : <>Lancer l’inférence <span>→</span></>}
+            </button>
+          </article>
+        </section>
+
+        <section className="results-section" id="results">
+          <div className="results-header">
+            <div>
+              <p className="section-kicker">Contrôle visuel obligatoire</p>
+              <h2>Résultats et provenance</h2>
+            </div>
+            {result && (
+              <div className="result-meta">
+                <span>Pipeline {result.analysis_version}</span>
+                <span>{new Date(result.generated_at).toLocaleString("fr-FR")}</span>
+              </div>
+            )}
           </div>
 
           {!result ? (
-            <div className="empty-state">
-              <div className="cell-orbit" aria-hidden="true">
-                <span />
+            <div className="empty-results">
+              <div className="empty-visual"><span /><span /><span /></div>
+              <div>
+                <h3>Les preuves apparaîtront ici</h3>
+                <p>Lancez l’inférence pour obtenir les contours, le comptage et les indicateurs qualité.</p>
               </div>
-              <p>Results remain empty until a real image set is analyzed.</p>
             </div>
           ) : (
-            <>
-              <div className="metrics-grid">
-                {Object.entries(result.metrics).map(([key, value]) => (
-                  <div className="metric-card" key={key}>
-                    <span>{formatMetric(key)}</span>
-                    <strong>{value.toFixed(3)}</strong>
-                  </div>
-                ))}
-              </div>
-              <div className="provenance">
-                <span>Pipeline</span>
-                <code>{result.analysis_version}</code>
-                <span>{result.image_count} images</span>
-              </div>
-              {result.warnings.length > 0 && (
-                <ul className="warnings">
-                  {result.warnings.map((warning) => (
-                    <li key={warning}>{warning}</li>
+            <div className="result-layout">
+              <div className="result-main">
+                <div className="metrics-grid">
+                  {Object.entries(result.metrics).map(([key, value]) => (
+                    <div className={`metric-card ${key === "object_count_total" ? "featured" : ""}`} key={key}>
+                      <span>{metricLabels[key] ?? key}</span>
+                      <strong>{formatMetric(key, value)}</strong>
+                      <small>{key.includes("area") ? "pixels²" : key.includes("intensity") || key.includes("contrast") ? "échelle 0–1" : ""}</small>
+                    </div>
                   ))}
-                </ul>
-              )}
-            </>
-          )}
-        </article>
-      </section>
+                </div>
 
-      <footer>
-        <span>Transparent baseline · No synthetic scientific claims</span>
-        <span>Segmentation and phenotype models follow the dataset audit</span>
-      </footer>
-    </main>
+                <div className="overlay-grid">
+                  {result.image_results.map((imageResult) => (
+                    <figure key={imageResult.overlay_url}>
+                      <img src={imageResult.overlay_url} alt={`Segmentation de ${readableFilename(imageResult.filename)}`} />
+                      <figcaption>
+                        <div><strong>{readableFilename(imageResult.filename)}</strong><span>{imageResult.object_count} objets</span></div>
+                        <small>Premier plan {imageResult.foreground_polarity === "bright" ? "clair" : "sombre"} · seuil {imageResult.threshold}</small>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+
+              <aside className="evidence-panel">
+                <div className="evidence-title">
+                  <span>i</span>
+                  <div><strong>Niveau de preuve</strong><small>Exploration non validée</small></div>
+                </div>
+                <p>Ces mesures décrivent les images. Elles ne constituent ni un diagnostic ni une conclusion biologique.</p>
+                <h3>Points à vérifier</h3>
+                <ul>
+                  {result.warnings.map((warning) => <li key={warning}>{warning}</li>)}
+                </ul>
+                <div className="provenance-box">
+                  <span>Moteur</span><strong>{result.engine.name}</strong>
+                  <span>Images analysées</span><strong>{result.image_count}</strong>
+                  <span>Entraînement local</span><strong>Aucun</strong>
+                </div>
+              </aside>
+            </div>
+          )}
+        </section>
+
+        <footer>
+          <span>OrganChip Insight · prototype scientifique reproductible</span>
+          <span>Aucune donnée clinique · aucune conclusion automatisée</span>
+        </footer>
+      </main>
+    </div>
   );
 }

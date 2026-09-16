@@ -1,13 +1,13 @@
 {
   "name": "organchip-insight-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmit -p tsconfig.app.json && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -b --pretty false"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json --pretty false"
   },
   "dependencies": {
     "react": "19.3.0",

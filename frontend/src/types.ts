@@ -23,12 +23,43 @@ export interface ExperimentCreate {
   treatment_label: string;
 }
 
+export interface AnalysisEngine {
+  id: string;
+  name: string;
+  kind: "zero-training" | "pretrained" | "trained";
+  status: "available" | "planned" | "license-review";
+  description: string;
+  training_required: boolean;
+  limitations: string[];
+}
+
+export interface AnalysisArtifact {
+  filename: string;
+  kind: "segmentation-overlay";
+  media_type: string;
+  url: string;
+}
+
+export interface ImageAnalysis {
+  filename: string;
+  object_count: number;
+  foreground_fraction: number;
+  mean_object_area: number;
+  median_object_area: number;
+  mean_equivalent_diameter: number;
+  threshold: number;
+  foreground_polarity: "bright" | "dark";
+  overlay_url: string;
+}
+
 export interface AnalysisResult {
   experiment_id: string;
   analysis_version: string;
+  engine: AnalysisEngine;
   image_count: number;
   metrics: Record<string, number>;
+  image_results: ImageAnalysis[];
+  artifacts: AnalysisArtifact[];
   warnings: string[];
   generated_at: string;
 }
-
