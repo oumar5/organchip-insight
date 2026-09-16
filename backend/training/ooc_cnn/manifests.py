@@ -193,11 +193,15 @@ def load_manifest(
     expected_sha256: str,
     allowed_splits: frozenset[str],
     required_splits: frozenset[str],
+    manifest_root: Path | None = None,
     image_root: Path | None = None,
     require_image_files: bool = False,
     verify_image_hashes: bool = False,
 ) -> ManifestData:
-    relative_project_path(project_root, path, field="manifest path")
+    resolved_manifest_root = (manifest_root or project_root).resolve()
+    if not resolved_manifest_root.is_dir():
+        raise ValueError("Manifest storage root is missing or not a directory")
+    relative_project_path(resolved_manifest_root, path, field="manifest path")
     resolved_image_root = (image_root or project_root).resolve()
     if not resolved_image_root.is_dir():
         raise ValueError("Manifest image root is missing or not a directory")
@@ -475,8 +479,13 @@ def load_split_lock(
     )
 
 
-def assert_manifest_matches_spec(manifest: ManifestData, spec: ManifestSpec) -> None:
-    if manifest.path != spec.path:
+def assert_manifest_matches_spec(
+    manifest: ManifestData,
+    spec: ManifestSpec,
+    *,
+    require_path_match: bool = True,
+) -> None:
+    if require_path_match and manifest.path != spec.path:
         raise ValueError(f"{spec.role} manifest path does not match the split lock")
     if manifest.sha256 != spec.sha256:
         raise ValueError(f"{spec.role} manifest checksum does not match the split lock")

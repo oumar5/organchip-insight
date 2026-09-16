@@ -394,6 +394,7 @@ def load_run_manifests(
     train_validation_manifest_path: Path,
     split_lock_sha256: str | None = None,
     test_manifest_path: Path | None = None,
+    test_manifest_root: Path | None = None,
     frozen_manifest_path: Path | None = None,
     frozen_manifest_sha256: str | None = None,
     confirmation: str | None = None,
@@ -415,6 +416,7 @@ def load_run_manifests(
     relative_project_path(root, split_lock_path, field="split lock path")
     final_only_values = (
         test_manifest_path,
+        test_manifest_root,
         frozen_manifest_path,
         frozen_manifest_sha256,
         confirmation,
@@ -483,8 +485,14 @@ def load_run_manifests(
     assert active_config_sha256 is not None
     assert active_source_paths is not None
     test_path = test_manifest_path.resolve()
-    if test_path != split_lock.test.path:
-        raise ValueError("Test manifest path does not match the split lock")
+    resolved_test_manifest_root = (test_manifest_root or root).resolve()
+    test_relative_path = relative_project_path(
+        resolved_test_manifest_root,
+        test_path,
+        field="external test manifest",
+    )
+    if test_relative_path != split_lock.test.relative_path:
+        raise ValueError("Test manifest logical path does not match the split lock")
     frozen = load_frozen_manifest(
         frozen_manifest_path,
         project_root=root,
@@ -516,11 +524,12 @@ def load_run_manifests(
         expected_sha256=split_lock.test.sha256,
         allowed_splits=frozenset({"test"}),
         required_splits=frozenset({"test"}),
+        manifest_root=resolved_test_manifest_root,
         image_root=resolved_image_root,
         require_image_files=require_image_files,
         verify_image_hashes=verify_image_hashes,
     )
-    assert_manifest_matches_spec(test, split_lock.test)
+    assert_manifest_matches_spec(test, split_lock.test, require_path_match=False)
     assert_manifests_group_disjoint(train_validation, test)
     return RunManifests(
         mode=run_mode,

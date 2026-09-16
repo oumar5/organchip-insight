@@ -61,6 +61,7 @@ def _parser() -> argparse.ArgumentParser:
     _add_common_config(final)
     final.add_argument("--device", choices=("auto", "cuda"), default="auto")
     final.add_argument("--test-manifest", type=Path, required=True)
+    final.add_argument("--test-manifest-root", type=Path, default=PROJECT_ROOT)
     final.add_argument("--frozen-manifest", type=Path, required=True)
     final.add_argument("--frozen-manifest-sha256", required=True)
     final.add_argument("--confirm-test-open", required=True)
@@ -210,6 +211,7 @@ def _run_final(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
         split_lock_sha256=config.split_lock_sha256,
         train_validation_manifest_path=config.train_validation_manifest_path,
         test_manifest_path=arguments.test_manifest.resolve(),
+        test_manifest_root=_resolve_image_root(arguments.test_manifest_root),
         frozen_manifest_path=arguments.frozen_manifest.resolve(),
         frozen_manifest_sha256=arguments.frozen_manifest_sha256,
         confirmation=arguments.confirm_test_open,

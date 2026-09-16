@@ -424,6 +424,55 @@ def test_final_eval_writes_receipt_before_test_open_and_refuses_second_access(
     assert receipt["reason"] == "frozen model final evaluation"
 
 
+def test_final_eval_opens_external_test_manifest_only_after_receipt(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    project_root = tmp_path / "source-bundle"
+    paths = _fixture_project(project_root)
+    frozen = _write_frozen_manifest(paths)
+    external_root = tmp_path / "final-bundle"
+    external_test = external_root / paths["test"].relative_to(project_root)
+    external_test.parent.mkdir(parents=True)
+    external_test.write_bytes(paths["test"].read_bytes())
+    paths["test"].unlink()
+    receipt_directory = project_root / "reports/test-access"
+    original_open = Path.open
+
+    def tracked_open(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == external_test.resolve():
+            assert list(receipt_directory.glob("[0-9]*.json"))
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", tracked_open)
+    result = load_run_manifests(
+        mode=RunMode.FINAL_EVAL,
+        project_root=project_root,
+        split_lock_path=paths["lock"],
+        train_validation_manifest_path=paths["train_validation"],
+        test_manifest_path=external_test,
+        test_manifest_root=external_root,
+        frozen_manifest_path=frozen,
+        frozen_manifest_sha256=sha256_file(frozen),
+        confirmation=FINAL_EVAL_CONFIRMATION,
+        test_open_reason="frozen model final evaluation",
+        receipt_directory=receipt_directory,
+        active_config_path=project_root / "data/experiments/config.json",
+        active_config_sha256=sha256_file(
+            project_root / "data/experiments/config.json"
+        ),
+        active_source_paths=(
+            project_root / "backend/training/ooc_cnn/runtime.py",
+        ),
+        require_image_files=True,
+        verify_image_hashes=True,
+        receipt_id_factory=lambda: "external-test-receipt",
+    )
+
+    assert result.test is not None
+    assert result.test.path == external_test.resolve()
+
+
 def test_final_eval_rejects_mutated_checkpoint_before_test_open(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
