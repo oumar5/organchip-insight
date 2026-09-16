@@ -45,7 +45,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] validation CNN complète sur GPU Kaggle avec tranches par mode,
   résolution, lignée et jour ;
 - [x] recalcul des comparateurs majorité, mode/résolution et handcrafted sur v2 ;
-- [ ] exécution des ablations A/B puis C conditionnelle sur train/validation ;
+- [x] exécution des ablations A/B sur train/validation ; C non lancé car le
+  seuil conditionnel RGB pré-enregistré n'est pas atteint ;
 - [x] audit structurel des campagnes (3 jours, lignée commune) : 29 campagnes,
   270 images test exposées ;
 - [ ] décision et génération éventuelle du manifeste v2 avec paramètres figés,

@@ -65,6 +65,13 @@ plus petit et le moins coûteux. Si aucune n'est éligible, conserver le modèle
 actuel comme résultat scientifique, mais ne pas présenter le CNN comme contrôle
 qualité fiable pour RGB.
 
+Statut au 17 septembre 2026 : **A et B terminés, C non autorisé**. A atteint une
+balanced accuracy RGB de `0,5948` et B `0,6079`, toutes deux sous la référence
+`0,6315` et sous le seuil conditionnel `0,651515`. Aucune configuration n'est
+éligible au gel produit ; le test reste fermé. Les rapports et hashes sont
+consignés dans le
+[retour d'expérience A/B](retours-experience/2026-09-17-ablations-cnn-campagne-v2.md).
+
 ## Expériences conditionnelles, non lancées maintenant
 
 - MobileNetV3 par tuiles à résolution native : à envisager si B améliore RGB,

@@ -69,9 +69,61 @@ la perte d'entraînement. Entraîner plus longtemps n'est pas justifié.
 L'archive et son contenu extrait sont conservés sous
 `data/experiments/ooc-cnn/`, dossier ignoré par Git.
 
-## État de la décision
+## Run B — niveaux de gris, 448 px
 
-Le run B gris 448 px reste en cours. La décision de lancer ou non C sera prise
-uniquement après validation de B. C restera interdit si la balanced accuracy RGB
-de B est inférieure à `0,651515`.
+Kernel privé : `oumarbenlol/organchip-cnn-ablation-b-gray448`, version 3.
 
+| Mesure | Résultat |
+| --- | ---: |
+| Meilleure époque | 3 |
+| Époques exécutées | 9 / 20, arrêt anticipé patience 6 |
+| Seuil choisi sur validation | 0,49 |
+| Macro-F1 globale | 0,7788 |
+| Balanced accuracy globale | 0,7750 |
+| ROC-AUC globale | 0,8414 |
+| Balanced accuracy L | 0,8338 |
+| ROC-AUC L | 0,8551 |
+| Balanced accuracy RGB | 0,6079 |
+| ROC-AUC RGB | 0,6985 |
+
+La résolution 448 px améliore nettement le score global et la tranche L par
+rapport au modèle couleur 224 px de référence. Elle n'améliore toutefois pas la
+balanced accuracy RGB : `0,6079` contre `0,6315`. Le gain global masque donc
+encore une faiblesse sur le mode RGB et ne satisfait pas le plancher pré-enregistré
+de `0,65` par mode.
+
+La meilleure époque est 3. La perte de validation augmente ensuite alors que la
+perte d'entraînement continue de diminuer ; l'arrêt anticipé à l'époque 9 est
+cohérent avec un surapprentissage rapide.
+
+## Vérification des artefacts B
+
+- ZIP : `kaggle-validation-campaign-v2-gray448-artifacts.zip` ;
+- SHA-256 du ZIP :
+  `f6c6411c8b52c4db15c3fdf53d6e783a8c1b7f0fbade9dac56be3020978e2c23` ;
+- 14 fichiers déclarés : tous les SHA-256 internes sont conformes ;
+- rapport de validation SHA-256 :
+  `2a43f01dacc281ce9dc3a44d054edf9236d6435dfd1745c5f1e155ca81d6427d` ;
+- checkpoint sélectionné SHA-256 :
+  `6159fb2e313834dcdfb33e943ae61c05805862b4386b79d09dc36e15b87418a5` ;
+- modèle ONNX SHA-256 :
+  `c2f7339255a5e525f659d94a47aa8eb02d1ef60ed832597b343b542a4ed694a2` ;
+- parité ONNX réussie sur 6 échantillons, erreur absolue maximale
+  `1,07e-6` pour une tolérance de `1e-4` ;
+- `test_manifest_opened: false` et `test_used_for_selection: false`.
+
+L'archive et son contenu extrait sont conservés sous
+`data/experiments/ooc-cnn/`, dossier ignoré par Git.
+
+## Décision pré-enregistrée
+
+Ni A (`0,5948`) ni B (`0,6079`) n'améliore la balanced accuracy RGB d'au moins
+`0,02` par rapport à la référence `0,6315`. Le seuil conditionnel était
+`0,651515` : **le run C n'est donc pas lancé**.
+
+Aucune configuration ne satisfait le plancher de balanced accuracy `0,65` dans
+chaque mode. Le modèle B est le meilleur résultat global de validation, mais il
+n'est pas éligible comme contrôle qualité fiable pour les images RGB. Le test
+gelé reste fermé : l'ouvrir maintenant n'améliorerait aucune décision produit et
+affaiblirait le protocole. Le résultat utile est scientifique : la hausse de
+résolution récupère du signal pour L, pas une robustesse suffisante entre modes.
