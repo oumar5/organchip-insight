@@ -27,11 +27,20 @@ export interface AnalysisEngine {
   id: string;
   name: string;
   kind: "zero-training" | "pretrained" | "trained";
-  status: "available" | "planned" | "license-review";
+  status: "available" | "experimental" | "planned" | "license-review";
   description: string;
   training_required: boolean;
   limitations: string[];
 }
+
+export type KnownMetricKey =
+  | "object_count_total"
+  | "objects_per_image"
+  | "mean_foreground_fraction"
+  | "mean_object_area"
+  | "mean_intensity"
+  | "mean_contrast"
+  | "quality_score";
 
 export interface AnalysisArtifact {
   filename: string;
@@ -57,7 +66,7 @@ export interface AnalysisResult {
   analysis_version: string;
   engine: AnalysisEngine;
   image_count: number;
-  metrics: Record<string, number>;
+  metrics: Record<string, number> & Partial<Record<KnownMetricKey, number>>;
   image_results: ImageAnalysis[];
   artifacts: AnalysisArtifact[];
   warnings: string[];

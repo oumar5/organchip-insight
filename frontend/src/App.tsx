@@ -14,6 +14,7 @@ import type {
   Experiment,
   ExperimentCreate,
   ExperimentStatus,
+  KnownMetricKey,
 } from "./types";
 
 const initialForm: ExperimentCreate = {
@@ -23,15 +24,38 @@ const initialForm: ExperimentCreate = {
   treatment_label: "Traitement",
 };
 
-const metricLabels: Record<string, string> = {
-  object_count_total: "Objets détectés",
-  objects_per_image: "Objets / image",
-  mean_foreground_fraction: "Surface segmentée",
-  mean_object_area: "Surface moyenne",
-  mean_intensity: "Intensité moyenne",
-  mean_contrast: "Contraste moyen",
-  quality_score: "Score qualité",
+type MetricFormat = "decimal" | "integer" | "percent" | "relative-index";
+
+interface MetricPresentation {
+  label: string;
+  format: MetricFormat;
+  unit?: string;
+}
+
+const metricPresentations: Record<KnownMetricKey, MetricPresentation> = {
+  object_count_total: { label: "Objets détectés", format: "integer" },
+  objects_per_image: { label: "Objets / image", format: "decimal" },
+  mean_foreground_fraction: { label: "Surface segmentée", format: "percent" },
+  mean_object_area: { label: "Surface moyenne", format: "decimal", unit: "pixels²" },
+  mean_intensity: { label: "Intensité moyenne", format: "decimal", unit: "échelle 0–1" },
+  mean_contrast: { label: "Contraste moyen", format: "decimal", unit: "échelle 0–1" },
+  quality_score: {
+    label: "Indice de contraste relatif",
+    format: "relative-index",
+    unit: "heuristique 0–1 · pas une probabilité",
+  },
 };
+
+const decimalFormatter = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
+const relativeIndexFormatter = new Intl.NumberFormat("fr-FR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+const percentFormatter = new Intl.NumberFormat("fr-FR", {
+  style: "percent",
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 
 const statusLabels: Record<ExperimentStatus, string> = {
   draft: "Brouillon",
@@ -42,13 +66,17 @@ const statusLabels: Record<ExperimentStatus, string> = {
 };
 
 function formatMetric(key: string, value: number): string {
-  if (key === "mean_foreground_fraction" || key === "quality_score") {
-    return `${(value * 100).toFixed(1)} %`;
+  const presentation = metricPresentations[key as KnownMetricKey];
+  switch (presentation?.format) {
+    case "integer":
+      return Math.round(value).toLocaleString("fr-FR");
+    case "percent":
+      return percentFormatter.format(value);
+    case "relative-index":
+      return relativeIndexFormatter.format(value);
+    default:
+      return decimalFormatter.format(value);
   }
-  if (key === "object_count_total") {
-    return Math.round(value).toLocaleString("fr-FR");
-  }
-  return value.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
 }
 
 function readableFilename(filename: string): string {
@@ -409,9 +437,9 @@ export default function App() {
                 <div className="metrics-grid">
                   {Object.entries(result.metrics).map(([key, value]) => (
                     <div className={`metric-card ${key === "object_count_total" ? "featured" : ""}`} key={key}>
-                      <span>{metricLabels[key] ?? key}</span>
+                      <span>{metricPresentations[key as KnownMetricKey]?.label ?? key}</span>
                       <strong>{formatMetric(key, value)}</strong>
-                      <small>{key.includes("area") ? "pixels²" : key.includes("intensity") || key.includes("contrast") ? "échelle 0–1" : ""}</small>
+                      <small>{metricPresentations[key as KnownMetricKey]?.unit ?? ""}</small>
                     </div>
                   ))}
                 </div>
@@ -435,6 +463,12 @@ export default function App() {
                   <div><strong>Niveau de preuve</strong><small>Exploration non validée</small></div>
                 </div>
                 <p>Ces mesures décrivent les images. Elles ne constituent ni un diagnostic ni une conclusion biologique.</p>
+                {typeof result.metrics.quality_score === "number" && (
+                  <p className="metric-method-note">
+                    <strong>Indice de contraste relatif :</strong> moyenne du contraste divisée par 0,20,
+                    puis plafonnée à 1. Il ne mesure ni l’exactitude de la segmentation ni une qualité biologique.
+                  </p>
+                )}
                 <h3>Points à vérifier</h3>
                 <ul>
                   {result.warnings.map((warning) => <li key={warning}>{warning}</li>)}
