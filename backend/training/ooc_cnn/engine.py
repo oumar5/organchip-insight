@@ -130,11 +130,11 @@ def _visible_records(
     return train, validation
 
 
-def _image_slices(records: list[ManifestRecord], project_root: Path) -> dict[str, list[str]]:
+def _image_slices(records: list[ManifestRecord], image_root: Path) -> dict[str, list[str]]:
     modes: list[str] = []
     resolutions: list[str] = []
     for record in records:
-        image_path = project_root / record.path
+        image_path = image_root / record.path
         with Image.open(image_path) as image:
             modes.append(image.mode)
             resolutions.append(f"{image.width}x{image.height}")
@@ -149,7 +149,7 @@ def _image_slices(records: list[ManifestRecord], project_root: Path) -> dict[str
 def _make_loader(
     records: list[ManifestRecord],
     *,
-    project_root: Path,
+    image_root: Path,
     training: bool,
     batch_size: int,
     workers: int,
@@ -159,7 +159,7 @@ def _make_loader(
     torch, _nn, DataLoader = _import_torch()
     dataset = ManifestImageDataset(
         records,
-        project_root,
+        image_root,
         transform=build_image_transform(training=training),
         verify_hashes=verify_hashes,
     )
@@ -329,6 +329,7 @@ def _display_path(project_root: Path, path: Path) -> str:
 def run_training(
     *,
     project_root: Path,
+    image_root: Path | None,
     config: ExperimentConfig,
     manifests: RunManifests,
     mode: RunMode,
@@ -350,6 +351,9 @@ def run_training(
         raise ValueError("Smoke mode must use initialization='none'")
 
     root = project_root.resolve()
+    resolved_image_root = (image_root or root).resolve()
+    if not resolved_image_root.is_dir():
+        raise ValueError("CNN image root is missing or not a directory")
     torch, nn, _loader = _import_torch()
     seed = int(config.raw["training"]["seed"])
     _seed_everything(torch, seed)
@@ -363,7 +367,7 @@ def run_training(
 
     train_loader = _make_loader(
         train_records,
-        project_root=root,
+        image_root=resolved_image_root,
         training=True,
         batch_size=batch_size,
         workers=workers,
@@ -372,7 +376,7 @@ def run_training(
     )
     validation_loader = _make_loader(
         validation_records,
-        project_root=root,
+        image_root=resolved_image_root,
         training=False,
         batch_size=batch_size,
         workers=workers,
@@ -493,7 +497,7 @@ def run_training(
     fixed_metrics = binary_metrics(
         labels, probabilities, 0.5, ece_bins=int(evaluation_config["ece_bins"])
     )
-    slices = _image_slices(validation_records, root)
+    slices = _image_slices(validation_records, resolved_image_root)
     slice_metrics = {
         name: metrics_by_slice(
             labels,
@@ -568,6 +572,7 @@ def run_training(
                 {record.acquisition_prefix for record in validation_records}
             ),
             "image_hashes_verified": verify_image_hashes,
+            "image_root": _display_path(root, resolved_image_root),
         },
         "initialization": {"kind": "random", "external_weights": False},
         "training": {
@@ -644,6 +649,7 @@ def run_training(
 def run_final_evaluation(
     *,
     project_root: Path,
+    image_root: Path | None,
     config: ExperimentConfig,
     manifests: RunManifests,
     frozen: FrozenManifest,
@@ -659,6 +665,9 @@ def run_final_evaluation(
     if not verify_image_hashes:
         raise ValueError("Final evaluation requires image hash verification")
     root = project_root.resolve()
+    resolved_image_root = (image_root or root).resolve()
+    if not resolved_image_root.is_dir():
+        raise ValueError("CNN image root is missing or not a directory")
     torch, nn, _loader = _import_torch()
     seed = int(config.raw["training"]["seed"])
     _seed_everything(torch, seed)
@@ -667,7 +676,7 @@ def run_final_evaluation(
     records = list(manifests.test.records)
     loader = _make_loader(
         records,
-        project_root=root,
+        image_root=resolved_image_root,
         training=False,
         batch_size=int(config.raw["training"]["batch_size"]),
         workers=int(config.raw["training"]["workers"]),
@@ -689,7 +698,7 @@ def run_final_evaluation(
     metrics = binary_metrics(
         labels, probabilities, threshold, ece_bins=int(evaluation["ece_bins"])
     )
-    slices = _image_slices(records, root)
+    slices = _image_slices(records, resolved_image_root)
     slice_metrics = {
         name: metrics_by_slice(
             labels,
@@ -746,6 +755,7 @@ def run_final_evaluation(
             "groups": len({record.acquisition_prefix for record in records}),
             "manifest_sha256": manifests.test.sha256,
             "image_hashes_verified": verify_image_hashes,
+            "image_root": _display_path(root, resolved_image_root),
             "loss": loss,
             "threshold": threshold,
             "metrics": metrics,

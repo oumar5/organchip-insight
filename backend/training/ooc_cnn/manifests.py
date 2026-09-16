@@ -193,10 +193,14 @@ def load_manifest(
     expected_sha256: str,
     allowed_splits: frozenset[str],
     required_splits: frozenset[str],
+    image_root: Path | None = None,
     require_image_files: bool = False,
     verify_image_hashes: bool = False,
 ) -> ManifestData:
     relative_project_path(project_root, path, field="manifest path")
+    resolved_image_root = (image_root or project_root).resolve()
+    if not resolved_image_root.is_dir():
+        raise ValueError("Manifest image root is missing or not a directory")
     expected_sha256 = validate_sha256(expected_sha256, "manifest expected_sha256")
     actual_sha256 = sha256_file(path)
     if actual_sha256 != expected_sha256:
@@ -229,7 +233,11 @@ def load_manifest(
             raise ValueError(f"Manifest contains a duplicate image_id: {record.image_id}")
         seen_image_ids.add(record.image_id)
         hash_splits[record.sha256].add(record.grouped_split)
-        resolved = resolve_project_path(project_root, record.path, field="manifest image path")
+        resolved = resolve_project_path(
+            resolved_image_root,
+            record.path,
+            field="manifest image path",
+        )
         if resolved in seen_resolved_paths:
             raise ValueError(f"Manifest paths collide after normalization: {record.path}")
         seen_resolved_paths.add(resolved)

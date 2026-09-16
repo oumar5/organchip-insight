@@ -48,6 +48,7 @@ def _parser() -> argparse.ArgumentParser:
     train.add_argument("--weights-sha256")
     train.add_argument("--weights-metadata", type=Path)
     train.add_argument("--run-id")
+    train.add_argument("--image-root", type=Path, default=PROJECT_ROOT)
     train.add_argument("--skip-image-hash-verification", action="store_true")
 
     freeze = subparsers.add_parser("freeze", help="Freeze a validation-selected run")
@@ -65,6 +66,7 @@ def _parser() -> argparse.ArgumentParser:
     final.add_argument("--confirm-test-open", required=True)
     final.add_argument("--reason", required=True)
     final.add_argument("--run-id", required=True)
+    final.add_argument("--image-root", type=Path, default=PROJECT_ROOT)
 
     export = subparsers.add_parser("export", help="Export and verify an ONNX model")
     _add_common_config(export)
@@ -91,10 +93,19 @@ def _contract(config: ExperimentConfig, mode: RunMode, device: str) -> tuple[str
     )
 
 
-def _load_training_manifests(config: ExperimentConfig, mode: RunMode):
+def _resolve_image_root(path: Path) -> Path:
+    return (path if path.is_absolute() else PROJECT_ROOT / path).resolve()
+
+
+def _load_training_manifests(
+    config: ExperimentConfig,
+    mode: RunMode,
+    image_root: Path,
+):
     manifests = load_run_manifests(
         mode=mode,
         project_root=PROJECT_ROOT,
+        image_root=image_root,
         split_lock_path=config.split_lock_path,
         split_lock_sha256=config.split_lock_sha256,
         train_validation_manifest_path=config.train_validation_manifest_path,
@@ -128,10 +139,12 @@ def _run_train(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
     if mode is RunMode.VALIDATION and arguments.skip_image_hash_verification:
         raise ValueError("Validation cannot skip image hash verification")
     resolved_device, runtime = _contract(config, mode, arguments.device)
-    manifests = _load_training_manifests(config, mode)
+    image_root = _resolve_image_root(arguments.image_root)
+    manifests = _load_training_manifests(config, mode, image_root)
     weights = _weights_for_training(arguments, mode)
     report = run_training(
         project_root=PROJECT_ROOT,
+        image_root=image_root,
         config=config,
         manifests=manifests,
         mode=mode,
@@ -171,6 +184,7 @@ def _run_freeze(arguments: argparse.Namespace, config: ExperimentConfig) -> dict
 
 def _run_final(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[str, Any]:
     resolved_device, runtime = _contract(config, RunMode.FINAL_EVAL, arguments.device)
+    image_root = _resolve_image_root(arguments.image_root)
     assert_run_destination_available(config, RunMode.FINAL_EVAL, arguments.run_id)
     active_source_paths = tuple(
         sorted((PROJECT_ROOT / "backend/training/ooc_cnn").glob("*.py"))
@@ -191,6 +205,7 @@ def _run_final(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
     manifests = load_run_manifests(
         mode=RunMode.FINAL_EVAL,
         project_root=PROJECT_ROOT,
+        image_root=image_root,
         split_lock_path=config.split_lock_path,
         split_lock_sha256=config.split_lock_sha256,
         train_validation_manifest_path=config.train_validation_manifest_path,
@@ -210,6 +225,7 @@ def _run_final(arguments: argparse.Namespace, config: ExperimentConfig) -> dict[
         raise AssertionError("Final evaluation did not load a frozen manifest")
     report = run_final_evaluation(
         project_root=PROJECT_ROOT,
+        image_root=image_root,
         config=config,
         manifests=manifests,
         frozen=manifests.frozen_manifest,

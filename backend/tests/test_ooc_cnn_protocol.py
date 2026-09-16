@@ -89,9 +89,45 @@ def _write_frozen_manifest(paths: dict[str, Path]) -> Path:
     config.parent.mkdir(parents=True, exist_ok=True)
     config.write_text('{"model":"fixture"}\n', encoding="utf-8")
     checkpoint.write_bytes(b"checkpoint")
-    validation_report.write_text('{"mode":"validation"}\n', encoding="utf-8")
     source_file.parent.mkdir(parents=True, exist_ok=True)
     source_file.write_text("# frozen fixture source\n", encoding="utf-8")
+    validation_report.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "mode": "validation",
+                "benchmark_eligible": True,
+                "experiment_id": "fixture-cnn-v1",
+                "config": {
+                    "path": config.relative_to(paths["root"]).as_posix(),
+                    "sha256": sha256_file(config),
+                },
+                "split": {
+                    "lock_sha256": sha256_file(paths["lock"]),
+                    "train_validation_manifest_sha256": sha256_file(
+                        paths["train_validation"]
+                    ),
+                    "test_manifest_opened": False,
+                },
+                "selection": {
+                    "checkpoint_metric": "validation macro_f1 at threshold 0.5",
+                    "best_epoch": 1,
+                    "threshold": 0.55,
+                    "threshold_selected_on": "validation",
+                },
+                "artifacts": {
+                    "checkpoint": {
+                        "path": checkpoint.relative_to(paths["root"]).as_posix(),
+                        "sha256": sha256_file(checkpoint),
+                    }
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     frozen = paths["root"] / "data/experiments/frozen.json"
     frozen.write_text(
         json.dumps(
@@ -236,6 +272,30 @@ def test_non_final_modes_never_open_test_manifest(
 
     assert result.test is None
     assert test_path not in opened
+
+
+def test_validation_can_use_a_separate_read_only_image_root(tmp_path: Path) -> None:
+    project_root = tmp_path / "source-bundle"
+    image_root = tmp_path / "mounted-dataset"
+    paths = _fixture_project(project_root)
+    for source in sorted((project_root / "data/raw/ooc").glob("*.png")):
+        destination = image_root / source.relative_to(project_root)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(source.read_bytes())
+        source.unlink()
+
+    result = load_run_manifests(
+        mode=RunMode.VALIDATION,
+        project_root=project_root,
+        image_root=image_root,
+        split_lock_path=paths["lock"],
+        train_validation_manifest_path=paths["train_validation"],
+        require_image_files=True,
+        verify_image_hashes=True,
+    )
+
+    assert len(result.train_validation.records) == 4
+    assert result.test is None
 
 
 @pytest.mark.parametrize("mode", [RunMode.SMOKE, RunMode.VALIDATION])

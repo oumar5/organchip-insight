@@ -139,8 +139,8 @@ def load_frozen_manifest(
         if unexpected:
             details.append(f"unexpected: {', '.join(unexpected)}")
         raise ValueError(f"Frozen manifest artifact set is invalid ({'; '.join(details)})")
-    if not deferred_artifacts <= FROZEN_ARTIFACT_NAMES:
-        raise ValueError("Frozen manifest has unknown deferred artifacts")
+    if not deferred_artifacts <= {"test_manifest"}:
+        raise ValueError("Only the test manifest may be deferred")
     if not isinstance(selection, dict):
         raise ValueError("Frozen manifest selection is invalid")
     policy = value.get("policy")
@@ -200,6 +200,42 @@ def load_frozen_manifest(
     for source in source_files:
         if not source.path.is_file() or sha256_file(source.path) != source.sha256:
             raise ValueError(f"Frozen source checksum mismatch: {source.relative_path}")
+    validation_report = _load_json(
+        artifacts["validation_report"].path,
+        "Frozen validation report",
+    )
+    report_selection = validation_report.get("selection")
+    report_artifacts = validation_report.get("artifacts")
+    report_config = validation_report.get("config")
+    report_split = validation_report.get("split")
+    if (
+        validation_report.get("schema_version") != 1
+        or validation_report.get("mode") != "validation"
+        or validation_report.get("benchmark_eligible") is not True
+        or validation_report.get("experiment_id") != experiment_id.strip()
+        or not isinstance(report_selection, dict)
+        or not isinstance(report_artifacts, dict)
+        or not isinstance(report_config, dict)
+        or not isinstance(report_split, dict)
+    ):
+        raise ValueError("Frozen validation report provenance is invalid")
+    report_checkpoint = report_artifacts.get("checkpoint")
+    if not isinstance(report_checkpoint, dict):
+        raise ValueError("Frozen validation report checkpoint is invalid")
+    expected_report_values = (
+        (report_selection.get("checkpoint_metric"), selection["checkpoint_metric"]),
+        (report_selection.get("best_epoch"), best_epoch),
+        (report_selection.get("threshold"), threshold),
+        (report_selection.get("threshold_selected_on"), "validation"),
+        (report_config.get("path"), artifacts["config"].relative_path),
+        (report_config.get("sha256"), artifacts["config"].sha256),
+        (report_checkpoint.get("path"), artifacts["checkpoint"].relative_path),
+        (report_checkpoint.get("sha256"), artifacts["checkpoint"].sha256),
+        (report_split.get("lock_sha256"), artifacts["split_lock"].sha256),
+        (report_split.get("test_manifest_opened"), False),
+    )
+    if any(actual != expected for actual, expected in expected_report_values):
+        raise ValueError("Frozen selection does not match the validation report")
     return FrozenManifest(
         path=path.resolve(),
         sha256=actual_sha256,
@@ -339,6 +375,7 @@ def load_run_manifests(
     *,
     mode: RunMode | str,
     project_root: Path,
+    image_root: Path | None = None,
     split_lock_path: Path,
     train_validation_manifest_path: Path,
     split_lock_sha256: str | None = None,
@@ -358,6 +395,9 @@ def load_run_manifests(
 ) -> RunManifests:
     run_mode = RunMode(mode)
     root = project_root.resolve()
+    resolved_image_root = (image_root or root).resolve()
+    if not resolved_image_root.is_dir():
+        raise ValueError("CNN image root is missing or not a directory")
     relative_project_path(root, split_lock_path, field="split lock path")
     final_only_values = (
         test_manifest_path,
@@ -405,6 +445,7 @@ def load_run_manifests(
         expected_sha256=split_lock.train_validation.sha256,
         allowed_splits=frozenset({"train", "validation"}),
         required_splits=frozenset({"train", "validation"}),
+        image_root=resolved_image_root,
         require_image_files=require_image_files,
         verify_image_hashes=verify_image_hashes,
     )
@@ -461,6 +502,7 @@ def load_run_manifests(
         expected_sha256=split_lock.test.sha256,
         allowed_splits=frozenset({"test"}),
         required_splits=frozenset({"test"}),
+        image_root=resolved_image_root,
         require_image_files=require_image_files,
         verify_image_hashes=verify_image_hashes,
     )
