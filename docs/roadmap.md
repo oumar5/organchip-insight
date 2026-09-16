@@ -39,14 +39,17 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] baseline de confondants mode/résolution avant CNN ;
 - [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
 - [x] smoke CPU avec hashes d'images vérifiés et export ONNX contrôlé ;
-- [ ] vérification des versions réelles de l'image Kaggle (PyTorch 2.11
-  attendu) et extension du contrat runtime après smoke local ;
-- [ ] prétraitement CNN v2 neutralisant le raccourci d'acquisition
-  (recadrage commun, niveaux de gris, résolution ≥ 512 px ou tuiles) ;
+- [ ] exécution de la sonde Kaggle prête (`notebooks/ooc-runtime-probe-kaggle.ipynb`)
+  avec GPU, puis extension éventuelle du contrat runtime après smoke local ;
+- [ ] protocole d'ablation CNN pré-enregistré (couleur/gris, résolution,
+  seeds, budget) testé sur train/validation ;
 - [ ] validation CNN complète sur GPU Kaggle avec tranches par mode,
   résolution, lignée et jour, métrique primaire par mode ;
-- [ ] split v2 par « campagnes » de dates consécutives partageant une lignée,
-  avant tout run GPU, et documentation du bruit de labels intra-groupe ;
+- [x] audit structurel des campagnes (3 jours, lignée commune) : 29 campagnes,
+  270 images test exposées ;
+- [ ] décision et génération éventuelle du manifeste v2 avec paramètres figés,
+  v1 conservé ;
+- [ ] documentation du bruit de labels intra-groupe ;
 - [ ] ouverture unique du test après gel de la sélection et des hashes, avec
   archivage externe du reçu local avant fermeture du workspace final.
 
@@ -58,14 +61,17 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [ ] rattacher chaque image à contrôle/traitement à l'import, agrégation par
   groupe avec intervalles, ou masquer les champs non livrés ;
 - [ ] export CSV/JSON depuis l'interface et tableau par image ;
+- [ ] benchmark d'instances borné (BBBC038) et réserve explicite sur le
+  comptage dans l'interface ;
 - [ ] analyse d'erreurs et cas hors distribution ;
 - [ ] caractéristiques morphologiques plus riches (optionnel).
 
 ## Jalon 4 — Stabilisation produit
 
-- [ ] import séparé de l'analyse, récapitulatif acceptés/rejetés, erreurs
+- [x] import séparé de l'analyse, récapitulatif acceptés/rejetés, erreurs
   lisibles, verrou de sélection pendant l'analyse ;
-- [ ] limite nginx cohérente avec la limite par fichier ;
+- [x] limite nginx cohérente avec la limite par fichier ;
+- [x] TIFF 16 bits, limite de pixels, reprise après échec d'analyse ;
 - [ ] plancher typographique et contraste AA sur tout texte informatif ;
 - [ ] file de tâches et progression (si µSAM devient un moteur produit) ;
 - [ ] limites de pixels et en-têtes de sécurité ;
