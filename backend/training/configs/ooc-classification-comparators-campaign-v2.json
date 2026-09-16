@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "experiment_id": "ooc-classification-comparators-campaign-v2",
+  "dataset": {
+    "id": "OOC-image-dataset",
+    "doi": "10.5281/zenodo.10203721",
+    "version": "2023-11-27",
+    "license": "CC-BY-4.0"
+  },
+  "train_validation_csv": "data/splits/ooc-campaign-v2-train-validation.csv",
+  "feature_cache_csv": "data/processed/ooc-handcrafted-features-campaign-v2.csv",
+  "feature_cache_metadata": "data/processed/ooc-handcrafted-features-campaign-v2.meta.json",
+  "model_output": "data/models/ooc-handcrafted-image-quality-campaign-v2.joblib",
+  "predictions_output": "reports/predictions/ooc-classification-comparators-campaign-v2-validation.csv",
+  "report_output": "reports/benchmarks/ooc-classification-comparators-campaign-v2.json",
+  "thumbnail_size": 256,
+  "workers": 8,
+  "seed": 20260916,
+  "models": {
+    "logistic_regression": {
+      "c_values": [0.01, 0.1, 1.0, 10.0]
+    },
+    "extra_trees": [
+      {
+        "n_estimators": 500,
+        "max_depth": 8,
+        "min_samples_leaf": 2
+      },
+      {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_leaf": 2
+      },
+      {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_leaf": 5
+      }
+    ],
+    "hist_gradient_boosting": [
+      {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_leaf_nodes": 15,
+        "l2_regularization": 1.0
+      },
+      {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_leaf_nodes": 31,
+        "l2_regularization": 3.0
+      }
+    ]
+  }
+}
