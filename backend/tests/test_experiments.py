@@ -97,6 +97,34 @@ def test_inference_engine_registry_is_transparent() -> None:
 
     assert response.status_code == 200
     engines = response.json()
-    assert engines[0]["id"] == "adaptive-segmentation-v1"
-    assert engines[0]["status"] == "available"
-    assert any(engine["status"] == "license-review" for engine in engines)
+    engine_statuses = {engine["id"]: engine["status"] for engine in engines}
+    assert engine_statuses == {
+        "adaptive-segmentation-v1": "available",
+        "micro-sam-pretrained": "experimental",
+        "cellpose-pretrained": "license-review",
+    }
+    assert all(engine["limitations"] for engine in engines)
+
+
+def test_unavailable_inference_engines_are_rejected() -> None:
+    create_response = client.post(
+        "/api/v1/experiments",
+        json={"name": "Unavailable engine guard"},
+    )
+    experiment_id = create_response.json()["id"]
+
+    image_buffer = BytesIO()
+    Image.new("L", (32, 32), color=128).save(image_buffer, format="PNG")
+    upload_response = client.post(
+        f"/api/v1/experiments/{experiment_id}/images",
+        files={"files": ("field.png", image_buffer.getvalue(), "image/png")},
+    )
+    assert upload_response.status_code == 200
+
+    for engine_id in ("micro-sam-pretrained", "cellpose-pretrained"):
+        response = client.post(
+            f"/api/v1/experiments/{experiment_id}/analyze",
+            params={"engine_id": engine_id},
+        )
+        assert response.status_code == 422
+        assert "is not available" in response.json()["detail"]

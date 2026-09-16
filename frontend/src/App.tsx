@@ -65,6 +65,19 @@ const statusLabels: Record<ExperimentStatus, string> = {
   failed: "Échec",
 };
 
+const engineStatusLabels: Record<AnalysisEngine["status"], string> = {
+  available: "Disponible",
+  experimental: "Expérimental",
+  planned: "Planifié",
+  "license-review": "Revue de licence",
+};
+
+const engineKindLabels: Record<AnalysisEngine["kind"], string> = {
+  "zero-training": "Pipeline déterministe",
+  pretrained: "Modèle préentraîné",
+  trained: "Modèle entraîné",
+};
+
 function formatMetric(key: string, value: number): string {
   const presentation = metricPresentations[key as KnownMetricKey];
   switch (presentation?.format) {
@@ -87,7 +100,7 @@ export default function App() {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [engines, setEngines] = useState<AnalysisEngine[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [selectedEngineId, setSelectedEngineId] = useState("adaptive-segmentation-v1");
+  const [selectedEngineId, setSelectedEngineId] = useState("");
   const [form, setForm] = useState<ExperimentCreate>(initialForm);
   const [files, setFiles] = useState<FileList | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -110,9 +123,19 @@ export default function App() {
   }
 
   useEffect(() => {
-    Promise.all([refreshExperiments(), listInferenceEngines().then(setEngines)]).catch(
-      (requestError: Error) => setError(requestError.message),
-    );
+    Promise.all([
+      refreshExperiments(),
+      listInferenceEngines().then((items) => {
+        setEngines(items);
+        setSelectedEngineId((currentId) => {
+          const currentEngine = items.find((engine) => engine.id === currentId);
+          if (currentEngine?.status === "available") {
+            return currentId;
+          }
+          return items.find((engine) => engine.status === "available")?.id ?? "";
+        });
+      }),
+    ]).catch((requestError: Error) => setError(requestError.message));
   }, []);
 
   useEffect(() => {
@@ -146,6 +169,10 @@ export default function App() {
       setError("Créez ou sélectionnez une expérience avant l’analyse.");
       return;
     }
+    if (selectedEngine?.status !== "available") {
+      setError("Sélectionnez un moteur disponible avant l’analyse.");
+      return;
+    }
     const hasNewFiles = Boolean(files?.length);
     if (!hasNewFiles && selectedExperiment.image_count === 0) {
       setError("Ajoutez au moins une image de microscopie.");
@@ -158,7 +185,7 @@ export default function App() {
       if (files?.length) {
         await uploadImages(selectedExperiment.id, files);
       }
-      const analysis = await analyzeExperiment(selectedExperiment.id, selectedEngineId);
+      const analysis = await analyzeExperiment(selectedExperiment.id, selectedEngine.id);
       setResult(analysis);
       setFiles(null);
       await refreshExperiments(selectedExperiment.id);
@@ -351,23 +378,55 @@ export default function App() {
                   value={selectedEngineId}
                   onChange={(event) => setSelectedEngineId(event.target.value)}
                 >
-                  {engines.filter((engine) => engine.status === "available").map((engine) => (
-                    <option key={engine.id} value={engine.id}>{engine.name}</option>
+                  {!engines.some((engine) => engine.status === "available") && (
+                    <option value="">Aucun moteur disponible</option>
+                  )}
+                  {engines.map((engine) => (
+                    <option
+                      disabled={engine.status !== "available"}
+                      key={engine.id}
+                      value={engine.id}
+                    >
+                      {engine.name} — {engineStatusLabels[engine.status]}
+                    </option>
                   ))}
                 </select>
               </label>
             </div>
 
-            {selectedEngine && (
-              <div className="engine-card">
-                <div>
-                  <span className="engine-pulse" />
-                  <strong>{selectedEngine.name}</strong>
-                  <small>Zéro entraînement</small>
-                </div>
-                <p>{selectedEngine.description}</p>
+            <section className="engine-catalog" aria-labelledby="engine-catalog-title">
+              <div className="engine-catalog-heading">
+                <strong id="engine-catalog-title">Registre des moteurs</strong>
+                <small>Seul un moteur « Disponible » peut lancer une inférence.</small>
               </div>
-            )}
+              <div className="engine-catalog-list">
+                {engines.map((engine) => (
+                  <article
+                    className={`engine-card ${engine.id === selectedEngineId ? "selected" : ""}`}
+                    key={engine.id}
+                  >
+                    <div className="engine-card-heading">
+                      <strong>{engine.name}</strong>
+                      <span className={`engine-status status-${engine.status}`}>
+                        {engineStatusLabels[engine.status]}
+                      </span>
+                    </div>
+                    <p>{engine.description}</p>
+                    <small className="engine-meta">
+                      {engineKindLabels[engine.kind]} · {engine.training_required ? "entraînement requis" : "sans entraînement local"}
+                    </small>
+                    <ul>
+                      {engine.limitations.map((limitation) => (
+                        <li key={limitation}>{limitation}</li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+                {engines.length === 0 && (
+                  <p className="engine-catalog-empty">Registre indisponible.</p>
+                )}
+              </div>
+            </section>
 
             <label className="drop-zone">
               <span className="drop-icon" aria-hidden="true">⌁</span>
@@ -400,7 +459,7 @@ export default function App() {
 
             <button
               className="primary-button analyze-button"
-              disabled={busy || !selectedExperiment}
+              disabled={busy || !selectedExperiment || selectedEngine?.status !== "available"}
               onClick={handleAnalyze}
               type="button"
             >
