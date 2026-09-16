@@ -1,13 +1,13 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit benchmark-bbbc019
 
 backend-dev:
 	uv run --project backend uvicorn app.main:app --reload
 
 backend-test:
-	uv run --project backend pytest backend/tests
+	uv run --project backend --extra dev pytest backend/tests
 
 backend-lint:
-	uv run --project backend ruff check backend/app backend/tests backend/inference.py backend/training backend/evaluation
+	uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py backend/training backend/evaluation backend/scripts
 
 frontend-dev:
 	cd frontend && npm run dev
@@ -20,6 +20,18 @@ frontend-typecheck:
 
 check: backend-lint backend-test frontend-typecheck frontend-build
 	docker compose config --quiet
+
+data-fetch:
+	uv run --project backend python backend/scripts/acquire_datasets.py
+
+data-verify:
+	uv run --project backend python backend/scripts/acquire_datasets.py --verify-only
+
+data-audit:
+	uv run --project backend --extra ml python backend/evaluation/audit_data.py
+
+benchmark-bbbc019:
+	uv run --project backend python backend/evaluation/evaluate.py --config backend/evaluation/configs/bbbc019-microfluidic.json
 
 docker-up:
 	docker compose up --build

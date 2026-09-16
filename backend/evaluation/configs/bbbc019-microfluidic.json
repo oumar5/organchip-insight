@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "bbbc019-microfluidic-adaptive-segmentation-v1",
+  "dataset": {
+    "id": "BBBC019v2-Microfluidic",
+    "version": "2",
+    "archive_sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f",
+    "license": "CC-BY-3.0",
+    "source": "https://bbbc.broadinstitute.org/BBBC019"
+  },
+  "engine": "adaptive-segmentation-v1",
+  "images_dir": "data/raw/bbbc019/Microfluidic/images",
+  "masks_dir": "data/raw/bbbc019/Microfluidic/manual",
+  "image_glob": "*.tif",
+  "mask_template": "{stem}_manual.png",
+  "bootstrap_iterations": 10000,
+  "seed": 20260916,
+  "output_json": "reports/benchmarks/bbbc019-microfluidic-adaptive-v1.json",
+  "output_csv": "reports/benchmarks/bbbc019-microfluidic-adaptive-v1.csv",
+  "overlay_dir": "reports/generated/bbbc019-microfluidic-adaptive-v1/overlays",
+  "historical_references": [
+    {
+      "algorithm": "TScratch",
+      "mean_precision": 0.35,
+      "mean_recall": 0.79,
+      "mean_f1": 0.42,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "MultiCellSeg",
+      "mean_precision": 0.23,
+      "mean_recall": 0.98,
+      "mean_f1": 0.35,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    },
+    {
+      "algorithm": "Topman",
+      "mean_precision": 0.47,
+      "mean_recall": 0.99,
+      "mean_f1": 0.63,
+      "source": "https://bbbc.broadinstitute.org/BBBC019"
+    }
+  ]
+}

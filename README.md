@@ -82,12 +82,26 @@ make check
 Ou séparément :
 
 ```bash
-uv run --project backend ruff check backend/app backend/tests backend/inference.py
-uv run --project backend pytest backend/tests
+uv run --project backend --extra dev ruff check backend/app backend/tests backend/inference.py
+uv run --project backend --extra dev pytest backend/tests
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
 docker compose config --quiet
 ```
+
+## Données publiques et benchmark
+
+Le téléchargement minimal est borné, vérifié par checksum et n'inclut pas
+l'archive OoC de 6,7 Go :
+
+```bash
+make data-fetch
+make data-audit
+make benchmark-bbbc019
+```
+
+Les données brutes restent dans `data/raw/`, hors Git. Le manifeste, l'audit et
+les résultats versionnés sont décrits dans [data/README.md](data/README.md).
 
 ## Architecture
 
@@ -118,5 +132,6 @@ Commencer par l'[index documentaire](docs/README.md), puis lire :
 Catégorie prévue : **Tool & Platform** pour le challenge
 [AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien).
 
-La priorité scientifique suivante est un benchmark reproductible sur BBBC019
-Microfluidics et BBBC038, puis une démonstration sur le dataset OoC public.
+Le premier benchmark reproductible cible BBBC019 Microfluidics. La suite est la
+comparaison µSAM, puis la classification de qualité sur le dataset OoC après un
+split anti-fuite vérifié.

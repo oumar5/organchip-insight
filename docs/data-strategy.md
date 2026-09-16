@@ -4,7 +4,7 @@
 
 | Rôle | Dataset | Licence | Pourquoi |
 |---|---|---|---|
-| Démonstration OoC | [OOC Image Dataset](https://doi.org/10.5281/zenodo.10203721) | CC-BY-SA | 3 072 bright-fields et métadonnées OoC |
+| Démonstration OoC | [OOC Image Dataset](https://doi.org/10.5281/zenodo.10203721) | CC-BY-4.0 | 3 072 bright-fields et métadonnées OoC |
 | Validation microfluidique | [BBBC019 Microfluidics](https://bbbc.broadinstitute.org/BBBC019) | CC-BY 3.0 | images DIC et masques manuels |
 | Validation d'instances | [BBBC038](https://bbbc.broadinstitute.org/BBBC038) | CC0 | diversité et masques de noyaux |
 
@@ -50,6 +50,10 @@ sur l'entraînement.
 5. sélectionner un sous-ensemble reproductible ;
 6. intégrer un manifeste versionné, jamais les données brutes dans Git.
 
+Le manifeste actif est dans [`data/manifests/datasets.json`](../data/manifests/datasets.json).
+L'archive OoC complète est désactivée par défaut : les 15 Gio libres observés le
+16 septembre 2026 ne suffisent pas à garantir archive + extraction sans risque.
+
 ## Métriques
 
 - premier plan : précision, rappel, F1, IoU ;
@@ -63,4 +67,3 @@ sur l'entraînement.
 RxRx1 est riche mais pèse 296 Go et sa licence est CC-BY-NC-SA. JUMP est encore
 plus volumineux. Ces ressources pourront servir via profils pré-calculés, pas
 comme dépendance de la première démonstration.
-

@@ -16,7 +16,12 @@ node_modules/
 frontend/dist/
 *.tsbuildinfo
 
-data/
+data/raw/
+data/processed/
+data/cache/
+data/models/
+data/experiments/
+data/*.sqlite3
 artifacts/
 reports/generated/
 *.onnx

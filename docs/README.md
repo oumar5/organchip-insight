@@ -16,6 +16,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 - [Stratégie de données](data-strategy.md)
 - [Plan de validation](validation.md)
 - [Exigences du challenge](competition-requirements.md)
+- [Manifeste et acquisition des données](../data/README.md)
 
 ## Produit et exploitation
 

@@ -20,6 +20,14 @@ class PipelineOutput:
     warnings: list[str]
 
 
+@dataclass(frozen=True)
+class SegmentationOutput:
+    mask: np.ndarray
+    labels: np.ndarray
+    threshold: float
+    polarity: str
+
+
 class AdaptiveSegmentationAnalyzer:
     """Transparent zero-training inference for microscopy image exploration."""
 
@@ -55,6 +63,19 @@ class AdaptiveSegmentationAnalyzer:
         cleaned = remove_small_objects(cleaned, max_size=adaptive_min_size - 1)
         return remove_small_holes(cleaned, max_size=adaptive_min_size - 1)
 
+    def segment(self, grayscale: np.ndarray) -> SegmentationOutput:
+        """Return the exact foreground mask used by the production inference path."""
+        normalized = self._normalize(grayscale)
+        threshold = float(threshold_otsu(normalized)) if np.ptp(normalized) > 0 else 0.5
+        raw_mask, polarity = self._choose_foreground(normalized, threshold)
+        mask = self._clean_mask(raw_mask)
+        return SegmentationOutput(
+            mask=mask,
+            labels=label(mask, connectivity=2),
+            threshold=threshold,
+            polarity=polarity,
+        )
+
     @staticmethod
     def _save_overlay(rgb: np.ndarray, labels: np.ndarray, destination: Path) -> None:
         overlay = rgb.astype(np.float32)
@@ -88,10 +109,10 @@ class AdaptiveSegmentationAnalyzer:
                 warnings.append(f"Image illisible {image_path.name} : {error}")
                 continue
 
-            normalized = self._normalize(grayscale)
-            threshold = float(threshold_otsu(normalized)) if np.ptp(normalized) > 0 else 0.5
-            raw_mask, polarity = self._choose_foreground(normalized, threshold)
-            labels = label(self._clean_mask(raw_mask), connectivity=2)
+            segmentation = self.segment(grayscale)
+            threshold = segmentation.threshold
+            polarity = segmentation.polarity
+            labels = segmentation.labels
             regions = regionprops(labels)
             areas = [float(region.area) for region in regions]
             diameters = [float(region.equivalent_diameter_area) for region in regions]

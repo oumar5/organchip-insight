@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "accessed_on": "2026-09-16",
+  "resources": [
+    {
+      "id": "ooc-datasheet-v1",
+      "dataset": "Organ-on-a-Chip (OOC) Image Dataset",
+      "version": "v1",
+      "source_page": "https://zenodo.org/records/10203721",
+      "url": "https://zenodo.org/api/records/10203721/files/OOC_datasheet.xlsx/content",
+      "path": "data/raw/ooc/OOC_datasheet.xlsx",
+      "size_bytes": 119712,
+      "checksums": {
+        "md5": "a3d4875e3da4da83bac45c0ce727cb40",
+        "sha256": "863fc133f8be825c010c41ea26168fedb75af8d2722646f61402779583073eba"
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "enabled_by_default": true
+    },
+    {
+      "id": "ooc-images-v1",
+      "dataset": "Organ-on-a-Chip (OOC) Image Dataset",
+      "version": "v1",
+      "source_page": "https://zenodo.org/records/10203721",
+      "url": "https://zenodo.org/api/records/10203721/files/OOC_image_dataset.zip/content",
+      "path": "data/raw/ooc/OOC_image_dataset.zip",
+      "size_bytes": 6710767405,
+      "checksums": {
+        "md5": "8f7e058996203d48eb03b2d86c0a2e4d"
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "enabled_by_default": false,
+      "large": true,
+      "extraction": {
+        "type": "zip",
+        "destination": "data/raw/ooc"
+      }
+    },
+    {
+      "id": "bbbc019-microfluidic-v2",
+      "dataset": "BBBC019 Collective cell migration — Microfluidics",
+      "version": "2",
+      "source_page": "https://bbbc.broadinstitute.org/BBBC019",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC019/Microfluidic.zip",
+      "path": "data/raw/bbbc019/Microfluidic.zip",
+      "size_bytes": 10746718,
+      "checksums": {
+        "md5": "a19cfd45e94cf6c57ad7ddd0fb4c6f9c",
+        "sha256": "968b74f478b59d8a558ea2582fea9796e3c2845922077819a5f7b6db6c157b5f"
+      },
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/"
+      },
+      "enabled_by_default": true,
+      "extraction": {
+        "type": "zip",
+        "destination": "data/raw/bbbc019"
+      }
+    }
+  ]
+}
