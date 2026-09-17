@@ -26,7 +26,7 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - même pipeline depuis l'interface, l'API ou `inference.py` ;
 - pipeline expérimental MobileNetV3 reproductible, avec modes `smoke`,
   `validation` et `final-eval` isolés ;
-- Docker Compose et suites de tests.
+- Docker Compose, suites unitaires et parcours Playwright bout en bout.
 
 ## Démarrage recommandé
 
@@ -105,6 +105,15 @@ uv run --project backend --extra dev --extra ml pytest backend/tests
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
 docker compose config --quiet
+```
+
+Le scénario navigateur démarre une pile Docker isolée, crée une expérience,
+importe une image synthétique, lance l'analyse et vérifie les exports JSON/CSV,
+puis supprime ses conteneurs et son volume :
+
+```bash
+npm --prefix frontend exec playwright install chromium
+make test-e2e
 ```
 
 ## Données publiques et benchmark
@@ -216,7 +225,9 @@ avec soutenance du 20 au 30 octobre) sont résumés dans
 de travail jusqu'à la finale est dans
 [docs/plan-soumission.md](docs/plan-soumission.md).
 
-Les benchmarks reproductibles adaptatif et µSAM ciblent BBBC019 Microfluidics.
-Le split OoC groupé, les baselines de qualité et de confondants, puis le smoke
-CNN sont terminés. La prochaine étape de modélisation est la validation CNN
-complète sur GPU, sans accès au test gelé.
+Les benchmarks reproductibles adaptatif et µSAM ciblent BBBC019 Microfluidics ;
+un audit d'instances µSAM pré-enregistré a aussi été exécuté sur BBBC038. Le
+split OoC groupé, les comparateurs, la validation CNN et les ablations A/B sont
+terminés. Aucun CNN n'a satisfait le critère par mode, le test gelé n'a jamais
+été ouvert et la modélisation est close. La suite porte sur la finition produit
+et les livrables de soumission.

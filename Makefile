@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -31,6 +31,9 @@ frontend-build:
 
 frontend-typecheck:
 	npm --prefix frontend run typecheck
+
+test-e2e:
+	./scripts/run-e2e.sh
 
 check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check
 	docker compose config --quiet

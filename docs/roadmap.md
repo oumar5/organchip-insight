@@ -85,7 +85,7 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [ ] file de tâches et progression (si µSAM devient un moteur produit) ;
 - [x] limites de pixels et en-têtes de sécurité API/Nginx ;
 - [x] parcours end-to-end navigateur local du démonstrateur CNN ;
-- [ ] test end-to-end Playwright automatisé ;
+- [x] test end-to-end Playwright automatisé sur pile Docker et volume isolés ;
 - [ ] test sur machine propre CPU ;
 - [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
 

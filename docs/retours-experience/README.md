@@ -21,6 +21,7 @@ a été prise.
 - [Démonstrateur CNN ONNX abstentionniste — 17 septembre 2026](2026-09-17-demonstrateur-cnn-onnx.md)
 - [Stabilisation produit, exports, sécurité et Docker — 17 septembre 2026](2026-09-17-stabilisation-produit-exports-securite-docker.md)
 - [Benchmark d'instances µSAM sur BBBC038 — 17 septembre 2026](2026-09-17-benchmark-instances-bbbc038.md)
+- [Parcours Playwright end-to-end — 17 septembre 2026](2026-09-17-playwright-e2e.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles
