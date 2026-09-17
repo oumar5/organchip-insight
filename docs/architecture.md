@@ -14,6 +14,7 @@ FastAPI ---------------------------------------------------+
        +--> registre de moteurs                            |
                |                                           |
                +--> segmentation adaptative (disponible)  |
+               +--> CNN QC run B (expérimental, optionnel) |
                +--> µSAM (expérimental, benchmark isolé)  |
                +--> Cellpose (revue de licence)            |
                                                            |
@@ -24,9 +25,10 @@ CLI inference.py ------------------------------------------+
 
 1. **Local-first** : aucun service commercial obligatoire.
 2. **Inférence immédiate** : la baseline fonctionne avant tout entraînement.
-3. **Moteurs interchangeables** : même contrat de sortie pour chaque approche.
+3. **Moteurs explicites** : tâche, maturité, exécutabilité et type de sortie sont discriminés.
 4. **Persistance simple** : SQLite et fichiers suffisent au MVP.
-5. **Preuve visible** : chaque segmentation génère un overlay.
+5. **Preuve visible** : chaque segmentation génère un overlay ; une classification
+   expérimentale expose son mode source, ses hashes et son abstention.
 6. **Reproductibilité** : API, CLI et interface utilisent le même pipeline.
 
 ## Backend
@@ -36,6 +38,7 @@ backend/
 ├── app/
 │   ├── api/routes/        endpoints HTTP
 │   ├── ml/pipeline.py     inférence et artefacts
+│   ├── ml/quality_classifier.py  runtime ONNX expérimental à fermeture sûre
 │   ├── ml/registry.py     disponibilité et limites des moteurs
 │   ├── repository.py      persistance SQLite
 │   ├── schemas.py         contrat Pydantic
@@ -66,8 +69,8 @@ migration vers PostgreSQL + stockage objet sans modifier le contrat API.
 
 ## Frontend
 
-Le frontend suit trois actions : définir, segmenter, vérifier. Il affiche la
-version du pipeline, le niveau de preuve, les avertissements et les contours.
+Le frontend suit trois actions : définir, analyser, vérifier. Il affiche la
+version du pipeline, le niveau de preuve, les avertissements et la provenance.
 Il ne contient aucun résultat de démonstration simulé.
 
 ## Contrat de moteur
@@ -79,10 +82,12 @@ Un moteur fournit :
 - des résultats par image ;
 - des artefacts visuels ;
 - des avertissements ;
+- une provenance d'artefacts ;
 - une version immuable.
 
-La fiche sépare `available`, `experimental`, `planned` et `license-review`. Un
-moteur non disponible ne peut pas être invoqué par l'API.
+La fiche sépare `available`, `experimental`, `planned` et `license-review`, puis
+indique indépendamment `runnable`. Un moteur non exécutable ne peut pas être
+invoqué par l'API.
 
 ## Déploiement
 

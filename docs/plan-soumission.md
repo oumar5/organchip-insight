@@ -46,7 +46,7 @@ Le règlement officiel est résumé dans
 | Priorité | Tâche | Preuve attendue |
 |---|---|---|
 | P0 | ~~gel de la sélection CNN et run `final-eval`~~ **annulé** : aucune configuration éligible au 17 septembre 2026, test jamais ouvert, modélisation CNN close ; consigner le résultat négatif dans le rapport | [contre-audit](audit-2026-09-17-classification-cnn.md), phrase de conclusion dans le rapport technique |
-| P1 | démonstrateur ONNX expérimental du run B, optionnel : `onnxruntime` en dépendance optionnelle, inférence CPU, abstention systématique, softmax non calibré affiché avec le mode d'acquisition et la provenance (hashes), aucune décision automatique `good`/`bad`, aucun overlay ni comptage rattaché ; le contrôle qualité produit reste le moteur adaptatif et les métadonnées | tests API, fiche moteur `experimental` avec limites écrites |
+| P1 | **fait localement** : démonstrateur ONNX expérimental du run B, `onnxruntime` en dépendance optionnelle, inférence CPU, abstention systématique, softmax non calibré affiché avec le mode d'acquisition et la provenance (hashes), aucune décision automatique `good`/`bad`, aucun overlay ni comptage rattaché ; le contrôle qualité produit reste le moteur adaptatif et les métadonnées ; poids non distribués avant décision de licence | tests API, fiche moteur `experimental`, [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) |
 | P1 | vue « Comparaison des moteurs » dans l'interface, alimentée par les rapports versionnés (`reports/benchmarks/*.json`) : F1/IoU, intervalles, coût CPU, overlays d'erreur | capture, aucun chiffre saisi à la main |
 | P1 | affectation témoin/traitement à l'import, agrégats par groupe avec bootstrap par image, ou masquage explicite des champs si non livré | tests, capture |
 | P1 | benchmark d'instances borné : µSAM APG sur un sous-ensemble stratifié de BBBC038 (CC0, masques d'instances), erreur de comptage et précision/rappel par objet ; dans l'interface, « composantes connexes » avec réserve explicite tant qu'aucune validation de comptage n'existe sur images OoC | rapport JSON, capture |
@@ -125,7 +125,7 @@ Soumettre le **9 octobre**, vérifier chaque lien sans connexion, garder le
 | Traitement d'image | scikit-image, Pillow, NumPy | 0.26.0, 12.3.0, 2.5.3 | relever la borne `pillow<12` vers `<13` avec le lock |
 | Interface | React, Vite, TypeScript 7 (compilateur natif) | 19.3.0, 8.3.0, 7.0.2 | à jour, garder l'épinglage exact |
 | Entraînement | PyTorch, torchvision | 2.14.0 sur PyPI ; **2.11.0 attendu sur Kaggle** | étendre le contrat après validation locale |
-| Inférence CNN produit | ONNX Runtime CPU | 1.30.0 | modèle opset 18 déjà exporté et vérifié |
+| Inférence CNN expérimentale | ONNX Runtime CPU | 1.23.2 local ; 1.22.1 à l'export Kaggle | modèle opset 18 exporté, hashes vérifiés, abstention systématique |
 | Segmentation zero-shot | micro-sam | 1.8.14 | moteur expérimental ; `vit_t_lm` pour un repli CPU |
 | Explicabilité | pytorch-grad-cam | 1.5.7 | optionnel, avec avertissement |
 | Tâches longues | file SQLite en processus (`huey` 3.4 SqliteHuey ou thread + table `jobs`) | — | éviter Redis/Celery pour un déploiement local |

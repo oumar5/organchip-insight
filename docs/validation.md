@@ -148,6 +148,16 @@ Détails, artefacts et hashes :
 Validation GPU complète :
 [retour d'expérience de la campagne v2 Kaggle](retours-experience/2026-09-16-validation-cnn-kaggle-campagne-v2.md).
 
+### Démonstrateur CNN expérimental
+
+Le run B est intégré localement comme démonstrateur ONNX CPU, sans promotion en
+modèle de contrôle qualité. Le runtime vérifie les hashes du modèle, du
+prétraitement et des labels avant chargement. Il produit seulement un softmax
+brut non calibré, impose `À vérifier` à chaque image, refuse de scorer les modes
+source hors `L`/`RGB` et ne génère ni overlay ni comptage. Le smoke réel sur une
+image L et une image RGB du manifeste train/validation est documenté dans le
+[REX du 17 septembre](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
+
 ## Intervalles et répétabilité
 
 - bootstrap par unité expérimentale, jamais seulement par image ;

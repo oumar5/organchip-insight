@@ -59,10 +59,11 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 
 ## Jalon 3 — Expérience scientifique
 
-- [ ] démonstrateur ONNX expérimental du run B (optionnel) : abstention
+- [x] démonstrateur ONNX expérimental du run B : abstention
   systématique, softmax non calibré affiché avec le mode d'acquisition et la
   provenance, aucune décision automatique `good`/`bad`, aucun overlay ni
-  comptage rattaché ; aucun moteur CNN de contrôle qualité ;
+  comptage rattaché ; aucun moteur CNN de contrôle qualité ; poids non
+  distribués dans le dépôt, voir le [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) ;
 - [ ] vue de comparaison des moteurs alimentée par les rapports versionnés ;
 - [ ] rattacher chaque image à contrôle/traitement à l'import, agrégation par
   groupe avec intervalles, ou masquer les champs non livrés ;

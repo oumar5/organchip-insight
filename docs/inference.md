@@ -51,6 +51,7 @@ Il ne peut pas encore servir à :
 | Moteur | État | Usage | Décision |
 |---|---|---|---|
 | Segmentation adaptative v1 | disponible | baseline CPU locale | moteur par défaut |
+| QC CNN campagne v2, run B | expérimental | démonstrateur ONNX CPU | exécutable seulement si le bundle vérifié est présent ; abstention systématique |
 | µSAM | expérimental | benchmark isolé préentraîné | meilleur sur BBBC019, non activé dans le chemin produit |
 | Cellpose | revue de licence | segmentation généraliste | non activé par défaut |
 
@@ -59,6 +60,13 @@ modèles ont été entraînés sur des données CC-BY-NC. L'usage dans un challe
 prix doit donc être clarifié avant intégration. µSAM est publié sous licence MIT,
 et le checkpoint BBBC019 évalué est enregistré avec sa licence CC-BY-4.0 et ses
 SHA-256. Tout autre checkpoint devra refaire cette vérification de provenance.
+
+Le registre sépare désormais la maturité scientifique (`status`) de la
+disponibilité technique (`runnable`). Le CNN expérimental peut donc être
+exécutable sans devenir un moteur validé. Son softmax brut reste non calibré,
+aucune classe automatique n'est produite et les modes source hors `L`/`RGB`
+restent sans score. Voir le
+[retour d'expérience](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
 
 Sources :
 

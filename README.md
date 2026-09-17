@@ -107,11 +107,25 @@ make benchmark-bbbc019
 Les données brutes restent dans `data/raw/`, hors Git. Le manifeste, l'audit et
 les résultats versionnés sont décrits dans [data/README.md](data/README.md).
 
-Le pipeline CNN OoC a passé un smoke test CPU et une vérification d'export
-ONNX. Ce contrôle de 12 images vérifie le chemin technique, pas la performance
-du modèle : la validation complète sur GPU Kaggle et l'évaluation finale du
-test gelé restent à réaliser. Voir le
-[retour d'expérience CNN](docs/retours-experience/2026-09-16-pipeline-cnn-smoke.md).
+La modélisation CNN OoC est close après validation GPU et ablations A/B : aucune
+configuration n'a atteint le plancher pré-enregistré par mode et le test gelé
+n'a jamais été ouvert. Le run B est disponible uniquement comme démonstrateur
+ONNX expérimental à abstention systématique. Voir le
+[contre-audit](docs/audit-2026-09-17-classification-cnn.md) et le
+[REX produit](docs/retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
+
+Pour activer localement le démonstrateur avec le bundle autorisé déjà présent :
+
+```bash
+cd backend
+uv sync --extra dev --extra ml --extra inference
+ORGANCHIP_QUALITY_MODEL_DIR=../data/experiments/ooc-cnn/kaggle-validation-campaign-v2-gray448/onnx \
+  uv run uvicorn app.main:app --reload
+```
+
+Les poids restent hors Git. Sans ONNX Runtime ou sans bundle conforme, le
+moteur reste visible mais non exécutable et l'analyse adaptative continue de
+fonctionner.
 
 Contrôles locaux du pipeline et du notebook :
 
@@ -160,6 +174,7 @@ frontend React
         -> fichiers : images et overlays
         -> registre de moteurs
             -> segmentation adaptative v1 (disponible)
+            -> QC CNN run B (expérimental, bundle optionnel, abstention)
             -> µSAM (expérimental, benchmark isolé)
             -> Cellpose (revue de licence)
 ```

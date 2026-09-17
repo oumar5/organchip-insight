@@ -17,8 +17,8 @@ GET /inference/engines
 ```
 
 Retourne les moteurs disponibles, expérimentaux ou bloqués par une revue de
-licence. Une présence dans le registre ne signifie pas qu'un moteur est
-exécutable dans le chemin produit.
+licence. `status` décrit la maturité scientifique ; `runnable` décrit la
+disponibilité technique et `unavailable_reason` explique une indisponibilité.
 
 ## Expériences
 
@@ -65,6 +65,7 @@ deux actions séparées : une relance d'analyse ne téléverse rien.
 
 ```http
 POST /experiments/{experiment_id}/analyze?engine_id=adaptive-segmentation-v1
+POST /experiments/{experiment_id}/analyze?engine_id=ooc-quality-cnn-campaign-v2-gray448
 GET  /experiments/{experiment_id}/results
 GET  /experiments/{experiment_id}/artifacts/{filename}
 ```
@@ -73,9 +74,11 @@ Le résultat contient :
 
 - version et fiche du moteur ;
 - métriques agrégées ;
-- métriques par image ;
-- URLs des overlays ;
+- résultats par image discriminés par `analysis_type` ;
+- URLs des overlays pour une segmentation, ou softmax brut abstentionniste et
+  mode source pour le démonstrateur CNN ;
 - avertissements ;
+- provenance des artefacts consommés ;
 - horodatage.
 
 ## Erreurs principales
