@@ -5,8 +5,9 @@ Candidate branch: **`dev`**<br>
 Candidate date: **17 September 2026**
 
 These notes are ready to paste into the public GitHub release after the owner
-chooses the code licence, completes the team identity, authorizes the push and
-linear merge, and validates the final tag.
+confirms the public author identity, authorizes the linear merge and public
+release, and validates the final tag. Project code is Apache-2.0 and the team is
+solo.
 
 ## What this release delivers
 

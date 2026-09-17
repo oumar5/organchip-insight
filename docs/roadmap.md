@@ -9,7 +9,9 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 ## Blocages administratifs
 
 - [ ] dépôt GitHub public (privé au 16 septembre 2026) ;
-- [ ] fichier `LICENSE` (aucune licence détectée).
+- [x] fichier `LICENSE` Apache-2.0 ajouté ;
+- [x] équipe solo décidée ; nom public exact et affiliation éventuelle à
+  confirmer avant publication.
 
 ## Jalon 1 — Socle démontrable
 

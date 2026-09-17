@@ -1,25 +1,25 @@
 # Publication runbook
 
 This is the final ordered procedure once the project owner supplies the missing
-identity and licence decisions. It prevents a partially public or internally
+public identity and publication decisions. Apache-2.0 and a solo team are
+already fixed. The procedure prevents a partially public or internally
 inconsistent submission.
 
 ## 1. Owner-controlled fields
 
 Record all of the following before changing repository visibility:
 
-- final team name, 1–5 members, affiliations/disciplines and team lead;
+- exact public author name, optional affiliation, and confirmation that the
+  owner is the solo team lead;
 - confirmation that the organizer's external registration form was submitted;
-- code licence choice;
-- decision to keep the model bundle undistributed or a separate model licence;
 - authorization to push `dev`, merge linearly to `main`, create the release and
   make the repository public;
 - final tag (candidate: `v1.0.0-ai4s`).
 
 ## 2. Finalize the tracked content on `dev`
 
-1. Add the chosen `LICENSE` file.
-2. Replace the explicit owner-pending fields in the report and Writeup.
+1. Verify the Apache-2.0 `LICENSE` file and third-party attributions.
+2. Replace the remaining public-identity fields in the report and Writeup.
 3. Rebuild and inspect the PDF with `make report-pdf` and
    `make report-pdf-check`.
 4. Run `make check demo-video-check`.
@@ -38,7 +38,8 @@ are settled. Do not open the frozen classification test.
 4. Create the approved annotated tag and GitHub release from that commit.
 5. Paste `docs/release/RELEASE_NOTES_CANDIDATE.md` after replacing “candidate”
    fields, and attach the checksum file, PDF, MP4 and SRT.
-6. Make the repository and release public.
+6. Make the repository and release public **before** submitting the Writeup;
+   keep them public throughout evaluation.
 
 ## 4. Verify anonymously
 

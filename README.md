@@ -233,3 +233,10 @@ split OoC groupé, les comparateurs, la validation CNN et les ablations A/B sont
 terminés. Aucun CNN n'a satisfait le critère par mode, le test gelé n'a jamais
 été ouvert et la modélisation est close. La suite porte sur la finition produit
 et les livrables de soumission.
+
+## Licence
+
+Le code original d'OrganChip Insight est distribué sous licence
+[Apache-2.0](LICENSE). Les jeux de données, poids, bibliothèques et médias tiers
+conservent leurs licences propres, répertoriées dans
+[la déclaration des outils et licences](docs/declaration-ia-et-licences.md).

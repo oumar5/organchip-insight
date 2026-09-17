@@ -2,11 +2,11 @@
 
 **Category:** Tool & Platform
 
-**Team:** owner declaration pending
+**Team:** solo team; public author display name and optional affiliation pending
 
-**Public code:** owner authorization, licence, and public release URL pending
+**Public code:** Apache-2.0; public release URL pending
 
-**Demo video (maximum five minutes):** local production pending, then public URL
+**Demo video (maximum five minutes):** validated 3:18 local candidate; public URL pending
 
 **Technical report:** local PDF candidate generated; public URL pending
 
@@ -89,16 +89,17 @@ protocols, and dated decision records are available in the public repository.
 
 ## AI, data, models, and licences
 
-The product does not call an LLM or commercial API. AI assistants supported
-code, test, documentation, and literature-review work under human review; all
-reported measurements come from versioned scripts. The data sources are the
+The product does not call an LLM or commercial API. OpenAI Codex and Anthropic
+Claude Code supported code, tests, documentation, independent review, and
+literature-review work under human review; all reported measurements come from
+versioned scripts. The data sources are the
 CC-BY-4.0 OOC Image Dataset, CC-BY-3.0 BBBC019, and CC0 BBBC038. The isolated
 µSAM benchmark uses MIT code and CC-BY-4.0 weights. The optional MobileNetV3
 demonstrator uses torchvision and ImageNet weights under BSD-3 terms. Exact
 versions are locked in `backend/uv.lock`, `frontend/package-lock.json`, and the
 experiment environments.
 
-**Project code licence:** owner decision pending; no licence is implied.
+**Project code licence:** Apache-2.0.
 
 **Model bundle:** not distributed in the current candidate. Any later public
 bundle requires an explicit licence, location, provenance manifest, and hashes.

@@ -130,14 +130,15 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 
 - [x] inscription Kaggle confirmée (CLI : `userHasEntered = True`) ;
 - [ ] formulaire d'inscription externe confirmé par le propriétaire ;
-- [ ] équipe de 1 à 5 membres et responsable déclarés ;
+- [x] format d'équipe solo et responsable unique décidés ; nom public exact et
+  affiliation éventuelle encore à confirmer ;
 - [ ] dépôt GitHub **rendu public** (il est privé au 16 septembre 2026) ;
-- [ ] fichier `LICENSE` ajouté (aucune licence détectée par GitHub) ;
+- [x] fichier `LICENSE` Apache-2.0 ajouté ;
 - [ ] release figée avec tag, checksums et DOI Zenodo optionnel ;
 - [x] modèles non distribués explicitement et procédure de données documentée ;
 - [x] résultats recréés depuis un environnement propre ;
-- [ ] rapport technique complet localement, PDF encore à publier ;
-- [ ] vidéo locale validée à 3 min 18 s, encore à publier sans connexion ;
-- [ ] Writeup prêt hors équipe, licence et liens publics ;
-- [ ] déclarations IA, licences et citations complètes ;
+- [x] rapport technique complet localement ; PDF encore à publier ;
+- [x] vidéo locale validée à 3 min 18 s ; encore à publier sans connexion ;
+- [x] Writeup prêt hors identité publique et liens publics ;
+- [x] déclarations IA, licences et citations complètes ;
 - [ ] soutenance préparée : diapositives, démo hors ligne de secours, Q/R.

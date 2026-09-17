@@ -2,7 +2,8 @@
 
 This directory contains editable English and French deliverables for the AI4S
 Open Innovation submission. It deliberately keeps publication-dependent fields
-visible rather than inventing links or licences.
+visible rather than inventing links. The code licence is Apache-2.0 and the
+team format is solo.
 
 - [English technical report source](technical-report-en.md)
 - [French technical report source](technical-report-fr.md)
@@ -17,13 +18,16 @@ visible rather than inventing links or licences.
 - [Publication runbook](publication-runbook.md)
 - [Candidate release notes](../release/RELEASE_NOTES_CANDIDATE.md)
 
-## Fields that require the project owner's decision
+## Fields that still require the project owner's decision
 
-- team name and author list;
-- code licence and model-bundle licence;
+- exact public author name and optional affiliation;
 - public repository URL and release tag;
 - public video URL;
 - optional hosted-demo URL;
 - final PDF URL.
+
+The optional ONNX bundle is not distributed in this submission. The repository
+may remain private while these fields are finalized, but it must be public
+before the Kaggle Writeup is submitted and throughout evaluation.
 
 The frozen test set must not be opened to complete any of these fields.

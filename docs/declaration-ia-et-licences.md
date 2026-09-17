@@ -5,15 +5,20 @@ bibliothèques et données utilisés, avec leur source, leur licence et leur
 usage. Cette page est la source unique de cette déclaration ; elle doit être
 recopiée dans le rapport technique et le Writeup.
 
-Dernière mise à jour : 17 septembre 2026. Les lignes marquées `à compléter`
-doivent être finalisées avant la release.
+Dernière mise à jour : 17 septembre 2026.
 
 ## Outils d'IA utilisés pour développer le projet
 
 | Outil | Usage | Contrôle humain |
 |---|---|---|
-| Claude Code (Anthropic), modèles de la famille Claude | assistance à l'écriture de code, de tests, de documentation et à la recherche bibliographique | chaque commit est relu ; les métriques proviennent exclusivement de scripts versionnés ; aucune sortie générée n'est présentée comme un résultat expérimental |
-| autres assistants (`à compléter` si utilisés) | — | — |
+| OpenAI Codex, modèles de la famille GPT | développement, revue de code, tests, documentation, interface, orchestration locale et contre-analyse méthodologique | chaque modification est relue et validée par les suites du dépôt ; aucune métrique n'est inventée par le modèle |
+| Claude Code (Anthropic), modèles de la famille Claude | revues indépendantes, assistance au code, aux tests, à la documentation et à la recherche bibliographique | les constats sont recoupés avec le code, les rapports versionnés et des commandes reproductibles |
+
+La déclaration publique conserve les noms officiels des fournisseurs et des
+produits. Les surnoms de sessions ou d'interfaces ne sont pas conservés, car
+ils ne constituent pas des identifiants de modèle stables ou vérifiables. Les
+versions exactes ne sont indiquées que lorsqu'un reçu ou un manifeste permet
+de les prouver.
 
 Aucune fonction du produit ne dépend d'un grand modèle de langage ou d'une
 API commerciale.
@@ -24,8 +29,20 @@ API commerciale.
 |---|---|---|---|---|
 | `adaptive-segmentation-v1` | moteur par défaut, sans poids | code du projet | aucun | — |
 | µSAM `vit_b_lm` + APG, micro-sam 1.8.14 | benchmarks isolés BBBC019 et BBBC038 | MIT | CC-BY-4.0, BioImage.IO `diplomatic-bug` 1.2 | SHA-256 dans `data/manifests/models.json` et les rapports |
-| MobileNetV3-Small (torchvision) | classifieur de qualité expérimental | BSD-3 (torchvision) | poids ImageNet BSD-3, fournis localement avec SHA-256 | `à compléter` après le run `validation` |
+| MobileNetV3-Small (torchvision) | classifieur de qualité expérimental | BSD-3 (torchvision) | poids ImageNet BSD-3, fournis localement avec SHA-256 | rapports de validation, ablations A/B et manifestes ONNX verrouillés |
 | Cellpose / Cellpose-SAM | non utilisé | BSD-3 | données d'entraînement CC-BY-NC | statut `license-review`, jamais chargé |
+
+Le run MobileNetV3-Small sélectionné, son export ONNX et leurs SHA-256 sont
+consignés dans les rapports de validation et d'ablation. Le bundle reste hors
+de la soumission publique.
+
+## Outils de production des vidéos
+
+| Outil | Usage | Licence / réserve |
+|---|---|---|
+| Chatterbox Multilingual 0.1.7 (Resemble AI) | synthèse locale des narrations anglaise et française, sans audio de référence ni clonage de voix | code et modèle MIT ; runtime et poids non redistribués dans le dépôt |
+| Rhubarb Lip Sync 1.14.0 | génération locale des repères de bouche de l'avatar | MIT ; les repères produits appartiennent au projet |
+| Demo Studio | capture, montage reproductible, sous-titres et composition des livrables vidéo | outil local de production ; seul le résultat et les configurations OrganChip nécessaires sont distribués |
 
 ## Données
 
@@ -47,9 +64,10 @@ Les versions exactes sont figées dans `backend/uv.lock`,
 
 ## Licence du projet
 
-`à compléter` : le dépôt n'a pas encore de fichier `LICENSE`. Recommandation :
-Apache-2.0, compatible avec toutes les dépendances ci-dessus et explicite sur
-les brevets.
+Le code original d'OrganChip Insight est distribué sous **Apache-2.0**, avec le
+texte complet dans `LICENSE`. Cette licence permissive comprend une concession
+explicite de brevets. Elle ne remplace pas les licences propres aux datasets,
+poids, bibliothèques, musique et autres contenus tiers listés dans ce document.
 
 ## Citations attendues dans le rapport
 

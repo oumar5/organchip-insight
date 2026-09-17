@@ -2,15 +2,16 @@
 
 **Technical report candidate — 17 September 2026**
 
-**Team:** Owner declaration pending (1–5 members and team lead required)
+**Team:** solo team; the project owner is the sole member and team lead. Public
+display name and optional affiliation must be confirmed before submission.
 
 **Category:** Tool & Platform
 
 **Release:** validated candidate on `dev`; public tag pending owner authorization
 
-> Publication note: values are linked to versioned project reports. The team
-> declaration, code licence, public tag, and public URLs remain owner-controlled
-> publication fields and must be inserted before the Kaggle Writeup is submitted.
+> Publication note: values are linked to versioned project reports. The public
+> author identity, public tag, and public URLs remain owner-controlled fields
+> and must be inserted before the Kaggle Writeup is submitted.
 
 ## Abstract
 
@@ -369,20 +370,20 @@ verified through the versioned manifests and scripts documented in
 
 ## 11. AI tools, libraries, and licences
 
-AI assistants supported code, tests, documentation, and literature review
-under human control. Each reported metric comes from a versioned script or
-report; generated prose is not presented as experimental evidence. The product
-does not depend on an LLM, hosted model, or commercial API.
+OpenAI Codex and Anthropic Claude Code supported code, tests, documentation,
+independent review, and literature review under human control. Each reported
+metric comes from a versioned script or report; generated prose is not
+presented as experimental evidence. The product does not depend on an LLM,
+hosted model, or commercial API.
 
 The canonical disclosure, including µSAM, MobileNetV3, datasets, and main
 libraries, is
 [`docs/declaration-ia-et-licences.md`](../declaration-ia-et-licences.md).
 
-**Code licence:** owner decision pending; the repository remains all rights
-reserved until a `LICENSE` file is added.
+**Code licence:** Apache-2.0, recorded in the repository-root `LICENSE` file.
 
-**Model bundle:** not distributed in the release candidate; any later
-publication requires a separate owner licence decision and hash-locked bundle.
+**Model bundle:** not distributed in this submission. Any later publication
+requires a separate licence decision and hash-locked bundle.
 
 ## 12. Conclusion
 

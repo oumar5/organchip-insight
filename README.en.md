@@ -202,3 +202,10 @@ The repository emphasizes a complete and reproducible analysis workflow,
 explicit uncertainty, acquisition-shortcut audits, a locked test set, and
 scientific limits that remain visible in the product. The remaining work is
 release preparation and submission material, not additional model selection.
+
+## Licence
+
+Original OrganChip Insight code is released under the
+[Apache License 2.0](LICENSE). Third-party datasets, weights, libraries, and
+media retain their own licences as listed in the
+[AI, model, data, and licence disclosure](docs/declaration-ia-et-licences.md).

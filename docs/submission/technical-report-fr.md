@@ -2,15 +2,17 @@
 
 **Rapport technique candidat - 17 septembre 2026**
 
-**Équipe :** déclaration du propriétaire en attente (1 à 5 membres et un responsable requis)
+**Équipe :** équipe solo ; le propriétaire du projet est l'unique membre et
+responsable. Le nom public exact et l'affiliation éventuelle doivent être
+confirmés avant la soumission.
 
 **Catégorie :** Outil & Plateforme
 
 **Release :** candidat validé sur `dev` ; tag public en attente de l'autorisation du propriétaire
 
 > Note de publication : les valeurs sont reliées aux rapports versionnés du projet.
-> La déclaration d'équipe, la licence du code, le tag public et les URL publiques
-> restent sous le contrôle du propriétaire et doivent être renseignés avant la
+> L'identité publique de l'auteur, le tag public et les URL publiques restent
+> sous le contrôle du propriétaire et doivent être renseignés avant la
 > soumission du Writeup Kaggle.
 
 ## Résumé
@@ -366,21 +368,21 @@ acquis ou vérifiés par les manifestes et scripts documentés dans
 
 ## 11. Outils d'IA, bibliothèques et licences
 
-Des assistants d'IA ont contribué au code, aux tests, à la documentation et à
-la revue de littérature sous contrôle humain. Chaque métrique rapportée provient
-d'un script ou d'un rapport versionné ; la prose générée n'est pas présentée
-comme preuve expérimentale. Le produit ne dépend d'aucun LLM, modèle hébergé ou
-API commerciale.
+OpenAI Codex et Anthropic Claude Code ont contribué au code, aux tests, à la
+documentation, aux contre-revues et à la revue de littérature sous contrôle
+humain. Chaque métrique rapportée provient d'un script ou d'un rapport
+versionné ; la prose générée n'est pas présentée comme preuve expérimentale. Le
+produit ne dépend d'aucun LLM, modèle hébergé ou API commerciale.
 
 La déclaration canonique, incluant µSAM, MobileNetV3, les jeux de données et
 les bibliothèques principales, est disponible dans
 [`docs/declaration-ia-et-licences.md`](../declaration-ia-et-licences.md).
 
-**Licence du code :** décision du propriétaire en attente ; le dépôt reste tous
-droits réservés jusqu'à l'ajout d'un fichier `LICENSE`.
+**Licence du code :** Apache-2.0, consignée dans le fichier `LICENSE` à la
+racine du dépôt.
 
-**Bundle modèle :** non distribué dans le candidat ; toute publication future
-exige une décision de licence séparée et un bundle verrouillé par hash.
+**Bundle modèle :** non distribué dans cette soumission ; toute publication
+future exige une décision de licence séparée et un bundle verrouillé par hash.
 
 ## 12. Conclusion
 
