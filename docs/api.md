@@ -67,6 +67,8 @@ deux actions séparées : une relance d'analyse ne téléverse rien.
 POST /experiments/{experiment_id}/analyze?engine_id=adaptive-segmentation-v1
 POST /experiments/{experiment_id}/analyze?engine_id=ooc-quality-cnn-campaign-v2-gray448
 GET  /experiments/{experiment_id}/results
+GET  /experiments/{experiment_id}/exports/results.json
+GET  /experiments/{experiment_id}/exports/results.csv
 GET  /experiments/{experiment_id}/artifacts/{filename}
 ```
 
@@ -80,6 +82,10 @@ Le résultat contient :
 - avertissements ;
 - provenance des artefacts consommés ;
 - horodatage.
+
+L'export JSON conserve le résultat complet et sa provenance. Le CSV contient
+une ligne par image et des colonnes adaptées au type de résultat ; les deux
+réponses sont servies comme pièces jointes.
 
 ## Erreurs principales
 

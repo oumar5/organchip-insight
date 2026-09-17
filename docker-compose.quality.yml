@@ -1,0 +1,9 @@
+services:
+  backend:
+    environment:
+      ORGANCHIP_QUALITY_MODEL_DIR: /models/quality
+    volumes:
+      - type: bind
+        source: ${ORGANCHIP_QUALITY_MODEL_DIR_HOST:?Set an absolute ONNX bundle path}
+        target: /models/quality
+        read_only: true

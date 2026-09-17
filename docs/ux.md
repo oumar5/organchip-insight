@@ -7,8 +7,9 @@ Créer l'expérience
   -> sélectionner le moteur
   -> importer les images
   -> lancer l'inférence
-  -> contrôler les overlays
-  -> examiner les métriques et limites
+  -> contrôler les overlays ou l'abstention du CNN
+  -> examiner les métriques, la provenance et les limites
+  -> exporter JSON ou CSV
 ```
 
 Le parcours est volontairement linéaire. Un utilisateur ne doit pas choisir un
@@ -18,7 +19,8 @@ hyperparamètre avant d'avoir vu une première sortie.
 
 - barre latérale : navigation et expériences persistées ;
 - en-tête : promesse et disponibilité du service ;
-- carte 01 : contexte et groupes de l'expérience ;
+- carte 01 : contexte de l'expérience ; les groupes restent masqués tant que
+  l'affectation par image n'est pas livrée ;
 - carte 02 : moteur, fichiers et action principale ;
 - résultats : mesures, overlays, provenance et avertissements.
 
@@ -32,6 +34,8 @@ hyperparamètre avant d'avoir vu une première sortie.
 4. **Statut visible** : disponible, en cours, terminé ou en échec.
 5. **Langage prudent** : “exploratoire” tant que la validation manque.
 6. **Local-first** : les données ne quittent pas l'environnement par défaut.
+7. **Pas de groupe fictif** : aucun champ témoin/traitement n'est affiché avant
+   de pouvoir rattacher réellement chaque image à un groupe.
 
 ## États à couvrir
 
@@ -42,6 +46,7 @@ hyperparamètre avant d'avoir vu une première sortie.
 | Téléversement invalide | fichier rejeté sans casser le lot |
 | Analyse en cours | action bloquée, indicateur de progression |
 | Analyse terminée | métriques, overlays et provenance visibles |
+| Export | JSON complet et CSV par image téléchargés depuis le résultat courant |
 | Résultat rechargé | récupération depuis SQLite après redémarrage |
 | Petit écran | navigation compacte et cartes empilées |
 
@@ -63,4 +68,3 @@ Le test modéré doit vérifier qu'un utilisateur externe peut :
 3. retrouver la version du pipeline ;
 4. identifier au moins une limitation ;
 5. relancer une analyse avec les images déjà stockées.
-

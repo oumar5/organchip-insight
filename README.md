@@ -16,10 +16,13 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - décodage des uploads, limites de taille/pixels et détection des doublons binaires ;
 - imports séparés de l'analyse, rejets détaillés et TIFF gris 16 bits pris en charge ;
 - inférence CPU sans poids : Otsu, morphologie, composantes connexes ;
-- comptage, surfaces, diamètre, intensité, contraste et indice de contraste
-  relatif explicitement heuristique ;
+- composantes connexes, surfaces, diamètre, intensité, contraste et indice de
+  contraste relatif explicitement heuristiques ; le comptage n'est pas validé
+  comme nombre de cellules ;
 - overlays de segmentation inspectables ;
 - registre transparent des moteurs disponibles et candidats ;
+- démonstrateur CNN ONNX optionnel à abstention systématique ;
+- exports JSON complet et CSV par image ;
 - même pipeline depuis l'interface, l'API ou `inference.py` ;
 - pipeline expérimental MobileNetV3 reproductible, avec modes `smoke`,
   `validation` et `final-eval` isolés ;
@@ -41,6 +44,17 @@ Ouvrir ensuite :
 - OpenAPI : <http://localhost:8000/docs>
 
 Les données sont conservées dans le volume Docker `organchip_data`.
+
+Le Docker standard conserve le moteur adaptatif et affiche le CNN comme
+indisponible tant que ses poids ne sont pas montés. Pour la démonstration ONNX :
+
+```bash
+export ORGANCHIP_QUALITY_MODEL_DIR_HOST="$(pwd)/data/experiments/ooc-cnn/kaggle-validation-campaign-v2-gray448/onnx"
+docker compose -f docker-compose.yml -f docker-compose.quality.yml up --build
+```
+
+L'overlay Compose monte ce dossier en lecture seule et le runtime vérifie les
+trois SHA-256 avant de rendre le moteur exécutable.
 
 Si un port est déjà occupé, modifier `.env` sans toucher au code :
 

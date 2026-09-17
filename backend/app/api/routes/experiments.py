@@ -1,4 +1,7 @@
+import csv
 import hashlib
+import io
+import json
 import logging
 from pathlib import Path
 from threading import RLock
@@ -6,7 +9,7 @@ from typing import Annotated
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile, status
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from PIL import Image, UnidentifiedImageError
 
 from app.config import get_settings
@@ -220,13 +223,55 @@ def analyze_experiment(
 
 @router.get("/{experiment_id}/results", response_model=AnalysisResult)
 def get_results(experiment_id: UUID) -> AnalysisResult:
+    return _result_or_404(experiment_id)
+
+
+def _result_or_404(experiment_id: UUID) -> AnalysisResult:
     experiment = _get_experiment_or_404(experiment_id)
     if experiment.status != "complete":
-        raise HTTPException(status_code=404, detail="No completed analysis for the current images")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Aucun résultat terminé pour les images actuelles",
+        )
     result = repository.get_result(experiment_id)
     if result is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Results not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Résultat absent")
     return result
+
+
+@router.get("/{experiment_id}/exports/results.json", response_class=Response)
+def export_results_json(experiment_id: UUID) -> Response:
+    result = _result_or_404(experiment_id)
+    payload = json.dumps(result.model_dump(mode="json"), ensure_ascii=False, indent=2)
+    return Response(
+        content=payload + "\n",
+        media_type="application/json",
+        headers={
+            "Content-Disposition": (
+                f'attachment; filename="organchip-{experiment_id}-results.json"'
+            )
+        },
+    )
+
+
+@router.get("/{experiment_id}/exports/results.csv", response_class=Response)
+def export_results_csv(experiment_id: UUID) -> Response:
+    result = _result_or_404(experiment_id)
+    rows = [item.model_dump(mode="json") for item in result.image_results]
+    fieldnames = list(dict.fromkeys(key for row in rows for key in row))
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return Response(
+        content="\ufeff" + output.getvalue(),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": (
+                f'attachment; filename="organchip-{experiment_id}-image-results.csv"'
+            )
+        },
+    )
 
 
 @router.get("/{experiment_id}/artifacts/{artifact_name}", response_class=FileResponse)

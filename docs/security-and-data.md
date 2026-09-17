@@ -13,19 +13,25 @@ directement sur Internet.
 - extensions autorisées limitées ;
 - contenu vérifié par Pillow ;
 - taille maximale configurable ;
+- limite de pixels décompressés avant acceptation ;
 - artefacts servis uniquement depuis le dossier de l'expérience ;
 - aucun appel à un service externe pendant l'inférence par défaut ;
 - base SQLite et images dans un volume local.
+- en-têtes `nosniff`, anti-framing, `no-referrer` et désactivation
+  caméra/microphone/géolocalisation côté API et Nginx ;
+- CSP restrictive sur l'interface Docker ;
+- bundle ONNX optionnel monté en lecture seule et accepté uniquement si ses
+  trois empreintes correspondent au contrat versionné.
 
 ## Protections nécessaires avant déploiement public
 
 - authentification et séparation par utilisateur ;
 - quotas de taille et de nombre de fichiers ;
-- analyse antivirus et limites de pixels décompressés ;
+- analyse antivirus ;
 - exécution asynchrone avec timeouts ;
 - HTTPS, journaux structurés et politique de rétention ;
 - sauvegardes et suppression vérifiable ;
-- en-têtes de sécurité et restriction CORS stricte.
+- revue de la restriction CORS pour le domaine final et tests actifs de la CSP.
 
 ## Données interdites au MVP
 
@@ -39,4 +45,3 @@ directement sur Internet.
 
 Chaque dataset intégré doit avoir : source, version, date d'accès, licence,
 checksum, citation, schéma de métadonnées, unité de split et restrictions.
-

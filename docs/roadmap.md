@@ -65,11 +65,12 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   comptage rattaché ; aucun moteur CNN de contrôle qualité ; poids non
   distribués dans le dépôt, voir le [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) ;
 - [ ] vue de comparaison des moteurs alimentée par les rapports versionnés ;
-- [ ] rattacher chaque image à contrôle/traitement à l'import, agrégation par
-  groupe avec intervalles, ou masquer les champs non livrés ;
-- [ ] export CSV/JSON depuis l'interface et tableau par image ;
+- [x] champs contrôle/traitement masqués tant que l'affectation par image et
+  l'agrégation par groupe ne sont pas livrées ;
+- [x] export JSON complet et CSV par image depuis l'interface ;
 - [ ] benchmark d'instances borné (BBBC038) et réserve explicite sur le
-  comptage dans l'interface ;
+  comptage dans l'interface ; la réserve « composantes connexes, non validées
+  comme cellules » est déjà affichée ;
 - [ ] analyse d'erreurs et cas hors distribution ;
 - [ ] caractéristiques morphologiques plus riches (optionnel).
 
@@ -81,8 +82,9 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] TIFF 16 bits, limite de pixels, reprise après échec d'analyse ;
 - [ ] plancher typographique et contraste AA sur tout texte informatif ;
 - [ ] file de tâches et progression (si µSAM devient un moteur produit) ;
-- [ ] limites de pixels et en-têtes de sécurité ;
-- [ ] test end-to-end navigateur ;
+- [x] limites de pixels et en-têtes de sécurité API/Nginx ;
+- [x] parcours end-to-end navigateur local du démonstrateur CNN ;
+- [ ] test end-to-end Playwright automatisé ;
 - [ ] test sur machine propre CPU ;
 - [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
 

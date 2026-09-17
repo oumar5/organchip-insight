@@ -13,6 +13,12 @@ def test_health_endpoint() -> None:
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
     assert response.json()["inference_ready"] is True
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["x-frame-options"] == "DENY"
+    assert response.headers["referrer-policy"] == "no-referrer"
+    assert response.headers["permissions-policy"] == (
+        "camera=(), microphone=(), geolocation=()"
+    )
 
 
 def test_health_reports_when_no_inference_engine_is_available(

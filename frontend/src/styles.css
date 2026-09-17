@@ -579,6 +579,17 @@ textarea {
   resize: vertical;
 }
 
+.form-scope-note {
+  margin: 4px 0 18px;
+  padding: 11px 12px;
+  border: 1px solid #e5e0d2;
+  border-radius: 10px;
+  color: #73684f;
+  background: #fffcf3;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 input:focus,
 textarea:focus,
 select:focus {
@@ -903,6 +914,29 @@ select:focus {
   color: #6a7b73;
   background: #f0f4f2;
   font-size: 0.61rem;
+}
+
+.result-actions {
+  display: flex;
+  flex: 1 0 100%;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.result-actions a {
+  padding: 7px 9px;
+  border: 1px solid #cbdcd3;
+  border-radius: 8px;
+  color: #27634d;
+  background: #f5faf7;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.result-actions a:hover {
+  border-color: #82b79f;
+  background: #eaf5ef;
 }
 
 .empty-results {

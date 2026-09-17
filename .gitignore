@@ -22,6 +22,7 @@ data/cache/
 data/models/
 data/experiments/
 data/*.sqlite3
+backend/data/
 artifacts/
 organchip-kaggle-uploads-v2/
 reports/generated/

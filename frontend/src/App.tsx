@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import {
   analyzeExperiment,
   createExperiment,
+  experimentResultExportUrl,
   getExperimentResults,
   listExperiments,
   listInferenceEngines,
@@ -36,8 +37,8 @@ interface MetricPresentation {
 }
 
 const metricPresentations: Record<KnownMetricKey, MetricPresentation> = {
-  object_count_total: { label: "Objets détectés", format: "integer" },
-  objects_per_image: { label: "Objets / image", format: "decimal" },
+  object_count_total: { label: "Composantes connexes", format: "integer" },
+  objects_per_image: { label: "Composantes / image", format: "decimal" },
   mean_foreground_fraction: { label: "Surface segmentée", format: "percent" },
   mean_object_area: { label: "Surface moyenne", format: "decimal", unit: "pixels²" },
   mean_intensity: { label: "Intensité moyenne", format: "decimal", unit: "échelle 0–1" },
@@ -405,26 +406,10 @@ export default function App() {
                   placeholder="Décrire la comparaison et le signal attendu…"
                 />
               </label>
-              <div className="two-columns">
-                <label>
-                  Groupe témoin
-                  <input
-                    value={form.control_label}
-                    required
-                    maxLength={80}
-                    onChange={(event) => setForm({ ...form, control_label: event.target.value })}
-                  />
-                </label>
-                <label>
-                  Groupe traité
-                  <input
-                    value={form.treatment_label}
-                    required
-                    maxLength={80}
-                    onChange={(event) => setForm({ ...form, treatment_label: event.target.value })}
-                  />
-                </label>
-              </div>
+              <p className="form-scope-note">
+                L’affectation témoin/traitement est masquée tant que chaque image ne peut pas être
+                rattachée explicitement à un groupe expérimental.
+              </p>
               <button className="primary-button" disabled={busy} type="submit">
                 Créer l’expérience <span>→</span>
               </button>
@@ -587,6 +572,10 @@ export default function App() {
               <div className="result-meta">
                 <span>Pipeline {result.analysis_version}</span>
                 <span>{new Date(result.generated_at).toLocaleString("fr-FR")}</span>
+                <div className="result-actions" aria-label="Exporter les résultats">
+                  <a href={experimentResultExportUrl(result.experiment_id, "json")}>Exporter JSON</a>
+                  <a href={experimentResultExportUrl(result.experiment_id, "csv")}>Exporter CSV</a>
+                </div>
               </div>
             )}
           </div>
@@ -658,6 +647,12 @@ export default function App() {
                   <p className="metric-method-note">
                     <strong>Indice de contraste relatif :</strong> moyenne du contraste divisée par 0,20,
                     puis plafonnée à 1. Il ne mesure ni l’exactitude de la segmentation ni une qualité biologique.
+                  </p>
+                )}
+                {result.task === "segmentation" && (
+                  <p className="metric-method-note">
+                    <strong>Comptage :</strong> chaque élément correspond à une composante connexe
+                    du masque. Il n’est pas validé comme cellule ou noyau sur les images OoC.
                   </p>
                 )}
                 <h3>Points à vérifier</h3>

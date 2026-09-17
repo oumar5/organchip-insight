@@ -65,3 +65,10 @@ export function analyzeExperiment(
 export function getExperimentResults(experimentId: string): Promise<AnalysisResult> {
   return request<AnalysisResult>(`/experiments/${experimentId}/results`);
 }
+
+export function experimentResultExportUrl(
+  experimentId: string,
+  format: "json" | "csv",
+): string {
+  return `${API_BASE_URL}/experiments/${encodeURIComponent(experimentId)}/exports/results.${format}`;
+}

@@ -79,6 +79,20 @@ def test_upload_and_analyze_real_image() -> None:
     assert overlay_response.status_code == 200
     assert overlay_response.headers["content-type"] == "image/png"
 
+    json_export = client.get(
+        f"/api/v1/experiments/{experiment_id}/exports/results.json"
+    )
+    assert json_export.status_code == 200
+    assert json_export.headers["content-disposition"].endswith('results.json"')
+    assert json_export.json()["task"] == "segmentation"
+
+    csv_export = client.get(
+        f"/api/v1/experiments/{experiment_id}/exports/results.csv"
+    )
+    assert csv_export.status_code == 200
+    assert csv_export.headers["content-disposition"].endswith('image-results.csv"')
+    assert "object_count" in csv_export.text.splitlines()[0]
+
 
 def test_upload_rejects_invalid_image() -> None:
     create_response = client.post(
