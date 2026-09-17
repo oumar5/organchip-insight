@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:18,000
+Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits in one local experiment.
+
+2
+00:00:18,000 --> 00:00:50,000
+A named objective is recorded before analysis. This public smoke batch combines RGB and grayscale OoC images with an external BBBC019 TIFF; uploads remain separate from inference.
+
+3
+00:00:50,000 --> 00:01:26,000
+The default adaptive engine is local, CPU-only, and weight-free. TIFF previews are display-only; the original source is analyzed. The interface never calls connected components validated cells.
+
+4
+00:01:26,000 --> 00:01:56,000
+Every overlay stays linked to its source and measurements. Areas and diameters remain in pixels because physical calibration is unavailable, and the reservation is visible beside the result.
+
+5
+00:01:56,000 --> 00:02:16,000
+JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time for downstream audit.
+
+6
+00:02:16,000 --> 00:02:52,000
+Versioned external benchmarks expose both accuracy and cost. µSAM is stronger on BBBC019 foreground segmentation, but fails two of three preregistered BBBC038 promotion criteria and remains isolated.
+
+7
+00:02:52,000 --> 00:03:18,000
+Quality classification did not demonstrate a robust signal independent of acquisition shortcuts, so the frozen test set remains unopened. The reproducible product ships with abstention, checksums, tests, and explicit limits.

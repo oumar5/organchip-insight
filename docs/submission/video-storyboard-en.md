@@ -5,6 +5,18 @@ limit. The product must be on screen in the first 30 seconds. Record at 1080p,
 hide notifications and personal paths, use English captions, and do not use
 copyrighted music.
 
+## Reproducible local candidate
+
+Run `make demo-video` to build the current **3:18 captioned candidate** from
+the locked real-image manifest. The command starts an isolated Docker stack,
+checks every source hash, records the browser at 1280×720, adds a compatible
+silent AAC track, writes an English SRT sidecar, and validates the result with
+`ffprobe`. Run `make demo-video-check` for a read-only verification.
+
+The candidate deliberately contains no synthetic narration or music. It is a
+publishable caption-first fallback; the shot list below remains the preferred
+voice-over version if the team records human narration before submission.
+
 ## Recording prerequisites
 
 - start from the release candidate and a fresh demo experiment;
