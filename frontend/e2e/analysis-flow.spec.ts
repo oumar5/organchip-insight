@@ -79,8 +79,9 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await page.getByRole("button", { name: /Segmentation de champ-synthetique.png/ }).click();
   const viewer = page.getByRole("dialog");
   await expect(viewer.getByRole("heading", { name: "champ-synthetique.png" })).toBeVisible();
-  await viewer.getByRole("button", { name: "Original" }).click();
-  await expect(viewer.getByAltText(/original/)).toBeVisible();
+  await viewer.getByRole("button", { name: "Source (aperçu)" }).click();
+  await expect(viewer.getByAltText(/aperçu source/)).toBeVisible();
+  await expect(viewer.getByText(/PNG 8 bits destiné uniquement à l’affichage/)).toBeVisible();
   await viewer.getByRole("button", { name: "Fermer" }).click();
   await expect(viewer).toBeHidden();
 

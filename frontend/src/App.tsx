@@ -242,18 +242,39 @@ export default function App() {
   const lightboxItems: LightboxItem[] = useMemo(() => {
     if (!lightbox) return [];
     if (lightbox.source === "images") {
-      return images.map((image) => ({ title: image.display_name, original_url: image.preview_url, overlay_url: null, facts: [{ label: "Taille", value: `${(image.size_bytes / 1024 / 1024).toFixed(2)} Mo` }] }));
+      return images.map((image) => ({
+        title: image.display_name,
+        original_url: image.preview_url,
+        overlay_url: null,
+        facts: [
+          { label: "Format source", value: `${image.source_format} · ${image.source_mode} · ${image.source_bit_depth} bits/canal` },
+          { label: "Dimensions", value: `${image.width} × ${image.height} px` },
+          { label: "Taille", value: `${(image.size_bytes / 1024 / 1024).toFixed(2)} Mo` },
+          { label: "Aperçu", value: "PNG 8 bits · affichage uniquement" },
+          { label: "Analyse", value: "fichier source original" },
+        ],
+      }));
     }
     if (!result) return [];
     const version = encodeURIComponent(result.generated_at);
     return result.image_results.map((item) => {
-      const original = images.find((image) => image.filename === item.filename)?.preview_url ?? null;
+      const sourceImage = images.find((image) => image.filename === item.filename);
+      const original = sourceImage?.preview_url ?? null;
+      const sourceFacts = sourceImage
+        ? [
+            { label: "Format source", value: `${sourceImage.source_format} · ${sourceImage.source_mode} · ${sourceImage.source_bit_depth} bits/canal` },
+            { label: "Dimensions", value: `${sourceImage.width} × ${sourceImage.height} px` },
+            { label: "Aperçu", value: "PNG 8 bits · affichage uniquement" },
+            { label: "Analyse", value: "fichier source original" },
+          ]
+        : [];
       if (item.analysis_type === "segmentation") {
         return {
           title: readableFilename(item.filename),
           original_url: original,
           overlay_url: `${item.overlay_url}?v=${version}`,
           facts: [
+            ...sourceFacts,
             { label: "Composantes connexes", value: formatInteger(item.object_count) },
             { label: "Surface segmentée", value: formatPercent(item.foreground_fraction) },
             { label: "Aire moyenne (px²)", value: formatDecimal(item.mean_object_area) },
@@ -268,6 +289,7 @@ export default function App() {
         original_url: original,
         overlay_url: null,
         facts: [
+          ...sourceFacts,
           { label: "Mode d’acquisition", value: acquisitionModeLabels[item.source_acquisition_mode] },
           { label: "Softmax brut « good » (non calibré)", value: item.probability_good_raw === null ? "non calculé" : formatDecimal(item.probability_good_raw) },
           { label: "Décision", value: "À vérifier · aucune classe attribuée" },

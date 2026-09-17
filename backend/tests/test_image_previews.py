@@ -49,6 +49,15 @@ def test_lists_stored_images_with_display_names_and_preview_urls() -> None:
         assert record["filename"].endswith(record["display_name"])
         assert record["size_bytes"] > 0
         assert record["preview_url"].endswith(f"/previews/{record['filename']}")
+        assert record["source_format"] in {"PNG", "TIFF"}
+        assert record["source_mode"] in {"RGB", "I;16"}
+        assert record["source_bit_depth"] in {8, 16}
+        assert record["width"] > 0 and record["height"] > 0
+
+    tiff = next(record for record in records if record["display_name"] == "champ-b.tif")
+    assert tiff["source_format"] == "TIFF"
+    assert tiff["source_bit_depth"] == 16
+    assert (tiff["width"], tiff["height"]) == (60, 40)
 
 
 def test_preview_renders_16_bit_tiff_as_visible_png() -> None:

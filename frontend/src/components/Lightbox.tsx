@@ -20,7 +20,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
   const item = index === null ? null : items[index] ?? null;
 
   useEffect(() => {
-    if (item && !item.overlay_url) setLayer("original");
+    if (item) setLayer(item.overlay_url ? "overlay" : "original");
   }, [item]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           <div className="lightbox-toolbar">
             {item.overlay_url && item.original_url && (
               <div className="segmented" role="group" aria-label="Couche affichée">
-                <button type="button" className={layer === "original" ? "active" : ""} onClick={() => setLayer("original")}>Original</button>
+                <button type="button" className={layer === "original" ? "active" : ""} onClick={() => setLayer("original")}>Source (aperçu)</button>
                 <button type="button" className={layer === "overlay" ? "active" : ""} onClick={() => setLayer("overlay")}>Segmentation</button>
               </div>
             )}
@@ -53,8 +53,13 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
             </div>
           </div>
           <div className="lightbox-stage">
-            {source ? <img src={source} alt={`${item.title} · ${layer === "overlay" ? "segmentation" : "original"}`} /> : <p className="muted">Aucune image disponible.</p>}
+            {source ? <img src={source} alt={`${item.title} · ${layer === "overlay" ? "segmentation" : "aperçu source"}`} /> : <p className="muted">Aucune image disponible.</p>}
           </div>
+          {item.original_url && (
+            <p className="muted lightbox-preview-note">
+              L’aperçu est un PNG 8 bits destiné uniquement à l’affichage. L’analyse utilise le fichier source conservé dans son format d’origine.
+            </p>
+          )}
           {item.facts.length > 0 && (
             <dl className="kv lightbox-facts">
               {item.facts.map((fact) => (

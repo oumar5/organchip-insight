@@ -37,6 +37,11 @@ export interface ImageRecord {
   display_name: string;
   size_bytes: number;
   preview_url: string;
+  source_format: string;
+  source_mode: string;
+  source_bit_depth: number;
+  width: number;
+  height: number;
 }
 
 export interface UploadLimits {

@@ -104,7 +104,10 @@ export function ImportPanel({
             <li key={image.filename}>
               <button type="button" className="gallery-card" onClick={() => onOpenImage(index)}>
                 <img src={image.preview_url} alt={`Aperçu de ${image.display_name}`} loading="lazy" />
-                <span className="gallery-caption">{image.display_name}</span>
+                <span className="gallery-caption">
+                  <strong>{image.display_name}</strong>
+                  <span>{image.source_format} · {image.source_bit_depth} bits/canal</span>
+                </span>
               </button>
             </li>
           ))}

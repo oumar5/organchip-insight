@@ -28,7 +28,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [x] Benchmarks BBBC019/BBBC038 et comparaison traçable des moteurs.
 - [x] Tests backend, lint, type-check, build et Playwright synthétique.
 - [x] README anglais et brouillons du rapport, du Writeup et de la vidéo.
-- [ ] **Prochaine action unique : réaliser la phase 1 sur images réelles.**
+- [x] Validation de phase 1 terminée sur les trois images réelles verrouillées.
+- [ ] **Prochaine action unique : produire et geler la release candidate de la phase 2.**
 
 ## Règles pendant l'exécution
 
@@ -45,42 +46,42 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 1.1 Jeu de smoke test réel
 
-- [ ] Créer un manifeste contenant exactement :
+- [x] Créer un manifeste contenant exactement :
   - une image OoC RGB appartenant au train autorisé ;
   - une image OoC L appartenant au train autorisé ;
   - un TIFF BBBC019.
-- [ ] Enregistrer pour chaque source : chemin, dataset, licence, mode et
+- [x] Enregistrer pour chaque source : chemin, dataset, licence, mode et
   SHA-256.
-- [ ] Vérifier que les trois hashes correspondent avant toute analyse.
+- [x] Vérifier que les trois hashes correspondent avant toute analyse.
 
 ### 1.2 CLI robuste
 
-- [ ] Permettre à `inference.py` d'accepter des fichiers, un dossier ou le
+- [x] Permettre à `inference.py` d'accepter des fichiers, un dossier ou le
   manifeste réel.
-- [ ] Refuser clairement : dossier vide, extension inconnue, lien symbolique
+- [x] Refuser clairement : dossier vide, extension inconnue, lien symbolique
   et hash incorrect.
-- [ ] Éviter l'écrasement de deux overlays issus de fichiers ayant le même nom
+- [x] Éviter l'écrasement de deux overlays issus de fichiers ayant le même nom
   de base.
-- [ ] Ajouter `make test-real-images`.
-- [ ] Vérifier automatiquement `result.json`, les trois résultats et les trois
+- [x] Ajouter `make test-real-images`.
+- [x] Vérifier automatiquement `result.json`, les trois résultats et les trois
   overlays.
 
 ### 1.3 Interface réelle
 
-- [ ] Ajouter un parcours Playwright réel séparé ; conserver le parcours
+- [x] Ajouter un parcours Playwright réel séparé ; conserver le parcours
   synthétique comme test rapide obligatoire.
-- [ ] Importer les trois sources dans une expérience neuve.
-- [ ] Vérifier la galerie, Original / Segmentation, les mesures et les exports.
-- [ ] Afficher « format source » et « aperçu PNG 8 bits » sans laisser penser
+- [x] Importer les trois sources dans une expérience neuve.
+- [x] Vérifier la galerie, Source (aperçu) / Segmentation, les mesures et les exports.
+- [x] Afficher « format source » et « aperçu PNG 8 bits » sans laisser penser
   que l'original a été converti pour l'analyse.
-- [ ] Vérifier que les fichiers sources ne changent pas après l'analyse.
+- [x] Vérifier que les fichiers sources ne changent pas après l'analyse.
 
 ### Preuve de fin de phase 1
 
-- [ ] `make test-real-images` passe.
-- [ ] Le parcours Playwright réel passe.
-- [ ] Les hashes avant/après sont identiques.
-- [ ] Les résultats restent décrits comme exploratoires.
+- [x] `make test-real-images` passe.
+- [x] Le parcours Playwright réel passe.
+- [x] Les hashes avant/après sont identiques.
+- [x] Les résultats restent décrits comme exploratoires.
 
 ---
 

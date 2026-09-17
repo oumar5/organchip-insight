@@ -41,6 +41,11 @@ class ImageRecord(BaseModel):
     display_name: str
     size_bytes: int
     preview_url: str
+    source_format: str
+    source_mode: str
+    source_bit_depth: int
+    width: int
+    height: int
 
 
 class AnalysisEngine(BaseModel):

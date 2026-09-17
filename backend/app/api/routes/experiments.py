@@ -74,6 +74,18 @@ def _stored_images(experiment_id: UUID) -> list[Path]:
 
 
 def _image_record(experiment_id: UUID, path: Path) -> ImageRecord:
+    with Image.open(path) as source:
+        source_format = source.format or path.suffix.lstrip(".").upper()
+        source_mode = source.mode
+        width, height = source.size
+    if source_mode == "1":
+        source_bit_depth = 1
+    elif "16" in source_mode or (source_format == "PNG" and source_mode == "I"):
+        source_bit_depth = 16
+    elif source_mode in {"I", "F"}:
+        source_bit_depth = 32
+    else:
+        source_bit_depth = 8
     return ImageRecord(
         filename=path.name,
         display_name=_STORED_PREFIX.sub("", path.name),
@@ -81,6 +93,11 @@ def _image_record(experiment_id: UUID, path: Path) -> ImageRecord:
         preview_url=(
             f"{settings.api_v1_prefix}/experiments/{experiment_id}/previews/{path.name}"
         ),
+        source_format=source_format,
+        source_mode=source_mode,
+        source_bit_depth=source_bit_depth,
+        width=width,
+        height=height,
     )
 
 

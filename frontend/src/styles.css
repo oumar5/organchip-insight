@@ -577,6 +577,7 @@ input:focus, textarea:focus, select:focus { border-color: #5dad8d; box-shadow: 0
 .lightbox-nav { display: flex; align-items: center; gap: 10px; }
 .lightbox-stage { display: grid; place-items: center; min-height: 320px; border-radius: 12px; background: #111915; }
 .lightbox-stage img { display: block; max-width: 100%; max-height: min(70vh, 720px); object-fit: contain; }
+.lightbox-preview-note { margin: 0; font-size: var(--font-sm); }
 .lightbox-facts { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fbfdfc; }
 .segmented { display: inline-flex; border: 1px solid #cfdad4; border-radius: 10px; overflow: hidden; }
 .segmented button { min-height: 38px; padding: 0 14px; border: 0; color: #2f4a40; background: #fff; font-weight: 700; }
