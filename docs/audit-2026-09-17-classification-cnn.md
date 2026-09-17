@@ -79,11 +79,12 @@ les 2 056 images train, évaluée sur la validation au seuil 0,5 :
 | Comparateur | BA L | AUC L | BA RGB | AUC RGB | BA globale |
 |---|---:|---:|---:|---:|---:|
 | mode × bucket de jour | 0,8171 | 0,8171 | 0,6533 | 0,7068 | 0,7920 |
-| mode × lignée | 0,6358 | 0,6228 | 0,5080 | 0,4734 | 0,7251 |
+| mode × lignée | 0,6358 | 0,6228 | 0,5000 | 0,4734 | 0,7251 |
 | B (CNN) | 0,8338 | 0,8551 | 0,6079 | 0,6985 | 0,7750 |
 
-Ce comparateur n'est pas dans le rapport versionné des comparateurs ; il
-doit y être ajouté avant toute reprise de modélisation.
+Ce comparateur a été versionné le 17 septembre (commits `438a555` et
+`fea6526`, rapport `reports/benchmarks/ooc-classification-comparators-campaign-v2.json`) ;
+voir l'addendum en fin de page pour une sensibilité importante.
 
 ## Test adversarial de la conclusion
 
@@ -131,3 +132,25 @@ manifeste `data/splits/ooc-campaign-v2-train-validation.csv` et l'inventaire
 `reports/ooc-image-inventory-2026-09-16.csv`. Les comparateurs de métadonnées
 et le bootstrap apparié doivent être versionnés dans
 `backend/training/` pour devenir des résultats du projet.
+
+## Addendum du 17 septembre 2026 — revue des comparateurs versionnés
+
+- Correction : la balanced accuracy RGB du comparateur mode × lignée est
+  `0,5000` (matrice `[[0, 75], [0, 220]]`), et non `0,5080` comme écrit
+  initialement dans le tableau ; la valeur venait d'un traitement différent de
+  la catégorie `RGB/HUVEC`, absente du train. L'AUC (`0,4734`) est inchangée.
+- Sensibilité à un libellé : le dataset publie deux libellés pour le même
+  bucket (`4_days`, 223 images ; `4+_days`, 1 199 images). En validation RGB,
+  `4_days` correspond à une seule date (220608, 23 images toutes `bad`). Toute
+  la balanced accuracy RGB `0,6533` du comparateur mode × bucket de jour vient
+  de là. En fusionnant les deux libellés, ce comparateur retombe à `0,5000` en
+  RGB et à `0,7413` globalement, sous la référence (`0,7619`) et sous B
+  (`0,7750`) ; la tranche L reste à `0,8171`. Lecture juste : en L, l'âge de
+  culture explique le score ; en RGB, c'est un libellé de bucket qui identifie
+  une campagne. La conclusion générale ne change pas, mais la phrase « un
+  comparateur de métadonnées bat tous les CNN, y compris globalement » n'est
+  vraie qu'avec la table à huit catégories, et doit être citée avec cette
+  réserve.
+- Les paragraphes demandant de versionner le comparateur et le bootstrap
+  apparié sont résolus pour le comparateur ; le bootstrap apparié par mode
+  reste à versionner.
