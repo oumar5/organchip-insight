@@ -1,14 +1,14 @@
-# OrganChip Insight — Kaggle Writeup draft
+# OrganChip Insight — Kaggle Writeup
 
 **Category:** Tool & Platform
 
 **Team:** Ben Lol OUMAR — solo team lead; no institutional affiliation declared
 
-**Public code:** Apache-2.0; public release URL pending
+**Public code:** [GitHub repository](https://github.com/oumar5/organchip-insight) · [v1.0.0-ai4s release](https://github.com/oumar5/organchip-insight/releases/tag/v1.0.0-ai4s) · Apache-2.0
 
-**Demo video (maximum five minutes):** validated 3:00 local candidate; public URL pending
+**Demo video (maximum five minutes):** [English, 3:00](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-demo-candidate-en.mp4) · [French, 3:00](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-demo-candidate-fr.mp4)
 
-**Technical report:** local PDF candidate generated; public URL pending
+**Technical report:** [English PDF](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-technical-report-candidate-en.pdf) · [French PDF](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-technical-report-candidate-fr.pdf)
 
 **Optional live demo:** not provided; Docker, CLI, report, and video are the reproducible paths
 
@@ -117,5 +117,5 @@ experiment environments.
 
 **Project code licence:** Apache-2.0.
 
-**Model bundle:** not distributed in the current candidate. Any later public
+**Model bundle:** not distributed in this release. Any later public
 bundle requires an explicit licence, location, provenance manifest, and hashes.

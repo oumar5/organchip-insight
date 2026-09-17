@@ -1,10 +1,8 @@
 # Submission package
 
-This directory contains editable English and French deliverables for the AI4S
-Open Innovation submission. It deliberately keeps publication-dependent fields
-visible rather than inventing links. The code licence is Apache-2.0 and the
-team is Ben Lol OUMAR as sole member and lead, with no institutional affiliation
-declared.
+This directory contains the English and French deliverables for the AI4S Open
+Innovation submission. The code licence is Apache-2.0 and the team is Ben Lol
+OUMAR as sole member and lead, with no institutional affiliation declared.
 
 - [English technical report source](technical-report-en.md)
 - [French technical report source](technical-report-fr.md)
@@ -20,20 +18,17 @@ declared.
 - [Publication runbook](publication-runbook.md)
 - [Candidate release notes](../05-release/RELEASE_NOTES_CANDIDATE.md)
 
-## Fields that still require the project owner's decision
+## Public package
 
-- confirmation of the organizer's external registration form;
-- authorization to merge `dev` linearly into `main`, make the repository public,
-  select `main` as the public default branch, and create the release tag;
-- public video URL;
-- optional hosted-demo URL;
-- final PDF URL.
+- [Public repository](https://github.com/oumar5/organchip-insight)
+- [Immutable v1.0.0-ai4s release](https://github.com/oumar5/organchip-insight/releases/tag/v1.0.0-ai4s)
+- [English technical report](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-technical-report-candidate-en.pdf)
+- [French technical report](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-technical-report-candidate-fr.pdf)
+- [English demonstration](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-demo-candidate-en.mp4)
+- [French demonstration](https://github.com/oumar5/organchip-insight/releases/download/v1.0.0-ai4s/organchip-insight-demo-candidate-fr.mp4)
 
-The validated source is pushed to the private repository at
-`https://github.com/oumar5/organchip-insight`; the validated technical baseline
-is `53bc810`, followed only by publication-status documentation on `dev`. This
-is not yet a public submission URL. The optional ONNX bundle is not distributed in this submission.
-The repository may remain private while these fields are finalized, but it must
-be public before the Kaggle Writeup is submitted and throughout evaluation.
+The optional ONNX bundle is not distributed in this submission. The frozen test
+set remains unopened. Confirmation of the organizer's external registration
+form is recorded separately because it can contain account-specific data.
 
 The frozen test set must not be opened to complete any of these fields.

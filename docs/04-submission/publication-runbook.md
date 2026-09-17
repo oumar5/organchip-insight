@@ -7,23 +7,21 @@ inconsistent submission.
 
 ## Current verified state — 18 September 2026
 
-- `dev` is pushed and synchronized with `origin/dev`; its validated technical
-  baseline is `53bc810`, followed only by this publication-status documentation;
-- the GitHub repository is private;
-- GitHub currently reports `dev` as the default branch;
-- no merge into `main`, tag, release, visibility change, public upload or
-  Kaggle submission has been performed;
+- `dev` and `main` are public and synchronized at the validated product state;
+- the GitHub repository is public and `main` is the default branch;
+- the `main` CI passed on the exact product commit before release finalization;
+- tag, release assets and Kaggle submission are the remaining publication steps;
 - both candidate videos passed the automated codec, audio, duration and
   subtitle checks again on 18 September 2026.
 
 ## 1. Owner-controlled fields
 
-Record all of the following before changing repository visibility:
+Record all of the following before submission:
 
 - confirmation that the organizer's external registration form was submitted;
 - authorization to merge linearly to `main`, make the repository public and
-  create the release;
-- final tag (candidate: `v1.0.0-ai4s`).
+  create the release — granted on 18 September 2026;
+- final tag: `v1.0.0-ai4s`.
 
 ## 2. Finalize the tracked content on `dev`
 

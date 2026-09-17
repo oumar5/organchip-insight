@@ -45,9 +45,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
   interdisciplinaire revendiqué.
 - [x] Licence du code fixée à Apache-2.0 et bundle ONNX non distribué dans la
   soumission.
-- [ ] **Prochaine action unique : confirmer le formulaire externe, puis
-  autoriser explicitement la publication (fusion vers `main`, dépôt public,
-  tag et release).**
+- [ ] **Prochaine action unique : confirmer le formulaire externe, publier la
+  release `v1.0.0-ai4s`, puis soumettre le Writeup Kaggle.**
 
 ## Règles pendant l'exécution
 
@@ -182,18 +181,18 @@ et ne doit retarder ni la publication ni le Writeup.
 - [x] Pousser les commits locaux validés : l'état technique de référence
   `53bc810` et sa mise à jour documentaire de publication sont synchronisés
   sur `origin/dev` depuis le 18 septembre 2026.
-- [ ] Décider de rendre le dépôt public.
-- [ ] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
-- [ ] Valider le nom et la date du tag de release.
-- [ ] Après la fusion validée, remettre `main` comme branche GitHub par défaut ;
-  le dépôt privé utilise actuellement `dev` par défaut.
+- [x] Décider de rendre le dépôt public ; publication confirmée le 18 septembre.
+- [x] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
+- [x] Valider le tag `v1.0.0-ai4s` daté du 18 septembre 2026.
+- [x] Remettre `main` comme branche GitHub par défaut.
 
 ### 3.2 Publication
 
 - [x] Préparer les notes de release candidates, les artefacts et le runbook de
   publication sans inventer les décisions du propriétaire.
 - [x] Pousser l'état validé de `dev` après autorisation.
-- [ ] Fusionner vers `main` uniquement après autorisation explicite.
+- [x] Fusionner vers `main` uniquement après autorisation explicite ; `main` et
+  `dev` ont été alignées linéairement et le CI distant a réussi.
 - [ ] Créer le tag et la release GitHub depuis le commit validé.
 - [ ] Joindre notes de release, checksums et instructions de reproduction.
 - [ ] Publier les poids uniquement si licence, attribution et hashes sont
