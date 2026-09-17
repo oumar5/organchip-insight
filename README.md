@@ -220,8 +220,8 @@ Commencer par l'[index documentaire](docs/README.md), puis lire :
 Catégorie prévue : **Tool & Platform** pour le challenge
 [AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien),
 volet international du 5ᵉ Pazhou Algorithm Competition. Le règlement officiel,
-la grille (innovation 30 %, achèvement 25 %, valeur 20 %, complétude 15 %,
-crédibilité 10 %) et le calendrier (soumission le 10 octobre 2026, finale
+la grille Kaggle (impact 30 %, approche et innovation 30 %, résultats 20 %,
+reproductibilité 10 %, présentation 10 %) et le calendrier (soumission le 10 octobre 2026, finale
 avec soutenance du 20 au 30 octobre) sont résumés dans
 [docs/competition-requirements.md](docs/competition-requirements.md). Le plan
 de travail jusqu'à la finale est dans

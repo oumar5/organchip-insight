@@ -9,7 +9,8 @@ copyrighted music.
 
 - start from the release candidate and a fresh demo experiment;
 - keep the adaptive engine selected;
-- prepare a small batch with one PNG and one 16-bit TIFF;
+- prepare the locked public smoke batch: one RGB OoC PNG, one grayscale OoC
+  PNG, and one BBBC019 TIFF;
 - prepare one intentionally rejected file if it can be shown without slowing
   the sequence;
 - pre-start Docker and keep a terminal ready for the final verification shot;
@@ -29,12 +30,13 @@ experiment.”
 
 ### 0:25–1:05 — Create and import
 
-**Screen:** create a named experiment, fill acquisition mode, culture-day
-bucket and lineage, import the prepared files, show accepted/rejected counts.  
-**Narration:** “The experiment stores its context before analysis. Uploads are
+**Screen:** create a named experiment, enter its objective, import the prepared
+files, and show accepted/rejected counts and source formats.
+
+**Narration:** “The experiment records its objective before analysis. Uploads are
 decoded, bounded by pixel and file size, checked for binary duplicates, and
-kept separate from inference. PNG, JPEG, and grayscale 16-bit TIFF are
-supported.”
+kept separate from inference. PNG, JPEG, and grayscale TIFF are supported,
+including 16-bit sources when supplied.”
 
 ### 1:05–2:10 — Analyze and inspect
 
@@ -91,4 +93,3 @@ provenance travel together.”
 - the public URL works in a private browser window without authentication;
 - the description links to the exact release and technical report;
 - only redistributable images, icons, fonts, and audio are present.
-

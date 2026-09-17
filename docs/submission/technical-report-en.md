@@ -1,13 +1,16 @@
 # OrganChip Insight: a traceable microscopy workspace for organ-on-chip experiments
 
-**Technical report draft — 17 September 2026**  
-**Team:** `[TO COMPLETE]`  
-**Category:** Tool & Platform  
-**Release:** `[TO COMPLETE]`
+**Technical report candidate — 17 September 2026**
 
-> Publication note: this source is ready for editorial review, figures, final
-> author details, licence decisions, and PDF layout. Values are linked to
-> versioned project reports. Placeholders must be resolved before submission.
+**Team:** Owner declaration pending (1–5 members and team lead required)
+
+**Category:** Tool & Platform
+
+**Release:** validated candidate on `dev`; public tag pending owner authorization
+
+> Publication note: values are linked to versioned project reports. The team
+> declaration, code licence, public tag, and public URLs remain owner-controlled
+> publication fields and must be inserted before the Kaggle Writeup is submitted.
 
 ## Abstract
 
@@ -259,19 +262,26 @@ and the frozen test set remains unopened.
 
 ## 7. Product verification
 
-The backend suite contains 170 collected tests in the 17 September 2026 local
-state, with one environment-dependent test skipped. Ruff, TypeScript
+The backend suite contains 177 collected tests in the 17 September 2026 release
+candidate: 176 pass and one environment-dependent test is skipped. Ruff, TypeScript
 type-checking, the production Vite build, notebook synchronization, benchmark
-summary synchronization, and Docker Compose configuration pass through
-`make check`.
+summary synchronization, release-tree audit, checksum inventory, and Docker
+Compose configuration pass through `make check`.
 
-The Playwright scenario starts an isolated Docker project and volume, creates
-an experiment, imports a synthetic image, runs adaptive inference, checks the
-overlay and scientific reservation, downloads JSON and CSV, validates the
-engine comparison, audits visible text against a 12-pixel floor, and reports
-zero Axe color-contrast violations in the tested desktop flow. It then removes
-the isolated containers and volume. This proves the tested flow with locally
-available container images; a clean-machine rebuild remains a release gate.
+Playwright starts isolated Docker projects and fresh volumes. The fast path
+creates an experiment, imports a synthetic image, runs adaptive inference,
+checks the overlay and scientific reservation, and downloads JSON and CSV. A
+second path imports three hash-locked public images (OoC RGB, OoC grayscale,
+and BBBC019 TIFF), verifies source-format metadata, runs the same workflow,
+and confirms that all source hashes remain unchanged. Additional gates report
+zero Axe violations, verify visible keyboard focus, mobile reflow at 390 px,
+an effective 200% layout width, and persistence of sources, results, exports,
+gallery, and viewer after both containers restart.
+
+The candidate was also rebuilt with `docker compose build --pull --no-cache`.
+The release audit found no tracked secret, personal path, cache, raw dataset,
+or undistributable model binary. The SHA-256 inventory covers 31 tracked
+reports, manifests, notebooks, submission sources, and frontend evidence.
 
 ## 8. Credibility and limitations
 
@@ -334,6 +344,9 @@ OpenAPI document at `http://localhost:8000/docs`.
 make check
 npm --prefix frontend exec playwright install chromium
 make test-e2e
+make test-real-images
+make test-e2e-real
+make test-release-persistence
 ```
 
 ### 10.3 Command-line inference
@@ -365,8 +378,11 @@ The canonical disclosure, including µSAM, MobileNetV3, datasets, and main
 libraries, is
 [`docs/declaration-ia-et-licences.md`](../declaration-ia-et-licences.md).
 
-**Code licence:** `[TO COMPLETE — APACHE-2.0 RECOMMENDED]`  
-**Model-bundle licence:** `[TO COMPLETE BEFORE PUBLICATION]`
+**Code licence:** owner decision pending; the repository remains all rights
+reserved until a `LICENSE` file is added.
+
+**Model bundle:** not distributed in the release candidate; any later
+publication requires a separate owner licence decision and hash-locked bundle.
 
 ## 12. Conclusion
 
@@ -382,12 +398,8 @@ provide.
 
 ## References
 
-1. Movčana et al. “Organ-On-A-Chip (OOC) Image Dataset for Machine Learning
-   and Tissue Model Evaluation.” *Data* 9(2):28, 2024.
-2. Ljosa, Sokolnicki, and Carpenter. “Annotated high-throughput microscopy
-   image sets for validation.” *Nature Methods* 9:637, 2012.
+1. Movčana et al. “Organ-On-A-Chip (OOC) Image Dataset for Machine Learning and Tissue Model Evaluation.” *Data* 9(2):28, 2024.
+2. Ljosa, Sokolnicki, and Carpenter. “Annotated high-throughput microscopy image sets for validation.” *Nature Methods* 9:637, 2012.
 3. Archit et al. “Segment Anything for Microscopy.” *Nature Methods*, 2025.
-4. Archit and Pape. “Revisiting foundation models for cell instance
-   segmentation.” MIDL, 2026.
+4. Archit and Pape. “Revisiting foundation models for cell instance segmentation.” MIDL, 2026.
 5. Howard et al. “Searching for MobileNetV3.” ICCV, 2019.
-

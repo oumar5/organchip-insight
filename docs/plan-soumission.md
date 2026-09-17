@@ -13,9 +13,10 @@ Le règlement officiel est résumé dans
    se joue en finale**, devant un jury issu d'une société de puces
    neuro-organoïdes attachée à la standardisation et à la valorisation des
    données.
-2. Les 55 % les plus lourds de la grille (innovation 30 %, achèvement et
-   résultats 25 %) récompensent une chaîne complète qui tourne et une idée
-   claire, pas un point de macro-F1 supplémentaire. Le travail de modélisation est clos au 17 septembre 2026 : validation GPU,
+2. Les 60 % les plus lourds de la grille (impact 30 %, approche et innovation
+   30 %) récompensent un problème important, une chaîne complète et une idée
+   claire, pas un point de macro-F1 supplémentaire. Le travail de modélisation
+   est clos au 17 septembre 2026 : validation GPU,
    comparateurs et ablations A/B exécutés sur train/validation, aucune
    configuration éligible, test jamais ouvert ; le produit intègre au plus un
    démonstrateur ONNX expérimental sans décision automatique.
@@ -23,8 +24,9 @@ Le règlement officiel est résumé dans
    (voir [etat-de-l-art.md](etat-de-l-art.md)). Notre protocole anti-fuite,
    l'audit des raccourcis d'acquisition et l'accès test verrouillé sont la
    contribution scientifique à mettre en avant, en plus de la plateforme.
-4. Deux blocages administratifs annulent tout le reste s'ils ne sont pas
-   levés : le dépôt GitHub est **privé** et n'a **aucune licence**.
+4. Trois blocages administratifs annulent tout le reste s'ils ne sont pas
+   levés : le formulaire externe doit être confirmé, le dépôt GitHub est
+   **privé** et il n'a **aucune licence**.
 
 ## Calendrier de travail
 
@@ -57,7 +59,7 @@ Le règlement officiel est résumé dans
 
 | Priorité | Tâche | Preuve attendue |
 |---|---|---|
-| P0 | test sur machine propre : `docker compose up --build`, parcours complet, CLI `inference.py`, `make check` | REX « machine propre » |
+| P0 | **fait localement** : reconstruction `--pull --no-cache`, parcours réel, CLI, contrôles d'accessibilité et persistance après redémarrage | `TASKS.md`, tests Playwright, `make check` |
 | P0 | release `v1.0.0-ai4s` : tag, checksums des modèles et rapports, archive Zenodo optionnelle avec DOI | page release |
 | P0 | vidéo ≤ 5 min tournée sur le produit réel, sans musique sous droits, sous-titres anglais | lien public testé en navigation privée |
 | P0 | rapport technique PDF selon le plan de l'organisateur, 15 à 20 pages, chaque chiffre relié à un fichier versionné | PDF public |
@@ -82,11 +84,11 @@ Soumettre le **9 octobre**, vérifier chaque lien sans connexion, garder le
 
 | Critère | Poids | Preuve principale | Fichier ou artefact |
 |---|---:|---|---|
-| Innovation technique | 30 % | registre de moteurs comparables + protocole d'accès test unique + audit des raccourcis | `backend/app/ml/registry.py`, `backend/training/ooc_cnn/protocol.py`, `reports/ooc-grouped-split-v1.json` |
-| Achèvement et résultats | 25 % | démo Docker complète, protocole CNN pré-enregistré mené à terme avec résultat négatif documenté (test jamais ouvert), benchmarks versionnés | vidéo, `reports/benchmarks/`, REX A/B |
-| Valeur pratique | 20 % | contrôle qualité avant analyse, export traçable, comparaison de conditions | interface, `result.json`, CSV |
-| Complétude | 15 % | docs, manifestes, checksums, tests, CI, reproduction en une commande | `docs/`, `data/manifests/`, `make check` |
-| Interprétabilité et crédibilité | 10 % | overlays, intervalles, tranches, abstention, limites écrites | interface, REX |
+| Importance et impact | 30 % | workflow OoC traçable, standardisation des entrées et preuves exportables | interface, JSON/CSV, rapport |
+| Approche et innovation | 30 % | registre de moteurs comparables + accès test verrouillé + audit des raccourcis | `backend/app/ml/registry.py`, protocole CNN, rapports de split |
+| Résultats et validation | 20 % | benchmarks versionnés, critères pré-enregistrés et résultat négatif CNN documenté | `reports/benchmarks/`, REX A/B |
+| Reproductibilité et implémentation | 10 % | Docker, CLI, manifestes, checksums, tests réels et persistance | `docs/`, `data/manifests/`, `make check` |
+| Présentation | 10 % | démo produit réelle, rapport autonome et Writeup concis | vidéo, PDF, Writeup |
 
 ## Plan du rapport technique
 

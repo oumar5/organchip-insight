@@ -96,14 +96,14 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   visionneuse original/segmentation, modales de création et de détails ;
 - [x] parcours end-to-end navigateur local du démonstrateur CNN ;
 - [x] test end-to-end Playwright automatisé sur pile Docker et volume isolés ;
-- [ ] test sur machine propre CPU : deux reconstructions avec accès Docker Hub
-  sont restées bloquées au chargement des métadonnées des images de base ; le
-  parcours isolé passe avec les images locales, voir le [REX](retours-experience/2026-09-17-playwright-e2e.md) ;
+- [x] reconstruction CPU `docker compose build --pull --no-cache`, parcours
+  synthétique et réel, audit accessibilité/mobile et persistance des résultats
+  après redémarrage ;
 - [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
 
 ## Jalon 5 — Remise (avant le 9 octobre)
 
-- [ ] figer données, code, résultats et citations ;
+- [x] figer données, code et résultats avec inventaire de 31 checksums ;
 - [ ] release taguée avec checksums, DOI Zenodo optionnel ;
 - [ ] rapport technique 15–20 pages selon le plan de l'organisateur ;
 - [ ] vidéo ≤ 5 minutes montrant le produit réel ;

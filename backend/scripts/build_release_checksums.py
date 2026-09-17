@@ -33,6 +33,7 @@ def is_deliverable(path: Path) -> bool:
         or posix_path == "frontend/public/benchmark-summary.json"
         or posix_path == "docs/release/README.md"
         or posix_path.startswith("docs/submission/")
+        or (posix_path.startswith("output/pdf/") and path.suffix == ".pdf")
         or path.suffix.lower() in WEIGHT_SUFFIXES
     )
 

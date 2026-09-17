@@ -1,26 +1,26 @@
 # Exigences du challenge AI4S
 
-Sources :
+Sources relues le **17 septembre 2026** :
 
-- page organisateur, règlement complet en chinois :
-  [琶洲算法大赛 — AI + 器官芯片](https://www.aicompetition-pz.com/topic_detail/26)
-  (lue le 16 septembre 2026, source de référence pour la grille, le calendrier
-  et les livrables) ;
-- page Kaggle :
+- page Kaggle officielle, source de référence pour la grille, le calendrier et
+  les livrables :
   [AI4S Open Innovation: AI for Life Science](https://www.kaggle.com/competitions/ai-4-s-open-innovation-artificial-intelligence-for-life-scien)
   (sous-titre officiel : « AI + Organ-on-a-Chip: Open Innovation Challenge for
   In Vitro Life Systems ») ;
+- page organisateur :
+  [琶洲算法大赛 — AI + 器官芯片](https://www.aicompetition-pz.com/topic_detail/26) ;
 - CLI Kaggle, 16 septembre 2026 : échéance `2026-10-10 15:59:59 UTC`, soit
   17 h 59 à Paris ; catégorie `Community` ; dotation affichée 22 200 USD ;
   2 équipes inscrites ; notre équipe est inscrite.
 
 Le challenge est le volet international du 5ᵉ 琶洲算法大赛 (Pazhou Algorithm
-Competition, Guangzhou). Le sujet est posé par **圆壳生物 (Yuanke Bio, Suzhou)**,
-société de puces neuro-organoïdes issue d'un laboratoire de Sorbonne
-Université, qui met en avant la standardisation des données expérimentales,
-leur valorisation en actifs et les jumeaux numériques pilotés par l'IA. Ce
-profil de jury doit orienter le discours : traçabilité, standardisation,
-réutilisation des données, et non « un modèle de plus ».
+Competition, Guangzhou). La page officielle présente **CellShells Bioscience
+Co., Ltd.** comme organisation de soutien et décrit une équipe fondatrice issue
+du laboratoire de puces cérébrales de Sorbonne Université. Elle met en avant la
+standardisation et la valorisation des données expérimentales ainsi que les
+jumeaux numériques pilotés par l'IA. Ce contexte oriente le discours vers la
+traçabilité, la standardisation et la réutilisation des données, et non vers
+« un modèle de plus ».
 
 ## Positionnement
 
@@ -63,27 +63,34 @@ Structure recommandée par l'organisateur : vidéo, dépôt, résumé de 200 à
 300 mots, rapport technique, lien démo optionnel. Tous les liens doivent
 rester valides jusqu'à la fin de l'évaluation.
 
-Éléments encore à confirmer sur la page Kaggle connectée : la déclaration de
-catégorie en tête de Writeup et la longueur cible du rapport (15 à 20 pages
-notée lors de la lecture du 16 septembre 2026). Ils ne figurent pas sur la
-page organisateur.
+La page Kaggle impose la déclaration de catégorie en tête du Writeup et
+recommande un rapport autonome de 15 à 20 pages hors références et annexes.
+
+## Inscription et équipe
+
+- le formulaire d'inscription externe lié depuis Kaggle est obligatoire en
+  plus de l'inscription au challenge ; une équipe qui ne l'a pas rempli n'est
+  pas éligible ;
+- une équipe compte de 1 à 5 membres et désigne une personne responsable ;
+- chaque personne ne peut participer qu'à une équipe ;
+- une équipe réunissant compétences IA/informatique et
+  biologie/bio-ingénierie/clinique reçoit un bonus de 0,5 dans la dimension
+  interprétabilité et fiabilité ; cette composition doit être déclarée dans
+  le rapport.
 
 ## Grille d'évaluation officielle
 
-| Critère (organisateur) | Poids | Ce que le jury regarde | Preuve du projet |
+| Critère officiel Kaggle | Poids | Ce que le jury regarde | Preuve du projet |
 |---|---:|---|---|
-| Innovation technique | 30 % | nouveauté, profondeur, façon inspirante de combiner IA et OoC | registre de moteurs comparables, protocole anti-fuite à accès test unique, audit des raccourcis d'acquisition, chaîne de preuves image → rapport |
-| Achèvement et résultats | 25 % | ça tourne, la démo est claire, la tâche est accomplie, les résultats sont stables | Docker en une commande, vidéo réelle, benchmarks versionnés, tests |
-| Valeur pratique | 20 % | usage en R&D OoC, évaluation de médicaments, toxicologie, actifs de données, jumeau numérique, automatisation | contrôle qualité avant analyse, provenance exportable, comparaison témoin/traitement |
-| Complétude de la solution | 15 % | problème clair, chaîne technique bouclée, données/méthode/expériences/code/rapport/reproduction complets | docs, manifestes, checksums, scripts |
-| Interprétabilité et crédibilité | 10 % | validité scientifique, explication des sorties, limites, incertitude, éthique | overlays, intervalles, tranches par condition, langage « exploratoire » |
+| Importance du problème et impact potentiel | 30 % | importance en sciences de la vie, valeur scientifique ou pratique | workflow OoC traçable, données et sorties réutilisables, limites opérationnelles explicites |
+| Approche technique et innovation | 30 % | solidité, innovation et usage pertinent de l'IA | registre de moteurs, audit des raccourcis, protocole anti-fuite, chaîne de preuves image → rapport |
+| Résultats et validation | 20 % | fiabilité des résultats, comparaisons et expériences | benchmarks versionnés, intervalles, critères de promotion pré-enregistrés, résultat négatif CNN publié |
+| Reproductibilité et qualité d'implémentation | 10 % | code, modèles, données et documentation testables | Docker, CLI, tests, manifestes, checksums et instructions hors service payant |
+| Qualité de présentation | 10 % | clarté de la vidéo, du récit et de la démonstration | vidéo réelle ≤ 5 minutes, rapport autonome, Writeup concis |
 
-La grille lue sur la page Kaggle le 16 septembre 2026 était formulée
-différemment (importance et impact 30 %, approche et innovation 30 %,
-résultats et validation 20 %, reproductibilité 10 %, présentation 10 %). Les
-deux formulations se recouvrent ; le dossier doit satisfaire l'union des deux.
-Poser la question de la grille de référence sur le forum Kaggle du challenge
-est une action à faible coût qui lève l'ambiguïté et montre l'engagement.
+Une grille différente relevée antérieurement sur une page secondaire est
+conservée dans l'audit historique. Pour la soumission, la grille Kaggle
+ci-dessus est la référence publique actuelle.
 
 ## Calendrier officiel
 
@@ -122,6 +129,8 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 ## Checklist de soumission
 
 - [x] inscription Kaggle confirmée (CLI : `userHasEntered = True`) ;
+- [ ] formulaire d'inscription externe confirmé par le propriétaire ;
+- [ ] équipe de 1 à 5 membres et responsable déclarés ;
 - [ ] dépôt GitHub **rendu public** (il est privé au 16 septembre 2026) ;
 - [ ] fichier `LICENSE` ajouté (aucune licence détectée par GitHub) ;
 - [ ] release figée avec tag, checksums et DOI Zenodo optionnel ;

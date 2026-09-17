@@ -1,13 +1,18 @@
 # OrganChip Insight — Kaggle Writeup draft
 
-**Category:** Tool & Platform  
-**Team:** `[TO COMPLETE]`  
-**Public code:** `[TO COMPLETE AFTER LICENCE AND VISIBILITY DECISIONS]`  
-**Demo video (maximum five minutes):** `[TO COMPLETE]`  
-**Technical report:** `[TO COMPLETE AFTER PDF EXPORT]`  
-**Optional live demo:** `[TO COMPLETE OR STATE “NOT PROVIDED”]`
+**Category:** Tool & Platform
 
-## Summary (264 words)
+**Team:** owner declaration pending
+
+**Public code:** owner authorization, licence, and public release URL pending
+
+**Demo video (maximum five minutes):** local production pending, then public URL
+
+**Technical report:** local PDF candidate generated; public URL pending
+
+**Optional live demo:** not provided; Docker, CLI, report, and video are the reproducible paths
+
+## Summary (265 words)
 
 OrganChip Insight is a local, reproducible analysis workspace for bright-field
 organ-on-chip microscopy. It turns an image folder into a traceable experiment:
@@ -93,5 +98,7 @@ demonstrator uses torchvision and ImageNet weights under BSD-3 terms. Exact
 versions are locked in `backend/uv.lock`, `frontend/package-lock.json`, and the
 experiment environments.
 
-**Project code licence:** `[TO COMPLETE]`  
-**Model-bundle licence and public location:** `[TO COMPLETE IF DISTRIBUTED]`
+**Project code licence:** owner decision pending; no licence is implied.
+
+**Model bundle:** not distributed in the current candidate. Any later public
+bundle requires an explicit licence, location, provenance manifest, and hashes.

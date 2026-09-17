@@ -130,6 +130,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [ ] Choisir la licence du code.
 - [ ] Choisir la licence du bundle ONNX, ou décider de ne pas le distribuer.
 - [ ] Compléter le nom de l'équipe et la liste des auteurs.
+- [ ] Confirmer l'inscription obligatoire via le formulaire externe de
+  l'organisateur, avec un responsable d'équipe et 1 à 5 membres.
 - [ ] Autoriser le push de `dev`.
 - [ ] Décider de rendre le dépôt public.
 - [ ] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
@@ -157,16 +159,18 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 4.1 Rapport technique
 
-- [ ] Relire et compléter le rapport anglais.
-- [ ] Remplacer tous les champs `TO COMPLETE`.
-- [ ] Ajouter les figures générées depuis les rapports versionnés.
-- [ ] Vérifier les légendes, citations, licences et limites.
-- [ ] Exporter le PDF et contrôler visuellement chaque page.
+- [x] Relire et compléter le rapport anglais candidat.
+- [x] Remplacer tous les champs `TO COMPLETE` par des résultats ou par une
+  réserve explicite relevant du propriétaire.
+- [x] Ajouter les figures générées depuis les rapports versionnés.
+- [x] Vérifier les légendes, citations, licences et limites.
+- [x] Exporter le PDF reproductible et contrôler visuellement ses 15 pages.
 - [ ] Publier le PDF sur une URL publique stable.
 
 ### 4.2 Vidéo de cinq minutes maximum
 
-- [ ] Préparer une expérience de démonstration reproductible.
+- [x] Préparer une expérience de démonstration reproductible fondée sur le
+  manifeste réel verrouillé de la phase 1.
 - [ ] Enregistrer le produit réel en suivant le storyboard.
 - [ ] Ajouter les sous-titres anglais.
 - [ ] Vérifier qu'aucun secret, chemin personnel ou donnée gelée n'apparaît.
@@ -174,10 +178,10 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 4.3 Writeup Kaggle
 
-- [ ] Finaliser le résumé de 200–300 mots.
+- [x] Finaliser le résumé de 200–300 mots.
 - [ ] Ajouter les liens exacts vers dépôt, release, PDF et vidéo.
-- [ ] Ajouter la déclaration des outils d'IA, données, modèles et licences.
-- [ ] Conserver clairement le résultat négatif CNN et les limites du comptage.
+- [x] Ajouter la déclaration des outils d'IA, données, modèles et licences.
+- [x] Conserver clairement le résultat négatif CNN et les limites du comptage.
 - [ ] Vérifier tous les liens dans une fenêtre privée.
 - [ ] Soumettre le Writeup le **9 octobre 2026**.
 

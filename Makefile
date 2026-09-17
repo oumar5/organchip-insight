@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-release-persistence test-real-images release-audit release-checksums release-checksums-check benchmark-summary check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-release-persistence test-real-images release-audit release-checksums release-checksums-check report-pdf report-pdf-check benchmark-summary check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -53,10 +53,16 @@ release-checksums:
 release-checksums-check:
 	uv run --project backend python backend/scripts/build_release_checksums.py --check
 
+report-pdf:
+	uv run --project backend --extra report python backend/scripts/build_technical_report_pdf.py
+
+report-pdf-check:
+	uv run --project backend --extra report python backend/scripts/build_technical_report_pdf.py --check
+
 benchmark-summary:
 	uv run --project backend python backend/evaluation/build_benchmark_summary.py
 
-check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check release-audit release-checksums-check
+check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check release-audit release-checksums-check report-pdf-check
 	uv run --project backend python backend/evaluation/build_benchmark_summary.py --check
 	docker compose config --quiet
 
