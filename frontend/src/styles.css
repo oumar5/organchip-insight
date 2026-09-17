@@ -90,7 +90,7 @@ h3 { font-size: 0.95rem; }
   border: 1px solid rgba(138, 225, 191, 0.5);
   background: radial-gradient(circle at 35% 35%, #a7edcf 0 4px, transparent 5px), rgba(54, 148, 112, 0.35);
 }
-.brand-name { font-weight: 700; letter-spacing: -0.01em; }
+.brand-name { margin: 0; font-size: var(--font-md); font-weight: 700; letter-spacing: -0.01em; }
 .brand-name em { font-style: normal; color: #8be0bd; font-weight: 500; }
 
 .tabs { display: flex; gap: 4px; margin-left: 8px; }
@@ -298,7 +298,7 @@ footer {
 .step-copy { display: grid; line-height: 1.2; }
 .step-copy strong { font-size: var(--font-sm); }
 .step-copy small { color: var(--muted); font-size: var(--font-xs); }
-.step.todo { opacity: 0.75; }
+.step.todo { background: #f8faf9; }
 
 /* ---------- Forms ---------- */
 .stack-form { display: flex; flex-direction: column; gap: 14px; }

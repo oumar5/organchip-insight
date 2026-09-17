@@ -19,7 +19,7 @@ export function AppBar({ tab, onTab, statusKind, statusLabel, resultAvailable }:
     <header className="appbar">
       <div className="brand">
         <span className="brand-mark" aria-hidden="true" />
-        <span className="brand-name">OrganChip <em>Insight</em></span>
+        <h1 className="brand-name">OrganChip <em>Insight</em></h1>
       </div>
       <nav className="tabs" aria-label="Sections">
         {TABS.map((item) => (

@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-real-images benchmark-summary check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-release-persistence test-real-images benchmark-summary check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -37,6 +37,9 @@ test-e2e:
 
 test-e2e-real:
 	ORGANCHIP_REAL_E2E_MANIFEST="$(CURDIR)/data/manifests/product-real-smoke-v1.json" ./scripts/run-e2e.sh
+
+test-release-persistence:
+	./scripts/validate_release_persistence.sh
 
 test-real-images:
 	uv run --project backend python backend/scripts/run_real_image_smoke.py
