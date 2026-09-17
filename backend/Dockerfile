@@ -9,7 +9,7 @@ COPY pyproject.toml ./
 COPY inference.py ./
 COPY app ./app
 
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir ".[inference]"
 
 RUN mkdir -p /data
 

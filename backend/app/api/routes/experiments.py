@@ -189,12 +189,14 @@ def analyze_experiment(
         result = AnalysisResult(
             experiment_id=experiment_id,
             analysis_version=analyzer.version,
+            task=engine.task,
             engine=engine,
             image_count=len(output.image_results),
             metrics=output.metrics,
             image_results=output.image_results,
             artifacts=output.artifacts,
             warnings=output.warnings,
+            provenance=output.provenance,
         )
         repository.save_result(result)
         repository.update_status(experiment_id, "complete")

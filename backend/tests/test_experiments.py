@@ -6,6 +6,8 @@ from PIL import Image, ImageDraw
 
 from app.main import app
 from app.ml import registry, runtime
+from app.ml.pipeline import PipelineOutput
+from app.schemas import QualityImageAnalysis
 
 client = TestClient(app)
 
@@ -102,10 +104,16 @@ def test_inference_engine_registry_is_transparent() -> None:
     engine_statuses = {engine["id"]: engine["status"] for engine in engines}
     assert engine_statuses == {
         "adaptive-segmentation-v1": "available",
+        "ooc-quality-cnn-campaign-v2-gray448": "experimental",
         "micro-sam-pretrained": "experimental",
         "cellpose-pretrained": "license-review",
     }
     assert all(engine["limitations"] for engine in engines)
+    runnable = {engine["id"]: engine["runnable"] for engine in engines}
+    assert runnable["adaptive-segmentation-v1"] is True
+    assert runnable["ooc-quality-cnn-campaign-v2-gray448"] is (
+        "ooc-quality-cnn-campaign-v2-gray448" in runtime.ANALYZERS_BY_ENGINE_ID
+    )
 
 
 def test_unavailable_inference_engines_are_rejected() -> None:
@@ -132,6 +140,66 @@ def test_unavailable_inference_engines_are_rejected() -> None:
         assert "is not available" in response.json()["detail"]
 
 
+def test_experimental_quality_api_preserves_abstention_and_provenance(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FakeQualityAnalyzer:
+        version = "quality-fixture-1"
+        engine = registry.EXPERIMENTAL_QUALITY_ENGINE.model_copy(update={"runnable": True})
+
+        def analyze(self, image_paths, artifact_dir, artifact_url_prefix):
+            assert len(image_paths) == 1
+            return PipelineOutput(
+                metrics={"images_with_raw_score": 1.0},
+                image_results=[
+                    QualityImageAnalysis(
+                        filename=image_paths[0].name,
+                        source_acquisition_mode="L",
+                        probability_good_raw=0.75,
+                        interpretation="review-required",
+                    )
+                ],
+                artifacts=[],
+                warnings=["À vérifier"],
+                provenance={"model_sha256": "a" * 64},
+            )
+
+    monkeypatch.setitem(
+        runtime.ANALYZERS_BY_ENGINE_ID,
+        registry.EXPERIMENTAL_QUALITY_ENGINE.id,
+        FakeQualityAnalyzer(),
+    )
+    created = client.post("/api/v1/experiments", json={"name": "Quality demo"}).json()
+    image_buffer = BytesIO()
+    Image.new("L", (32, 32), color=128).save(image_buffer, format="PNG")
+    upload_response = client.post(
+        f"/api/v1/experiments/{created['id']}/images",
+        files={"files": ("field.png", image_buffer.getvalue(), "image/png")},
+    )
+    assert upload_response.status_code == 200
+
+    response = client.post(
+        f"/api/v1/experiments/{created['id']}/analyze",
+        params={"engine_id": registry.EXPERIMENTAL_QUALITY_ENGINE.id},
+    )
+
+    assert response.status_code == 200
+    result = response.json()
+    assert result["task"] == "quality-classification"
+    assert result["engine"]["status"] == "experimental"
+    assert result["engine"]["runnable"] is True
+    assert result["artifacts"] == []
+    assert result["provenance"]["model_sha256"] == "a" * 64
+    assert result["image_results"][0] == {
+        "analysis_type": "quality-classification",
+        "filename": result["image_results"][0]["filename"],
+        "source_acquisition_mode": "L",
+        "probability_good_raw": 0.75,
+        "review_required": True,
+        "interpretation": "review-required",
+    }
+
+
 def test_registry_fails_closed_when_status_has_no_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(registry.MICRO_SAM_ENGINE, "status", "available")
 
@@ -139,10 +207,18 @@ def test_registry_fails_closed_when_status_has_no_runtime(monkeypatch: pytest.Mo
         runtime.list_inference_engines()
 
 
-def test_registry_can_report_no_available_engine(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(registry.ADAPTIVE_SEGMENTATION_ENGINE, "status", "experimental")
+def test_registry_can_report_no_runnable_engine(monkeypatch: pytest.MonkeyPatch) -> None:
+    adaptive_analyzer = runtime.ANALYZERS_BY_ENGINE_ID[
+        registry.ADAPTIVE_SEGMENTATION_ENGINE.id
+    ]
+    monkeypatch.setattr(
+        runtime,
+        "ANALYZERS_BY_ENGINE_ID",
+        {registry.ADAPTIVE_SEGMENTATION_ENGINE.id: adaptive_analyzer},
+    )
+    monkeypatch.setattr(registry.ADAPTIVE_SEGMENTATION_ENGINE, "runnable", False)
 
-    assert not any(engine.status == "available" for engine in runtime.list_inference_engines())
+    assert not any(engine.runnable for engine in runtime.list_inference_engines())
     with pytest.raises(ValueError, match="is not available"):
         runtime.get_available_runtime(registry.ADAPTIVE_SEGMENTATION_ENGINE.id)
 

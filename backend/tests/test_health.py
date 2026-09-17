@@ -18,7 +18,15 @@ def test_health_endpoint() -> None:
 def test_health_reports_when_no_inference_engine_is_available(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(registry.ADAPTIVE_SEGMENTATION_ENGINE, "status", "experimental")
+    adaptive_analyzer = runtime.ANALYZERS_BY_ENGINE_ID[
+        registry.ADAPTIVE_SEGMENTATION_ENGINE.id
+    ]
+    monkeypatch.setattr(
+        runtime,
+        "ANALYZERS_BY_ENGINE_ID",
+        {registry.ADAPTIVE_SEGMENTATION_ENGINE.id: adaptive_analyzer},
+    )
+    monkeypatch.setattr(registry.ADAPTIVE_SEGMENTATION_ENGINE, "runnable", False)
 
     response = client.get("/api/v1/health")
 

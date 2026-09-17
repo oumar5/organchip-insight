@@ -40,8 +40,11 @@ export interface UploadLimits {
 export interface AnalysisEngine {
   id: string;
   name: string;
+  task: "segmentation" | "quality-classification";
   kind: "zero-training" | "pretrained" | "trained";
   status: "available" | "experimental" | "planned" | "license-review";
+  runnable: boolean;
+  unavailable_reason: string | null;
   description: string;
   training_required: boolean;
   limitations: string[];
@@ -54,7 +57,9 @@ export type KnownMetricKey =
   | "mean_object_area"
   | "mean_intensity"
   | "mean_contrast"
-  | "quality_score";
+  | "quality_score"
+  | "images_with_raw_score"
+  | "images_outside_training_domain";
 
 export interface AnalysisArtifact {
   filename: string;
@@ -63,7 +68,8 @@ export interface AnalysisArtifact {
   url: string;
 }
 
-export interface ImageAnalysis {
+export interface SegmentationImageAnalysis {
+  analysis_type: "segmentation";
   filename: string;
   object_count: number;
   foreground_fraction: number;
@@ -75,14 +81,27 @@ export interface ImageAnalysis {
   overlay_url: string;
 }
 
+export interface QualityImageAnalysis {
+  analysis_type: "quality-classification";
+  filename: string;
+  source_acquisition_mode: "L" | "RGB" | "outside-training-domain";
+  probability_good_raw: number | null;
+  review_required: true;
+  interpretation: "review-required" | "outside-training-domain";
+}
+
+export type ImageAnalysis = SegmentationImageAnalysis | QualityImageAnalysis;
+
 export interface AnalysisResult {
   experiment_id: string;
   analysis_version: string;
+  task: "segmentation" | "quality-classification";
   engine: AnalysisEngine;
   image_count: number;
   metrics: Record<string, number> & Partial<Record<KnownMetricKey, number>>;
   image_results: ImageAnalysis[];
   artifacts: AnalysisArtifact[];
   warnings: string[];
+  provenance: Record<string, string>;
   generated_at: string;
 }

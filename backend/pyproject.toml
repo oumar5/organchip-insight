@@ -28,6 +28,9 @@ ml = [
   "pandas>=2.2,<3.0",
   "scikit-learn>=1.6,<2.0",
 ]
+inference = [
+  "onnxruntime>=1.22,<1.24",
+]
 
 [project.scripts]
 organchip-infer = "inference:main"

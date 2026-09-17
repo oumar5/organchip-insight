@@ -10,15 +10,16 @@ from skimage.segmentation import find_boundaries
 
 from app.ml.image_io import read_image
 from app.ml.registry import ADAPTIVE_SEGMENTATION_ENGINE
-from app.schemas import AnalysisArtifact, ImageAnalysis
+from app.schemas import AnalysisArtifact, ImageAnalysis, QualityImageAnalysis
 
 
 @dataclass(frozen=True)
 class PipelineOutput:
     metrics: dict[str, float]
-    image_results: list[ImageAnalysis]
+    image_results: list[ImageAnalysis | QualityImageAnalysis]
     artifacts: list[AnalysisArtifact]
     warnings: list[str]
+    provenance: dict[str, str]
 
 
 @dataclass(frozen=True)
@@ -188,4 +189,5 @@ class AdaptiveSegmentationAnalyzer:
             image_results=image_results,
             artifacts=artifacts,
             warnings=warnings,
+            provenance={},
         )

@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:8080"
     max_upload_mb: int = Field(default=25, ge=1, le=25)
     max_image_pixels: int = Field(default=16_777_216, ge=1, le=16_777_216)
+    quality_model_dir: Path = Path(
+        "../data/experiments/ooc-cnn/kaggle-validation-campaign-v2-gray448/onnx"
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",

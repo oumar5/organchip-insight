@@ -37,8 +37,11 @@ class UploadSummary(BaseModel):
 class AnalysisEngine(BaseModel):
     id: str
     name: str
+    task: Literal["segmentation", "quality-classification"] = "segmentation"
     kind: Literal["zero-training", "pretrained", "trained"]
     status: Literal["available", "experimental", "planned", "license-review"]
+    runnable: bool = True
+    unavailable_reason: str | None = None
     description: str
     training_required: bool
     limitations: list[str]
@@ -52,6 +55,7 @@ class AnalysisArtifact(BaseModel):
 
 
 class ImageAnalysis(BaseModel):
+    analysis_type: Literal["segmentation"] = "segmentation"
     filename: str
     object_count: int
     foreground_fraction: float
@@ -63,13 +67,24 @@ class ImageAnalysis(BaseModel):
     overlay_url: str
 
 
+class QualityImageAnalysis(BaseModel):
+    analysis_type: Literal["quality-classification"] = "quality-classification"
+    filename: str
+    source_acquisition_mode: Literal["L", "RGB", "outside-training-domain"]
+    probability_good_raw: float | None = Field(default=None, ge=0.0, le=1.0)
+    review_required: Literal[True] = True
+    interpretation: Literal["review-required", "outside-training-domain"]
+
+
 class AnalysisResult(BaseModel):
     experiment_id: UUID
     analysis_version: str
+    task: Literal["segmentation", "quality-classification"] = "segmentation"
     engine: AnalysisEngine
     image_count: int
     metrics: dict[str, float]
-    image_results: list[ImageAnalysis]
+    image_results: list[ImageAnalysis | QualityImageAnalysis]
     artifacts: list[AnalysisArtifact]
     warnings: list[str]
+    provenance: dict[str, str] = Field(default_factory=dict)
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

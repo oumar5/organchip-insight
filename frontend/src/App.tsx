@@ -47,6 +47,8 @@ const metricPresentations: Record<KnownMetricKey, MetricPresentation> = {
     format: "relative-index",
     unit: "heuristique 0–1 · pas une probabilité",
   },
+  images_with_raw_score: { label: "Images avec softmax brut", format: "integer" },
+  images_outside_training_domain: { label: "Images hors domaine", format: "integer" },
 };
 
 const decimalFormatter = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
@@ -123,15 +125,15 @@ export default function App() {
     () => engines.find((engine) => engine.id === selectedEngineId) ?? null,
     [engines, selectedEngineId],
   );
-  const hasAvailableEngine = engines.some((engine) => engine.status === "available");
+  const hasRunnableEngine = engines.some((engine) => engine.runnable);
   const inferenceStatus = !engineRegistryLoaded
     ? "loading"
-    : hasAvailableEngine
+    : hasRunnableEngine
       ? "ready"
       : "unavailable";
   const inferenceStatusLabel = !engineRegistryLoaded
     ? "Vérification de l’inférence…"
-    : hasAvailableEngine
+    : hasRunnableEngine
       ? "Inférence disponible"
       : "Inférence indisponible";
 
@@ -150,10 +152,10 @@ export default function App() {
           setEngines(items);
           setSelectedEngineId((currentId) => {
             const currentEngine = items.find((engine) => engine.id === currentId);
-            if (currentEngine?.status === "available") {
+            if (currentEngine?.runnable) {
               return currentId;
             }
-            return items.find((engine) => engine.status === "available")?.id ?? "";
+            return items.find((engine) => engine.runnable)?.id ?? "";
           });
         })
         .finally(() => setEngineRegistryLoaded(true)),
@@ -243,7 +245,7 @@ export default function App() {
       setError("Créez ou sélectionnez une expérience avant l’analyse.");
       return;
     }
-    if (selectedEngine?.status !== "available") {
+    if (!selectedEngine?.runnable) {
       setError("Sélectionnez un moteur disponible avant l’analyse.");
       return;
     }
@@ -362,12 +364,12 @@ export default function App() {
           <i />
           <div>
             <span className="intro-index">02</span>
-            <p><strong>Segmenter</strong><small>Sans entraînement</small></p>
+            <p><strong>Analyser</strong><small>Moteur explicite</small></p>
           </div>
           <i />
           <div>
             <span className="intro-index">03</span>
-            <p><strong>Vérifier</strong><small>Overlays et métriques</small></p>
+            <p><strong>Vérifier</strong><small>Preuves et limites</small></p>
           </div>
           <div className="evidence-chip">Exploratoire · traçable</div>
         </section>
@@ -459,12 +461,11 @@ export default function App() {
                   disabled={busy}
                   onChange={(event) => setSelectedEngineId(event.target.value)}
                 >
-                  {!engines.some((engine) => engine.status === "available") && (
+                  {!engines.some((engine) => engine.runnable) && (
                     <option value="">Aucun moteur disponible</option>
                   )}
-                  {engines.filter((engine) => engine.status === "available").map((engine) => (
+                  {engines.filter((engine) => engine.runnable).map((engine) => (
                     <option
-                      disabled={engine.status !== "available"}
                       key={engine.id}
                       value={engine.id}
                     >
@@ -478,7 +479,7 @@ export default function App() {
             <section className="engine-catalog" aria-labelledby="engine-catalog-title">
               <div className="engine-catalog-heading">
                 <strong id="engine-catalog-title">Moteur actif et candidats</strong>
-                <small>Les candidats expérimentaux ou en revue de licence ne sont pas encore utilisables.</small>
+                <small>La maturité scientifique et la disponibilité technique sont affichées séparément.</small>
               </div>
               <div className="engine-catalog-list">
                 {engines.map((engine) => (
@@ -494,8 +495,11 @@ export default function App() {
                     </div>
                     <p>{engine.description}</p>
                     <small className="engine-meta">
-                      {engineKindLabels[engine.kind]} · {engine.training_required ? "entraînement requis" : "sans entraînement local"}
+                      {engineKindLabels[engine.kind]} · {engine.training_required ? "entraînement requis" : "sans entraînement local"} · {engine.runnable ? "exécutable" : "indisponible"}
                     </small>
+                    {engine.unavailable_reason && (
+                      <small className="engine-unavailable">Indisponible : {engine.unavailable_reason}</small>
+                    )}
                     <ul>
                       {engine.limitations.map((limitation) => (
                         <li key={limitation}>{limitation}</li>
@@ -563,7 +567,7 @@ export default function App() {
 
             <button
               className="primary-button analyze-button"
-              disabled={busy || !selectedExperiment?.image_count || files.length > 0 || selectedEngine?.status !== "available"}
+              disabled={busy || !selectedExperiment?.image_count || files.length > 0 || !selectedEngine?.runnable}
               onClick={handleAnalyze}
               type="button"
             >
@@ -592,7 +596,7 @@ export default function App() {
               <div className="empty-visual"><span /><span /><span /></div>
               <div>
                 <h3>Les preuves apparaîtront ici</h3>
-                <p>Lancez l’inférence pour obtenir les contours, le comptage et les indicateurs qualité.</p>
+                <p>Lancez un moteur pour obtenir ses résultats, sa provenance et ses limites d’interprétation.</p>
               </div>
             </div>
           ) : (
@@ -608,17 +612,36 @@ export default function App() {
                   ))}
                 </div>
 
-                <div className="overlay-grid">
-                  {result.image_results.map((imageResult) => (
-                    <figure key={imageResult.overlay_url}>
-                      <img src={`${imageResult.overlay_url}?v=${encodeURIComponent(result.generated_at)}`} alt={`Segmentation de ${readableFilename(imageResult.filename)}`} />
-                      <figcaption>
-                        <div><strong>{readableFilename(imageResult.filename)}</strong><span>{imageResult.object_count} objets</span></div>
-                        <small>Premier plan {imageResult.foreground_polarity === "bright" ? "clair" : "sombre"} · seuil {imageResult.threshold}</small>
-                      </figcaption>
-                    </figure>
-                  ))}
-                </div>
+                {result.task === "segmentation" ? (
+                  <div className="overlay-grid">
+                    {result.image_results.filter((item) => item.analysis_type === "segmentation").map((imageResult) => (
+                      <figure key={imageResult.overlay_url}>
+                        <img src={`${imageResult.overlay_url}?v=${encodeURIComponent(result.generated_at)}`} alt={`Segmentation de ${readableFilename(imageResult.filename)}`} />
+                        <figcaption>
+                          <div><strong>{readableFilename(imageResult.filename)}</strong><span>{imageResult.object_count} objets</span></div>
+                          <small>Premier plan {imageResult.foreground_polarity === "bright" ? "clair" : "sombre"} · seuil {imageResult.threshold}</small>
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="quality-result-list">
+                    {result.image_results.filter((item) => item.analysis_type === "quality-classification").map((imageResult) => (
+                      <article className="quality-result-card" key={imageResult.filename}>
+                        <div>
+                          <strong>{readableFilename(imageResult.filename)}</strong>
+                          <small>Mode source : {imageResult.source_acquisition_mode}</small>
+                        </div>
+                        <div className="raw-score">
+                          <span>Softmax brut « good »</span>
+                          <strong>{imageResult.probability_good_raw === null ? "Non calculé" : decimalFormatter.format(imageResult.probability_good_raw)}</strong>
+                          <small>Non calibré · aucune classe attribuée</small>
+                        </div>
+                        <span className="review-badge">À vérifier</span>
+                      </article>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <aside className="evidence-panel">
@@ -626,7 +649,11 @@ export default function App() {
                   <span>i</span>
                   <div><strong>Niveau de preuve</strong><small>Exploration non validée</small></div>
                 </div>
-                <p>Ces mesures décrivent les images. Elles ne constituent ni un diagnostic ni une conclusion biologique.</p>
+                {result.task === "quality-classification" ? (
+                  <p><strong>Abstention systématique :</strong> ce démonstrateur n’attribue jamais automatiquement les classes bon ou mauvais. Le score affiché est un softmax brut non calibré.</p>
+                ) : (
+                  <p>Ces mesures décrivent les images. Elles ne constituent ni un diagnostic ni une conclusion biologique.</p>
+                )}
                 {typeof result.metrics.quality_score === "number" && (
                   <p className="metric-method-note">
                     <strong>Indice de contraste relatif :</strong> moyenne du contraste divisée par 0,20,
@@ -640,7 +667,12 @@ export default function App() {
                 <div className="provenance-box">
                   <span>Moteur</span><strong>{result.engine.name}</strong>
                   <span>Images analysées</span><strong>{result.image_count}</strong>
-                  <span>Entraînement local</span><strong>Aucun</strong>
+                  <span>Tâche</span><strong>{result.task === "segmentation" ? "Segmentation" : "QC expérimental"}</strong>
+                  {Object.entries(result.provenance).map(([key, value]) => (
+                    <div className="provenance-entry" key={key}>
+                      <span>{key}</span><code>{value}</code>
+                    </div>
+                  ))}
                 </div>
               </aside>
             </div>
