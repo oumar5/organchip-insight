@@ -126,7 +126,9 @@ def _load_engine(config: dict[str, Any], project_root: Path) -> _EngineRuntime:
                 verbose=False,
                 **generate_kwargs,
             )
-            return instances > 0, {"instance_count": int(instances.max(initial=0))}
+            return instances.astype(np.int32, copy=False), {
+                "instance_count": int(instances.max(initial=0))
+            }
 
         model_files: list[dict[str, Any]] = []
         models_dir = model_cache / "models"

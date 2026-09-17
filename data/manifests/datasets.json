@@ -63,6 +63,44 @@
         "type": "zip",
         "destination": "data/raw/bbbc019"
       }
+    },
+    {
+      "id": "bbbc038-stage1-train-v1",
+      "dataset": "BBBC038 Kaggle 2018 Data Science Bowl",
+      "version": "1",
+      "source_page": "https://bbbc.broadinstitute.org/BBBC038",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC038/stage1_train.zip",
+      "path": "data/raw/bbbc038/stage1_train.zip",
+      "size_bytes": 82923446,
+      "checksums": {
+        "sha256": "dcb6edc2690f137406638b2309581a71522c4dff19157d118453b448dcddcb68"
+      },
+      "license": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "enabled_by_default": false,
+      "extraction": {
+        "type": "zip",
+        "destination": "data/raw/bbbc038/stage1_train"
+      }
+    },
+    {
+      "id": "bbbc038-metadata-v1",
+      "dataset": "BBBC038 Kaggle 2018 Data Science Bowl metadata",
+      "version": "1",
+      "source_page": "https://bbbc.broadinstitute.org/BBBC038",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC038/metadata.xlsx",
+      "path": "data/raw/bbbc038/metadata.xlsx",
+      "size_bytes": 20194,
+      "checksums": {
+        "sha256": "3ebf48d0b562a8044854d64b3675cf35d49b6e9e84f34346184236130ac40be9"
+      },
+      "license": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "enabled_by_default": false
     }
   ]
 }

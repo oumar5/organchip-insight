@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "bbbc038-stage1-subset-v1-micro-sam-vit-b-lm-apg",
+  "dataset": {
+    "id": "BBBC038v1-stage1-train",
+    "version": "1",
+    "archive_sha256": "dcb6edc2690f137406638b2309581a71522c4dff19157d118453b448dcddcb68",
+    "license": "CC0-1.0",
+    "source": "https://bbbc.broadinstitute.org/BBBC038"
+  },
+  "subset_manifest": "data/manifests/bbbc038-stage1-subset-v1.json",
+  "subset_manifest_sha256": "c6c768b7b4aba84259e9e170bee5a5deb5354a898cdc3abcdaa4afb96f8cec2f",
+  "expected_image_count": 12,
+  "engine": "micro-sam-vit-b-lm-apg",
+  "engine_config": {
+    "model_type": "vit_b_lm",
+    "segmentation_mode": "apg",
+    "device": "cpu",
+    "is_tiled": false,
+    "cache_dir": "data/models/micro-sam",
+    "runtime_cache_dir": "data/cache/micro-sam-runtime",
+    "weights_license": "CC-BY-4.0",
+    "weights_source": "https://bioimage.io/#/?id=diplomatic-bug",
+    "generate_kwargs": {
+      "min_size": 25,
+      "center_distance_threshold": 0.5,
+      "boundary_distance_threshold": 0.5,
+      "foreground_threshold": 0.5,
+      "multimasking": false,
+      "batch_size": 32,
+      "nms_threshold": 0.9,
+      "intersection_over_min": false,
+      "refine_with_box_prompts": false
+    }
+  },
+  "parameter_selection": "Unmodified micro_sam 1.8.14 APG defaults, copied from the pre-existing BBBC019 protocol and frozen before viewing BBBC038 predictions or metrics; no mask-based tuning.",
+  "iou_thresholds": [0.5, 0.75],
+  "bootstrap_iterations": 10000,
+  "seed": 20260917,
+  "output_json": "reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json",
+  "output_csv": "reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.csv",
+  "overlay_dir": "reports/generated/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg/overlays",
+  "warnings": [
+    "BBBC038 contains nuclear microscopy images from heterogeneous experiments, not organ-on-chip images.",
+    "The 12-image subset is a bounded image-diversity audit, not a population estimate for all 670 images.",
+    "Selection used image dimensions and grayscale statistics only; ground-truth masks and counts were not used.",
+    "The 95% intervals resample 12 images and do not represent independent biological experiments.",
+    "The benchmark validates zero-shot nuclear instance segmentation and counting only; it does not validate cell counting on the challenge OoC images."
+  ]
+}

@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -98,6 +98,12 @@ benchmark-bbbc019:
 
 benchmark-bbbc019-microsam:
 	cd backend && $(MICROSAM_PYTHON) -m evaluation.evaluate --config backend/evaluation/configs/bbbc019-microfluidic-microsam-vit-b-lm-apg.json
+
+build-bbbc038-subset:
+	uv run --project backend python backend/evaluation/build_bbbc038_subset.py
+
+benchmark-bbbc038-instances:
+	cd backend && $(MICROSAM_PYTHON) -m evaluation.evaluate_instances --config backend/evaluation/configs/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json
 
 docker-up:
 	docker compose up --build

@@ -40,7 +40,7 @@ py-modules = ["inference"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["app*", "training*"]
+include = ["app*", "evaluation*", "training*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
