@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "iorganoassay-validation-v1.1.0-adaptive-v1",
+  "manifest": "data/manifests/iorganoassay-validation-v1.1.0.json",
+  "engine": "adaptive-segmentation-v1",
+  "ground_truth_threshold": 0.5,
+  "bootstrap_iterations": 10000,
+  "seed": 20260917,
+  "parameter_selection": "The frozen adaptive-segmentation-1.1.0 algorithm and all 28 official validation triples are evaluated once. No threshold, polarity, morphology, sample, or condition is selected from the results.",
+  "decision_criteria": {
+    "minimum_macro_f1": 0.7,
+    "minimum_condition_macro_f1": 0.65,
+    "maximum_fraction_below_f1_0_5": 0.2
+  },
+  "output_json": "reports/benchmarks/iorganoassay-validation-v1.1.0-adaptive-v1.json",
+  "output_csv": "reports/benchmarks/iorganoassay-validation-v1.1.0-adaptive-v1.csv",
+  "overlay_dir": "reports/generated/iorganoassay-validation-v1.1.0-adaptive-v1/overlays",
+  "warnings": [
+    "The validation images are mouse intestinal organoids, not the challenge organ-on-chip fields.",
+    "Ground truth identifies one annotated organoid structure per image and is not an instance-level cell count.",
+    "JPEG masks contain compression values; the official greater-than-0.5 grayscale rule is reproduced.",
+    "The 28 images form two conditions but are not asserted to be 28 independent biological replicates.",
+    "The external result cannot select a model, alter the frozen OoC protocol, or open the OoC test set."
+  ]
+}

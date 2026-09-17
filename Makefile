@@ -1,4 +1,4 @@
-.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-release-persistence test-real-images release-audit release-checksums release-checksums-check report-pdf report-pdf-check demo-video demo-video-check benchmark-summary check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
+.PHONY: backend-dev backend-test backend-lint frontend-dev frontend-build frontend-typecheck test-e2e test-e2e-real test-release-persistence test-real-images release-audit release-checksums release-checksums-check report-pdf report-pdf-check demo-video demo-video-check benchmark-summary label-noise-audit label-noise-check build-iorganoassay-manifest benchmark-iorganoassay check docker-up docker-down data-fetch data-verify data-audit split-ooc split-ooc-campaign-v2 train-ooc-baseline evaluate-ooc-comparators-v2 benchmark-bbbc019 benchmark-bbbc019-microsam build-bbbc038-subset benchmark-bbbc038-instances cnn-build-manifests cnn-stage-kaggle-source cnn-stage-kaggle-ablation cnn-protocol-test cnn-smoke cnn-export cnn-archive cnn-notebook-check
 
 MICROSAM_PYTHON ?= conda run --name organchip-microsam python
 CNN_PYTHON ?= conda run --name organchip-ooc-cnn-cpu python
@@ -68,7 +68,7 @@ demo-video-check:
 benchmark-summary:
 	uv run --project backend python backend/evaluation/build_benchmark_summary.py
 
-check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check release-audit release-checksums-check report-pdf-check
+check: backend-lint backend-test frontend-typecheck frontend-build cnn-notebook-check release-audit release-checksums-check report-pdf-check label-noise-check
 	uv run --project backend python backend/evaluation/build_benchmark_summary.py --check
 	docker compose config --quiet
 
@@ -80,6 +80,18 @@ data-verify:
 
 data-audit:
 	uv run --project backend --extra ml python backend/evaluation/audit_data.py
+
+label-noise-audit:
+	uv run --project backend python backend/evaluation/audit_ooc_label_noise.py
+
+label-noise-check:
+	uv run --project backend python backend/evaluation/audit_ooc_label_noise.py --check
+
+build-iorganoassay-manifest:
+	uv run --project backend python backend/evaluation/build_iorganoassay_validation_manifest.py
+
+benchmark-iorganoassay:
+	uv run --project backend python backend/evaluation/evaluate_iorganoassay.py
 
 split-ooc:
 	uv run --project backend python backend/training/split_ooc.py --config backend/training/configs/ooc-grouped-split-v1.json

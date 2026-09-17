@@ -78,7 +78,7 @@ questions et ne doivent jamais être fusionnés avec l'entraînement actuel.
 
 | Dataset | Contenu vérifié | Licence et taille | Décision avant soumission |
 |---|---|---|---|
-| [iOrganoAssay](https://doi.org/10.5281/zenodo.18627307) | images bright-field quotidiennes, métadonnées d'essais, traitements, sorties de segmentation et morphométrie ; 28 annotations manuelles décrites dans l'article | CC-BY-4.0 ; ZIP 113 949 908 octets, MD5 `f09c388342b2453cf8a7e184dd5afe9a` | **premier candidat** pour un test externe borné de segmentation, import et traçabilité ; inspecter les métadonnées avant téléchargement complet |
+| [iOrganoAssay v1.1.0](https://doi.org/10.5281/zenodo.20351867) | 234 images bright-field, sorties de segmentation/morphométrie et dossier officiel de validation contenant 28 triplets BF/GT/Seg, répartis entre contrôle et DSS | CC0-1.0 ; ZIP 1 817 410 571 octets, MD5 `3cd6380e9413b977fdc531f32338ccd2` | **retenu** pour un unique test externe borné ; seuls les 84 fichiers du dossier de validation sont extraits, avec protocole et hashes gelés avant score |
 | [Brain Organoid Dataset v2](https://doi.org/10.5281/zenodo.10301912) | 1 400 images de 64 organoïdes suivis, quatre clones, deux laboratoires, JPEG/TIFF et masques binaires manuels | CC-BY-4.0 ; ZIP 973 563 674 octets, MD5 `53e6b41af957ac33c03b927e0fbe69aa` | alternative robuste pour un protocole inter-laboratoire sur un sous-ensemble pré-enregistré |
 | [MultiOrg](https://doi.org/10.34740/kaggle/ds/5097172) | plus de 400 images de plaques, plus de 60 000 boîtes d'organoïdes, 26 expériences et trois jeux d'annotations par deux experts | CC-BY-NC-SA-4.0 ; environ 35,4 Go | ne pas intégrer avant la soumission : coût, licence non commerciale et tâche de détection distincte ; conserver comme référence sur l'incertitude inter-annotateurs |
 | [SWIFT](https://www.nature.com/articles/s42003-026-10768-x) | workflow 2026 de segmentation, classification et suivi ; entraînement YOLOv8s sur 417 images bright-field de côlon | données hébergées sur OMERO et code public ; bundle de reproduction encore à auditer | état de l'art uniquement ; ne pas introduire une nouvelle chaîne YOLO/SAM avant la release |
@@ -87,7 +87,8 @@ questions et ne doivent jamais être fusionnés avec l'entraînement actuel.
 
 Un seul test externe supplémentaire est autorisé avant publication, uniquement
 s'il tient dans un protocole borné, n'exige aucun réglage sur les résultats et
-ne décale pas les tâches P0. iOrganoAssay est prioritaire pour sa petite taille
-et ses liens avec des essais ; le dataset cérébral est l'alternative si ses
-masques manuels répondent mieux à la question de segmentation. Un résultat
-négatif sera publié tel quel.
+ne décale pas les tâches P0. iOrganoAssay v1.1.0 est retenu parce qu'il fournit
+un sous-ensemble officiel BF/GT/Seg explicitement destiné à la validation ; le
+dataset cérébral reste une alternative non exécutée. L'archive complète de
+1,82 Go est vérifiée, mais seuls les 84 fichiers de validation sont extraits.
+Un résultat négatif sera publié tel quel.

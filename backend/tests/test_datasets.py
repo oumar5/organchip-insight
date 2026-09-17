@@ -40,6 +40,29 @@ def test_safe_extraction_rejects_parent_traversal(tmp_path) -> None:
     assert not (tmp_path.parent / "outside.txt").exists()
 
 
+def test_safe_extraction_can_select_a_bounded_prefix(tmp_path) -> None:
+    archive_path = tmp_path / "bounded.zip"
+    with zipfile.ZipFile(archive_path, "w") as archive:
+        archive.writestr("dataset/validation/sample.txt", "selected")
+        archive.writestr("dataset/high-resolution/large.txt", "excluded")
+    resource = {
+        "id": "bounded",
+        "path": "bounded.zip",
+        "extraction": {
+            "type": "zip",
+            "destination": "extracted",
+            "include_prefixes": ["dataset/validation"],
+        },
+    }
+
+    result = extract_resource(resource, tmp_path)
+
+    assert result is not None
+    assert result["files_extracted"] == 1
+    assert (tmp_path / "extracted/dataset/validation/sample.txt").read_text() == "selected"
+    assert not (tmp_path / "extracted/dataset/high-resolution/large.txt").exists()
+
+
 def test_download_resource_resumes_partial_file(tmp_path, monkeypatch) -> None:
     payload = b"reproducible microscopy data"
     destination = tmp_path / "nested" / "fixture.bin"

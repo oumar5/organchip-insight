@@ -184,6 +184,30 @@ def extract_resource(resource: dict[str, Any], project_root: Path) -> dict[str, 
     try:
         with zipfile.ZipFile(archive_path) as archive:
             members = _safe_zip_members(archive, destination)
+            include_prefixes = extraction.get("include_prefixes")
+            if include_prefixes is not None:
+                if not isinstance(include_prefixes, list) or not include_prefixes:
+                    raise DatasetError("include_prefixes must be a non-empty list")
+                normalized_prefixes: list[str] = []
+                for prefix in include_prefixes:
+                    if not isinstance(prefix, str) or not prefix.strip():
+                        raise DatasetError("include_prefixes entries must be non-empty strings")
+                    prefix_path = Path(prefix)
+                    if prefix_path.is_absolute() or ".." in prefix_path.parts:
+                        raise DatasetError(f"Unsafe extraction prefix: {prefix}")
+                    normalized_prefixes.append(prefix.replace("\\", "/").rstrip("/") + "/")
+                members = [
+                    member
+                    for member in members
+                    if any(
+                        member.filename.replace("\\", "/").startswith(prefix)
+                        for prefix in normalized_prefixes
+                    )
+                ]
+                if not members:
+                    raise DatasetError(
+                        f"No archive members match include_prefixes for {resource['id']}"
+                    )
             archive.extractall(destination, members=members)
     except (OSError, zipfile.BadZipFile) as error:
         raise DatasetError(f"Cannot extract {resource['id']}: {error}") from error

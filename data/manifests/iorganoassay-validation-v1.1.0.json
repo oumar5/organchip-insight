@@ -1,0 +1,945 @@
+{
+  "schema_version": 1,
+  "manifest_id": "iorganoassay-validation-v1.1.0",
+  "dataset": {
+    "name": "iOrganoAssay: Microscopy Image Dataset for Organoid Assessment Assays",
+    "version": "v1.1.0",
+    "zenodo_record": "20351867",
+    "doi": "10.5281/zenodo.20351867",
+    "license": "CC0-1.0",
+    "archive_size_bytes": 1817410571,
+    "archive_md5": "3cd6380e9413b977fdc531f32338ccd2"
+  },
+  "root": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation",
+  "sample_count": 28,
+  "conditions": {
+    "Ctrl": 14,
+    "DSS": 14
+  },
+  "samples": [
+    {
+      "sample_id": "Ctrl_01",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_01_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_01_BF.jpg",
+          "size_bytes": 238323,
+          "sha256": "82d2e07e675dc975069a93adeef7935c7e1c4732a26ea45b324f124910c40268",
+          "width": 1329,
+          "height": 1069,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_01_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_01_GT.jpg",
+          "size_bytes": 18823,
+          "sha256": "93cf6ae8d43da821381992c95f650a18246fec36ce1dd41872a20e249d8d4e24",
+          "width": 886,
+          "height": 713,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_01_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_01_Seg.jpg",
+          "size_bytes": 27393,
+          "sha256": "7d105f3fc19b30c5efe72c1c09d42b449184704aff265ad7774580bd84274893",
+          "width": 886,
+          "height": 713,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_02",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_02_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_02_BF.jpg",
+          "size_bytes": 210206,
+          "sha256": "ef840f5b927909cd3fb3611e24114370428e1452f8c514ed2baebe63457c08fb",
+          "width": 1428,
+          "height": 1036,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_02_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_02_GT.jpg",
+          "size_bytes": 18968,
+          "sha256": "a6eb93102d58975c770f727abcf73c6492298e7b13dd8f8ece740f38410c7508",
+          "width": 952,
+          "height": 690,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_02_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_02_Seg.jpg",
+          "size_bytes": 29088,
+          "sha256": "30e1ba8e98585cde4062fa424ec5b46319803bdcc87c3a07aec215c3f7929745",
+          "width": 952,
+          "height": 690,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_03",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_03_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_03_BF.jpg",
+          "size_bytes": 208510,
+          "sha256": "3e08c4cc3d8f091ce316fdad4365958a74be1923c1198ea9096ac276fa6a3422",
+          "width": 1377,
+          "height": 1041,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_03_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_03_GT.jpg",
+          "size_bytes": 18283,
+          "sha256": "c2c4d0f32b18c686422da6568b0bc2372e9108a248711707049faa30884111b2",
+          "width": 918,
+          "height": 694,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_03_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_03_Seg.jpg",
+          "size_bytes": 24010,
+          "sha256": "0f2b7241fe53121f06739b430fd37ee38250d33409066fb559a65801e0d86bea",
+          "width": 918,
+          "height": 694,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_04",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_04_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_04_BF.jpg",
+          "size_bytes": 208222,
+          "sha256": "d56ea3a483b9649a79ac65010588a802b0d9db18c65585dfdeaeaa1e2d7e65a0",
+          "width": 1338,
+          "height": 1037,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_04_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_04_GT.jpg",
+          "size_bytes": 22053,
+          "sha256": "b874a17eeeb3649cd4691c6fcb1eb09262c88121a0af96edb48c9ed270c8d5ad",
+          "width": 892,
+          "height": 692,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_04_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_04_Seg.jpg",
+          "size_bytes": 24248,
+          "sha256": "a3aab0bf9ff3b7339b0924f4e5e937c5cc8205699429a8e834ed0e1fc198d885",
+          "width": 892,
+          "height": 692,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_05",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_05_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_05_BF.jpg",
+          "size_bytes": 220592,
+          "sha256": "4de75126c6834bee91e5ca4b8c1bdf9cce3dc095e58aff8849ef96347dc5efd8",
+          "width": 1330,
+          "height": 1068,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_05_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_05_GT.jpg",
+          "size_bytes": 21971,
+          "sha256": "5b04d88ba0571d3f1ec3121b1596635be67f57373f349a5f92f9d648575125d9",
+          "width": 887,
+          "height": 712,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_05_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_05_Seg.jpg",
+          "size_bytes": 23060,
+          "sha256": "00f22aa77b3dca7cb4da3b07c096aa9347478c8ac9381d2fae07acb2a241967b",
+          "width": 887,
+          "height": 712,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_06",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_06_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_06_BF.jpg",
+          "size_bytes": 231656,
+          "sha256": "9ddb33c1757f198446700ffcef92a305a54f93c48a0e1d9b8bd18c616f2ffc36",
+          "width": 1354,
+          "height": 1021,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_06_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_06_GT.jpg",
+          "size_bytes": 19462,
+          "sha256": "431bd976770b043b789be71b82095a2396511e72cdb77b8dd2e840f99177b104",
+          "width": 902,
+          "height": 681,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_06_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_06_Seg.jpg",
+          "size_bytes": 16479,
+          "sha256": "a096a2f6b024c26183c4545c8dc2ff77d78979b159f6a56b78d70e4cf6f46d3a",
+          "width": 902,
+          "height": 681,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_07",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_07_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_07_BF.jpg",
+          "size_bytes": 229758,
+          "sha256": "a40760ea57664f8c415fb3232c1a8d976712d0e01e939784352f343744b27e95",
+          "width": 1384,
+          "height": 1063,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_07_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_07_GT.jpg",
+          "size_bytes": 21122,
+          "sha256": "5f2fbda5571edee5a69168ebfe2dc39bcedaf59877fcf0202036441476fa419c",
+          "width": 923,
+          "height": 708,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_07_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_07_Seg.jpg",
+          "size_bytes": 27022,
+          "sha256": "416a5a5e0b73b92d845b1539978ec2e6c7a49ede1da18b274fd27355eb290c7e",
+          "width": 923,
+          "height": 708,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_08",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_08_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_08_BF.jpg",
+          "size_bytes": 182264,
+          "sha256": "303fab2655a1100cf2478cf47edf13d2034c1279e0a0ee604cdee0986eab32ba",
+          "width": 1116,
+          "height": 1014,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_08_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_08_GT.jpg",
+          "size_bytes": 20262,
+          "sha256": "9ea8021d905023873fbbe0b8e097eb934546d66364e7ef8100e3b3553b127d7a",
+          "width": 744,
+          "height": 675,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_08_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_08_Seg.jpg",
+          "size_bytes": 17933,
+          "sha256": "c774943e8b1ded025a0d484163c98dd5427ba60579b0496c3804c1f030e18487",
+          "width": 744,
+          "height": 675,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_09",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_09_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_09_BF.jpg",
+          "size_bytes": 219968,
+          "sha256": "6f11dfb6a487da9490670264cdfec330449946a46d77dc9f59865b142b7f5f70",
+          "width": 1344,
+          "height": 1067,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_09_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_09_GT.jpg",
+          "size_bytes": 20164,
+          "sha256": "b01e1f52196571f1b8b9c1d3e21c17d3cf2f9153ce6848ce37706d64d7b35058",
+          "width": 896,
+          "height": 711,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_09_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_09_Seg.jpg",
+          "size_bytes": 19341,
+          "sha256": "b102c64af9e8dda961dc576a567ef5a9605a14bd4ae8ddbba9813bd70deda9c7",
+          "width": 896,
+          "height": 711,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_10",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_10_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_10_BF.jpg",
+          "size_bytes": 218549,
+          "sha256": "8770219bdf6a01714086df24ffdadd79ef1638281e015dfa08481b3ecb51bc7b",
+          "width": 1394,
+          "height": 1030,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_10_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_10_GT.jpg",
+          "size_bytes": 22268,
+          "sha256": "0d32be089a7d533bec5f6430910e4e42ee2677b1c0b733983063d677f4136ac4",
+          "width": 929,
+          "height": 687,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_10_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_10_Seg.jpg",
+          "size_bytes": 21978,
+          "sha256": "93f558654809fdb9daf180062362acb92983edd3488dda621cf83811ff579959",
+          "width": 929,
+          "height": 687,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_11",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_11_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_11_BF.jpg",
+          "size_bytes": 225848,
+          "sha256": "04cab8aa75667890e779c1982be8014210344bc159a03e7af3162864368c3510",
+          "width": 1351,
+          "height": 1080,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_11_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_11_GT.jpg",
+          "size_bytes": 21005,
+          "sha256": "0cc6c9b4be06909f6702ee4161e092003dfd266eba6af403fc8b401b19bfaded",
+          "width": 901,
+          "height": 720,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_11_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_11_Seg.jpg",
+          "size_bytes": 24695,
+          "sha256": "3e3a1a25fa1ac6e4044e78d07de638c052fa32ad03354aaf94977a254b6abd04",
+          "width": 901,
+          "height": 720,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_12",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_12_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_12_BF.jpg",
+          "size_bytes": 262646,
+          "sha256": "1e27b44accef1a3d90f1977f635f80605c201443cdc091913f7e784f3a4bf59e",
+          "width": 1413,
+          "height": 1068,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_12_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_12_GT.jpg",
+          "size_bytes": 26584,
+          "sha256": "8059a32fc4b941ebf643a5ab0464bfd5aa2ed79d00490e92ced2e2d7ffc17cc3",
+          "width": 942,
+          "height": 712,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_12_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_12_Seg.jpg",
+          "size_bytes": 27624,
+          "sha256": "8cdbc2726b504bfae4c7250ce3047ad20b30dba70975dcece5a9a515b10767e4",
+          "width": 942,
+          "height": 712,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_13",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_13_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_13_BF.jpg",
+          "size_bytes": 242132,
+          "sha256": "7da8be05d9229961b75bf01b3b2ed4ee0a9d64436e6c8b1884bee1d1e5f8af43",
+          "width": 1399,
+          "height": 1080,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_13_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_13_GT.jpg",
+          "size_bytes": 24889,
+          "sha256": "7993a1c6a8b81eb237901b07bbfb96123cebfe5458aff040b969ad24879c3bc3",
+          "width": 933,
+          "height": 720,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_13_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_13_Seg.jpg",
+          "size_bytes": 32490,
+          "sha256": "ad55f07c04fddbc75f35c3ff276aba14fc941efec1984db4c8be700b615119ec",
+          "width": 933,
+          "height": 720,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "Ctrl_14",
+      "condition": "Ctrl",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_14_BF.jpg",
+          "relative_path": "Ctrl/Ctrl_14_BF.jpg",
+          "size_bytes": 220031,
+          "sha256": "13d565bf045aea82e720e011513531447871a889c6fa79fdf4052b399f101b7a",
+          "width": 1412,
+          "height": 1060,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_14_GT.jpg",
+          "relative_path": "Ctrl/Ctrl_14_GT.jpg",
+          "size_bytes": 23153,
+          "sha256": "953b5d5b9d92bddb23c6f59d8bbcd11473cc645cb79d438c552375192a586b35",
+          "width": 942,
+          "height": 707,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/Ctrl/Ctrl_14_Seg.jpg",
+          "relative_path": "Ctrl/Ctrl_14_Seg.jpg",
+          "size_bytes": 26516,
+          "sha256": "04478ec63490c7ffc2a98a3c3a8b3c5f3d8fa75547d770af17eb3787f0d13172",
+          "width": 942,
+          "height": 707,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_01",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_01_BF.jpg",
+          "relative_path": "DSS/DSS_01_BF.jpg",
+          "size_bytes": 247783,
+          "sha256": "994c880b9b4583018de87fd17e7ec3c1e9d284c3ce32defe95f88bcf5e9c7e80",
+          "width": 1378,
+          "height": 1019,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_01_GT.jpg",
+          "relative_path": "DSS/DSS_01_GT.jpg",
+          "size_bytes": 19163,
+          "sha256": "0db1b097b9d353138486c79c5e831a16e723988e5975fb4cd95460b3ba7a1343",
+          "width": 919,
+          "height": 680,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_01_Seg.jpg",
+          "relative_path": "DSS/DSS_01_Seg.jpg",
+          "size_bytes": 16460,
+          "sha256": "527084d0f84670cf0af50ff2dc3395c70c6b5fd81ccb953735528fbdc5b1f8b7",
+          "width": 919,
+          "height": 680,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_02",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_02_BF.jpg",
+          "relative_path": "DSS/DSS_02_BF.jpg",
+          "size_bytes": 204283,
+          "sha256": "66943313c268c62e269671698aa9650793f447c14c7a22d3b0b545bbbcdc0ce6",
+          "width": 1366,
+          "height": 922,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_02_GT.jpg",
+          "relative_path": "DSS/DSS_02_GT.jpg",
+          "size_bytes": 13787,
+          "sha256": "bc05baa2688768cac046d95cc33ec2b5fededa5b2a68e3a60dead4d7c27bf62b",
+          "width": 910,
+          "height": 615,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_02_Seg.jpg",
+          "relative_path": "DSS/DSS_02_Seg.jpg",
+          "size_bytes": 13811,
+          "sha256": "0338a4999100b588d05d62b84e6368a1706e21d6cd7b298cb55e1e7d1166bf63",
+          "width": 910,
+          "height": 615,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_03",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_03_BF.jpg",
+          "relative_path": "DSS/DSS_03_BF.jpg",
+          "size_bytes": 281296,
+          "sha256": "7333f672ee70cd97325bb85de3819aea72f507248f7fad6cb82f213196539767",
+          "width": 1421,
+          "height": 924,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_03_GT.jpg",
+          "relative_path": "DSS/DSS_03_GT.jpg",
+          "size_bytes": 15313,
+          "sha256": "6b360eae53e78653b47f9caad008fe487777f8f4eb909cc324de1ba0d8deb6f4",
+          "width": 947,
+          "height": 616,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_03_Seg.jpg",
+          "relative_path": "DSS/DSS_03_Seg.jpg",
+          "size_bytes": 15091,
+          "sha256": "04517b4b0da0d384f52fdfa982ec62eabd361bb8708fc3257542ae38ab0a9184",
+          "width": 947,
+          "height": 616,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_04",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_04_BF.jpg",
+          "relative_path": "DSS/DSS_04_BF.jpg",
+          "size_bytes": 267368,
+          "sha256": "2df2a5f772cb96f75689531373be5bd2292d752a140bcac68de864928ebb51f4",
+          "width": 1360,
+          "height": 909,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_04_GT.jpg",
+          "relative_path": "DSS/DSS_04_GT.jpg",
+          "size_bytes": 15761,
+          "sha256": "ff0fafabb4e7d97e5693dc76ce2472af5962798b30be825496e7ebb5ba0cd337",
+          "width": 908,
+          "height": 606,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_04_Seg.jpg",
+          "relative_path": "DSS/DSS_04_Seg.jpg",
+          "size_bytes": 14178,
+          "sha256": "edc524cb8128fa129921d49814f659eeefdd27eb8041d4990c7a51fccfe4b41c",
+          "width": 908,
+          "height": 606,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_05",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_05_BF.jpg",
+          "relative_path": "DSS/DSS_05_BF.jpg",
+          "size_bytes": 255804,
+          "sha256": "f88c8f78920f840fd4dd4959a30dbe7fdb2f7b5fdacf57fed465321c151f2c8a",
+          "width": 1387,
+          "height": 995,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_05_GT.jpg",
+          "relative_path": "DSS/DSS_05_GT.jpg",
+          "size_bytes": 15785,
+          "sha256": "6f45c0e1d8d3e40761331cf796f26835dae2b970d2ce5b166ed9e2ae3ee8eb07",
+          "width": 925,
+          "height": 663,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_05_Seg.jpg",
+          "relative_path": "DSS/DSS_05_Seg.jpg",
+          "size_bytes": 13050,
+          "sha256": "3f6b2952452842f5651f16bf08166472681406624a99eb24a3bd7b508694ba9e",
+          "width": 925,
+          "height": 663,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_06",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_06_BF.jpg",
+          "relative_path": "DSS/DSS_06_BF.jpg",
+          "size_bytes": 273035,
+          "sha256": "e00cf5718940664983ded620f8fe83e1a562d2a0b4cd0d0363aa14151c344eba",
+          "width": 1284,
+          "height": 1082,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_06_GT.jpg",
+          "relative_path": "DSS/DSS_06_GT.jpg",
+          "size_bytes": 17647,
+          "sha256": "04be1eaf43e18ff9e75cb78466df8bd4b19ddeda7c5f880a65eb8f66cc64de26",
+          "width": 856,
+          "height": 721,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_06_Seg.jpg",
+          "relative_path": "DSS/DSS_06_Seg.jpg",
+          "size_bytes": 13017,
+          "sha256": "3992eac8da3dcc6514586bef86b0eedef50d83bfd028f4ee1d36b5c7dd6e2dba",
+          "width": 856,
+          "height": 721,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_07",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_07_BF.jpg",
+          "relative_path": "DSS/DSS_07_BF.jpg",
+          "size_bytes": 233527,
+          "sha256": "1daf280bc73f471cf789d55b607c12fb3c82fd53324ad0ca7a80a63fb03e6d9f",
+          "width": 1270,
+          "height": 1068,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_07_GT.jpg",
+          "relative_path": "DSS/DSS_07_GT.jpg",
+          "size_bytes": 15947,
+          "sha256": "9e84d4e200dacd12baaf4d3b353452390630f0b3c33159ce9e9bd274a606e5fe",
+          "width": 847,
+          "height": 712,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_07_Seg.jpg",
+          "relative_path": "DSS/DSS_07_Seg.jpg",
+          "size_bytes": 15625,
+          "sha256": "5851f0e14071cda631375854df4a062c9f52f30f5661a8460e7bc86b7ddf8dbb",
+          "width": 847,
+          "height": 712,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_08",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_08_BF.jpg",
+          "relative_path": "DSS/DSS_08_BF.jpg",
+          "size_bytes": 197907,
+          "sha256": "a4c044f926f585a99958708245fae6e4745ca3c2635439621ab84b7ea1641f34",
+          "width": 1406,
+          "height": 992,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_08_GT.jpg",
+          "relative_path": "DSS/DSS_08_GT.jpg",
+          "size_bytes": 17706,
+          "sha256": "5fe573d1a5ffe19dc356a7553505590b51574e22c226aecc666b6062c4f5c1a1",
+          "width": 937,
+          "height": 661,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_08_Seg.jpg",
+          "relative_path": "DSS/DSS_08_Seg.jpg",
+          "size_bytes": 17029,
+          "sha256": "edd6943b4a384433f2a2cf2dbeccf73b175fba39e9627dc9a06f6bfa55f56248",
+          "width": 937,
+          "height": 661,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_09",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_09_BF.jpg",
+          "relative_path": "DSS/DSS_09_BF.jpg",
+          "size_bytes": 204367,
+          "sha256": "0336baa7122008ec105a4b01ab84a7d582b5987ca34bd02a76849b3a51dcf181",
+          "width": 1256,
+          "height": 1034,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_09_GT.jpg",
+          "relative_path": "DSS/DSS_09_GT.jpg",
+          "size_bytes": 18024,
+          "sha256": "928ac76fd8eca22029d824f6c87de0f432e2edceb9b36cc76e37a9da49a6aedb",
+          "width": 837,
+          "height": 689,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_09_Seg.jpg",
+          "relative_path": "DSS/DSS_09_Seg.jpg",
+          "size_bytes": 14597,
+          "sha256": "1252cdd3b3ef878baae54b10dcf1e66eca5b66aa20bf71fae7ac279cb00b0c50",
+          "width": 837,
+          "height": 689,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_10",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_10_BF.jpg",
+          "relative_path": "DSS/DSS_10_BF.jpg",
+          "size_bytes": 214553,
+          "sha256": "308c86923f1c56c620f816182ac08f168b792b08770c758fcc8eb46d1766e7f7",
+          "width": 1198,
+          "height": 951,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_10_GT.jpg",
+          "relative_path": "DSS/DSS_10_GT.jpg",
+          "size_bytes": 13084,
+          "sha256": "50570ae0ff2031c320790d74315f047808894e9963777ed75d687e1f25d2b58f",
+          "width": 799,
+          "height": 634,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_10_Seg.jpg",
+          "relative_path": "DSS/DSS_10_Seg.jpg",
+          "size_bytes": 13068,
+          "sha256": "a2d6c5236fbe3a0122568f5fb2c8d7d4078aef385350b1e347460933691cf5e1",
+          "width": 799,
+          "height": 634,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_11",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_11_BF.jpg",
+          "relative_path": "DSS/DSS_11_BF.jpg",
+          "size_bytes": 222394,
+          "sha256": "920e77792768cb54d67a62691becdc0dd161c3536ccb0b052b740bc95e768c05",
+          "width": 1315,
+          "height": 1039,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_11_GT.jpg",
+          "relative_path": "DSS/DSS_11_GT.jpg",
+          "size_bytes": 18238,
+          "sha256": "9942fbf409228d1681cb5b3624e04095db14276400bb21ec133ca3fd475056c5",
+          "width": 877,
+          "height": 693,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_11_Seg.jpg",
+          "relative_path": "DSS/DSS_11_Seg.jpg",
+          "size_bytes": 16941,
+          "sha256": "6fc6c6f7f4279d1c11e6863441b56319efd8a0ed8d190ac63b2bf5d6cc12cb8e",
+          "width": 877,
+          "height": 693,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_12",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_12_BF.jpg",
+          "relative_path": "DSS/DSS_12_BF.jpg",
+          "size_bytes": 177233,
+          "sha256": "a929811f35a40cf9da05220d316836bdf17723305afa0079cd9764fa8cfae6cd",
+          "width": 1209,
+          "height": 934,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_12_GT.jpg",
+          "relative_path": "DSS/DSS_12_GT.jpg",
+          "size_bytes": 15719,
+          "sha256": "3234aaf5327d6252ce74858f42a8b89d15c7ad664454d0dd27d7aca2fd8563f3",
+          "width": 806,
+          "height": 623,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_12_Seg.jpg",
+          "relative_path": "DSS/DSS_12_Seg.jpg",
+          "size_bytes": 15542,
+          "sha256": "0f207fb8be43b2e9e64db75b4ad47a844bc63df710b289dcdb86dbc2ae25f17c",
+          "width": 806,
+          "height": 623,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_13",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_13_BF.jpg",
+          "relative_path": "DSS/DSS_13_BF.jpg",
+          "size_bytes": 226217,
+          "sha256": "b98bfc007101af8bc5642d7ca5fb58041e3623f52d9d9d3d45e8c1967282ab5a",
+          "width": 1376,
+          "height": 975,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_13_GT.jpg",
+          "relative_path": "DSS/DSS_13_GT.jpg",
+          "size_bytes": 14832,
+          "sha256": "8d254262117da2a007f5032cbd8bf0d1be9547790658c64177164f8613727b6c",
+          "width": 917,
+          "height": 650,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_13_Seg.jpg",
+          "relative_path": "DSS/DSS_13_Seg.jpg",
+          "size_bytes": 14787,
+          "sha256": "31116afde65340d65d649616b6e7a6a041fd2cb672b6907240a1bccc76f6829e",
+          "width": 917,
+          "height": 650,
+          "mode": "RGB"
+        }
+      }
+    },
+    {
+      "sample_id": "DSS_14",
+      "condition": "DSS",
+      "files": {
+        "brightfield": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_14_BF.jpg",
+          "relative_path": "DSS/DSS_14_BF.jpg",
+          "size_bytes": 227891,
+          "sha256": "0e718ae6d74fc8d3783b55aaeb791e98751a76b7306c1fdef12ac45b149bc77f",
+          "width": 1288,
+          "height": 1003,
+          "mode": "RGB"
+        },
+        "ground_truth": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_14_GT.jpg",
+          "relative_path": "DSS/DSS_14_GT.jpg",
+          "size_bytes": 16534,
+          "sha256": "efc501284372bf02557af9dce661f8c2b2e6d7e1d8045c8f5903e311c748ec8b",
+          "width": 859,
+          "height": 669,
+          "mode": "RGB"
+        },
+        "reference_segmentation": {
+          "path": "data/raw/iorganoassay/iOrganoAssay v1.1.0/6.Validation/DSS/DSS_14_Seg.jpg",
+          "relative_path": "DSS/DSS_14_Seg.jpg",
+          "size_bytes": 14668,
+          "sha256": "5eeffb72ecb00e6d9f41d896028206d3d5124bfc72ac3a0a3824a57490805015",
+          "width": 859,
+          "height": 669,
+          "mode": "RGB"
+        }
+      }
+    }
+  ]
+}

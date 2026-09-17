@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "audit_id": "ooc-label-noise-v1",
+  "source": {
+    "inventory": "reports/ooc-image-inventory-2026-09-16.csv",
+    "inventory_sha256": "26fbe2f67ed71389b61c815ce5a0813524da9f2d5ac52429b839fc873aeb17a0"
+  },
+  "method": {
+    "hash": "256-bit difference hash on a 17x16 grayscale thumbnail",
+    "maximum_hamming_distance": 8,
+    "pair_selection": "all unordered inventory pairs"
+  },
+  "results": {
+    "image_count": 3072,
+    "pair_count": 4717056,
+    "candidate_pair_count": 116,
+    "label_conflict_pair_count": 26,
+    "different_cell_type_pair_count": 97,
+    "cross_published_split_pair_count": 57,
+    "same_acquisition_prefix_pair_count": 116,
+    "label_conflict_different_cell_type_pair_count": 23,
+    "distance_counts": {
+      "0": 3,
+      "1": 13,
+      "2": 9,
+      "3": 7,
+      "4": 10,
+      "5": 10,
+      "6": 17,
+      "7": 23,
+      "8": 24
+    },
+    "label_conflict_distance_counts": {
+      "1": 2,
+      "2": 2,
+      "3": 1,
+      "4": 1,
+      "5": 3,
+      "6": 4,
+      "7": 7,
+      "8": 6
+    }
+  },
+  "interpretation": {
+    "claim": "Visually close pairs can carry contradictory published labels; this is a label-noise risk, not proof that either label is wrong.",
+    "limitations": [
+      "dHash similarity does not prove biological or acquisition identity.",
+      "The audit does not estimate a population label-error rate.",
+      "No image is removed or relabelled after observing model outputs."
+    ]
+  }
+}

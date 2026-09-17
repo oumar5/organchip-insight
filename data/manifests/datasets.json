@@ -101,6 +101,31 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/"
       },
       "enabled_by_default": false
+    },
+    {
+      "id": "iorganoassay-v1.1.0",
+      "dataset": "iOrganoAssay: Microscopy Image Dataset for Organoid Assessment Assays",
+      "version": "v1.1.0",
+      "source_page": "https://zenodo.org/records/20351867",
+      "url": "https://zenodo.org/api/records/20351867/files/iOrganoAssay%20v1.1.0.zip/content",
+      "path": "data/raw/iorganoassay/iOrganoAssay-v1.1.0.zip",
+      "size_bytes": 1817410571,
+      "checksums": {
+        "md5": "3cd6380e9413b977fdc531f32338ccd2"
+      },
+      "license": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "enabled_by_default": false,
+      "large": true,
+      "extraction": {
+        "type": "zip",
+        "destination": "data/raw/iorganoassay",
+        "include_prefixes": [
+          "iOrganoAssay v1.1.0/6.Validation"
+        ]
+      }
     }
   ]
 }
