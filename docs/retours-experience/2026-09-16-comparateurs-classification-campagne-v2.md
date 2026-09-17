@@ -109,3 +109,33 @@ les 509 prédictions sont versionnés afin de rendre chaque chiffre auditable.
   (`0,5948`, `0,6079` contre `0,6315`), C n'a pas été lancé, aucune
   configuration n'est éligible, le test n'a jamais été ouvert. Voir le
   [contre-audit](../audit-2026-09-17-classification-cnn.md).
+
+### Mise en œuvre de l'addendum — 17 septembre 2026
+
+Le commit `438a555932fa9dd89fc7cd221794a468779392ef` ajoute au comparateur
+reproductible les tables catégorielles mode × bucket de jour et mode × type
+cellulaire. Elles sont ajustées sur `train` uniquement, avec lissage de Laplace
+`alpha=1`, puis évaluées au seuil fixe `0,5`. Aucune catégorie de validation
+n'est absente du train et aucun seuil n'est choisi sur ces résultats.
+
+| Comparateur | Macro-F1 | Balanced accuracy | ROC-AUC | BA L | BA RGB |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Mode × bucket de jour | 0,7971 | 0,7920 | 0,8442 | 0,8171 | 0,6533 |
+| Mode × type cellulaire | 0,7272 | 0,7251 | 0,6975 | 0,6358 | 0,5000 |
+
+Le premier comparateur dépasse numériquement les CNN de référence et B sur la
+balanced accuracy globale de cette validation. Cette observation confirme que
+le bucket de jour et le mode portent un raccourci majeur ; elle ne constitue pas
+une estimation indépendante de généralisation. Le type cellulaire seul, même
+conditionné par le mode, n'explique pas le résultat RGB.
+
+Les 509 prédictions contiennent désormais les probabilités des deux
+comparateurs. Le rapport régénéré référence le commit d'exécution ci-dessus :
+
+| Élément régénéré | SHA-256 |
+| --- | --- |
+| Rapport JSON | `4f1bdc729256bddf4824725397aba8b7b790f78c88d83d451f31f2f50346c42c` |
+| Prédictions validation | `2442f271ab4a9a5d157d80124dc78047186d1c41b823409d9b549e1c67388968` |
+
+Les empreintes antérieures restent dans la section historique ci-dessus afin de
+ne pas réécrire silencieusement le premier résultat.
