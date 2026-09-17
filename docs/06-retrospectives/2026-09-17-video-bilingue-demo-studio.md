@@ -47,3 +47,19 @@ du présentateur pendant les séquences narrées. Les manifestes contiennent 486
 repères de bouche en anglais et 472 en français ; un contrôle rapproché sur
 quatre images successives a confirmé que la bouche suit ces repères. Le jeu de
 test gelé n'a jamais été ouvert.
+
+## Revalidation du 18 septembre 2026
+
+Le validateur a de nouveau confirmé les deux pistes H.264/AAC, la résolution
+1280×720, les durées de 198 secondes, un volume moyen proche de −21 dB et les
+sept scènes de sous-titres dans chaque langue. Une planche de six images de la
+version française a été relue manuellement : le présentateur est visible avec la
+narration, les titres sont lisibles et les écrans correspondent au storyboard.
+
+La capture précède l'ajout de la calibration persistée, du zoom synchronisé et
+de la comparaison de deux expériences. Le Writeup distingue désormais les
+scènes effectivement visibles de ces capacités produit supplémentaires,
+couvertes par les tests navigateur et le rapport technique. Une nouvelle
+capture n'est pas nécessaire pour la soumission : la vidéo actuelle raconte la
+chaîne centrale, les preuves et les limites en 3 min 18 s sans affirmation
+inexacte.

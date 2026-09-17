@@ -53,15 +53,21 @@ provenance, uncertainty, and negative findings visible together.
 
 ## What the video shows
 
-1. create a named experiment and record acquisition metadata;
+1. create a named experiment and record its objective;
 2. import a mixed image batch and inspect validation outcomes;
 3. run the default adaptive analysis on CPU;
-4. inspect synchronized source/overlay views, calibrated measurements when a
-   documented scale is supplied, and the connected-component reservation;
-5. compare two completed experiments descriptively, without a biological claim;
-6. export JSON and per-image CSV results;
-7. open the report-generated engine comparison and provenance hashes;
-8. reproduce the stack with Docker and run the verification command.
+4. inspect the source preview and segmentation overlay, with the
+   connected-component reservation and pixel-only geometry visible;
+5. export JSON and per-image CSV results;
+6. open the report-generated engine comparison and provenance hashes;
+7. show the experimental engines and the project's explicit abstention.
+
+The final product additionally supports persisted chip, well, cell-line and
+culture-day metadata, optional source-backed physical calibration,
+synchronized zoom/pan, and descriptive comparison of two completed
+experiments. These capabilities are covered by automated browser tests and the
+technical report; they are not presented as scenes in the current 198-second
+video candidate.
 
 ## Evidence and limitations
 

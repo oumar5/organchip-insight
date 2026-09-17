@@ -1,7 +1,7 @@
 # Tâches — chemin jusqu'au terminus
 
-Dernière mise à jour : **17 septembre 2026**  
-Branche de travail : **`dev`**  
+Dernière mise à jour : **18 septembre 2026**
+Branche de travail : **`dev`**
 Soumission prévue : **9 octobre 2026**
 
 ## Ce que signifie « terminé à 100 % »
@@ -45,8 +45,9 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
   interdisciplinaire revendiqué.
 - [x] Licence du code fixée à Apache-2.0 et bundle ONNX non distribué dans la
   soumission.
-- [ ] **Prochaine action unique : pousser les commits techniques validés, puis
-  confirmer le formulaire externe et autoriser la publication.**
+- [ ] **Prochaine action unique : confirmer le formulaire externe, puis
+  autoriser explicitement la publication (fusion vers `main`, dépôt public,
+  tag et release).**
 
 ## Règles pendant l'exécution
 
@@ -178,17 +179,20 @@ et ne doit retarder ni la publication ni le Writeup.
   membre ; aucune affiliation institutionnelle déclarée.
 - [ ] Confirmer l'inscription obligatoire via le formulaire externe de
   l'organisateur, avec un responsable d'équipe et 1 à 5 membres.
-- [ ] Pousser les commits locaux validés : `dev` est actuellement en avance sur
-  `origin/dev` ; aucune publication n'est faite sans autorisation explicite.
+- [x] Pousser les commits locaux validés : l'état technique de référence
+  `53bc810` et sa mise à jour documentaire de publication sont synchronisés
+  sur `origin/dev` depuis le 18 septembre 2026.
 - [ ] Décider de rendre le dépôt public.
 - [ ] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
 - [ ] Valider le nom et la date du tag de release.
+- [ ] Après la fusion validée, remettre `main` comme branche GitHub par défaut ;
+  le dépôt privé utilise actuellement `dev` par défaut.
 
 ### 3.2 Publication
 
 - [x] Préparer les notes de release candidates, les artefacts et le runbook de
   publication sans inventer les décisions du propriétaire.
-- [ ] Pousser l'état validé de `dev` après autorisation.
+- [x] Pousser l'état validé de `dev` après autorisation.
 - [ ] Fusionner vers `main` uniquement après autorisation explicite.
 - [ ] Créer le tag et la release GitHub depuis le commit validé.
 - [ ] Joindre notes de release, checksums et instructions de reproduction.

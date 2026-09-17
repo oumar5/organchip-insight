@@ -2,7 +2,9 @@
 
 Proposed tag: **`v1.0.0-ai4s`** (owner approval pending)<br>
 Candidate branch: **`dev`**<br>
-Candidate date: **17 September 2026**
+Validated technical baseline: **`53bc810`**; resolve the final candidate commit
+from the approved release tag rather than copying a mutable branch hash.<br>
+Candidate date: **18 September 2026**
 
 These notes are ready to paste into the public GitHub release after Ben Lol
 OUMAR authorizes the linear merge and public release and validates the final

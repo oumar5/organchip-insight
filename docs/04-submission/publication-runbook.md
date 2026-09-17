@@ -5,13 +5,24 @@ publication decisions. Apache-2.0 and the solo team led by Ben Lol OUMAR are
 already fixed. The procedure prevents a partially public or internally
 inconsistent submission.
 
+## Current verified state — 18 September 2026
+
+- `dev` is pushed and synchronized with `origin/dev`; its validated technical
+  baseline is `53bc810`, followed only by this publication-status documentation;
+- the GitHub repository is private;
+- GitHub currently reports `dev` as the default branch;
+- no merge into `main`, tag, release, visibility change, public upload or
+  Kaggle submission has been performed;
+- both candidate videos passed the automated codec, audio, duration and
+  subtitle checks again on 18 September 2026.
+
 ## 1. Owner-controlled fields
 
 Record all of the following before changing repository visibility:
 
 - confirmation that the organizer's external registration form was submitted;
-- authorization to push `dev`, merge linearly to `main`, create the release and
-  make the repository public;
+- authorization to merge linearly to `main`, make the repository public and
+  create the release;
 - final tag (candidate: `v1.0.0-ai4s`).
 
 ## 2. Finalize the tracked content on `dev`
@@ -30,13 +41,14 @@ are settled. Do not open the frozen classification test.
 
 ## 3. Publish the exact validated state
 
-1. Push `dev` only after authorization.
-2. Merge `dev` linearly into `main` only after a second explicit authorization.
+1. `dev` is already pushed at the validated commit above.
+2. Merge `dev` linearly into `main` only after explicit authorization.
 3. Confirm CI/CD succeeds on the exact `main` commit.
-4. Create the approved annotated tag and GitHub release from that commit.
-5. Paste `docs/05-release/RELEASE_NOTES_CANDIDATE.md` after replacing “candidate”
+4. Select `main` as the GitHub default branch before anonymous verification.
+5. Create the approved annotated tag and GitHub release from that commit.
+6. Paste `docs/05-release/RELEASE_NOTES_CANDIDATE.md` after replacing “candidate”
    fields, and attach the checksum file, PDF, MP4 and SRT.
-6. Make the repository and release public **before** submitting the Writeup;
+7. Make the repository and release public **before** submitting the Writeup;
    keep them public throughout evaluation.
 
 ## 4. Verify anonymously
