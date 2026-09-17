@@ -2,7 +2,8 @@
 
 Date : **16 septembre 2026**
 
-Statut : **validation GPU terminée et sélection gelée ; test final non ouvert**
+Statut : **validation GPU terminée ; sélection candidate consignée, non gelée
+pour le produit ; test final jamais ouvert** (voir addendum du 17 septembre 2026)
 
 ## Question
 
@@ -227,3 +228,22 @@ Les corrections appliquées avant le prochain run sont : nom d'archive dérivé 
 `RUN_ID`, identifiant lu dans le rapport, provenance commit/bundle/config dans le
 manifeste, étiquette explicite `onnx-export`, archivage du reçu final et retrait
 de l'inventaire complet contenant les lignes test du bundle source.
+
+## Addendum du 17 septembre 2026 — lecture après comparateurs et ablations
+
+- La tranche L (balanced accuracy `0,7729`) ne compte que deux dates
+  d'acquisition (230419 : 124 images, 6,45 % `good` ; 230517 : 90 images,
+  60 % `good`). En analyse post hoc, un comparateur mode × bucket de jour
+  appris sur le seul train y atteint `0,8171`. La phrase « le modèle apprend
+  donc un signal utile dans la tranche L » n'est pas soutenue : ce score ne
+  démontre pas un signal de qualité indépendant des métadonnées.
+- Le macro-F1 de validation `0,762687` ne se compare pas au `0,761214` de la
+  baseline handcrafted v1, obtenu sur un autre split ; le handcrafted
+  recalculé sur v2 atteint `0,6876`
+  (`reports/benchmarks/ooc-classification-comparators-campaign-v2.json`).
+- La revue des tranches et les ablations A/B ont été réalisées le
+  17 septembre 2026 ; ni A ni B n'est éligible, C n'a pas été lancé, aucun
+  gel produit n'a lieu, le test n'a jamais été ouvert et ne le sera pas pour
+  cette modélisation, qui est close. Aucune consultation du test n'a eu lieu.
+- Voir le [contre-audit](../audit-2026-09-17-classification-cnn.md) et le
+  [retour d'expérience A/B](2026-09-17-ablations-cnn-campagne-v2.md).

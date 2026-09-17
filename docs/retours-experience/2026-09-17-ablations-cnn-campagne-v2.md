@@ -1,6 +1,7 @@
 # Ablations CNN A/B — campagne v2
 
-État au 17 septembre 2026. Les runs utilisent uniquement le manifeste
+État au 17 septembre 2026. Un addendum du même jour, en fin de document,
+corrige plusieurs formulations après contre-audit. Les runs utilisent uniquement le manifeste
 train/validation v2. Le dataset de test gelé n'est pas attaché et le rapport A
 confirme `test_manifest_opened: false`.
 
@@ -127,3 +128,41 @@ n'est pas éligible comme contrôle qualité fiable pour les images RGB. Le test
 gelé reste fermé : l'ouvrir maintenant n'améliorerait aucune décision produit et
 affaiblirait le protocole. Le résultat utile est scientifique : la hausse de
 résolution récupère du signal pour L, pas une robustesse suffisante entre modes.
+
+## Addendum du 17 septembre 2026 — contre-audit et lecture post hoc
+
+Le [contre-audit du 17 septembre](../audit-2026-09-17-classification-cnn.md)
+a reproduit les chiffres ci-dessus et corrige les lectures suivantes ; les
+analyses citées sont post hoc, hors protocole, et ne modifient aucun verdict.
+
+- « La résolution 448 px améliore nettement le score global et la tranche L »
+  se lit : la résolution 448 px relève les estimations ponctuelles globale et
+  L, mais la tranche L ne compte que deux dates d'acquisition (230419 : 124
+  images, 6,45 % `good` ; 230517 : 90 images, 60 % `good`) et la différence
+  B − référence en balanced accuracy L, par bootstrap groupé, couvre zéro :
+  `[-0,0539 ; 0,0609]`, avec seulement trois points de support. Aucune
+  amélioration n'est démontrée. Sur RGB, la différence est `[-0,1177 ;
+  0,0278]` en balanced accuracy et `[-0,0874 ; 0,1567]` en ROC-AUC.
+- « La hausse de résolution récupère du signal pour L » se lit : un
+  comparateur mode × bucket de jour appris sur le seul train atteint, en
+  analyse post hoc, une balanced accuracy de `0,8171` sur L et de `0,6533`
+  sur RGB, au-dessus de la référence dans chaque mode et de B sur RGB.
+- « Le modèle B n'est pas éligible comme contrôle qualité fiable pour les
+  images RGB » se lit : aucune configuration n'est éligible et le CNN n'est
+  présenté comme contrôle qualité fiable pour aucun mode d'acquisition.
+- « Le test gelé reste fermé » se lit : le test n'a jamais été ouvert et ne
+  le sera pas pour cette modélisation, qui est close. Aucun changement de
+  seuil a posteriori ne peut restaurer l'éligibilité : en leave-one-date-out
+  sur RGB, la balanced accuracy retombe à `0,6312` (sélection par balanced
+  accuracy) ou `0,6089` (sélecteur officiel), avec des seuils instables.
+
+Après conditionnement sur date, bucket de jour et lignée, B conserve en RGB
+une discrimination résiduelle modeste (AUC intra-strate `0,6430`, en
+échantillon), absente pour A et pour la référence ; elle ne justifie ni une
+revendication produit ni un run supplémentaire. Formulation retenue : sur
+cette validation, aucun signal de qualité robuste et indépendant des
+métadonnées d'acquisition et de culture n'est démontré.
+
+B peut être intégré uniquement comme démonstrateur ONNX expérimental :
+abstention systématique, softmax non calibré, mode et provenance affichés,
+aucune décision automatique `good`/`bad`, aucun overlay ni comptage.

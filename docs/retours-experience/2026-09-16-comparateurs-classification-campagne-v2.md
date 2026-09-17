@@ -3,6 +3,7 @@
 Date : **16 septembre 2026**
 
 Statut : **comparaison train/validation terminée ; test final non ouvert**
+(addendum du 17 septembre 2026 en fin de document)
 
 ## Question
 
@@ -90,3 +91,21 @@ balanced accuracy RGB d'au moins `0,02`. Aucun accès test avant ce gel.
 
 Le cache et le modèle restent dans des chemins ignorés par Git. Le rapport et
 les 509 prédictions sont versionnés afin de rendre chaque chiffre auditable.
+
+## Addendum du 17 septembre 2026 — comparateur de métadonnées manquant
+
+- « Le CNN dépasse réellement le raccourci au sein de chaque mode » : le
+  raccourci mode + résolution vaut `0,5000` de balanced accuracy par mode par
+  construction ; le dépasser n'établit rien à mode constant.
+- « La tranche L fournit un signal convaincant » : la tranche L ne compte que
+  deux dates d'acquisition ; en analyse post hoc, un comparateur mode ×
+  bucket de jour appris sur le seul train (lissage de Laplace, seuil 0,5)
+  atteint `0,8171` sur L, `0,6533` sur RGB et `0,7920` globalement, au-dessus
+  du CNN de référence (`0,7729`, `0,6315`, `0,7619`). Ce comparateur n'est
+  pas versionné dans le rapport ; il doit y être ajouté avant toute reprise.
+- Les écarts avec le handcrafted (`0,1145` sur L, `0,0706` sur RGB) sont des
+  points sans intervalle : L ne permet aucun bootstrap groupé informatif.
+- A et B ont été exécutés ; aucun n'améliore la balanced accuracy RGB
+  (`0,5948`, `0,6079` contre `0,6315`), C n'a pas été lancé, aucune
+  configuration n'est éligible, le test n'a jamais été ouvert. Voir le
+  [contre-audit](../audit-2026-09-17-classification-cnn.md).

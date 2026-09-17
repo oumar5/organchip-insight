@@ -68,7 +68,8 @@ qualité fiable pour RGB.
 Statut au 17 septembre 2026 : **A et B terminés, C non autorisé**. A atteint une
 balanced accuracy RGB de `0,5948` et B `0,6079`, toutes deux sous la référence
 `0,6315` et sous le seuil conditionnel `0,651515`. Aucune configuration n'est
-éligible au gel produit ; le test reste fermé. Les rapports et hashes sont
+éligible au gel produit ; le test n'a jamais été ouvert et ne sera pas ouvert
+pour cette modélisation, qui est close. Les rapports et hashes sont
 consignés dans le
 [retour d'expérience A/B](retours-experience/2026-09-17-ablations-cnn-campagne-v2.md).
 
@@ -87,3 +88,30 @@ Une seule configuration est gelée avec ses hashes, son seuil, son commit et son
 bundle source. Le test n'est attaché qu'ensuite, une seule fois. Le reçu d'accès
 est copié dans le dossier du run final et inclus dans son archive avant arrêt du
 workspace. Aucun résultat test ne peut rouvrir le choix du modèle.
+
+## Addendum du 17 septembre 2026 — clôture
+
+Les règles ci-dessus restent textuellement celles du pré-enregistrement. Ce
+qui suit consigne leur issue et des précisions post hoc issues du
+[contre-audit](audit-2026-09-17-classification-cnn.md).
+
+- La clause « si aucune n'est éligible » s'applique : le CNN n'est présenté
+  comme contrôle qualité fiable pour aucun mode. B ne peut être intégré qu'en
+  démonstrateur ONNX expérimental : abstention systématique, softmax non
+  calibré, mode et provenance affichés, aucune décision automatique
+  `good`/`bad`, aucun overlay ni comptage rattaché.
+- Le « résultat L au-delà de la catégorie mode/résolution » ne dépasse que ce
+  raccourci, constant à l'intérieur d'un mode. La tranche L ne compte que deux
+  dates d'acquisition et un comparateur mode × bucket de jour appris sur le
+  seul train y atteint `0,8171` : aucun signal indépendant des métadonnées
+  d'acquisition et de culture n'y est démontré.
+- Les expériences conditionnelles (tuiles, DINOv2, LoRA) ne sont pas lancées :
+  leur condition n'est pas remplie et la modélisation est close. L'étape 3
+  reste une règle consignée, non une tâche à venir.
+- Toute modification de la règle de seuil, du plancher ou des tranches
+  décidée après consultation des prédictions de validation est une déviation
+  post hoc ; elle peut être documentée, jamais utilisée pour restaurer une
+  éligibilité. Pour un futur protocole, la règle de seuil doit être
+  invariante à la prévalence (seuil par mode ou maximin des balanced
+  accuracies par mode) et les comparateurs de métadonnées versionnés avant le
+  premier run.
