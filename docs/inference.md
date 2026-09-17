@@ -68,6 +68,12 @@ aucune classe automatique n'est produite et les modes source hors `L`/`RGB`
 restent sans score. Voir le
 [retour d'expérience](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
 
+Le benchmark d'instances BBBC038 du 17 septembre 2026 ne franchit que l'un des
+trois critères pré-enregistrés : macro-F1 objet `0,628327` à IoU 0,50,
+`0,481698` à IoU 0,75 et erreur absolue relative médiane de comptage
+`15,3409 %`. µSAM reste donc isolé du chemin produit. Ce résultat sur des
+noyaux externes ne valide pas les composantes connexes comme cellules OoC.
+
 Sources :
 
 - [Cellpose, documentation officielle](https://cellpose.readthedocs.io/en/latest/)

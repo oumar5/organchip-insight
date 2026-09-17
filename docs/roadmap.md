@@ -29,7 +29,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] manifeste BBBC019 Microfluidics avec checksum ;
 - [x] script de téléchargement reproductible ;
 - [x] métriques premier plan et rapport d'erreurs ;
-- [ ] benchmark BBBC038 (optionnel, non bloquant) ;
+- [x] benchmark d'instances BBBC038 borné, pré-enregistré et exécuté : résultat
+  mitigé, 2 critères sur 3 échouent, aucune promotion produit ;
 - [x] audit métadonnées du dataset OoC ;
 - [x] split OoC groupé par préfixe d'acquisition ;
 - [x] baseline OoC image-only avec test tenu à l'écart ;
@@ -68,10 +69,10 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] champs contrôle/traitement masqués tant que l'affectation par image et
   l'agrégation par groupe ne sont pas livrées ;
 - [x] export JSON complet et CSV par image depuis l'interface ;
-- [ ] benchmark d'instances borné (BBBC038) et réserve explicite sur le
+- [x] benchmark d'instances borné (BBBC038) et réserve explicite sur le
   comptage dans l'interface ; la réserve « composantes connexes, non validées
-  comme cellules » est déjà affichée ;
-- [ ] analyse d'erreurs et cas hors distribution ;
+  comme cellules » est affichée ;
+- [x] analyse d'erreurs BBBC038 et cas hors distribution documentés ;
 - [ ] caractéristiques morphologiques plus riches (optionnel).
 
 ## Jalon 4 — Stabilisation produit

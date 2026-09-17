@@ -73,7 +73,7 @@ dataset d'entraînement :
 |---|---|---|---|
 | [Brain organoid dataset, Zenodo 10301912](https://www.nature.com/articles/s41597-024-03330-z) | 1 400 images bright-field de 64 organoïdes, deux microscopes, annotations pixel | à vérifier sur Zenodo | robustesse inter-microscope de la segmentation et du QC |
 | [iOrganoAssay, *Data* 2026](https://doi.org/10.3390/data11060132) | 234 images grand champ d'organoïdes intestinaux, 28 annotations manuelles, métriques Dice | à vérifier | test de généralisation de la segmentation |
-| BBBC038 | noyaux, masques d'instances, CC0 | CC0 | déjà prévu, non exécuté |
+| BBBC038 | noyaux, masques d'instances, CC0 | CC0 | audit zéro-shot exécuté sur 12 images diverses ; résultat mitigé, non généralisable aux images OoC |
 
 Aucun second dataset public d'images OoC bright-field avec label de qualité
 n'a été trouvé le 16 septembre 2026. La validation externe la plus honnête

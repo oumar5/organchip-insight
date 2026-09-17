@@ -17,11 +17,20 @@ biologique.
 
 ### BBBC038
 
-- split par source/contexte d'imagerie, pas image aléatoire uniquement ;
-- Dice et IoU pixel ;
-- précision, rappel et F1 par objet ;
-- erreur absolue de comptage ;
-- temps CPU par mégapixel.
+- audit borné de 12 images sélectionnées sans utiliser les masques : une image
+  par résolution puis trois extrêmes d'apparence ;
+- précision, rappel et F1 par objet à IoU 0,50 et 0,75 ;
+- erreur absolue et relative de comptage ;
+- contexte pixel, temps CPU et mémoire.
+
+Le protocole pré-enregistré et exécuté le 17 septembre 2026 donne un macro-F1
+objet de `0,628327` à IoU 0,50 et `0,481698` à IoU 0,75. L'erreur absolue
+relative médiane de comptage est `15,3409 %`, mais le moteur sous-compte
+globalement 230 noyaux (`539` prédits contre `769` annotés). Deux des trois
+critères de qualification échouent : µSAM n'est pas promu dans le produit et
+ce benchmark nucléaire externe ne valide pas le comptage sur les images OoC.
+Rapport :
+[`bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json`](../reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json).
 
 ### BBBC019 Microfluidics
 

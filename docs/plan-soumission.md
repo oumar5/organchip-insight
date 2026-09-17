@@ -49,7 +49,7 @@ Le règlement officiel est résumé dans
 | P1 | **fait localement** : démonstrateur ONNX expérimental du run B, `onnxruntime` en dépendance optionnelle, inférence CPU, abstention systématique, softmax non calibré affiché avec le mode d'acquisition et la provenance (hashes), aucune décision automatique `good`/`bad`, aucun overlay ni comptage rattaché ; le contrôle qualité produit reste le moteur adaptatif et les métadonnées ; poids non distribués avant décision de licence | tests API, fiche moteur `experimental`, [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) |
 | P1 | vue « Comparaison des moteurs » dans l'interface, alimentée par les rapports versionnés (`reports/benchmarks/*.json`) : F1/IoU, intervalles, coût CPU, overlays d'erreur | capture, aucun chiffre saisi à la main |
 | P1 | affectation témoin/traitement à l'import, agrégats par groupe avec bootstrap par image, ou masquage explicite des champs si non livré | tests, capture |
-| P1 | benchmark d'instances borné : µSAM APG sur un sous-ensemble stratifié de BBBC038 (CC0, masques d'instances), erreur de comptage et précision/rappel par objet ; dans l'interface, « composantes connexes » avec réserve explicite tant qu'aucune validation de comptage n'existe sur images OoC | rapport JSON, capture |
+| P1 | **fait localement** : benchmark d'instances µSAM APG pré-enregistré sur 12 images BBBC038 (CC0), macro-F1 objet `0,628327` à IoU 0,50 et `0,481698` à IoU 0,75, erreur absolue relative médiane de comptage `15,3409 %` ; 2 critères sur 3 échouent, aucune promotion produit ; l'interface conserve « composantes connexes » et sa réserve OoC | [rapport JSON](../reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json), [REX](retours-experience/2026-09-17-benchmark-instances-bbbc038.md) |
 | P2 | ~~Grad-CAM sur le CNN~~ retiré : aucun overlay n'est rattaché au démonstrateur, faute de signal démontré indépendant des métadonnées | — |
 | P2 | µSAM `vit_t_lm` en moteur optionnel asynchrone si le coût CPU le permet ; sinon rester en benchmark isolé documenté | mesure temps/mémoire |
 
@@ -93,13 +93,13 @@ Soumettre le **9 octobre**, vérifier chaque lien sans connexion, garder le
 1. Résumé (½ page) ;
 2. Problème et utilisateur : laboratoire OoC, images bright-field, temps perdu,
    absence de traçabilité (1 page) ;
-3. Données et licences : OoC Zenodo, BBBC019, manifestes, checksums, audit du
+3. Données et licences : OoC Zenodo, BBBC019, BBBC038, manifestes, checksums, audit du
    tableur, split groupé, quasi-doublons (2 pages) ;
 4. Méthode : architecture, registre de moteurs, moteur adaptatif, µSAM APG,
    CNN MobileNetV3, protocole `smoke`/`validation`/`final-eval` (3 pages) ;
 5. Implémentation : API, CLI, Docker, tests, contrat runtime Kaggle (2 pages) ;
-6. Expériences et résultats : tableaux BBBC019, baselines OoC, CNN avec
-   intervalles et tranches, galerie d'erreurs (4 pages) ;
+6. Expériences et résultats : tableaux BBBC019 et BBBC038, baselines OoC, CNN
+   avec intervalles et tranches, galerie d'erreurs (4 pages) ;
 7. Crédibilité et limites : fuite résiduelle, proxy de date, absence de
    calibration µm, petite taille de BBBC019, coût µSAM (2 pages) ;
 8. Valeur applicative et perspectives : standardisation OME, comparaison de

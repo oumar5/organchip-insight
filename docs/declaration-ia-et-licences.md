@@ -5,7 +5,7 @@ bibliothèques et données utilisés, avec leur source, leur licence et leur
 usage. Cette page est la source unique de cette déclaration ; elle doit être
 recopiée dans le rapport technique et le Writeup.
 
-Dernière mise à jour : 16 septembre 2026. Les lignes marquées `à compléter`
+Dernière mise à jour : 17 septembre 2026. Les lignes marquées `à compléter`
 doivent être finalisées avant la release.
 
 ## Outils d'IA utilisés pour développer le projet
@@ -23,7 +23,7 @@ API commerciale.
 | Modèle | Rôle | Code | Poids | Provenance vérifiée |
 |---|---|---|---|---|
 | `adaptive-segmentation-v1` | moteur par défaut, sans poids | code du projet | aucun | — |
-| µSAM `vit_b_lm` + APG, micro-sam 1.8.14 | benchmark isolé BBBC019 | MIT | CC-BY-4.0, BioImage.IO `diplomatic-bug` 1.2 | SHA-256 dans `data/manifests/models.json` |
+| µSAM `vit_b_lm` + APG, micro-sam 1.8.14 | benchmarks isolés BBBC019 et BBBC038 | MIT | CC-BY-4.0, BioImage.IO `diplomatic-bug` 1.2 | SHA-256 dans `data/manifests/models.json` et les rapports |
 | MobileNetV3-Small (torchvision) | classifieur de qualité expérimental | BSD-3 (torchvision) | poids ImageNet BSD-3, fournis localement avec SHA-256 | `à compléter` après le run `validation` |
 | Cellpose / Cellpose-SAM | non utilisé | BSD-3 | données d'entraînement CC-BY-NC | statut `license-review`, jamais chargé |
 
@@ -33,7 +33,7 @@ API commerciale.
 |---|---|---|---|---|
 | OOC Image Dataset, Zenodo 10203721 | v1 (2023) | CC-BY-4.0 | classification de qualité, split groupé | md5 archive, sha256 tableur |
 | BBBC019 Microfluidics | v2 | CC-BY-3.0 | benchmark de segmentation | sha256 |
-| BBBC038 | v1 | CC0 | prévu, non exécuté | — |
+| BBBC038 stage 1 train | v1 | CC0-1.0 | benchmark borné d'instances et de comptage, 12 images | sha256 archive, images, arbres de masques et manifeste |
 
 Aucune donnée personnelle, clinique ou privée n'est utilisée.
 

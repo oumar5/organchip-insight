@@ -20,6 +20,7 @@ a été prise.
 - [Ablations CNN A/B, campagne v2 — 17 septembre 2026](2026-09-17-ablations-cnn-campagne-v2.md)
 - [Démonstrateur CNN ONNX abstentionniste — 17 septembre 2026](2026-09-17-demonstrateur-cnn-onnx.md)
 - [Stabilisation produit, exports, sécurité et Docker — 17 septembre 2026](2026-09-17-stabilisation-produit-exports-securite-docker.md)
+- [Benchmark d'instances µSAM sur BBBC038 — 17 septembre 2026](2026-09-17-benchmark-instances-bbbc038.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles
