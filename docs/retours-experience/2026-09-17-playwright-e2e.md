@@ -118,3 +118,25 @@ La variable `VITE_PROXY_TARGET` permet d'exécuter cet audit contre une API
 temporaire sur un port dédié, sans réutiliser la base locale principale. Axe
 automatise le contraste calculable mais ne remplace pas une revue complète du
 clavier, des lecteurs d'écran et des différents niveaux de zoom.
+
+## Addendum — comparaison des moteurs et nouvelle tentative sans cache
+
+Le 17 septembre 2026, le scénario a été étendu à la vue « Comparaison des
+moteurs ». Il vérifie une métrique BBBC019 issue du résumé généré et la décision
+de non-promotion du benchmark BBBC038. Le parcours isolé complet, avec les
+images Docker locales et un volume neuf, passe en `4,5 s`.
+
+Une nouvelle tentative de reconstruction a ensuite exécuté :
+
+```bash
+docker compose build --pull --no-cache
+```
+
+Elle est restée bloquée avant toute étape de build applicatif, pendant la
+lecture des métadonnées Docker Hub de `nginx:1.27-alpine`,
+`python:3.12-slim` et `node:22-alpine`, puis a été interrompue. Ce résultat
+reproduit l'incident initial et ne permet toujours pas de cocher le jalon
+« machine propre ». La preuve disponible reste : code validé par `make check`,
+pile et volume E2E neufs, parcours Chromium passant avec les images locales.
+Le test de release doit être rejoué depuis une machine ou un réseau capable de
+joindre Docker Hub.

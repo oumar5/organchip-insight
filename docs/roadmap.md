@@ -92,7 +92,9 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] limites de pixels et en-têtes de sécurité API/Nginx ;
 - [x] parcours end-to-end navigateur local du démonstrateur CNN ;
 - [x] test end-to-end Playwright automatisé sur pile Docker et volume isolés ;
-- [ ] test sur machine propre CPU ;
+- [ ] test sur machine propre CPU : deux reconstructions avec accès Docker Hub
+  sont restées bloquées au chargement des métadonnées des images de base ; le
+  parcours isolé passe avec les images locales, voir le [REX](retours-experience/2026-09-17-playwright-e2e.md) ;
 - [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
 
 ## Jalon 5 — Remise (avant le 9 octobre)
