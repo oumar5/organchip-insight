@@ -10,17 +10,26 @@ DEMO_STUDIO_CLI="$DEMO_STUDIO_ROOT/dist/cli.js"
 DEMO_PROJECT_ROOT="$REPOSITORY_ROOT/demo/video"
 DEMO_CONFIG="$DEMO_PROJECT_ROOT/demo.config.yaml"
 NATURAL_VOICE_ROOT=${ORGANCHIP_NATURAL_VOICE_ROOT:-"$(CDPATH= cd -- "$REPOSITORY_ROOT/.." && pwd)/solmik/product-demos/.runtime"}
-TEMPORARY_DIRECTORY=$(mktemp -d)
+if [ -n "${ORGANCHIP_DEMO_WORK_DIR:-}" ]; then
+  TEMPORARY_DIRECTORY=$ORGANCHIP_DEMO_WORK_DIR
+  mkdir -p "$TEMPORARY_DIRECTORY"
+  REMOVE_TEMPORARY_DIRECTORY=0
+else
+  TEMPORARY_DIRECTORY=$(mktemp -d)
+  REMOVE_TEMPORARY_DIRECTORY=1
+fi
 RAW_VIDEO_EN="$TEMPORARY_DIRECTORY/organchip-insight-demo-en.webm"
 RAW_VIDEO_FR="$TEMPORARY_DIRECTORY/organchip-insight-demo-fr.webm"
-MANIFEST="$REPOSITORY_ROOT/data/manifests/product-real-smoke-v1.json"
+MANIFEST=${ORGANCHIP_REAL_E2E_MANIFEST:-"$REPOSITORY_ROOT/data/manifests/product-real-smoke-v1.json"}
 
 cleanup() {
   ORGANCHIP_BACKEND_PORT="$BACKEND_PORT" \
     ORGANCHIP_FRONTEND_PORT="$FRONTEND_PORT" \
     docker compose --project-directory "$REPOSITORY_ROOT" \
       -p "$PROJECT_NAME" down --volumes --remove-orphans >/dev/null 2>&1 || true
-  rm -rf "$TEMPORARY_DIRECTORY"
+  if [ "$REMOVE_TEMPORARY_DIRECTORY" -eq 1 ]; then
+    rm -rf "$TEMPORARY_DIRECTORY"
+  fi
 }
 
 trap cleanup EXIT INT TERM
@@ -62,17 +71,21 @@ fi
 
 mkdir -p "$REPOSITORY_ROOT/output/video"
 for language in en fr; do
+  if [ "$language" = "en" ]; then
+    raw_video="$RAW_VIDEO_EN"
+  else
+    raw_video="$RAW_VIDEO_FR"
+  fi
+  if [ "${ORGANCHIP_DEMO_REUSE_CAPTURE:-0}" = "1" ] && [ -s "$raw_video" ]; then
+    echo "Reusing validated raw capture: $raw_video"
+    continue
+  fi
   # Start from an empty disposable volume for each language. Otherwise the
   # second capture would show the experiment created by the first capture.
   ORGANCHIP_BACKEND_PORT="$BACKEND_PORT" \
     ORGANCHIP_FRONTEND_PORT="$FRONTEND_PORT" \
     docker compose --project-directory "$REPOSITORY_ROOT" \
       -p "$PROJECT_NAME" up --detach --build --wait
-  if [ "$language" = "en" ]; then
-    raw_video="$RAW_VIDEO_EN"
-  else
-    raw_video="$RAW_VIDEO_FR"
-  fi
   PLAYWRIGHT_BASE_URL="http://127.0.0.1:$FRONTEND_PORT" \
     ORGANCHIP_REAL_E2E_MANIFEST="$MANIFEST" \
     ORGANCHIP_DEMO_LANGUAGE="$language" \

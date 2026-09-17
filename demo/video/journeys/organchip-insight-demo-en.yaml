@@ -29,59 +29,59 @@ viewport:
   height: 720
 setup: []
 chapters:
-  - id: promise
+  - id: promise-a
     title: One auditable experiment
-    narration: Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits inside one local experiment.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: One auditable experiment
-        holdMs: 0
-  - id: protocol
+    narration: Organ-on-chip microscopy needs more than a model score.
+    steps: [{action: pause, durationMs: 100, caption: One auditable experiment, holdMs: 0}]
+  - id: promise-b
+    title: Evidence stays together
+    narration: OrganChip Insight keeps images, measurements, provenance, and limits together.
+    steps: [{action: pause, durationMs: 100, caption: Evidence stays together, holdMs: 0}]
+  - id: protocol-a
     title: A protocol before analysis
-    narration: Before analysis, the user records an objective and imports hash-locked public microscopy images. Upload is separated from inference, so a failed analysis never duplicates the source files.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: A protocol before analysis
-        holdMs: 0
-  - id: analysis
-    title: Local and source-faithful analysis
-    narration: The default adaptive engine runs locally on the CPU without model weights. The original TIFF is analyzed, while the normalized preview is used only for inspection.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Local and source-faithful analysis
-        holdMs: 0
-  - id: limits
-    title: Measurements with explicit limits
-    narration: Each segmentation overlay remains linked to its source and measurements. Components are never presented as validated cells, and geometry stays in pixels when physical calibration is unavailable.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Measurements with explicit limits
-        holdMs: 0
-  - id: export
+    narration: Record the objective before analysis and import hash-locked public images.
+    steps: [{action: pause, durationMs: 100, caption: A protocol before analysis, holdMs: 0}]
+  - id: protocol-b
+    title: Sources are preserved
+    narration: Uploads stay separate from inference, so sources are never duplicated.
+    steps: [{action: pause, durationMs: 100, caption: Sources are preserved, holdMs: 0}]
+  - id: analysis-a
+    title: Local analysis
+    narration: The adaptive engine runs locally on CPU, without model weights.
+    steps: [{action: pause, durationMs: 100, caption: Local analysis, holdMs: 0}]
+  - id: analysis-b
+    title: Source-faithful analysis
+    narration: It analyzes the original TIFF; the normalized preview is display-only.
+    steps: [{action: pause, durationMs: 100, caption: Source-faithful analysis, holdMs: 0}]
+  - id: limits-a
+    title: Synchronized inspection
+    narration: Zoom source and segmentation together to inspect every overlay.
+    steps: [{action: pause, durationMs: 100, caption: Synchronized inspection, holdMs: 0}]
+  - id: limits-b
+    title: Explicit limits
+    narration: Components are not cells, and physical units require documented calibration.
+    steps: [{action: pause, durationMs: 100, caption: Explicit limits, holdMs: 0}]
+  - id: export-a
     title: Reproducible exports
-    narration: JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time, making every result independently auditable.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Reproducible exports
-        holdMs: 0
-  - id: benchmarks
-    title: Accuracy and cost together
-    narration: Versioned external benchmarks report both accuracy and computational cost. MicroSAM performs better on BBBC019 foreground segmentation, but it fails two of three preregistered BBBC038 promotion criteria.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Accuracy and cost together
-        holdMs: 0
-  - id: credibility
+    narration: JSON and CSV preserve the experiment, engine, and per-image results.
+    steps: [{action: pause, durationMs: 100, caption: Reproducible exports, holdMs: 0}]
+  - id: export-b
+    title: Descriptive comparison
+    narration: A second completed experiment is compared descriptively, without biological claims.
+    steps: [{action: pause, durationMs: 100, caption: Descriptive comparison, holdMs: 0}]
+  - id: benchmarks-a
+    title: Accuracy and cost
+    narration: Versioned benchmarks report accuracy, uncertainty, runtime, and memory.
+    steps: [{action: pause, durationMs: 100, caption: Accuracy and cost, holdMs: 0}]
+  - id: benchmarks-b
+    title: Evidence-gated decisions
+    narration: Promotion rules stay visible, including negative results.
+    steps: [{action: pause, durationMs: 100, caption: Evidence-gated decisions, holdMs: 0}]
+  - id: credibility-a
+    title: Acquisition shortcuts
+    narration: Quality classification did not escape acquisition shortcuts.
+    steps: [{action: pause, durationMs: 100, caption: Acquisition shortcuts, holdMs: 0}]
+  - id: credibility-b
     title: Honest abstention
-    narration: Quality classification did not establish a robust signal independent of acquisition shortcuts. The frozen test set remains unopened, and the product ships with abstention, checksums, tests, and explicit limits.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Honest abstention
-        holdMs: 0
+    narration: The frozen test set remains unopened; the product abstains and shows its limits.
+    steps: [{action: pause, durationMs: 100, caption: Honest abstention, holdMs: 0}]

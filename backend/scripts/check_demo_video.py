@@ -11,6 +11,9 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_ROOT = REPOSITORY_ROOT / "output/video"
 MAX_BYTES = 100 * 1024 * 1024
+MAX_SUBTITLE_CHARACTERS = 120
+MAX_SUBTITLE_WORDS = 18
+EXPECTED_SUBTITLE_SCENES = 14
 LANGUAGES = {
     "en": {
         "phrase": "frozen test set remains unopened",
@@ -113,8 +116,21 @@ def validate_language(language: str, definition: dict[str, object]) -> dict[str,
         )
 
     subtitles = subtitle_path.read_text(encoding="utf-8")
-    if len(re.findall(r"(?m)^\d+$", subtitles)) != 7:
-        fail(f"{language.upper()} subtitles must contain the seven scenes.")
+    if len(re.findall(r"(?m)^\d+$", subtitles)) != EXPECTED_SUBTITLE_SCENES:
+        fail(
+            f"{language.upper()} subtitles must contain "
+            f"{EXPECTED_SUBTITLE_SCENES} compact cues."
+        )
+    subtitle_texts = [
+        " ".join(block.splitlines()[2:]).strip()
+        for block in re.split(r"\n\s*\n", subtitles.strip())
+    ]
+    for index, text in enumerate(subtitle_texts, start=1):
+        if len(text) > MAX_SUBTITLE_CHARACTERS or len(text.split()) > MAX_SUBTITLE_WORDS:
+            fail(
+                f"{language.upper()} subtitle {index} is too long for the interface: "
+                f"{len(text)} characters, {len(text.split())} words."
+            )
     if re.search(r"(?:/Users|/home)/[^/]+/|[A-Za-z]:\\Users\\", subtitles):
         fail(f"Personal absolute path found in {language.upper()} subtitles.")
     if required_phrase not in subtitles:
@@ -127,7 +143,8 @@ def validate_language(language: str, definition: dict[str, object]) -> dict[str,
         "audio_codec": audio["codec_name"],
         "mean_volume_db": measured_volume,
         "bytes": video_path.stat().st_size,
-        "subtitle_scenes": 7,
+        "subtitle_scenes": EXPECTED_SUBTITLE_SCENES,
+        "max_subtitle_characters": max(map(len, subtitle_texts)),
     }
 
 

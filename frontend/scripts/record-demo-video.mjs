@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { chromium } from "playwright";
@@ -58,6 +58,10 @@ const ui = language === "en"
       details: "Details and limits",
       results: "Results",
       description: "Demonstrate traceable analysis on three public, hash-locked images.",
+      sideBySide: "Side by side",
+      zoomIn: "Zoom in",
+      secondExperiment: "Second experiment",
+      comparisonMetrics: "Metrics shared by both analyses",
     }
   : {
       status: "Inférence disponible",
@@ -91,43 +95,47 @@ const ui = language === "en"
       details: "Détails et limites",
       results: "Résultats",
       description: "Démontrer une analyse traçable sur trois images publiques verrouillées par empreinte.",
+      sideBySide: "Côte à côte",
+      zoomIn: "Augmenter le zoom",
+      secondExperiment: "Seconde expérience",
+      comparisonMetrics: "Métriques communes aux deux analyses",
     };
 
 const scenes = [
   {
-    end: 18,
+    end: 16,
     caption:
-      "Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits in one local experiment.",
+      "OrganChip Insight keeps microscopy images, measurements, provenance, and limits together.",
   },
   {
-    end: 50,
+    end: 42,
     caption:
-      "A named objective is recorded before analysis. This public smoke batch combines RGB and grayscale OoC images with an external BBBC019 TIFF; uploads remain separate from inference.",
+      "Record the protocol first. Imports remain separate from inference.",
   },
   {
-    end: 86,
+    end: 72,
     caption:
-      "The default adaptive engine is local, CPU-only, and weight-free. TIFF previews are display-only; the original source is analyzed. The interface never calls connected components validated cells.",
+      "Analysis stays local and uses the original source, never the display preview.",
   },
   {
-    end: 116,
+    end: 105,
     caption:
-      "Every overlay stays linked to its source and measurements. Areas and diameters remain in pixels because physical calibration is unavailable, and the reservation is visible beside the result.",
+      "Zoom source and overlay together. Physical units require a documented scale.",
   },
   {
-    end: 136,
+    end: 128,
     caption:
-      "JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time for downstream audit.",
+      "Exports stay auditable. Completed experiments are compared descriptively.",
   },
   {
-    end: 172,
+    end: 156,
     caption:
-      "Versioned external benchmarks expose both accuracy and cost. µSAM is stronger on BBBC019 foreground segmentation, but fails two of three preregistered BBBC038 promotion criteria and remains isolated.",
+      "Versioned benchmarks report accuracy, uncertainty, runtime, memory, and promotion decisions.",
   },
   {
-    end: 198,
+    end: 180,
     caption:
-      "Quality classification did not demonstrate a robust signal independent of acquisition shortcuts, so the frozen test set remains unopened. The reproducible product ships with abstention, checksums, tests, and explicit limits.",
+      "Classification abstains; the frozen test set remains unopened, with limitations visible.",
   },
 ];
 
@@ -232,6 +240,7 @@ try {
   });
 
   const experimentName = "Public demo · evidence-gated microscopy";
+  const comparisonName = "Public demo · descriptive repeat";
   await scene(1, async () => {
     await page.getByRole("button", { name: ui.newExperiment }).first().click();
     await page.getByLabel(ui.experimentName).fill(experimentName);
@@ -285,12 +294,35 @@ try {
     const gallery = page.getByRole("list", { name: ui.overlays });
     await gallery.getByRole("button").first().click();
     const viewer = page.getByRole("dialog");
-    await viewer.getByRole("button", { name: ui.sourcePreview }).click();
-    await page.waitForTimeout(3500);
-    await viewer.getByRole("button", { name: "Segmentation" }).click();
-    await page.waitForTimeout(3500);
+    await viewer.getByRole("button", { name: ui.zoomIn }).click();
+    await viewer.getByRole("button", { name: ui.sideBySide }).click();
+    await page.waitForTimeout(6000);
     await viewer.getByRole("button", { name: ui.close }).click();
     await page.getByText(ui.reservation).scrollIntoViewIfNeeded();
+
+    const comparisonCreate = await context.request.post(`${baseURL}/api/v1/experiments`, {
+      data: {
+        name: comparisonName,
+        description: language === "fr"
+          ? "Répétition technique descriptive sur une source publique."
+          : "Descriptive technical repeat on one public source.",
+      },
+    });
+    if (!comparisonCreate.ok()) throw new Error(`Comparison experiment creation failed: ${comparisonCreate.status()}`);
+    const comparison = await comparisonCreate.json();
+    const comparisonSource = sourcePaths[2];
+    const comparisonUpload = await context.request.post(`${baseURL}/api/v1/experiments/${comparison.id}/images`, {
+      multipart: {
+        files: {
+          name: basename(comparisonSource),
+          mimeType: "image/tiff",
+          buffer: await readFile(comparisonSource),
+        },
+      },
+    });
+    if (!comparisonUpload.ok()) throw new Error(`Comparison image upload failed: ${comparisonUpload.status()}`);
+    const comparisonAnalysis = await context.request.post(`${baseURL}/api/v1/experiments/${comparison.id}/analyze`);
+    if (!comparisonAnalysis.ok()) throw new Error(`Comparison analysis failed: ${comparisonAnalysis.status()}`);
   });
 
   await scene(4, async () => {
@@ -301,6 +333,11 @@ try {
     await page.getByRole("link", { name: ui.exportCsv }).click();
     await csvDownload;
     await page.getByText(ui.evidence).scrollIntoViewIfNeeded();
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByLabel(ui.activeExperiment).selectOption({ label: experimentName });
+    await page.getByRole("button", { name: ui.results }).click();
+    await page.getByLabel(ui.secondExperiment).selectOption({ label: comparisonName });
+    await page.getByText(ui.comparisonMetrics, { exact: true }).scrollIntoViewIfNeeded();
   });
 
   await scene(5, async () => {

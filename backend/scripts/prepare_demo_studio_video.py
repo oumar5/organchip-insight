@@ -13,7 +13,39 @@ from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROJECT_ROOT = REPOSITORY_ROOT / "demo/video"
-SCENE_STARTS_MS = (0, 18_000, 50_000, 86_000, 116_000, 136_000, 172_000)
+SCENE_STARTS_MS = (0, 16_000, 42_000, 72_000, 105_000, 128_000, 156_000)
+NARRATION_STARTS_MS = (
+    0,
+    8_000,
+    16_000,
+    29_000,
+    42_000,
+    57_000,
+    72_000,
+    88_000,
+    105_000,
+    116_000,
+    128_000,
+    142_000,
+    156_000,
+    168_000,
+)
+NARRATION_CHAPTER_IDS = (
+    "promise-a",
+    "promise-b",
+    "protocol-a",
+    "protocol-b",
+    "analysis-a",
+    "analysis-b",
+    "limits-a",
+    "limits-b",
+    "export-a",
+    "export-b",
+    "benchmarks-a",
+    "benchmarks-b",
+    "credibility-a",
+    "credibility-b",
+)
 
 
 @dataclass(frozen=True)
@@ -44,26 +76,20 @@ LANGUAGES = {
             "Honest abstention",
         ),
         narration=(
-            "Organ-on-chip microscopy needs more than a model score. OrganChip Insight "
-            "keeps images, measurements, provenance, and scientific limits inside one "
-            "local experiment.",
-            "Before analysis, the user records an objective and imports hash-locked public "
-            "microscopy images. Upload is separated from inference, so a failed analysis "
-            "never duplicates the source files.",
-            "The default adaptive engine runs locally on the CPU without model weights. "
-            "The original TIFF is analyzed, while the normalized preview is used only for "
-            "inspection.",
-            "Each segmentation overlay remains linked to its source and measurements. "
-            "Components are never presented as validated cells, and geometry stays in "
-            "pixels when physical calibration is unavailable.",
-            "JSON and CSV exports preserve the experiment, engine, parameters, per-image "
-            "results, and generation time, making every result independently auditable.",
-            "Versioned external benchmarks report both accuracy and computational cost. "
-            "MicroSAM performs better on BBBC019 foreground segmentation, but it fails two "
-            "of three preregistered BBBC038 promotion criteria.",
-            "Quality classification did not establish a robust signal independent of "
-            "acquisition shortcuts. The frozen test set remains unopened, and the product "
-            "ships with abstention, checksums, tests, and explicit limits.",
+            "Organ-on-chip microscopy needs more than a model score.",
+            "OrganChip Insight keeps images, measurements, provenance, and limits together.",
+            "Record the objective before analysis and import hash-locked public images.",
+            "Uploads stay separate from inference, so sources are never duplicated.",
+            "The adaptive engine runs locally on CPU, without model weights.",
+            "It analyzes the original TIFF; the normalized preview is display-only.",
+            "Zoom source and segmentation together to inspect every overlay.",
+            "Components are not cells, and physical units require documented calibration.",
+            "JSON and CSV preserve the experiment, engine, and per-image results.",
+            "A second completed experiment is compared descriptively, without biological claims.",
+            "Versioned benchmarks report accuracy, uncertainty, runtime, and memory.",
+            "Promotion rules stay visible, including negative results.",
+            "Quality classification did not escape acquisition shortcuts.",
+            "The frozen test set remains unopened; the product abstains and shows its limits.",
         ),
     ),
     "fr": LanguageSpec(
@@ -82,27 +108,21 @@ LANGUAGES = {
             "Une abstention honnête",
         ),
         narration=(
-            "La microscopie d'organes sur puce exige plus qu'un score de modèle. OrganChip "
-            "Insight réunit images, mesures, provenance et limites scientifiques dans une "
-            "expérience locale.",
-            "Avant l'analyse, l'utilisateur consigne un objectif et importe des images "
-            "publiques verrouillées par empreinte. L'import reste séparé de l'inférence, "
-            "afin qu'un échec d'analyse ne duplique jamais les sources.",
-            "Le moteur adaptatif par défaut s'exécute localement sur processeur, sans poids "
-            "de modèle. Le TIFF original est analysé ; l'aperçu normalisé sert uniquement "
-            "à l'inspection.",
-            "Chaque overlay de segmentation reste relié à sa source et à ses mesures. Les "
-            "composantes ne sont jamais présentées comme des cellules validées, et la "
-            "géométrie reste en pixels sans calibration physique.",
-            "Les exports JSON et CSV conservent l'expérience, le moteur, les paramètres, "
-            "les résultats par image et l'heure de génération, afin que chaque résultat "
-            "soit auditable.",
-            "Les benchmarks externes versionnés publient à la fois la précision et le coût "
-            "de calcul. MicroSAM est meilleur sur la segmentation BBBC019, mais échoue à "
-            "deux des trois critères préenregistrés sur BBBC038.",
-            "La classification de qualité n'a pas établi de signal robuste indépendant des "
-            "raccourcis d'acquisition. Le jeu de test gelé reste fermé, et le produit livre "
-            "abstention, checksums, tests et limites explicites.",
+            "La microscopie d'organes sur puce exige plus qu'un score de modèle.",
+            "OrganChip Insight réunit images, mesures, provenance et limites scientifiques.",
+            "Consignez l'objectif avant l'analyse, puis importez les images publiques vérifiées.",
+            "L'import reste séparé de l'inférence ; les sources ne sont jamais dupliquées.",
+            "Le moteur adaptatif fonctionne localement sur processeur, sans poids appris.",
+            "Il analyse le TIFF original ; l'aperçu normalisé sert uniquement à l'affichage.",
+            "Zoomez ensemble sur la source et la segmentation pour inspecter l'overlay.",
+            "Les composantes ne sont pas des cellules ; les unités physiques "
+            "exigent une calibration.",
+            "Les exports JSON et CSV conservent l'expérience et les résultats par image.",
+            "Une seconde expérience se compare descriptivement, sans conclusion biologique.",
+            "Les benchmarks versionnés publient précision, incertitude, temps et mémoire.",
+            "Les règles de promotion restent visibles, y compris les résultats négatifs.",
+            "La classification de qualité n'échappe pas aux raccourcis d'acquisition.",
+            "Le jeu de test gelé reste fermé ; le produit s'abstient et montre ses limites.",
         ),
     ),
 }
@@ -146,8 +166,13 @@ def create_narration(
     audio_root.mkdir(parents=True, exist_ok=True)
     segments: list[dict[str, object]] = []
 
-    for index, (start_ms, text) in enumerate(
-        zip(SCENE_STARTS_MS, specification.narration, strict=True),
+    for index, (chapter_id, start_ms, text) in enumerate(
+        zip(
+            NARRATION_CHAPTER_IDS,
+            NARRATION_STARTS_MS,
+            specification.narration,
+            strict=True,
+        ),
         start=1,
     ):
         stem = f"{index:02d}-scene"
@@ -190,7 +215,9 @@ def create_narration(
         intermediate.unlink()
         end_ms = start_ms + duration_ms(output)
         next_start_ms = (
-            SCENE_STARTS_MS[index] if index < len(SCENE_STARTS_MS) else raw_duration_ms
+            NARRATION_STARTS_MS[index]
+            if index < len(NARRATION_STARTS_MS)
+            else raw_duration_ms
         )
         if end_ms >= next_start_ms - 250:
             raise RuntimeError(
@@ -199,15 +226,7 @@ def create_narration(
             )
         segments.append(
             {
-                "chapterId": (
-                    "promise",
-                    "protocol",
-                    "analysis",
-                    "limits",
-                    "export",
-                    "benchmarks",
-                    "credibility",
-                )[index - 1],
+                "chapterId": chapter_id,
                 "startMs": start_ms,
                 "endMs": end_ms,
                 "text": text,
@@ -259,44 +278,41 @@ def create_timeline(
     video_asset: str,
 ) -> None:
     run_root = project_root / "public/runs" / specification.journey_id
-    events: list[dict[str, object]] = []
-    chapter_ids = (
-        "promise",
-        "protocol",
-        "analysis",
-        "limits",
-        "export",
-        "benchmarks",
-        "credibility",
-    )
-    for index, (chapter_id, start_ms, caption) in enumerate(
-        zip(chapter_ids, SCENE_STARTS_MS, specification.captions, strict=True)
+    run_root.mkdir(parents=True, exist_ok=True)
+    events: list[dict[str, object]] = [
+        {
+            "type": "chapter",
+            "chapterId": chapter_id,
+            "chapterTitle": chapter_id,
+            "atMs": start_ms,
+        }
+        for chapter_id, start_ms in zip(
+            NARRATION_CHAPTER_IDS,
+            NARRATION_STARTS_MS,
+            strict=True,
+        )
+    ]
+    for index, (start_ms, caption) in enumerate(
+        zip(SCENE_STARTS_MS, specification.captions, strict=True)
     ):
         end_ms = (
             SCENE_STARTS_MS[index + 1]
             if index + 1 < len(SCENE_STARTS_MS)
             else raw_duration_ms
         )
-        events.extend(
-            [
-                {
-                    "type": "chapter",
-                    "chapterId": chapter_id,
-                    "chapterTitle": caption,
-                    "atMs": start_ms,
-                },
-                {
-                    "type": "action",
-                    "chapterId": chapter_id,
-                    "chapterTitle": caption,
-                    "action": "pause",
-                    "atMs": start_ms,
-                    "endMs": end_ms,
-                    "caption": caption,
-                    "focus": False,
-                },
-            ]
+        events.append(
+            {
+                "type": "action",
+                "chapterId": NARRATION_CHAPTER_IDS[index * 2],
+                "chapterTitle": caption,
+                "action": "pause",
+                "atMs": start_ms,
+                "endMs": end_ms,
+                "caption": caption,
+                "focus": False,
+            }
         )
+    events.sort(key=lambda event: (int(event["atMs"]), event["type"] == "action"))
 
     timeline = {
         "journeyId": specification.journey_id,
@@ -376,7 +392,7 @@ def main() -> None:
 
     raw_durations_ms = {language: duration_ms(path) for language, path in raw_videos.items()}
     for language, raw_duration_ms in raw_durations_ms.items():
-        if not 190_000 <= raw_duration_ms <= 210_000:
+        if not 170_000 <= raw_duration_ms <= 190_000:
             raise RuntimeError(
                 f"Unexpected {language} raw capture duration: {raw_duration_ms} ms"
             )

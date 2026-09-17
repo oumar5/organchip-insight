@@ -62,9 +62,9 @@ data, using paid APIs, or requiring a hosted model.
 - release inventory: 45 SHA-256 entries covering the final deliverables;
 - technical reports: deterministic 11-page A4 PDFs in English and French,
   visually checked page by page with no blank page;
-- demos: two 198-second 1280×720 H.264/AAC videos, each showing the interface
-  in its narration language, with seven subtitle scenes, a presenter and
-  licensed music.
+- demos: two 180-second 1280×720 H.264/AAC videos, each showing the interface
+  in its narration language, with fourteen compact subtitle cues, a presenter,
+  licensed music, synchronized zoom and descriptive experiment comparison.
 
 ## Known limitations
 

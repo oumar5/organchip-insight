@@ -1,27 +1,55 @@
 1
-00:00:00,000 --> 00:00:08,680
-La microscopie d'organes sur puce exige plus qu'un score de modèle. OrganChip Insight réunit images, mesures, provenance et limites scientifiques dans une expérience locale.
+00:00:00,000 --> 00:00:03,560
+La microscopie d'organes sur puce exige plus qu'un score de modèle.
 
 2
-00:00:18,000 --> 00:00:27,360
-Avant l'analyse, l'utilisateur consigne un objectif et importe des images publiques verrouillées par empreinte. L'import reste séparé de l'inférence, afin qu'un échec d'analyse ne duplique jamais les sources.
+00:00:08,000 --> 00:00:11,880
+OrganChip Insight réunit images, mesures, provenance et limites scientifiques.
 
 3
-00:00:50,000 --> 00:00:58,920
-Le moteur adaptatif par défaut s'exécute localement sur processeur, sans poids de modèle. Le TIFF original est analysé ; l'aperçu normalisé sert uniquement à l'inspection.
+00:00:16,000 --> 00:00:20,360
+Consignez l'objectif avant l'analyse, puis importez les images publiques vérifiées.
 
 4
-00:01:26,000 --> 00:01:35,360
-Chaque overlay de segmentation reste relié à sa source et à ses mesures. Les composantes ne sont jamais présentées comme des cellules validées, et la géométrie reste en pixels sans calibration physique.
+00:00:29,000 --> 00:00:32,880
+L'import reste séparé de l'inférence ; les sources ne sont jamais dupliquées.
 
 5
-00:01:56,000 --> 00:02:05,360
-Les exports JSON et CSV conservent l'expérience, le moteur, les paramètres, les résultats par image et l'heure de génération, afin que chaque résultat soit auditable.
+00:00:42,000 --> 00:00:45,920
+Le moteur adaptatif fonctionne localement sur processeur, sans poids appris.
 
 6
-00:02:16,000 --> 00:02:27,640
-Les benchmarks externes versionnés publient à la fois la précision et le coût de calcul. MicroSAM est meilleur sur la segmentation BBBC019, mais échoue à deux des trois critères préenregistrés sur BBBC038.
+00:00:57,000 --> 00:01:01,000
+Il analyse le TIFF original ; l'aperçu normalisé sert uniquement à l'affichage.
 
 7
-00:02:52,000 --> 00:03:02,720
-La classification de qualité n'a pas établi de signal robuste indépendant des raccourcis d'acquisition. Le jeu de test gelé reste fermé, et le produit livre abstention, checksums, tests et limites explicites.
+00:01:12,000 --> 00:01:15,920
+Zoomez ensemble sur la source et la segmentation pour inspecter l'overlay.
+
+8
+00:01:28,000 --> 00:01:31,960
+Les composantes ne sont pas des cellules ; les unités physiques exigent une calibration.
+
+9
+00:01:45,000 --> 00:01:49,480
+Les exports JSON et CSV conservent l'expérience et les résultats par image.
+
+10
+00:01:56,000 --> 00:02:00,160
+Une seconde expérience se compare descriptivement, sans conclusion biologique.
+
+11
+00:02:08,000 --> 00:02:12,440
+Les benchmarks versionnés publient précision, incertitude, temps et mémoire.
+
+12
+00:02:22,000 --> 00:02:25,920
+Les règles de promotion restent visibles, y compris les résultats négatifs.
+
+13
+00:02:36,000 --> 00:02:39,320
+La classification de qualité n'échappe pas aux raccourcis d'acquisition.
+
+14
+00:02:48,000 --> 00:02:52,160
+Le jeu de test gelé reste fermé ; le produit s'abstient et montre ses limites.

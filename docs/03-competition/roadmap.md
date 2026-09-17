@@ -120,7 +120,7 @@ par semaine est dans [plan-soumission.md](submission-plan.md).
 - [x] reconstruction CPU `docker compose build --pull --no-cache`, parcours
   synthétique et réel, audit accessibilité/mobile et persistance des résultats
   après redémarrage ;
-- [x] vidéos locales de secours anglaise et française de 3 min 18 s, chacune
+- [x] vidéos locales de secours anglaise et française de 3 min, chacune
   capturée dans la langue correspondante, sous-titrées et contrôlées ; démo
   hébergée laissée optionnelle.
 
@@ -133,7 +133,7 @@ par semaine est dans [plan-soumission.md](submission-plan.md).
   déterministes contrôlés page par page, sans page vide, avec l'identité de
   Ben Lol OUMAR ;
   publication encore requise ;
-- [x] vidéos candidates anglaise et française de 3 min 18 s montrant le produit
+- [x] vidéos candidates anglaise et française de 3 min montrant le produit
   réel, avec narration, avatar, musique sous licence, sous-titres et SRT ;
   publication encore requise ;
 - [x] Writeup Kaggle : catégorie, équipe, résumé 200–300 mots, limites,

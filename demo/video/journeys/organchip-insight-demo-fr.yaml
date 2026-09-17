@@ -29,59 +29,59 @@ viewport:
   height: 720
 setup: []
 chapters:
-  - id: promise
+  - id: promise-a
     title: Une expérience auditable
-    narration: La microscopie d'organes sur puce exige plus qu'un score de modèle. OrganChip Insight réunit images, mesures, provenance et limites scientifiques dans une expérience locale.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Une expérience auditable
-        holdMs: 0
-  - id: protocol
+    narration: La microscopie d'organes sur puce exige plus qu'un score de modèle.
+    steps: [{action: pause, durationMs: 100, caption: Une expérience auditable, holdMs: 0}]
+  - id: promise-b
+    title: Les preuves restent réunies
+    narration: OrganChip Insight réunit images, mesures, provenance et limites scientifiques.
+    steps: [{action: pause, durationMs: 100, caption: Les preuves restent réunies, holdMs: 0}]
+  - id: protocol-a
     title: Un protocole avant l'analyse
-    narration: Avant l'analyse, l'utilisateur consigne un objectif et importe des images publiques verrouillées par empreinte. L'import reste séparé de l'inférence, afin qu'un échec d'analyse ne duplique jamais les sources.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Un protocole avant l'analyse
-        holdMs: 0
-  - id: analysis
-    title: Une analyse locale fidèle à la source
-    narration: Le moteur adaptatif par défaut s'exécute localement sur processeur, sans poids de modèle. Le TIFF original est analysé ; l'aperçu normalisé sert uniquement à l'inspection.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Une analyse locale fidèle à la source
-        holdMs: 0
-  - id: limits
-    title: Des mesures aux limites explicites
-    narration: Chaque overlay de segmentation reste relié à sa source et à ses mesures. Les composantes ne sont jamais présentées comme des cellules validées, et la géométrie reste en pixels sans calibration physique.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Des mesures aux limites explicites
-        holdMs: 0
-  - id: export
+    narration: Consignez l'objectif avant l'analyse, puis importez les images publiques vérifiées.
+    steps: [{action: pause, durationMs: 100, caption: Un protocole avant l'analyse, holdMs: 0}]
+  - id: protocol-b
+    title: Les sources sont préservées
+    narration: L'import reste séparé de l'inférence ; les sources ne sont jamais dupliquées.
+    steps: [{action: pause, durationMs: 100, caption: Les sources sont préservées, holdMs: 0}]
+  - id: analysis-a
+    title: Une analyse locale
+    narration: Le moteur adaptatif fonctionne localement sur processeur, sans poids appris.
+    steps: [{action: pause, durationMs: 100, caption: Une analyse locale, holdMs: 0}]
+  - id: analysis-b
+    title: Fidèle à la source
+    narration: Il analyse le TIFF original ; l'aperçu normalisé sert uniquement à l'affichage.
+    steps: [{action: pause, durationMs: 100, caption: Fidèle à la source, holdMs: 0}]
+  - id: limits-a
+    title: Une inspection synchronisée
+    narration: Zoomez ensemble sur la source et la segmentation pour inspecter l'overlay.
+    steps: [{action: pause, durationMs: 100, caption: Une inspection synchronisée, holdMs: 0}]
+  - id: limits-b
+    title: Des limites explicites
+    narration: Les composantes ne sont pas des cellules ; les unités physiques exigent une calibration.
+    steps: [{action: pause, durationMs: 100, caption: Des limites explicites, holdMs: 0}]
+  - id: export-a
     title: Des exports reproductibles
-    narration: Les exports JSON et CSV conservent l'expérience, le moteur, les paramètres, les résultats par image et l'heure de génération, afin que chaque résultat soit auditable.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Des exports reproductibles
-        holdMs: 0
-  - id: benchmarks
-    title: Précision et coût ensemble
-    narration: Les benchmarks externes versionnés publient à la fois la précision et le coût de calcul. MicroSAM est meilleur sur la segmentation BBBC019, mais échoue à deux des trois critères préenregistrés sur BBBC038.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Précision et coût ensemble
-        holdMs: 0
-  - id: credibility
+    narration: Les exports JSON et CSV conservent l'expérience et les résultats par image.
+    steps: [{action: pause, durationMs: 100, caption: Des exports reproductibles, holdMs: 0}]
+  - id: export-b
+    title: Une comparaison descriptive
+    narration: Une seconde expérience se compare descriptivement, sans conclusion biologique.
+    steps: [{action: pause, durationMs: 100, caption: Une comparaison descriptive, holdMs: 0}]
+  - id: benchmarks-a
+    title: Précision et coût
+    narration: Les benchmarks versionnés publient précision, incertitude, temps et mémoire.
+    steps: [{action: pause, durationMs: 100, caption: Précision et coût, holdMs: 0}]
+  - id: benchmarks-b
+    title: Des décisions fondées sur les preuves
+    narration: Les règles de promotion restent visibles, y compris les résultats négatifs.
+    steps: [{action: pause, durationMs: 100, caption: Des décisions fondées sur les preuves, holdMs: 0}]
+  - id: credibility-a
+    title: Les raccourcis d'acquisition
+    narration: La classification de qualité n'échappe pas aux raccourcis d'acquisition.
+    steps: [{action: pause, durationMs: 100, caption: Les raccourcis d'acquisition, holdMs: 0}]
+  - id: credibility-b
     title: Une abstention honnête
-    narration: La classification de qualité n'a pas établi de signal robuste indépendant des raccourcis d'acquisition. Le jeu de test gelé reste fermé, et le produit livre abstention, checksums, tests et limites explicites.
-    steps:
-      - action: pause
-        durationMs: 100
-        caption: Une abstention honnête
-        holdMs: 0
+    narration: Le jeu de test gelé reste fermé ; le produit s'abstient et montre ses limites.
+    steps: [{action: pause, durationMs: 100, caption: Une abstention honnête, holdMs: 0}]

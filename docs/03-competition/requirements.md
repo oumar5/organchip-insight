@@ -138,7 +138,7 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 - [x] modèles non distribués explicitement et procédure de données documentée ;
 - [x] résultats recréés depuis un environnement propre ;
 - [x] rapport technique complet localement ; PDF encore à publier ;
-- [x] vidéo locale validée à 3 min 18 s ; encore à publier sans connexion ;
+- [x] vidéo locale bilingue validée à 3 min ; encore à publier sans connexion ;
 - [x] Writeup prêt hors liens publics ;
 - [x] déclarations IA, licences et citations complètes ;
 - [ ] soutenance préparée : diapositives, démo hors ligne de secours, Q/R.

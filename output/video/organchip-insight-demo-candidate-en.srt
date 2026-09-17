@@ -1,27 +1,55 @@
 1
-00:00:00,000 --> 00:00:08,520
-Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits inside one local experiment.
+00:00:00,000 --> 00:00:03,560
+Organ-on-chip microscopy needs more than a model score.
 
 2
-00:00:18,000 --> 00:00:27,200
-Before analysis, the user records an objective and imports hash-locked public microscopy images. Upload is separated from inference, so a failed analysis never duplicates the source files.
+00:00:08,000 --> 00:00:12,400
+OrganChip Insight keeps images, measurements, provenance, and limits together.
 
 3
-00:00:50,000 --> 00:00:57,880
-The default adaptive engine runs locally on the CPU without model weights. The original TIFF is analyzed, while the normalized preview is used only for inspection.
+00:00:16,000 --> 00:00:20,240
+Record the objective before analysis and import hash-locked public images.
 
 4
-00:01:26,000 --> 00:01:35,120
-Each segmentation overlay remains linked to its source and measurements. Components are never presented as validated cells, and geometry stays in pixels when physical calibration is unavailable.
+00:00:29,000 --> 00:00:33,120
+Uploads stay separate from inference, so sources are never duplicated.
 
 5
-00:01:56,000 --> 00:02:04,200
-JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time, making every result independently auditable.
+00:00:42,000 --> 00:00:45,280
+The adaptive engine runs locally on CPU, without model weights.
 
 6
-00:02:16,000 --> 00:02:29,000
-Versioned external benchmarks report both accuracy and computational cost. MicroSAM performs better on BBBC019 foreground segmentation, but it fails two of three preregistered BBBC038 promotion criteria.
+00:00:57,000 --> 00:01:00,960
+It analyzes the original TIFF; the normalized preview is display-only.
 
 7
-00:02:52,000 --> 00:03:02,600
-Quality classification did not establish a robust signal independent of acquisition shortcuts. The frozen test set remains unopened, and the product ships with abstention, checksums, tests, and explicit limits.
+00:01:12,000 --> 00:01:15,240
+Zoom source and segmentation together to inspect every overlay.
+
+8
+00:01:28,000 --> 00:01:32,160
+Components are not cells, and physical units require documented calibration.
+
+9
+00:01:45,000 --> 00:01:49,120
+JSON and CSV preserve the experiment, engine, and per-image results.
+
+10
+00:01:56,000 --> 00:02:00,480
+A second completed experiment is compared descriptively, without biological claims.
+
+11
+00:02:08,000 --> 00:02:12,240
+Versioned benchmarks report accuracy, uncertainty, runtime, and memory.
+
+12
+00:02:22,000 --> 00:02:24,680
+Promotion rules stay visible, including negative results.
+
+13
+00:02:36,000 --> 00:02:39,480
+Quality classification did not escape acquisition shortcuts.
+
+14
+00:02:48,000 --> 00:02:52,240
+The frozen test set remains unopened; the product abstains and shows its limits.

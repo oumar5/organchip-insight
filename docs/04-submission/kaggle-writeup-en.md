@@ -6,7 +6,7 @@
 
 **Public code:** Apache-2.0; public release URL pending
 
-**Demo video (maximum five minutes):** validated 3:18 local candidate; public URL pending
+**Demo video (maximum five minutes):** validated 3:00 local candidate; public URL pending
 
 **Technical report:** local PDF candidate generated; public URL pending
 
@@ -65,9 +65,10 @@ provenance, uncertainty, and negative findings visible together.
 The final product additionally supports persisted chip, well, cell-line and
 culture-day metadata, optional source-backed physical calibration,
 synchronized zoom/pan, and descriptive comparison of two completed
-experiments. These capabilities are covered by automated browser tests and the
-technical report; they are not presented as scenes in the current 198-second
-video candidate.
+experiments. The 180-second candidate video shows the synchronized viewer and
+descriptive comparison. Physical calibration remains optional and is not
+demonstrated because the public mixed-image batch has no documented shared
+micrometre-per-pixel scale.
 
 ## Evidence and limitations
 

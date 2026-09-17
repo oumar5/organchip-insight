@@ -230,7 +230,7 @@ inéligible.
 
 - [x] Préparer une expérience de démonstration reproductible fondée sur le
   manifeste réel verrouillé de la phase 1.
-- [x] Enregistrer deux captures reproductibles de 3 min 18 s sur le produit réel,
+- [x] Enregistrer deux captures reproductibles de 3 min sur le produit réel,
   avec interface anglaise pour le montage anglais et interface française pour
   le montage français, puis produire les deux montages avec Demo Studio.
 - [x] Ajouter narration locale, avatar, musique sous licence, sous-titres visibles
