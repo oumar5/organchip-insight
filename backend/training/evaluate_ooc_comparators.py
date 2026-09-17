@@ -76,6 +76,8 @@ def _add_acquisition_metadata(
                 "mode": mode,
                 "resolution": f"{width}x{height}",
                 "mode_resolution": f"{mode}/{width}x{height}",
+                "mode_day_bucket": f"{mode}/{row['day_bucket']}",
+                "mode_cell_type": f"{mode}/{row['cell_type']}",
             }
         )
     return output
@@ -147,12 +149,39 @@ def _evaluation(
     }
 
 
+def _fixed_categorical_comparator(
+    train_rows: list[dict[str, str]],
+    validation_rows: list[dict[str, str]],
+    validation_labels: np.ndarray,
+    *,
+    field: str,
+) -> tuple[np.ndarray, dict[str, Any]]:
+    probabilities, details = _categorical_probabilities(
+        train_rows,
+        validation_rows,
+        field=field,
+    )
+    return probabilities, {
+        **details,
+        "threshold": 0.5,
+        "threshold_selection": "fixed before validation evaluation",
+        "validation": _evaluation(
+            validation_rows,
+            validation_labels,
+            probabilities,
+            0.5,
+        ),
+    }
+
+
 def _write_predictions(
     path: Path,
     rows: list[dict[str, str]],
     *,
     majority_probabilities: np.ndarray,
     shortcut_probabilities: np.ndarray,
+    mode_day_bucket_probabilities: np.ndarray,
+    mode_cell_type_probabilities: np.ndarray,
     handcrafted_probabilities: np.ndarray,
     handcrafted_threshold: float,
 ) -> None:
@@ -167,17 +196,21 @@ def _write_predictions(
         "resolution",
         "majority_probability_good",
         "shortcut_probability_good",
+        "mode_day_bucket_probability_good",
+        "mode_cell_type_probability_good",
         "handcrafted_probability_good",
         "handcrafted_prediction",
         "handcrafted_correct",
     ]
     with path.open("w", encoding="utf-8", newline="") as output:
-        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
-        for row, majority, shortcut, handcrafted in zip(
+        for row, majority, shortcut, mode_day, mode_cell, handcrafted in zip(
             rows,
             majority_probabilities,
             shortcut_probabilities,
+            mode_day_bucket_probabilities,
+            mode_cell_type_probabilities,
             handcrafted_probabilities,
             strict=True,
         ):
@@ -194,6 +227,8 @@ def _write_predictions(
                     "resolution": row["resolution"],
                     "majority_probability_good": round(float(majority), 8),
                     "shortcut_probability_good": round(float(shortcut), 8),
+                    "mode_day_bucket_probability_good": round(float(mode_day), 8),
+                    "mode_cell_type_probability_good": round(float(mode_cell), 8),
                     "handcrafted_probability_good": round(float(handcrafted), 8),
                     "handcrafted_prediction": "good" if prediction else "bad",
                     "handcrafted_correct": prediction == target,
@@ -314,6 +349,22 @@ def run(config_path: Path) -> dict[str, Any]:
     shortcut_threshold, shortcut_selected_metrics = _select_threshold(
         validation_labels, shortcut_probabilities
     )
+    mode_day_bucket_probabilities, mode_day_bucket_report = (
+        _fixed_categorical_comparator(
+            train_rows,
+            validation_rows,
+            validation_labels,
+            field="mode_day_bucket",
+        )
+    )
+    mode_cell_type_probabilities, mode_cell_type_report = (
+        _fixed_categorical_comparator(
+            train_rows,
+            validation_rows,
+            validation_labels,
+            field="mode_cell_type",
+        )
+    )
 
     model_path = PROJECT_ROOT / config["model_output"]
     model_path.parent.mkdir(parents=True, exist_ok=True)
@@ -337,6 +388,8 @@ def run(config_path: Path) -> dict[str, Any]:
         validation_rows,
         majority_probabilities=majority_probabilities,
         shortcut_probabilities=shortcut_probabilities,
+        mode_day_bucket_probabilities=mode_day_bucket_probabilities,
+        mode_cell_type_probabilities=mode_cell_type_probabilities,
         handcrafted_probabilities=handcrafted_probabilities,
         handcrafted_threshold=selected_threshold,
     )
@@ -417,6 +470,8 @@ def run(config_path: Path) -> dict[str, Any]:
                     shortcut_threshold,
                 ),
             },
+            "mode_day_bucket_shortcut": mode_day_bucket_report,
+            "mode_cell_type_shortcut": mode_cell_type_report,
             "handcrafted": {
                 "selection_rule": (
                     "highest validation macro-F1, then balanced accuracy, then ROC-AUC"
@@ -497,6 +552,10 @@ def main() -> None:
         "majority": report["comparators"]["majority"]["validation"]["global"],
         "mode_resolution_shortcut": report["comparators"]
         ["mode_resolution_shortcut"]["selected_threshold_validation"]["global"],
+        "mode_day_bucket_shortcut": report["comparators"]
+        ["mode_day_bucket_shortcut"]["validation"]["global"],
+        "mode_cell_type_shortcut": report["comparators"]
+        ["mode_cell_type_shortcut"]["validation"]["global"],
         "handcrafted": report["comparators"]["handcrafted"]
         ["selected_threshold_validation"]["global"],
     }
