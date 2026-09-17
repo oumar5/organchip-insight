@@ -2,19 +2,44 @@ from datetime import UTC, datetime
 from typing import Literal
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 ExperimentStatus = Literal["draft", "ready", "analyzing", "complete", "failed"]
 
 
-class ExperimentCreate(BaseModel):
+class ExperimentMetadata(BaseModel):
+    chip_id: str = Field(default="", max_length=120)
+    well_id: str = Field(default="", max_length=80)
+    cell_line: str = Field(default="", max_length=120)
+    culture_day: int | None = Field(default=None, ge=0, le=3_650)
+    microns_per_pixel: float | None = Field(default=None, gt=0.0, le=1_000.0)
+    calibration_source: str = Field(default="", max_length=240)
+
+    @model_validator(mode="after")
+    def calibration_is_traceable(self) -> "ExperimentMetadata":
+        self.chip_id = self.chip_id.strip()
+        self.well_id = self.well_id.strip()
+        self.cell_line = self.cell_line.strip()
+        self.calibration_source = self.calibration_source.strip()
+        if self.microns_per_pixel is not None and not self.calibration_source:
+            raise ValueError(
+                "La source de calibration est obligatoire lorsqu’une échelle est renseignée."
+            )
+        if self.microns_per_pixel is None and self.calibration_source:
+            raise ValueError(
+                "Une échelle en µm/pixel est obligatoire avec une source de calibration."
+            )
+        return self
+
+
+class ExperimentCreate(ExperimentMetadata):
     name: str = Field(min_length=2, max_length=120)
     description: str = Field(default="", max_length=1_000)
     control_label: str = Field(default="Control", min_length=1, max_length=80)
     treatment_label: str = Field(default="Treatment", min_length=1, max_length=80)
 
 
-class Experiment(BaseModel):
+class Experiment(ExperimentMetadata):
     id: UUID = Field(default_factory=uuid4)
     name: str
     description: str = ""
@@ -101,4 +126,5 @@ class AnalysisResult(BaseModel):
     artifacts: list[AnalysisArtifact]
     warnings: list[str]
     provenance: dict[str, str] = Field(default_factory=dict)
+    experiment_metadata: ExperimentMetadata = Field(default_factory=ExperimentMetadata)
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

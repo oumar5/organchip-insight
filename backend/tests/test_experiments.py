@@ -18,6 +18,12 @@ def test_create_and_retrieve_experiment() -> None:
         "description": "Control versus treatment microscopy set",
         "control_label": "DMSO",
         "treatment_label": "Compound A",
+        "chip_id": "chip-001",
+        "well_id": "B04",
+        "cell_line": "iPSC-01",
+        "culture_day": 21,
+        "microns_per_pixel": 0.65,
+        "calibration_source": "Microscope metadata",
     }
 
     create_response = client.post("/api/v1/experiments", json=payload)
@@ -29,6 +35,45 @@ def test_create_and_retrieve_experiment() -> None:
     get_response = client.get(f"/api/v1/experiments/{experiment['id']}")
     assert get_response.status_code == 200
     assert get_response.json()["control_label"] == "DMSO"
+    assert get_response.json()["chip_id"] == "chip-001"
+    assert get_response.json()["microns_per_pixel"] == 0.65
+
+
+def test_calibration_requires_a_scale_and_a_source() -> None:
+    missing_source = client.post(
+        "/api/v1/experiments",
+        json={"name": "Missing source", "microns_per_pixel": 0.65},
+    )
+    missing_scale = client.post(
+        "/api/v1/experiments",
+        json={"name": "Missing scale", "calibration_source": "Microscope"},
+    )
+
+    assert missing_source.status_code == 422
+    assert missing_scale.status_code == 422
+
+
+def test_metadata_can_be_updated_and_is_trimmed() -> None:
+    experiment = client.post(
+        "/api/v1/experiments", json={"name": "Metadata update"}
+    ).json()
+
+    response = client.put(
+        f"/api/v1/experiments/{experiment['id']}/metadata",
+        json={
+            "chip_id": "  chip-002  ",
+            "well_id": "C05",
+            "cell_line": "Organoid line 3",
+            "culture_day": 12,
+            "microns_per_pixel": 1.25,
+            "calibration_source": "  Camera calibration certificate  ",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["chip_id"] == "chip-002"
+    assert response.json()["culture_day"] == 12
+    assert response.json()["calibration_source"] == "Camera calibration certificate"
 
 
 def test_analysis_requires_images() -> None:
@@ -76,7 +121,15 @@ def test_api_localizes_human_facing_errors_and_engine_metadata() -> None:
 def test_upload_and_analyze_real_image() -> None:
     create_response = client.post(
         "/api/v1/experiments",
-        json={"name": "Microscopy quality control"},
+        json={
+            "name": "Microscopy quality control",
+            "chip_id": "chip-calibrated",
+            "well_id": "A01",
+            "cell_line": "iPSC-control",
+            "culture_day": 14,
+            "microns_per_pixel": 0.5,
+            "calibration_source": "Microscope export metadata",
+        },
     )
     experiment_id = create_response.json()["id"]
 
@@ -103,6 +156,14 @@ def test_upload_and_analyze_real_image() -> None:
     assert result["metrics"]["object_count_total"] == 2
     assert result["metrics"]["mean_intensity"] > 0
     assert len(result["artifacts"]) == 1
+    assert result["experiment_metadata"] == {
+        "chip_id": "chip-calibrated",
+        "well_id": "A01",
+        "cell_line": "iPSC-control",
+        "culture_day": 14,
+        "microns_per_pixel": 0.5,
+        "calibration_source": "Microscope export metadata",
+    }
 
     overlay_response = client.get(result["artifacts"][0]["url"])
     assert overlay_response.status_code == 200
@@ -114,6 +175,7 @@ def test_upload_and_analyze_real_image() -> None:
     assert json_export.status_code == 200
     assert json_export.headers["content-disposition"].endswith('results.json"')
     assert json_export.json()["task"] == "segmentation"
+    assert json_export.json()["experiment_metadata"]["microns_per_pixel"] == 0.5
 
     csv_export = client.get(
         f"/api/v1/experiments/{experiment_id}/exports/results.csv"
@@ -121,6 +183,8 @@ def test_upload_and_analyze_real_image() -> None:
     assert csv_export.status_code == 200
     assert csv_export.headers["content-disposition"].endswith('image-results.csv"')
     assert "object_count" in csv_export.text.splitlines()[0]
+    assert "experiment_microns_per_pixel" in csv_export.text.splitlines()[0]
+    assert "mean_object_area_um2" in csv_export.text.splitlines()[0]
 
 
 def test_upload_rejects_invalid_image() -> None:

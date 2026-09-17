@@ -21,6 +21,7 @@ from app.schemas import (
     AnalysisResult,
     Experiment,
     ExperimentCreate,
+    ExperimentMetadata,
     ImageRecord,
     UploadSummary,
 )
@@ -156,6 +157,25 @@ def list_experiments() -> list[Experiment]:
 @router.get("/{experiment_id}", response_model=Experiment)
 def get_experiment(experiment_id: UUID) -> Experiment:
     return _get_experiment_or_404(experiment_id)
+
+
+@router.put("/{experiment_id}/metadata", response_model=Experiment)
+def update_experiment_metadata(
+    experiment_id: UUID, payload: ExperimentMetadata
+) -> Experiment:
+    _get_experiment_or_404(experiment_id)
+    try:
+        updated = repository.update_metadata(experiment_id, payload)
+    except RuntimeError as error:
+        if str(error) == "analysis-in-progress":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Les métadonnées ne peuvent pas changer pendant une analyse.",
+            ) from error
+        raise
+    if updated is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expérience introuvable")
+    return updated
 
 
 @router.post("/{experiment_id}/images", response_model=UploadSummary)
@@ -302,6 +322,7 @@ def analyze_experiment(
             artifacts=output.artifacts,
             warnings=output.warnings,
             provenance=output.provenance,
+            experiment_metadata=ExperimentMetadata.model_validate(experiment.model_dump()),
         )
         repository.save_result(result)
         repository.update_status(experiment_id, "complete")
@@ -359,7 +380,26 @@ def export_results_json(experiment_id: UUID) -> Response:
 @router.get("/{experiment_id}/exports/results.csv", response_class=Response)
 def export_results_csv(experiment_id: UUID) -> Response:
     result = _result_or_404(experiment_id)
-    rows = [item.model_dump(mode="json") for item in result.image_results]
+    metadata = result.experiment_metadata.model_dump(mode="json")
+    rows = []
+    for item in result.image_results:
+        row = item.model_dump(mode="json")
+        row.update(
+            {
+                f"experiment_{key}": value if value is not None else ""
+                for key, value in metadata.items()
+            }
+        )
+        if item.analysis_type == "segmentation" and metadata["microns_per_pixel"] is not None:
+            scale = float(metadata["microns_per_pixel"])
+            row.update(
+                {
+                    "mean_object_area_um2": item.mean_object_area * scale**2,
+                    "median_object_area_um2": item.median_object_area * scale**2,
+                    "mean_equivalent_diameter_um": item.mean_equivalent_diameter * scale,
+                }
+            )
+        rows.append(row)
     fieldnames = list(dict.fromkeys(key for row in rows for key in row))
     output = io.StringIO(newline="")
     writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")

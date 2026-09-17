@@ -36,6 +36,9 @@ EXACT_ENGLISH: dict[str, str] = {
     "Image illisible, endommagée ou dimensions non prises en charge.": (
         "Unreadable or damaged image, or unsupported dimensions."
     ),
+    "Les métadonnées ne peuvent pas changer pendant une analyse.": (
+        "Metadata cannot be changed while an analysis is running."
+    ),
 }
 
 

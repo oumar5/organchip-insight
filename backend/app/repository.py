@@ -7,7 +7,13 @@ from threading import RLock
 from uuid import UUID
 
 from app.config import get_settings
-from app.schemas import AnalysisResult, Experiment, ExperimentCreate, ExperimentStatus
+from app.schemas import (
+    AnalysisResult,
+    Experiment,
+    ExperimentCreate,
+    ExperimentMetadata,
+    ExperimentStatus,
+)
 
 
 class ExperimentRepository:
@@ -43,7 +49,13 @@ class ExperimentRepository:
                     treatment_label TEXT NOT NULL,
                     status TEXT NOT NULL,
                     image_count INTEGER NOT NULL,
-                    created_at TEXT NOT NULL
+                    created_at TEXT NOT NULL,
+                    chip_id TEXT NOT NULL DEFAULT '',
+                    well_id TEXT NOT NULL DEFAULT '',
+                    cell_line TEXT NOT NULL DEFAULT '',
+                    culture_day INTEGER,
+                    microns_per_pixel REAL,
+                    calibration_source TEXT NOT NULL DEFAULT ''
                 );
                 CREATE TABLE IF NOT EXISTS analysis_results (
                     experiment_id TEXT PRIMARY KEY,
@@ -52,6 +64,22 @@ class ExperimentRepository:
                 );
                 """
             )
+            existing_columns = {
+                row["name"] for row in connection.execute("PRAGMA table_info(experiments)")
+            }
+            migrations = {
+                "chip_id": "TEXT NOT NULL DEFAULT ''",
+                "well_id": "TEXT NOT NULL DEFAULT ''",
+                "cell_line": "TEXT NOT NULL DEFAULT ''",
+                "culture_day": "INTEGER",
+                "microns_per_pixel": "REAL",
+                "calibration_source": "TEXT NOT NULL DEFAULT ''",
+            }
+            for column, definition in migrations.items():
+                if column not in existing_columns:
+                    connection.execute(
+                        f"ALTER TABLE experiments ADD COLUMN {column} {definition}"
+                    )
 
     @staticmethod
     def _row_to_experiment(row: sqlite3.Row) -> Experiment:
@@ -64,8 +92,9 @@ class ExperimentRepository:
                 """
                 INSERT INTO experiments (
                     id, name, description, control_label, treatment_label,
-                    status, image_count, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    status, image_count, created_at, chip_id, well_id, cell_line,
+                    culture_day, microns_per_pixel, calibration_source
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(experiment.id),
@@ -76,6 +105,12 @@ class ExperimentRepository:
                     experiment.status,
                     experiment.image_count,
                     experiment.created_at.isoformat(),
+                    experiment.chip_id,
+                    experiment.well_id,
+                    experiment.cell_line,
+                    experiment.culture_day,
+                    experiment.microns_per_pixel,
+                    experiment.calibration_source,
                 ),
             )
         return experiment
@@ -103,6 +138,44 @@ class ExperimentRepository:
             connection.execute(
                 "UPDATE experiments SET image_count = ?, status = ? WHERE id = ?",
                 (image_count, next_status, str(experiment_id)),
+            )
+        return self.get(experiment_id)
+
+    def update_metadata(
+        self, experiment_id: UUID, metadata: ExperimentMetadata
+    ) -> Experiment | None:
+        """Replace scientific context and invalidate results tied to the old context."""
+        with self._lock, self._connect() as connection:
+            row = connection.execute(
+                "SELECT image_count, status FROM experiments WHERE id = ?",
+                (str(experiment_id),),
+            ).fetchone()
+            if row is None:
+                return None
+            if row["status"] == "analyzing":
+                raise RuntimeError("analysis-in-progress")
+            next_status = "ready" if row["image_count"] else "draft"
+            connection.execute(
+                """
+                UPDATE experiments
+                SET chip_id = ?, well_id = ?, cell_line = ?, culture_day = ?,
+                    microns_per_pixel = ?, calibration_source = ?, status = ?
+                WHERE id = ?
+                """,
+                (
+                    metadata.chip_id,
+                    metadata.well_id,
+                    metadata.cell_line,
+                    metadata.culture_day,
+                    metadata.microns_per_pixel,
+                    metadata.calibration_source,
+                    next_status,
+                    str(experiment_id),
+                ),
+            )
+            connection.execute(
+                "DELETE FROM analysis_results WHERE experiment_id = ?",
+                (str(experiment_id),),
             )
         return self.get(experiment_id)
 
