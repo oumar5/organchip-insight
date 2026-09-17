@@ -61,6 +61,19 @@ L'ajout effectif d'une image invalide le résultat précédent. Un rejet ou un
 doublon seul conserve un résultat encore applicable. Import et analyse sont
 deux actions séparées : une relance d'analyse ne téléverse rien.
 
+## Images importées et aperçus
+
+```http
+GET /experiments/{experiment_id}/images
+GET /experiments/{experiment_id}/previews/{filename}
+```
+
+La liste renvoie, pour chaque image stockée, le nom de stockage, le nom
+d'affichage, la taille et l'URL d'un aperçu PNG 8 bits généré à la demande et
+mis en cache. Les images monocanal, TIFF 16 bits compris, sont étirées entre
+leurs percentiles 1 et 99 pour l'affichage uniquement ; aucune mesure n'utilise
+ces aperçus.
+
 ## Inférence
 
 ```http

@@ -6,6 +6,7 @@ a été prise.
 
 ## Index
 
+- [Refonte UX : onglets, galerie, visionneuse et modales — 17 septembre 2026](2026-09-17-refonte-ux-galerie-modales.md)
 - [Refonte de l'interface : composants, lisibilité, cache nginx — 17 septembre 2026](2026-09-17-refonte-interface-composants.md)
 - [Fins de ligne des CSV et hashes de provenance — 17 septembre 2026](2026-09-17-fins-de-ligne-csv-et-hashes.md)
 - [Première sonde GPU Kaggle — 16 septembre 2026](2026-09-16-sonde-kaggle.md)

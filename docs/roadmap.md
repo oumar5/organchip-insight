@@ -92,6 +92,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] limites de pixels et en-têtes de sécurité API/Nginx ;
 - [x] interface découpée en composants, tableau par image, cache immuable des
   assets et repli SPA borné (branche `frontend-ui`, REX du 17 septembre) ;
+- [x] refonte UX : onglets, dépôt multi-images avec galerie d'aperçus,
+  visionneuse original/segmentation, modales de création et de détails ;
 - [x] parcours end-to-end navigateur local du démonstrateur CNN ;
 - [x] test end-to-end Playwright automatisé sur pile Docker et volume isolés ;
 - [ ] test sur machine propre CPU : deux reconstructions avec accès Docker Hub
