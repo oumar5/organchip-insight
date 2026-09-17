@@ -31,7 +31,10 @@ def is_deliverable(path: Path) -> bool:
         or (posix_path.startswith("data/manifests/") and path.suffix == ".json")
         or (posix_path.startswith("notebooks/") and path.suffix == ".ipynb")
         or posix_path == "frontend/public/benchmark-summary.json"
-        or posix_path == "docs/release/README.md"
+        or (
+            posix_path.startswith("docs/release/")
+            and path.suffix == ".md"
+        )
         or posix_path.startswith("docs/submission/")
         or (posix_path.startswith("output/pdf/") and path.suffix == ".pdf")
         or (

@@ -134,10 +134,10 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 - [ ] dépôt GitHub **rendu public** (il est privé au 16 septembre 2026) ;
 - [ ] fichier `LICENSE` ajouté (aucune licence détectée par GitHub) ;
 - [ ] release figée avec tag, checksums et DOI Zenodo optionnel ;
-- [ ] modèles et données téléchargeables ou procédure documentée ;
-- [ ] résultats recréés depuis un environnement propre ;
-- [ ] rapport technique complet (PDF public + résumé dans le Writeup) ;
-- [ ] vidéo publique ≤ 5 min, produit à l'écran dès la première minute ;
-- [ ] Writeup avec catégorie, résumé 200–300 mots, liens, limites ;
+- [x] modèles non distribués explicitement et procédure de données documentée ;
+- [x] résultats recréés depuis un environnement propre ;
+- [ ] rapport technique complet localement, PDF encore à publier ;
+- [ ] vidéo locale validée à 3 min 18 s, encore à publier sans connexion ;
+- [ ] Writeup prêt hors équipe, licence et liens publics ;
 - [ ] déclarations IA, licences et citations complètes ;
 - [ ] soutenance préparée : diapositives, démo hors ligne de secours, Q/R.

@@ -139,6 +139,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 3.2 Publication
 
+- [x] Préparer les notes de release candidates, les artefacts et le runbook de
+  publication sans inventer les décisions du propriétaire.
 - [ ] Pousser l'état validé de `dev` après autorisation.
 - [ ] Fusionner vers `main` uniquement après autorisation explicite.
 - [ ] Créer le tag et la release GitHub depuis le commit validé.

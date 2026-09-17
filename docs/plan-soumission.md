@@ -61,9 +61,9 @@ Le règlement officiel est résumé dans
 |---|---|---|
 | P0 | **fait localement** : reconstruction `--pull --no-cache`, parcours réel, CLI, contrôles d'accessibilité et persistance après redémarrage | `TASKS.md`, tests Playwright, `make check` |
 | P0 | release `v1.0.0-ai4s` : tag, checksums des modèles et rapports, archive Zenodo optionnelle avec DOI | page release |
-| P0 | vidéo ≤ 5 min tournée sur le produit réel, sans musique sous droits, sous-titres anglais | lien public testé en navigation privée |
-| P0 | rapport technique PDF selon le plan de l'organisateur, 15 à 20 pages, chaque chiffre relié à un fichier versionné | PDF public |
-| P0 | Writeup Kaggle : catégorie, résumé 200–300 mots, liens, limites, déclarations IA et licences | brouillon relu |
+| P0 | **fait localement** : vidéo candidate de 3 min 18 s tournée sur le produit réel, sans musique, sous-titres anglais et SRT ; reste la publication | lien public testé en navigation privée |
+| P0 | **fait localement** : rapport technique candidat de 15 pages, PDF déterministe et chaque chiffre relié à un fichier versionné ; restent identité, licence et publication | PDF public |
+| P0 | **fait localement hors champs propriétaire** : catégorie, résumé 200–300 mots, limites et déclarations ; restent équipe, licence et liens publics | brouillon relu |
 
 ### Tampon — 7 au 9 octobre
 

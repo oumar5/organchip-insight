@@ -99,18 +99,20 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] reconstruction CPU `docker compose build --pull --no-cache`, parcours
   synthétique et réel, audit accessibilité/mobile et persistance des résultats
   après redémarrage ;
-- [ ] démo hébergée optionnelle, vidéo et Docker local en secours.
+- [x] vidéo locale de secours de 3 min 18 s, sous-titrée et contrôlée ; démo
+  hébergée laissée optionnelle.
 
 ## Jalon 5 — Remise (avant le 9 octobre)
 
-- [x] figer données, code et résultats avec inventaire de 31 checksums ;
+- [x] figer données, code et résultats avec inventaire de 34 checksums ;
 - [ ] release taguée avec checksums, DOI Zenodo optionnel ;
-- [ ] rapport technique 15–20 pages selon le plan de l'organisateur ;
-- [ ] vidéo ≤ 5 minutes montrant le produit réel ;
-- [ ] Writeup Kaggle : catégorie, résumé 200–300 mots, liens, limites,
-  déclarations IA et licences ;
-- [x] brouillons anglais du rapport, du Writeup et du storyboard vidéo ; les
-  liens publics, auteurs, licences, figures et export PDF restent à finaliser ;
+- [x] rapport technique candidat de 15 pages, PDF déterministe contrôlé
+  visuellement ; publication et identité d'équipe encore requises ;
+- [x] vidéo candidate de 3 min 18 s montrant le produit réel, avec sous-titres
+  anglais et fichier SRT ; publication encore requise ;
+- [x] Writeup Kaggle : catégorie, résumé 200–300 mots, limites et déclarations
+  préparés ; liens publics, équipe et licence encore requis ;
+- [x] brouillons anglais, figures, PDF et vidéo locale finalisés ;
 - [ ] vérification de tous les liens en navigation privée.
 
 ## Jalon 6 — Finale (20 au 30 octobre)
