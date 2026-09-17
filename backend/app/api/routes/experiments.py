@@ -3,6 +3,7 @@ import hashlib
 import io
 import json
 import logging
+import re
 from pathlib import Path
 from threading import RLock
 from typing import Annotated
@@ -13,10 +14,16 @@ from fastapi.responses import FileResponse, Response
 from PIL import Image, UnidentifiedImageError
 
 from app.config import get_settings
-from app.ml.image_io import validate_image
+from app.ml.image_io import read_image, validate_image
 from app.ml.runtime import get_available_runtime
 from app.repository import repository
-from app.schemas import AnalysisResult, Experiment, ExperimentCreate, UploadSummary
+from app.schemas import (
+    AnalysisResult,
+    Experiment,
+    ExperimentCreate,
+    ImageRecord,
+    UploadSummary,
+)
 
 router = APIRouter()
 settings = get_settings()
@@ -45,6 +52,58 @@ def _experiment_artifact_dir(experiment_id: UUID) -> Path:
     artifact_dir = settings.data_dir / "experiments" / str(experiment_id) / "artifacts"
     artifact_dir.mkdir(parents=True, exist_ok=True)
     return artifact_dir
+
+
+def _experiment_preview_dir(experiment_id: UUID) -> Path:
+    preview_dir = settings.data_dir / "experiments" / str(experiment_id) / "previews"
+    preview_dir.mkdir(parents=True, exist_ok=True)
+    return preview_dir
+
+
+PREVIEW_MAX_EDGE = 1024
+_STORED_PREFIX = re.compile(r"^[a-f0-9]{12}-")
+
+
+def _stored_images(experiment_id: UUID) -> list[Path]:
+    image_dir = _experiment_image_dir(experiment_id)
+    return sorted(
+        path
+        for path in image_dir.iterdir()
+        if path.is_file() and not path.is_symlink() and path.suffix.lower() in ALLOWED_SUFFIXES
+    )
+
+
+def _image_record(experiment_id: UUID, path: Path) -> ImageRecord:
+    return ImageRecord(
+        filename=path.name,
+        display_name=_STORED_PREFIX.sub("", path.name),
+        size_bytes=path.stat().st_size,
+        preview_url=(
+            f"{settings.api_v1_prefix}/experiments/{experiment_id}/previews/{path.name}"
+        ),
+    )
+
+
+def _build_preview(source: Path, destination: Path) -> None:
+    """Render an 8-bit PNG preview of any accepted upload, TIFF 16 bits included.
+
+    Single-channel images are stretched between their 1st and 99th percentiles
+    for visibility only; the preview is never used for measurement."""
+    import numpy as np
+
+    with Image.open(source) as probe:
+        single_channel = probe.mode in {"1", "L", "LA", "I", "I;16", "I;16L", "I;16B"}
+    rgb, grayscale = read_image(source, settings.max_image_pixels)
+    if single_channel:
+        low, high = np.percentile(grayscale, (1, 99))
+        stretched = np.clip((grayscale - low) / max(float(high - low), 1e-6), 0.0, 1.0)
+        image = Image.fromarray(np.rint(stretched * 255).astype(np.uint8), mode="L")
+    else:
+        image = Image.fromarray(rgb, mode="RGB")
+    image.thumbnail((PREVIEW_MAX_EDGE, PREVIEW_MAX_EDGE))
+    temporary = destination.with_suffix(".tmp.png")
+    image.save(temporary, format="PNG", optimize=True)
+    temporary.replace(destination)
 
 
 def _write_upload(uploaded_file: UploadFile, destination: Path) -> str:
@@ -153,6 +212,32 @@ def _store_images(experiment_id: UUID, files: list[UploadFile]) -> UploadSummary
         duplicate_files=duplicates,
         rejection_reasons=reasons,
     )
+
+
+@router.get("/{experiment_id}/images", response_model=list[ImageRecord])
+def list_images(experiment_id: UUID) -> list[ImageRecord]:
+    _get_experiment_or_404(experiment_id)
+    return [_image_record(experiment_id, path) for path in _stored_images(experiment_id)]
+
+
+@router.get("/{experiment_id}/previews/{filename}", response_class=FileResponse)
+def get_preview(experiment_id: UUID, filename: str) -> FileResponse:
+    _get_experiment_or_404(experiment_id)
+    if Path(filename).name != filename or Path(filename).suffix.lower() not in ALLOWED_SUFFIXES:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid image name")
+    source = _experiment_image_dir(experiment_id) / filename
+    if not source.is_file() or source.is_symlink():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
+    preview = _experiment_preview_dir(experiment_id) / f"{filename}.png"
+    if not preview.is_file() or preview.stat().st_mtime < source.stat().st_mtime:
+        try:
+            _build_preview(source, preview)
+        except (OSError, ValueError, Image.DecompressionBombError, UnidentifiedImageError) as error:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Aperçu impossible : {error}",
+            ) from error
+    return FileResponse(preview, media_type="image/png", headers={"Cache-Control": "no-cache"})
 
 
 @router.post("/{experiment_id}/analyze", response_model=AnalysisResult)

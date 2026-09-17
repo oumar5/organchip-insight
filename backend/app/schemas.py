@@ -34,6 +34,15 @@ class UploadSummary(BaseModel):
     rejection_reasons: dict[str, str] = Field(default_factory=dict)
 
 
+class ImageRecord(BaseModel):
+    """One stored image of an experiment, with a browser-displayable preview."""
+
+    filename: str
+    display_name: str
+    size_bytes: int
+    preview_url: str
+
+
 class AnalysisEngine(BaseModel):
     id: str
     name: str
