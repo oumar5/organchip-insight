@@ -104,15 +104,17 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 
 ## Jalon 5 — Remise (avant le 9 octobre)
 
-- [x] figer données, code et résultats avec inventaire de 34 checksums ;
+- [x] figer données, code et résultats avec inventaire de 38 checksums ;
 - [ ] release taguée avec checksums, DOI Zenodo optionnel ;
-- [x] rapport technique candidat de 15 pages, PDF déterministe contrôlé
-  visuellement ; publication et identité d'équipe encore requises ;
+- [x] rapports techniques candidats anglais et français de 15 pages, PDF
+  déterministes contrôlés visuellement ; publication et identité d'équipe
+  encore requises ;
 - [x] vidéo candidate de 3 min 18 s montrant le produit réel, avec sous-titres
   anglais et fichier SRT ; publication encore requise ;
 - [x] Writeup Kaggle : catégorie, résumé 200–300 mots, limites et déclarations
   préparés ; liens publics, équipe et licence encore requis ;
-- [x] brouillons anglais, figures, PDF et vidéo locale finalisés ;
+- [x] brouillons bilingues, figures et PDF locaux finalisés ; vidéo bilingue en
+  cours de production ;
 - [ ] vérification de tous les liens en navigation privée.
 
 ## Jalon 6 — Finale (20 au 30 octobre)

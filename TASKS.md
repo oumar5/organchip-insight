@@ -161,12 +161,13 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 4.1 Rapport technique
 
-- [x] Relire et compléter le rapport anglais candidat.
+- [x] Relire et compléter les rapports candidats anglais et français.
 - [x] Remplacer tous les champs `TO COMPLETE` par des résultats ou par une
   réserve explicite relevant du propriétaire.
 - [x] Ajouter les figures générées depuis les rapports versionnés.
 - [x] Vérifier les légendes, citations, licences et limites.
-- [x] Exporter le PDF reproductible et contrôler visuellement ses 15 pages.
+- [x] Exporter les deux PDF reproductibles et contrôler visuellement leurs 15
+  pages en anglais et en français.
 - [ ] Publier le PDF sur une URL publique stable.
 
 ### 4.2 Vidéo de cinq minutes maximum

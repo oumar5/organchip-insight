@@ -31,22 +31,122 @@ from reportlab.platypus import (
 )
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_PATH = REPOSITORY_ROOT / "docs/submission/technical-report-en.md"
-OUTPUT_PATH = REPOSITORY_ROOT / "output/pdf/organchip-insight-technical-report-candidate.pdf"
-PAGE_BREAK_HEADINGS = {
-    "1. Problem and target user",
-    "2. Data, provenance, and legal basis",
-    "3. System architecture",
-    "4. Product method",
-    "5. Evaluation design",
-    "6. Results",
-    "6.2 Instance audit on BBBC038",
-    "6.3 Quality classification and metadata shortcuts",
-    "7. Product verification",
-    "8. Credibility and limitations",
-    "9. Practical value",
-    "10. Reproduction",
-    "11. AI tools, libraries, and licences",
+SOURCE_PATHS = {
+    "en": REPOSITORY_ROOT / "docs/submission/technical-report-en.md",
+    "fr": REPOSITORY_ROOT / "docs/submission/technical-report-fr.md",
+}
+OUTPUT_PATHS = {
+    "en": REPOSITORY_ROOT / "output/pdf/organchip-insight-technical-report-candidate-en.pdf",
+    "fr": REPOSITORY_ROOT / "output/pdf/organchip-insight-technical-report-candidate-fr.pdf",
+}
+PAGE_BREAK_PREFIXES = (
+    "1. ",
+    "2. ",
+    "3. ",
+    "4. ",
+    "5. ",
+    "6. ",
+    "6.2 ",
+    "6.3 ",
+    "7. ",
+    "8. ",
+    "9. ",
+    "10. ",
+    "11. ",
+)
+TEXT = {
+    "en": {
+        "header": "OrganChip Insight | Technical report candidate",
+        "pdf_title": "OrganChip Insight - Technical Report Candidate",
+        "pdf_author": "OrganChip Insight team - owner declaration pending",
+        "cover_title": "OrganChip Insight",
+        "cover_subtitle": "A traceable microscopy workspace for organ-on-chip experiments",
+        "cover_badge": "TOOL &amp; PLATFORM | AI4S OPEN INNOVATION 2026",
+        "cover_statement": (
+            "Evidence-gated image analysis that keeps sources, overlays, "
+            "measurements, provenance, uncertainty, and negative findings "
+            "in one reproducible local experiment."
+        ),
+        "cover_rows": [
+            ["Candidate date", "17 September 2026"],
+            ["Team", "Owner declaration pending"],
+            ["Release", "Validated on dev; public tag pending authorization"],
+            ["Scientific scope", "Non-clinical, exploratory microscopy workflow"],
+        ],
+        "cover_note": (
+            "Candidate PDF. Team identity, code licence, public release tag, "
+            "and public URLs remain owner-controlled publication fields."
+        ),
+        "architecture_boxes": [
+            ("React + TypeScript", "experiment workspace"),
+            ("FastAPI", "API + CLI contract"),
+            ("SQLite", "state"),
+            ("Files", "sources + overlays"),
+            (
+                "Evidence-gated engine registry",
+                "adaptive available | CNN abstains | µSAM benchmark",
+            ),
+        ],
+        "figure_1": "Figure 1. Local architecture and evidence-gated engine roles.",
+        "foreground_title": "External foreground benchmark",
+        "adaptive": "Adaptive",
+        "figure_2": (
+            "Figure 2. BBBC019 macro scores; the stronger µSAM result carries "
+            "much higher measured cost."
+        ),
+        "classification_title": "Balanced accuracy by acquisition mode",
+        "classification_categories": ["Reference", "Gray 224", "Gray 448", "Metadata"],
+        "figure_3": (
+            "Figure 3. Mode-specific validation exposes the weak and unstable "
+            "RGB signal hidden by global scores."
+        ),
+    },
+    "fr": {
+        "header": "OrganChip Insight | Rapport technique candidat",
+        "pdf_title": "OrganChip Insight - Rapport technique candidat",
+        "pdf_author": "Équipe OrganChip Insight - déclaration en attente",
+        "cover_title": "OrganChip Insight",
+        "cover_subtitle": "Un espace de microscopie traçable pour les expériences sur puce",
+        "cover_badge": "OUTIL &amp; PLATEFORME | AI4S OPEN INNOVATION 2026",
+        "cover_statement": (
+            "Une analyse d'images gouvernée par les preuves, qui conserve les "
+            "sources, overlays, mesures, provenance, incertitudes et résultats "
+            "négatifs dans une expérience locale reproductible."
+        ),
+        "cover_rows": [
+            ["Date du candidat", "17 septembre 2026"],
+            ["Équipe", "Déclaration du propriétaire en attente"],
+            ["Release", "Validée sur dev ; tag public en attente d'autorisation"],
+            ["Périmètre scientifique", "Exploration microscopique non clinique"],
+        ],
+        "cover_note": (
+            "PDF candidat. L'identité de l'équipe, la licence du code, le tag "
+            "public et les URL publiques restent sous le contrôle du propriétaire."
+        ),
+        "architecture_boxes": [
+            ("React + TypeScript", "espace expérimental"),
+            ("FastAPI", "contrat API + CLI"),
+            ("SQLite", "état"),
+            ("Fichiers", "sources + overlays"),
+            (
+                "Registre de moteurs gouverné par les preuves",
+                "adaptatif disponible | CNN s'abstient | benchmark µSAM",
+            ),
+        ],
+        "figure_1": "Figure 1. Architecture locale et rôles des moteurs selon les preuves.",
+        "foreground_title": "Benchmark externe du premier plan",
+        "adaptive": "Adaptatif",
+        "figure_2": (
+            "Figure 2. Macro-scores BBBC019 ; le meilleur résultat µSAM a un "
+            "coût mesuré nettement supérieur."
+        ),
+        "classification_title": "Balanced accuracy par mode d'acquisition",
+        "classification_categories": ["Référence", "Gris 224", "Gris 448", "Métadonnées"],
+        "figure_3": (
+            "Figure 3. La validation par mode révèle le signal RGB faible et "
+            "instable masqué par les scores globaux."
+        ),
+    },
 }
 
 
@@ -80,26 +180,21 @@ def inline_markup(text: str) -> str:
 
 
 class ArchitectureDiagram(Flowable):
-    def __init__(self) -> None:
+    def __init__(self, language: str) -> None:
         super().__init__()
+        self.language = language
         self.width = 170 * mm
         self.height = 63 * mm
 
     def draw(self) -> None:
         canvas = self.canv
+        labels = TEXT[self.language]["architecture_boxes"]
         boxes = [
-            (5, 124, 160, 42, "React + TypeScript", "experiment workspace"),
-            (200, 124, 160, 42, "FastAPI", "API + CLI contract"),
-            (395, 124, 80, 42, "SQLite", "state"),
-            (395, 58, 80, 42, "Files", "sources + overlays"),
-            (
-                200,
-                0,
-                160,
-                66,
-                "Evidence-gated engine registry",
-                "adaptive available | CNN abstains | µSAM benchmark",
-            ),
+            (5, 124, 160, 42, *labels[0]),
+            (200, 124, 160, 42, *labels[1]),
+            (395, 124, 80, 42, *labels[2]),
+            (395, 58, 80, 42, *labels[3]),
+            (200, 0, 160, 66, *labels[4]),
         ]
         for x, y, width, height, title, subtitle in boxes:
             canvas.setFillColor(colors.HexColor("#F3F8F5"))
@@ -255,9 +350,13 @@ def styles() -> dict[str, ParagraphStyle]:
     }
 
 
-def markdown_blocks(markdown: str, report_styles: dict[str, ParagraphStyle]) -> list[Flowable]:
+def markdown_blocks(
+    markdown: str,
+    report_styles: dict[str, ParagraphStyle],
+    language: str,
+) -> list[Flowable]:
     lines = markdown.splitlines()
-    start = next(index for index, line in enumerate(lines) if line == "## Abstract")
+    start = next(index for index, line in enumerate(lines) if line.startswith("## "))
     lines = lines[start:]
     blocks: list[Flowable] = []
     index = 0
@@ -270,48 +369,46 @@ def markdown_blocks(markdown: str, report_styles: dict[str, ParagraphStyle]) -> 
         if stripped.startswith("## ") or stripped.startswith("### "):
             level = 3 if stripped.startswith("### ") else 2
             title = stripped[level + 1 :]
-            if title in PAGE_BREAK_HEADINGS:
+            if title.startswith(PAGE_BREAK_PREFIXES):
                 blocks.append(PageBreak())
             blocks.append(Paragraph(inline_markup(title), report_styles[f"h{level}"]))
-            if title == "3. System architecture":
+            if title.startswith("3. "):
                 blocks.extend(
                     [
-                        ArchitectureDiagram(),
+                        ArchitectureDiagram(language),
                         Paragraph(
-                            "Figure 1. Local architecture and evidence-gated engine roles.",
+                            TEXT[language]["figure_1"],
                             report_styles["caption"],
                         ),
                     ]
                 )
-            if title == "6.1 Foreground segmentation on BBBC019":
+            if title.startswith("6.1 "):
                 blocks.extend(
                     [
                         GroupedBars(
-                            "External foreground benchmark",
-                            ["Adaptive", "µSAM"],
+                            TEXT[language]["foreground_title"],
+                            [TEXT[language]["adaptive"], "µSAM"],
                             {"Macro-F1": [0.424892, 0.815542], "Macro-IoU": [0.273632, 0.698535]},
                         ),
                         Paragraph(
-                            "Figure 2. BBBC019 macro scores; the stronger µSAM "
-                            "result carries much higher measured cost.",
+                            TEXT[language]["figure_2"],
                             report_styles["caption"],
                         ),
                     ]
                 )
-            if title == "6.3 Quality classification and metadata shortcuts":
+            if title.startswith("6.3 "):
                 blocks.extend(
                     [
                         GroupedBars(
-                            "Balanced accuracy by acquisition mode",
-                            ["Reference", "Gray 224", "Gray 448", "Metadata"],
+                            TEXT[language]["classification_title"],
+                            TEXT[language]["classification_categories"],
                             {
                                 "L": [0.7729, 0.7389, 0.8338, 0.8171],
                                 "RGB": [0.6315, 0.5948, 0.6079, 0.6533],
                             },
                         ),
                         Paragraph(
-                            "Figure 3. Mode-specific validation exposes the weak "
-                            "and unstable RGB signal hidden by global scores.",
+                            TEXT[language]["figure_3"],
                             report_styles["caption"],
                         ),
                     ]
@@ -319,14 +416,14 @@ def markdown_blocks(markdown: str, report_styles: dict[str, ParagraphStyle]) -> 
             index += 1
             continue
         if stripped.startswith("```"):
-            language = stripped[3:]
+            code_language = stripped[3:]
             code_lines: list[str] = []
             index += 1
             while index < len(lines) and not lines[index].strip().startswith("```"):
                 code_lines.append(lines[index].replace("→", "->"))
                 index += 1
             index += 1
-            label = f"{language}\n" if language else ""
+            label = f"{code_language}\n" if code_language else ""
             blocks.append(Preformatted(label + "\n".join(code_lines), report_styles["code"]))
             continue
         if stripped.startswith("> "):
@@ -431,26 +528,33 @@ def markdown_blocks(markdown: str, report_styles: dict[str, ParagraphStyle]) -> 
 
 
 class ReportCanvas(Canvas):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, language: str, **kwargs) -> None:
         kwargs["invariant"] = 1
         super().__init__(*args, **kwargs)
-        self.setTitle("OrganChip Insight - Technical Report Candidate")
-        self.setAuthor("OrganChip Insight team - owner declaration pending")
+        self.setTitle(TEXT[language]["pdf_title"])
+        self.setAuthor(TEXT[language]["pdf_author"])
 
 
-def draw_page_frame(canvas: Canvas, document: SimpleDocTemplate) -> None:
+def draw_page_frame(
+    canvas: Canvas,
+    document: SimpleDocTemplate,
+    language: str,
+) -> None:
     width, height = A4
     canvas.saveState()
     canvas.setStrokeColor(colors.HexColor("#D9E4DF"))
     canvas.line(20 * mm, height - 14 * mm, width - 20 * mm, height - 14 * mm)
     canvas.setFillColor(colors.HexColor("#52645C"))
     canvas.setFont("ReportSans", 7)
-    canvas.drawString(20 * mm, height - 11 * mm, "OrganChip Insight | Technical report candidate")
+    canvas.drawString(20 * mm, height - 11 * mm, TEXT[language]["header"])
     canvas.drawRightString(width - 20 * mm, 10 * mm, f"{document.page}")
     canvas.restoreState()
 
 
-def cover(report_styles: dict[str, ParagraphStyle]) -> list[Flowable]:
+def cover(
+    report_styles: dict[str, ParagraphStyle],
+    language: str,
+) -> list[Flowable]:
     title = ParagraphStyle(
         "CoverTitle",
         fontName="ReportSans-Bold",
@@ -480,16 +584,11 @@ def cover(report_styles: dict[str, ParagraphStyle]) -> list[Flowable]:
     )
     return [
         Spacer(1, 28 * mm),
-        Paragraph("OrganChip Insight", title),
+        Paragraph(TEXT[language]["cover_title"], title),
+        Paragraph(TEXT[language]["cover_subtitle"], subtitle),
+        Paragraph(TEXT[language]["cover_badge"], badge),
         Paragraph(
-            "A traceable microscopy workspace for organ-on-chip experiments",
-            subtitle,
-        ),
-        Paragraph("TOOL &amp; PLATFORM | AI4S OPEN INNOVATION 2026", badge),
-        Paragraph(
-            "Evidence-gated image analysis that keeps sources, overlays, "
-            "measurements, provenance, uncertainty, and negative findings "
-            "in one reproducible local experiment.",
+            TEXT[language]["cover_statement"],
             ParagraphStyle(
                 "CoverStatement",
                 parent=report_styles["body"],
@@ -500,12 +599,7 @@ def cover(report_styles: dict[str, ParagraphStyle]) -> list[Flowable]:
             ),
         ),
         Table(
-            [
-                ["Candidate date", "17 September 2026"],
-                ["Team", "Owner declaration pending"],
-                ["Release", "Validated on dev; public tag pending authorization"],
-                ["Scientific scope", "Non-clinical, exploratory microscopy workflow"],
-            ],
+            TEXT[language]["cover_rows"],
             colWidths=[40 * mm, 120 * mm],
             style=TableStyle(
                 [
@@ -522,15 +616,14 @@ def cover(report_styles: dict[str, ParagraphStyle]) -> list[Flowable]:
         ),
         Spacer(1, 23 * mm),
         Paragraph(
-            "Candidate PDF. Team identity, code licence, public release tag, "
-            "and public URLs remain owner-controlled publication fields.",
+            TEXT[language]["cover_note"],
             report_styles["quote"],
         ),
         PageBreak(),
     ]
 
 
-def build(output_path: Path) -> None:
+def build(language: str, output_path: Path) -> None:
     register_fonts()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     report_styles = styles()
@@ -541,30 +634,47 @@ def build(output_path: Path) -> None:
         leftMargin=20 * mm,
         topMargin=20 * mm,
         bottomMargin=18 * mm,
-        title="OrganChip Insight - Technical Report Candidate",
-        author="OrganChip Insight team - owner declaration pending",
+        title=TEXT[language]["pdf_title"],
+        author=TEXT[language]["pdf_author"],
     )
-    story = cover(report_styles)
-    story.extend(markdown_blocks(SOURCE_PATH.read_text(), report_styles))
-    document.build(story, onLaterPages=draw_page_frame, canvasmaker=ReportCanvas)
+    story = cover(report_styles, language)
+    story.extend(markdown_blocks(SOURCE_PATHS[language].read_text(), report_styles, language))
+
+    def frame(canvas: Canvas, current_document: SimpleDocTemplate) -> None:
+        draw_page_frame(canvas, current_document, language)
+
+    def canvas_factory(*args, **kwargs) -> ReportCanvas:
+        return ReportCanvas(*args, language=language, **kwargs)
+
+    document.build(story, onLaterPages=frame, canvasmaker=canvas_factory)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--language", choices=("en", "fr", "all"), default="all")
     arguments = parser.parse_args()
+    languages = ("en", "fr") if arguments.language == "all" else (arguments.language,)
     if arguments.check:
-        if not OUTPUT_PATH.is_file():
-            raise SystemExit("Technical report PDF is missing; run `make report-pdf`.")
-        with tempfile.TemporaryDirectory() as temporary_directory:
-            candidate = Path(temporary_directory) / OUTPUT_PATH.name
-            build(candidate)
-            if candidate.read_bytes() != OUTPUT_PATH.read_bytes():
-                raise SystemExit("Technical report PDF is stale; run `make report-pdf`.")
-        print(f"OK: {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)}")
+        for language in languages:
+            output_path = OUTPUT_PATHS[language]
+            if not output_path.is_file():
+                raise SystemExit(
+                    f"Technical report PDF ({language}) is missing; run `make report-pdf`."
+                )
+            with tempfile.TemporaryDirectory() as temporary_directory:
+                candidate = Path(temporary_directory) / output_path.name
+                build(language, candidate)
+                if candidate.read_bytes() != output_path.read_bytes():
+                    raise SystemExit(
+                        f"Technical report PDF ({language}) is stale; run `make report-pdf`."
+                    )
+            print(f"OK: {output_path.relative_to(REPOSITORY_ROOT)}")
         return
-    build(OUTPUT_PATH)
-    print(f"Wrote {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)}")
+    for language in languages:
+        output_path = OUTPUT_PATHS[language]
+        build(language, output_path)
+        print(f"Wrote {output_path.relative_to(REPOSITORY_ROOT)}")
 
 
 if __name__ == "__main__":

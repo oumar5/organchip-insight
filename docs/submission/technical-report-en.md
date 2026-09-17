@@ -280,7 +280,7 @@ gallery, and viewer after both containers restart.
 
 The candidate was also rebuilt with `docker compose build --pull --no-cache`.
 The release audit found no tracked secret, personal path, cache, raw dataset,
-or undistributable model binary. The SHA-256 inventory covers 31 tracked
+or undistributable model binary. The SHA-256 inventory covers 38 tracked
 reports, manifests, notebooks, submission sources, and frontend evidence.
 
 ## 8. Credibility and limitations

@@ -1,11 +1,13 @@
 # Submission package
 
-This directory contains editable English drafts for the AI4S Open Innovation
-submission. It deliberately keeps publication-dependent fields visible rather
-than inventing links or licences.
+This directory contains editable English and French deliverables for the AI4S
+Open Innovation submission. It deliberately keeps publication-dependent fields
+visible rather than inventing links or licences.
 
-- [Technical report source](technical-report-en.md)
-- [Technical report PDF](../../output/pdf/organchip-insight-technical-report-candidate.pdf)
+- [English technical report source](technical-report-en.md)
+- [French technical report source](technical-report-fr.md)
+- [English technical report PDF](../../output/pdf/organchip-insight-technical-report-candidate-en.pdf)
+- [French technical report PDF](../../output/pdf/organchip-insight-technical-report-candidate-fr.pdf)
 - [Kaggle Writeup draft](kaggle-writeup-en.md)
 - [Five-minute video storyboard](video-storyboard-en.md)
 - [Captioned demo candidate](../../output/video/organchip-insight-demo-candidate.mp4)
