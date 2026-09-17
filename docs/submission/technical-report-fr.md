@@ -290,7 +290,7 @@ exports, galerie et visionneuse après redémarrage des deux conteneurs.
 Le candidat a également été reconstruit avec
 `docker compose build --pull --no-cache`. L'audit de release n'a trouvé aucun
 secret suivi, chemin personnel, cache, jeu brut ni binaire de modèle non
-distribuable. L'inventaire SHA-256 couvre 38 rapports, manifestes, notebooks,
+distribuable. L'inventaire SHA-256 couvre 40 rapports, manifestes, notebooks,
 sources de soumission et preuves frontend suivis.
 
 ## 8. Crédibilité et limites

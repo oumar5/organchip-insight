@@ -10,8 +10,10 @@ visible rather than inventing links or licences.
 - [French technical report PDF](../../output/pdf/organchip-insight-technical-report-candidate-fr.pdf)
 - [Kaggle Writeup draft](kaggle-writeup-en.md)
 - [Five-minute video storyboard](video-storyboard-en.md)
-- [Captioned demo candidate](../../output/video/organchip-insight-demo-candidate.mp4)
-- [English subtitle sidecar](../../output/video/organchip-insight-demo-candidate.en.srt)
+- [English narrated demo candidate](../../output/video/organchip-insight-demo-candidate-en.mp4)
+- [French narrated demo candidate](../../output/video/organchip-insight-demo-candidate-fr.mp4)
+- [English subtitle sidecar](../../output/video/organchip-insight-demo-candidate-en.srt)
+- [French subtitle sidecar](../../output/video/organchip-insight-demo-candidate-fr.srt)
 - [Publication runbook](publication-runbook.md)
 - [Candidate release notes](../release/RELEASE_NOTES_CANDIDATE.md)
 

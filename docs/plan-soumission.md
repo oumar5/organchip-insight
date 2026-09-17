@@ -61,7 +61,7 @@ Le règlement officiel est résumé dans
 |---|---|---|
 | P0 | **fait localement** : reconstruction `--pull --no-cache`, parcours réel, CLI, contrôles d'accessibilité et persistance après redémarrage | `TASKS.md`, tests Playwright, `make check` |
 | P0 | release `v1.0.0-ai4s` : tag, checksums des modèles et rapports, archive Zenodo optionnelle avec DOI | page release |
-| P0 | **fait localement** : vidéo candidate de 3 min 18 s tournée sur le produit réel, sans musique, sous-titres anglais et SRT ; reste la publication | lien public testé en navigation privée |
+| P0 | **fait localement** : vidéos candidates anglaise et française de 3 min 18 s tournées sur le produit réel, narrations locales, avatar, musique sous licence, sous-titres et SRT ; reste la publication | liens publics testés en navigation privée |
 | P0 | **fait localement** : rapports techniques candidats anglais et français de 15 pages, PDF déterministes et chaque chiffre relié à un fichier versionné ; restent identité, licence et publication | PDF publics |
 | P0 | **fait localement hors champs propriétaire** : catégorie, résumé 200–300 mots, limites et déclarations ; restent équipe, licence et liens publics | brouillon relu |
 

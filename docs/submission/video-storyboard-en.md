@@ -1,21 +1,23 @@
 # Five-minute demonstration storyboard
 
-Target duration: **4:40**, leaving 20 seconds of safety below the five-minute
-limit. The product must be on screen in the first 30 seconds. Record at 1080p,
-hide notifications and personal paths, use English captions, and do not use
-copyrighted music.
+Delivered duration: **3:18**, leaving 1 minute 42 seconds of safety below the
+five-minute limit. The product is on screen immediately. Both candidates are
+1280×720 and hide notifications and personal paths.
 
 ## Reproducible local candidate
 
-Run `make demo-video` to build the current **3:18 captioned candidate** from
-the locked real-image manifest. The command starts an isolated Docker stack,
-checks every source hash, records the browser at 1280×720, adds a compatible
-silent AAC track, writes an English SRT sidecar, and validates the result with
-`ffprobe`. Run `make demo-video-check` for a read-only verification.
+Run `make demo-video` to build the **English and French 3:18 candidates** from
+one capture of the locked real-image manifest. The command starts an isolated
+Docker stack, checks every source hash, records the browser, generates local
+system narration without voice cloning, and uses Demo Studio to add a visible
+presenter, licensed background music and language-specific subtitles. It then
+normalizes both outputs to H.264 yuv420p/AAC and validates duration, codecs,
+resolution, file size, subtitle reservations and non-silent audio. Run
+`make demo-video-check` for a read-only verification.
 
-The candidate deliberately contains no synthetic narration or music. It is a
-publishable caption-first fallback; the shot list below remains the preferred
-voice-over version if the team records human narration before submission.
+English uses the macOS `Daniel` voice and French uses `Thomas`. The presenter
+is static because the optional Rhubarb lip-sync runtime is not required for the
+submission. The soundtrack licence notice is versioned next to the audio.
 
 ## Recording prerequisites
 

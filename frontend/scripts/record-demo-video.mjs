@@ -15,9 +15,10 @@ const rawVideoPath = resolve(
   process.env.ORGANCHIP_DEMO_RAW_VIDEO ??
     resolve(repositoryRoot, "output/video/organchip-insight-demo-candidate.webm"),
 );
+const burnCaptions = process.env.ORGANCHIP_DEMO_BURN_CAPTIONS !== "false";
 const subtitlePath = resolve(
-  repositoryRoot,
-  "output/video/organchip-insight-demo-candidate.en.srt",
+  process.env.ORGANCHIP_DEMO_SUBTITLE ??
+    resolve(repositoryRoot, "output/video/organchip-insight-demo-candidate.en.srt"),
 );
 
 const scenes = [
@@ -149,7 +150,7 @@ async function scene(index, action) {
 let recordingError;
 try {
   await page.goto(baseURL, { waitUntil: "networkidle" });
-  await installCaption(page);
+  if (burnCaptions) await installCaption(page);
   await scene(0, async () => {
     await page.locator("body").press("Home");
     await page.getByText("Inférence disponible").waitFor();

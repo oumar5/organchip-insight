@@ -1,0 +1,87 @@
+version: 1
+id: organchip-insight-demo-fr
+title: OrganChip Insight — microscopie fondée sur les preuves
+description: Démonstration reproductible du produit local réel et de ses garde-fous scientifiques pour le concours.
+kind: proof
+status: ready
+language: fr
+audience: Jury AI4S Open Innovation
+presenter:
+  name: Guide OrganChip Insight
+  initials: OCI
+  asset: presenters/conseiller-demo-studio.png
+  mouthAssets:
+    small: presenters/conseiller-demo-studio-mouth-small.png
+    round: presenters/conseiller-demo-studio-mouth-round.png
+    wide: presenters/conseiller-demo-studio-mouth-wide.png
+  placement: bottom-left
+  visibility: narration
+soundtrack:
+  asset: music/summer-motivational-corporate.mp3
+  gainDb: -29
+  duckingDb: -12
+  fadeInMs: 1800
+  fadeOutMs: 2600
+  loop: true
+  license: Summer Motivational Corporate - 30 sec edit, Abydos_Music — Pixabay Content License.
+viewport:
+  width: 1280
+  height: 720
+setup: []
+chapters:
+  - id: promise
+    title: Une expérience auditable
+    narration: La microscopie d'organes sur puce exige plus qu'un score de modèle. OrganChip Insight réunit images, mesures, provenance et limites scientifiques dans une expérience locale.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Une expérience auditable
+        holdMs: 0
+  - id: protocol
+    title: Un protocole avant l'analyse
+    narration: Avant l'analyse, l'utilisateur consigne un objectif et importe des images publiques verrouillées par empreinte. L'import reste séparé de l'inférence, afin qu'un échec d'analyse ne duplique jamais les sources.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Un protocole avant l'analyse
+        holdMs: 0
+  - id: analysis
+    title: Une analyse locale fidèle à la source
+    narration: Le moteur adaptatif par défaut s'exécute localement sur processeur, sans poids de modèle. Le TIFF original est analysé ; l'aperçu normalisé sert uniquement à l'inspection.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Une analyse locale fidèle à la source
+        holdMs: 0
+  - id: limits
+    title: Des mesures aux limites explicites
+    narration: Chaque overlay de segmentation reste relié à sa source et à ses mesures. Les composantes ne sont jamais présentées comme des cellules validées, et la géométrie reste en pixels sans calibration physique.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Des mesures aux limites explicites
+        holdMs: 0
+  - id: export
+    title: Des exports reproductibles
+    narration: Les exports JSON et CSV conservent l'expérience, le moteur, les paramètres, les résultats par image et l'heure de génération, afin que chaque résultat soit auditable.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Des exports reproductibles
+        holdMs: 0
+  - id: benchmarks
+    title: Précision et coût ensemble
+    narration: Les benchmarks externes versionnés publient à la fois la précision et le coût de calcul. MicroSAM est meilleur sur la segmentation BBBC019, mais échoue à deux des trois critères préenregistrés sur BBBC038.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Précision et coût ensemble
+        holdMs: 0
+  - id: credibility
+    title: Une abstention honnête
+    narration: La classification de qualité n'a pas établi de signal robuste indépendant des raccourcis d'acquisition. Le jeu de test gelé reste fermé, et le produit livre abstention, checksums, tests et limites explicites.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Une abstention honnête
+        holdMs: 0

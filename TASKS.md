@@ -174,11 +174,13 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 - [x] Préparer une expérience de démonstration reproductible fondée sur le
   manifeste réel verrouillé de la phase 1.
-- [x] Enregistrer un candidat reproductible de 3 min 18 s sur le produit réel.
-- [x] Ajouter les sous-titres anglais visibles et le fichier SRT associé.
+- [x] Enregistrer un candidat reproductible de 3 min 18 s sur le produit réel et
+  produire les montages anglais et français avec Demo Studio.
+- [x] Ajouter narration locale, avatar, musique sous licence, sous-titres visibles
+  et fichiers SRT dans les deux langues.
 - [x] Vérifier durée, résolution, codecs, taille, secrets, chemins personnels et
   absence de donnée gelée.
-- [ ] Publier la vidéo sur une URL accessible sans connexion.
+- [ ] Publier les deux vidéos sur des URL accessibles sans connexion.
 
 ### 4.3 Writeup Kaggle
 

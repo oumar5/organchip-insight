@@ -1,0 +1,87 @@
+version: 1
+id: organchip-insight-demo-en
+title: OrganChip Insight — evidence-gated microscopy
+description: Reproducible competition demonstration of the real local product and its scientific safeguards.
+kind: proof
+status: ready
+language: en
+audience: AI4S Open Innovation jury
+presenter:
+  name: OrganChip Insight guide
+  initials: OCI
+  asset: presenters/conseiller-demo-studio.png
+  mouthAssets:
+    small: presenters/conseiller-demo-studio-mouth-small.png
+    round: presenters/conseiller-demo-studio-mouth-round.png
+    wide: presenters/conseiller-demo-studio-mouth-wide.png
+  placement: bottom-left
+  visibility: narration
+soundtrack:
+  asset: music/summer-motivational-corporate.mp3
+  gainDb: -29
+  duckingDb: -12
+  fadeInMs: 1800
+  fadeOutMs: 2600
+  loop: true
+  license: Summer Motivational Corporate - 30 sec edit, Abydos_Music — Pixabay Content License.
+viewport:
+  width: 1280
+  height: 720
+setup: []
+chapters:
+  - id: promise
+    title: One auditable experiment
+    narration: Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits inside one local experiment.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: One auditable experiment
+        holdMs: 0
+  - id: protocol
+    title: A protocol before analysis
+    narration: Before analysis, the user records an objective and imports hash-locked public microscopy images. Upload is separated from inference, so a failed analysis never duplicates the source files.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: A protocol before analysis
+        holdMs: 0
+  - id: analysis
+    title: Local and source-faithful analysis
+    narration: The default adaptive engine runs locally on the CPU without model weights. The original TIFF is analyzed, while the normalized preview is used only for inspection.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Local and source-faithful analysis
+        holdMs: 0
+  - id: limits
+    title: Measurements with explicit limits
+    narration: Each segmentation overlay remains linked to its source and measurements. Components are never presented as validated cells, and geometry stays in pixels when physical calibration is unavailable.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Measurements with explicit limits
+        holdMs: 0
+  - id: export
+    title: Reproducible exports
+    narration: JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time, making every result independently auditable.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Reproducible exports
+        holdMs: 0
+  - id: benchmarks
+    title: Accuracy and cost together
+    narration: Versioned external benchmarks report both accuracy and computational cost. MicroSAM performs better on BBBC019 foreground segmentation, but it fails two of three preregistered BBBC038 promotion criteria.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Accuracy and cost together
+        holdMs: 0
+  - id: credibility
+    title: Honest abstention
+    narration: Quality classification did not establish a robust signal independent of acquisition shortcuts. The frozen test set remains unopened, and the product ships with abstention, checksums, tests, and explicit limits.
+    steps:
+      - action: pause
+        durationMs: 100
+        caption: Honest abstention
+        holdMs: 0

@@ -1,0 +1,24 @@
+version: 1
+project:
+  name: OrganChip Insight competition demo
+  language: en
+  fps: 30
+surfaces:
+  product:
+    baseUrl: http://127.0.0.1:18283
+paths:
+  journeys: journeys
+  public: public
+  runs: public/runs
+  output: output
+pipeline:
+  narration:
+    provider: none
+  avatar:
+    provider: none
+theme:
+  background: "#071d17"
+  accent: "#1f7a61"
+  text: "#ffffff"
+  overlay: rgba(5, 25, 20, 0.91)
+  logoText: OrganChip Insight
