@@ -1,0 +1,2 @@
+# Les CSV sont des artefacts hachés (SHA-256) : leurs octets ne doivent jamais être normalisés par Git.
+*.csv -text

@@ -6,6 +6,7 @@ a été prise.
 
 ## Index
 
+- [Fins de ligne des CSV et hashes de provenance — 17 septembre 2026](2026-09-17-fins-de-ligne-csv-et-hashes.md)
 - [Première sonde GPU Kaggle — 16 septembre 2026](2026-09-16-sonde-kaggle.md)
 - [Imports robustes et TIFF 16 bits — 16 septembre 2026](2026-09-16-imports-et-tiff.md)
 - [Stratégie Kaggle et choix des modèles — 16 septembre 2026](2026-09-16-strategie-kaggle-et-modeles.md)
