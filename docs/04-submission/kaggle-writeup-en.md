@@ -56,10 +56,12 @@ provenance, uncertainty, and negative findings visible together.
 1. create a named experiment and record acquisition metadata;
 2. import a mixed image batch and inspect validation outcomes;
 3. run the default adaptive analysis on CPU;
-4. inspect overlays, measurements, and the connected-component reservation;
-5. export JSON and per-image CSV results;
-6. open the report-generated engine comparison and provenance hashes;
-7. reproduce the stack with Docker and run the verification command.
+4. inspect synchronized source/overlay views, calibrated measurements when a
+   documented scale is supplied, and the connected-component reservation;
+5. compare two completed experiments descriptively, without a biological claim;
+6. export JSON and per-image CSV results;
+7. open the report-generated engine comparison and provenance hashes;
+8. reproduce the stack with Docker and run the verification command.
 
 ## Evidence and limitations
 
@@ -69,8 +71,8 @@ provenance, uncertainty, and negative findings visible together.
 - The CNN study is closed. No configuration passed the preregistered minimum
   balanced accuracy in both acquisition modes, and the test split remains
   unopened.
-- Connected-component areas and diameters are in pixels because no physical
-  calibration is available.
+- Connected-component areas and diameters remain in pixels unless the user
+  supplies a documented µm/pixel scale; the platform never guesses calibration.
 - The current SQLite and filesystem architecture targets local or
   single-instance use, not multi-tenant clinical deployment.
 - No personal, clinical, or private data is used. The platform must not be

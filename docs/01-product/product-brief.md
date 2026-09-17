@@ -16,7 +16,7 @@ auditer.
 2. contrôle de la qualité des images ;
 3. segmentation et quantification ;
 4. contrôle visuel des contours ;
-5. comparaison témoin/traitement ;
+5. comparaison descriptive de deux expériences, sans inférence biologique ;
 6. export d'un rapport reproductible.
 
 Le produit est positionné dans la catégorie **Tool & Platform** du challenge
@@ -35,6 +35,11 @@ métadonnées expérimentales, mais ne veut pas maintenir une pile ML complexe.
 > des images, lancer une inférence sans entraînement, inspecter les contours et
 > retrouver le résultat après redémarrage.
 
+Le contexte persistant comprend les identifiants de puce et de puits, la
+lignée, le jour de culture et, lorsqu'elle est connue, une échelle physique
+sourcée. Les mesures en pixels restent la référence ; les conversions en µm et
+µm² ne sont ajoutées que si l'utilisateur renseigne explicitement l'échelle.
+
 ## Non-objectifs actuels
 
 - diagnostic clinique ;
@@ -52,4 +57,3 @@ métadonnées expérimentales, mais ne veut pas maintenir une pile ML complexe.
 | Transparence | moteur, version, limites et date visibles |
 | Reproductibilité | API, CLI, Docker et tests fournissent le même pipeline |
 | Valeur scientifique | overlays inspectables et métriques reliées aux images |
-

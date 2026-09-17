@@ -25,6 +25,10 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
   avec choix persistant, langue de document correcte et tests navigateur.
 - [x] Import multiple PNG/JPEG/TIFF et prise en charge des TIFF 16 bits.
 - [x] Galerie, visionneuse Original / Segmentation et exports JSON/CSV.
+- [x] Visionneuse avec zoom, panoramique et vue source/segmentation
+  synchronisée ; comparaison descriptive de deux expériences terminées.
+- [x] Métadonnées expérimentales persistées (puce, puits, lignée, jour) et
+  calibration µm/pixel facultative, sourcée, exportée et testée.
 - [x] Moteur adaptatif et réserve explicite sur les composantes connexes.
 - [x] Démonstrateur ONNX optionnel et abstentionniste.
 - [x] Benchmarks BBBC019/BBBC038 et comparaison traçable des moteurs.
@@ -267,12 +271,12 @@ est terminée à 100 %.**
 
 Ces éléments ne doivent pas retarder la release ou la soumission :
 
-- [ ] zoom et panoramique avancés dans la visionneuse ;
-- [ ] comparaison côte à côte de plusieurs expériences ;
+- [x] zoom et panoramique avancés dans la visionneuse ;
+- [x] comparaison côte à côte de deux expériences terminées ;
 - [ ] démo hébergée optionnelle ;
 - [ ] DOI Zenodo ;
-- [ ] schéma de métadonnées avec identifiants de puce et de puits ;
-- [ ] calibration physique et vocabulaire de jours normalisé ;
+- [x] schéma de métadonnées avec identifiants de puce et de puits ;
+- [x] calibration physique facultative et jour de culture entier normalisé ;
 - [ ] annotations expertes des artefacts et annotations d'instances ;
 - [ ] import OME-Zarr et séries longitudinales ;
 - [ ] comparaison de conditions au niveau biologique approprié.

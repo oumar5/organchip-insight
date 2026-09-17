@@ -14,9 +14,13 @@ tag. Project code is Apache-2.0 and the team has one member.
 - a persistent French/English interface and localized API-facing messages,
   covered by a dedicated browser journey;
 - experiment creation and SQLite persistence across container restarts;
+- persisted chip, well, cell-line and culture-day context, plus optional
+  source-backed physical calibration;
 - verified multi-image PNG, JPEG, TIFF and 16-bit grayscale TIFF import;
 - source previews, segmentation overlays, per-image measurements and JSON/CSV
   exports;
+- synchronized zoom/pan for source and overlay, and descriptive comparison of
+  two completed experiments;
 - a CPU-only adaptive segmentation workflow with visible evidence level,
   provenance and scientific reservations;
 - an evidence-gated engine registry: the optional CNN abstains, while µSAM
@@ -46,12 +50,14 @@ data, using paid APIs, or requiring a hosted model.
 
 ## Verification snapshot
 
-- backend: 186 collected, 185 passed, 1 explicitly skipped;
+- backend: 190 collected, 189 passed, 1 explicitly skipped;
 - frontend: TypeScript check and production build passed;
-- browser: synthetic and locked real-image flows passed;
+- browser: five standard scenarios passed and two conditional scenarios were
+  skipped as designed; calibration, synchronized zoom and two-experiment
+  comparison are covered;
 - clean build: `docker compose build --pull --no-cache` passed;
 - release audit: zero violations at candidate validation;
-- release inventory: 36 SHA-256 entries covering the final deliverables;
+- release inventory: 45 SHA-256 entries covering the final deliverables;
 - technical reports: deterministic 11-page A4 PDFs in English and French,
   visually checked page by page with no blank page;
 - demos: two 198-second 1280×720 H.264/AAC videos, each showing the interface
@@ -61,8 +67,8 @@ data, using paid APIs, or requiring a hosted model.
 ## Known limitations
 
 - connected components are exploratory mask components, not validated cells;
-- no physical calibration is available, so geometric measurements remain in
-  pixels rather than micrometres;
+- physical calibration is optional and user-supplied; without a documented
+  µm/pixel source, geometric measurements deliberately remain in pixels;
 - the adaptive engine is fast and available but less accurate than µSAM on the
   small external BBBC019 foreground benchmark;
 - iOrganoAssay validates a target-organoid foreground only; its GT is not an

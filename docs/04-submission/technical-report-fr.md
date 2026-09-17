@@ -56,11 +56,15 @@ exporte des preuves révisables en dehors de l'application.
 L'utilisateur cible est un laboratoire de recherche travaillant sur des images
 non cliniques d'organes sur puce. Le workflow principal est le suivant :
 
-1. créer une expérience nommée et enregistrer les métadonnées disponibles ;
+1. créer une expérience nommée, enregistrer puce, puits, lignée et jour, puis
+   saisir une calibration sourcée lorsqu'elle est connue ;
 2. importer un lot d'images et inspecter les fichiers acceptés et rejetés ;
 3. exécuter un moteur d'analyse déclaré ;
-4. examiner les overlays et les mesures par image ;
-5. exporter des preuves structurées pour une analyse ou un audit ultérieur.
+4. examiner avec zoom synchronisé les overlays et les mesures en pixels ou,
+   lorsque l'échelle est fournie, en unités physiques ;
+5. comparer descriptivement deux expériences terminées, sans conclusion
+   biologique automatique ;
+6. exporter des preuves structurées pour une analyse ou un audit ultérieur.
 
 OrganChip Insight ne revendique ni diagnostic, ni recommandation thérapeutique,
 ni prédiction de toxicité ou d'efficacité, ni comptage cellulaire validé.
@@ -299,28 +303,30 @@ et le jeu de test gelé reste fermé.
 
 ## 7. Vérification du produit
 
-La suite backend contient 185 tests collectés dans le candidat du 17 septembre
-2026 : 184 réussissent et un test dépendant de l'environnement est ignoré. Ruff,
+La suite backend contient 190 tests collectés dans le candidat du 17 septembre
+2026 : 189 réussissent et un test dépendant de l'environnement est ignoré. Ruff,
 le type-check TypeScript, le build Vite de production, la synchronisation des
 notebooks, celle du résumé de benchmarks, l'audit de l'arbre de release,
 l'inventaire de checksums et la configuration Docker Compose passent via
 `make check`.
 
 Playwright démarre des projets Docker isolés avec des volumes neufs. Le parcours
-rapide crée une expérience, importe une image synthétique, exécute l'inférence
-adaptative, vérifie l'overlay et la réserve scientifique, puis télécharge JSON
-et CSV. Un second parcours importe trois images publiques verrouillées par hash
+rapide crée deux expériences calibrées, importe des images synthétiques, exécute
+l'inférence adaptative, vérifie le zoom source/overlay synchronisé, la comparaison
+descriptive, la réserve scientifique, puis télécharge JSON et CSV enrichis. Un
+second parcours importe trois images publiques verrouillées par hash
 (OoC RGB, OoC en niveaux de gris et TIFF BBBC019), vérifie les métadonnées du
 format source, exécute le même workflow et confirme que tous les hashes des
 sources restent inchangés. Des barrières supplémentaires rapportent zéro
 violation Axe, vérifient le focus clavier visible, le reflow mobile à 390 px,
 une largeur effective à 200 %, ainsi que la persistance des sources, résultats,
-exports, galerie et visionneuse après redémarrage des deux conteneurs.
+   exports, galerie et visionneuse après redémarrage des deux conteneurs. Cinq
+   scénarios standard passent ; deux scénarios conditionnels sont ignorés comme prévu.
 
 Le candidat a également été reconstruit avec
 `docker compose build --pull --no-cache`. L'audit de release n'a trouvé aucun
 secret suivi, chemin personnel, cache, jeu brut ni binaire de modèle non
-distribuable. L'inventaire SHA-256 couvre 40 rapports, manifestes, notebooks,
+distribuable. L'inventaire SHA-256 couvre 45 rapports, manifestes, notebooks,
 sources de soumission et preuves frontend suivis.
 
 ## 8. Crédibilité et limites
@@ -336,7 +342,9 @@ sources de soumission et preuves frontend suivis.
    validation dans deux conditions. Aucun résultat n'est une estimation de
    population sur les images OOC. Le GT iOrganoAssay marque un organoïde cible,
    pas toutes les instances visibles.
-5. **Aucune calibration physique.** Les surfaces et diamètres sont en pixels, pas en µm ou µm².
+5. **Calibration physique facultative.** Les surfaces et diamètres restent en
+   pixels sauf si l'utilisateur fournit une échelle µm/pixel et sa source ;
+   l'application ne déduit ni ne devine cette échelle.
 6. **Aucun comptage cellulaire validé.** Les composantes connexes sont des structures heuristiques, pas des cellules ou noyaux vérifiés sur OOC.
 7. **Sortie CNN non calibrée.** Les valeurs softmax du démonstrateur optionnel ne sont pas des probabilités calibrées et ne pilotent aucune décision automatique.
 8. **Périmètre de déploiement.** SQLite et les fichiers locaux conviennent à un prototype local ou une instance unique, pas à un système clinique multi-tenant.
@@ -346,14 +354,15 @@ sources de soumission et preuves frontend suivis.
 La valeur immédiate de la plateforme est la discipline du workflow : images,
 métadonnées, identité du moteur, overlays, mesures, exports et limites coexistent
 dans une expérience. Un laboratoire peut comprendre pourquoi une image a été
-rejetée, relancer une analyse sans réimporter, comparer les preuves des moteurs
-et exporter un dossier révisable sans service externe.
+rejetée, relancer une analyse sans réimporter, zoomer simultanément sur source et
+segmentation, comparer descriptivement deux expériences et exporter un dossier
+révisable sans service externe.
 
 Le résultat CNN négatif est également utile opérationnellement. Il empêche un
 classifieur dominé par les raccourcis de devenir une barrière automatique et
 identifie les métadonnées nécessaires aux futurs jeux : vocabulaire stable des
-jours, identifiants de puce et de puits, types d'artefacts explicites,
-calibration physique et au moins cinq dates indépendantes par mode.
+jours, identifiants de puce et de puits, types d'artefacts explicites, échelle
+physique issue de l'acquisition et au moins cinq dates indépendantes par mode.
 
 Les recherches futures pourront étudier un score d'écart à la maturation
 conditionné par mode, jour et lignée, des objectifs auxiliaires adversariaux pour

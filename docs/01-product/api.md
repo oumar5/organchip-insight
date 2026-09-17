@@ -26,6 +26,7 @@ disponibilité technique et `unavailable_reason` explique une indisponibilité.
 POST /experiments
 GET  /experiments
 GET  /experiments/{experiment_id}
+PUT  /experiments/{experiment_id}/metadata
 ```
 
 Exemple de création :
@@ -35,9 +36,21 @@ Exemple de création :
   "name": "Réponse au composé A",
   "description": "Comparer la morphologie à 24 h",
   "control_label": "DMSO",
-  "treatment_label": "Composé A"
+  "treatment_label": "Composé A",
+  "chip_id": "chip-001",
+  "well_id": "A01",
+  "cell_line": "iPSC-01",
+  "culture_day": 14,
+  "microns_per_pixel": 0.65,
+  "calibration_source": "Métadonnées du microscope"
 }
 ```
+
+Les six champs de contexte sont facultatifs, à l'exception du couple de
+calibration : `microns_per_pixel` et `calibration_source` doivent être fournis
+ensemble. L'échelle doit être strictement positive. La route `PUT .../metadata`
+remplace ce contexte ; elle refuse une modification pendant l'analyse et
+invalide ensuite le résultat courant tout en conservant les images.
 
 ## Images
 
@@ -98,14 +111,17 @@ Le résultat contient :
 
 L'export JSON conserve le résultat complet et sa provenance. Le CSV contient
 une ligne par image et des colonnes adaptées au type de résultat ; les deux
-réponses sont servies comme pièces jointes.
+réponses sont servies comme pièces jointes. Les exports embarquent l'instantané
+du contexte utilisé pendant l'analyse. Avec une calibration, le CSV ajoute
+`mean_object_area_um2`, `median_object_area_um2` et
+`mean_equivalent_diameter_um` sans supprimer les colonnes en pixels.
 
 ## Erreurs principales
 
 | Code | Signification |
 |---:|---|
 | 404 | expérience, résultat ou artefact absent |
-| 409 | aucune image disponible, ou analyse déjà en cours |
+| 409 | aucune image disponible, analyse déjà en cours, ou modification de métadonnées pendant l'analyse |
 | 422 | moteur indisponible ou aucune image exploitable |
 | 500 | échec inattendu : statut `failed`, images conservées pour réessayer |
 

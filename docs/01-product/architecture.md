@@ -9,7 +9,7 @@ React + TypeScript
        v
 FastAPI ---------------------------------------------------+
        |                                                   |
-       +--> SQLite : expériences et résultats              |
+       +--> SQLite : expériences, métadonnées et résultats |
        +--> volume local : images et overlays              |
        +--> registre de moteurs                            |
                |                                           |
@@ -67,11 +67,19 @@ SQLite conserve expériences, statuts et résultats JSON après redémarrage. Le
 images et overlays restent sur le volume. Cette séparation facilite une future
 migration vers PostgreSQL + stockage objet sans modifier le contrat API.
 
+Le schéma SQLite évolue de manière additive au démarrage pour conserver les
+bases existantes. Le contexte expérimental (puce, puits, lignée, jour,
+µm/pixel et source) est copié dans chaque résultat. Une modification invalide
+le résultat précédent, ce qui évite qu'un export associe des mesures à une
+calibration ajoutée après coup.
+
 ## Frontend
 
 Le frontend suit trois actions : définir, analyser, vérifier. Il affiche la
 version du pipeline, le niveau de preuve, les avertissements et la provenance.
-Il ne contient aucun résultat de démonstration simulé.
+La visionneuse applique un même zoom/panoramique à la source et à l'overlay. La
+comparaison charge deux résultats persistés et reste descriptive : elle ne crée
+ni p-value ni conclusion contrôle/traitement. Aucun résultat n'est simulé.
 
 ## Contrat de moteur
 
@@ -104,7 +112,7 @@ par `uv.lock` et `package-lock.json`.
 
 - OME-TIFF/OME-Zarr et métadonnées multidimensionnelles ;
 - tâches asynchrones ;
-- comparaison contrôle/traitement par unité expérimentale ;
+- comparaison statistique contrôle/traitement par unité expérimentale ;
 - export PDF/CSV ;
 - stockage d'artefacts adressé par hash ;
 - observabilité et authentification pour une démo publique.

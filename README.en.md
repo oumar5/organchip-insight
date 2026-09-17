@@ -16,13 +16,18 @@ nor an automated biological conclusion.
   language choice;
 - FastAPI backend documented with OpenAPI;
 - persistent experiments and results in SQLite;
+- persistent experimental context: chip and well identifiers, cell line,
+  culture day, and optional physical calibration with a required source;
 - decoded uploads with file-size, pixel-count, and binary-duplicate checks;
 - separate import and analysis steps, detailed rejections, and 16-bit
   grayscale TIFF support;
 - CPU-only adaptive segmentation with no learned weights;
 - connected-component, area, diameter, intensity, contrast, and relative
   contrast measurements explicitly labelled as heuristic;
-- inspectable segmentation overlays;
+- inspectable segmentation overlays with zoom, pan, and synchronized
+  source/segmentation views;
+- descriptive side-by-side comparison of two completed experiments, with
+  explicit warnings when scale or engine differs;
 - transparent engine registry with availability and scientific limits;
 - optional ONNX CNN demonstrator that always abstains;
 - complete JSON and per-image CSV exports;
@@ -106,11 +111,10 @@ The command writes the overlays and a traceable `result.json`.
 make check
 ```
 
-The isolated browser scenario starts a disposable Docker stack, creates an
-experiment, imports a synthetic image, runs the adaptive analysis, checks the
-overlay and scientific reservations, verifies the benchmark view and JSON/CSV
-downloads, audits text size and color contrast, and then removes its containers
-and volume:
+The isolated browser scenario starts a disposable Docker stack, creates two
+calibrated experiments, runs the adaptive analyses, checks synchronized zoom,
+physical JSON/CSV outputs and descriptive comparison, audits text size and
+color contrast, and then removes its containers and volume:
 
 ```bash
 npm --prefix frontend exec playwright install chromium

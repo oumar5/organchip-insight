@@ -53,11 +53,15 @@ can be reviewed outside the application.
 The target user is a research laboratory working with non-clinical
 organ-on-chip microscopy. The primary workflow is:
 
-1. create a named experiment and record available acquisition metadata;
+1. create a named experiment, record chip, well, lineage, and culture day, then
+   enter source-backed calibration when known;
 2. import an image batch and inspect accepted and rejected files;
 3. run a declared analysis engine;
-4. review overlays and per-image measurements;
-5. export structured evidence for downstream analysis or audit.
+4. review overlays with synchronized zoom and inspect measurements in pixels
+   or, when scale is supplied, physical units;
+5. compare two completed experiments descriptively, without an automated
+   biological conclusion;
+6. export structured evidence for downstream analysis or audit.
 
 OrganChip Insight does not claim diagnosis, treatment recommendation,
 toxicity prediction, efficacy prediction, or validated cellular counting.
@@ -291,25 +295,27 @@ and the frozen test set remains unopened.
 
 ## 7. Product verification
 
-The backend suite contains 185 collected tests in the 17 September 2026 release
-candidate: 184 pass and one environment-dependent test is skipped. Ruff, TypeScript
+The backend suite contains 190 collected tests in the 17 September 2026 release
+candidate: 189 pass and one environment-dependent test is skipped. Ruff, TypeScript
 type-checking, the production Vite build, notebook synchronization, benchmark
 summary synchronization, release-tree audit, checksum inventory, and Docker
 Compose configuration pass through `make check`.
 
 Playwright starts isolated Docker projects and fresh volumes. The fast path
-creates an experiment, imports a synthetic image, runs adaptive inference,
-checks the overlay and scientific reservation, and downloads JSON and CSV. A
-second path imports three hash-locked public images (OoC RGB, OoC grayscale,
+creates two calibrated experiments, imports synthetic images, runs adaptive
+inference, checks synchronized source/overlay zoom, descriptive comparison,
+the scientific reservation, and enriched JSON/CSV downloads. A second path
+imports three hash-locked public images (OoC RGB, OoC grayscale,
 and BBBC019 TIFF), verifies source-format metadata, runs the same workflow,
 and confirms that all source hashes remain unchanged. Additional gates report
 zero Axe violations, verify visible keyboard focus, mobile reflow at 390 px,
 an effective 200% layout width, and persistence of sources, results, exports,
-gallery, and viewer after both containers restart.
+gallery, and viewer after both containers restart. Five standard scenarios
+pass; two conditional scenarios are skipped as designed.
 
 The candidate was also rebuilt with `docker compose build --pull --no-cache`.
 The release audit found no tracked secret, personal path, cache, raw dataset,
-or undistributable model binary. The SHA-256 inventory covers 40 tracked
+or undistributable model binary. The SHA-256 inventory covers 45 tracked
 reports, manifests, notebooks, submission sources, and frontend evidence.
 
 ## 8. Credibility and limitations
@@ -329,8 +335,9 @@ reports, manifests, notebooks, submission sources, and frontend evidence.
    validation images across two conditions. Intervals are shown; none is a
    population claim over OOC images. The iOrganoAssay GT marks a target
    organoid rather than every visible instance.
-5. **No physical calibration.** Areas and diameters are in pixels, not µm or
-   µm².
+5. **Optional physical calibration.** Areas and diameters remain in pixels
+   unless the user supplies a µm/pixel scale and its source; the application
+   neither infers nor guesses that scale.
 6. **No validated cell count.** Connected components are heuristic image
    structures, not verified cells or nuclei on the OOC dataset.
 7. **Uncalibrated CNN output.** Softmax values from the optional demonstrator
@@ -344,13 +351,14 @@ reports, manifests, notebooks, submission sources, and frontend evidence.
 The platform's immediate value is workflow discipline: images, metadata,
 engine identity, overlays, measurements, exports, and limitations live in one
 experiment. A laboratory can inspect why an image was rejected, rerun an
-analysis without reimporting files, compare engine evidence, and export a
-reviewable record without an external service.
+analysis without reimporting files, zoom source and segmentation together,
+compare two experiments descriptively, and export a reviewable record without
+an external service.
 
 The negative CNN result is also operationally useful. It prevents a shortcut-
 driven classifier from becoming an automatic gate and identifies the metadata
 needed for future datasets: stable culture-day vocabulary, chip and well IDs,
-explicit artifact types, physical calibration, and at least five independent
+explicit artifact types, acquisition-derived physical scale, and at least five independent
 dates per acquisition mode.
 
 Future research may study a maturation-deviation score conditioned on mode,

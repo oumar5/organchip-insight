@@ -16,13 +16,18 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
   persistant ;
 - API FastAPI documentée par OpenAPI ;
 - expériences et résultats persistés dans SQLite ;
+- contexte expérimental persistant : identifiants de puce et de puits, lignée,
+  jour de culture et calibration facultative avec source obligatoire ;
 - décodage des uploads, limites de taille/pixels et détection des doublons binaires ;
 - imports séparés de l'analyse, rejets détaillés et TIFF gris 16 bits pris en charge ;
 - inférence CPU sans poids : Otsu, morphologie, composantes connexes ;
 - composantes connexes, surfaces, diamètre, intensité, contraste et indice de
   contraste relatif explicitement heuristiques ; le comptage n'est pas validé
   comme nombre de cellules ;
-- overlays de segmentation inspectables ;
+- overlays de segmentation inspectables avec zoom, panoramique et comparaison
+  synchronisée source/segmentation ;
+- comparaison descriptive côte à côte de deux expériences terminées, avec
+  avertissement lorsque l'échelle ou le moteur diffère ;
 - registre transparent des moteurs disponibles et candidats ;
 - démonstrateur CNN ONNX optionnel à abstention systématique ;
 - exports JSON complet et CSV par image ;
@@ -111,9 +116,10 @@ npm --prefix frontend run build
 docker compose config --quiet
 ```
 
-Le scénario navigateur démarre une pile Docker isolée, crée une expérience,
-importe une image synthétique, lance l'analyse et vérifie les exports JSON/CSV,
-puis supprime ses conteneurs et son volume :
+Le scénario navigateur démarre une pile Docker isolée, crée deux expériences
+calibrées, importe et analyse les images, vérifie les exports JSON/CSV, le zoom
+synchronisé et la comparaison descriptive, puis supprime ses conteneurs et son
+volume :
 
 ```bash
 npm --prefix frontend exec playwright install chromium

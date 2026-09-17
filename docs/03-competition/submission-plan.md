@@ -76,7 +76,7 @@ Soumettre le **9 octobre**, vérifier chaque lien sans connexion, garder le
   limites, valeur, feuille de route ;
 - démo de secours : vidéo locale et instance Docker pré-démarrée ;
 - questions probables : fuite de données et unité de groupe `YYMMDD`, calibration
-  µm absente, différence avec Cellpose et CellProfiler, licence des poids,
+  µm facultative et jamais devinée, différence avec Cellpose et CellProfiler, licence des poids,
   généralisation à d'autres puces ou lignées, ce qu'il faudrait pour un jumeau
   numérique, standardisation des métadonnées (OME).
 
@@ -102,8 +102,9 @@ Soumettre le **9 octobre**, vérifier chaque lien sans connexion, garder le
 5. Implémentation : API, CLI, Docker, tests, contrat runtime Kaggle (2 pages) ;
 6. Expériences et résultats : tableaux BBBC019 et BBBC038, baselines OoC, CNN
    avec intervalles et tranches, galerie d'erreurs (4 pages) ;
-7. Crédibilité et limites : fuite résiduelle, proxy de date, absence de
-   calibration µm, petite taille de BBBC019, coût µSAM (2 pages) ;
+7. Crédibilité et limites : fuite résiduelle, proxy de date, calibration µm
+   disponible seulement avec une source utilisateur, petite taille de BBBC019,
+   coût µSAM (2 pages) ;
 8. Valeur applicative et perspectives : standardisation OME, comparaison de
    conditions, jumeau numérique comme horizon (1 page) ;
 9. Reproduction : commandes exactes, hashes, temps attendus (1 page) ;

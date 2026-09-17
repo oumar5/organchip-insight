@@ -7,6 +7,7 @@ a été prise.
 ## Index
 
 - [Finalisation bilingue et documentaire — 17 septembre 2026](2026-09-17-finalisation-bilingue-et-documentaire.md)
+- [Finition scientifique : métadonnées, calibration et comparaison — 17 septembre 2026](2026-09-17-finition-metadonnees-calibration-comparaison.md)
 - [Vidéo bilingue avec Demo Studio — 17 septembre 2026](2026-09-17-video-bilingue-demo-studio.md)
 - [Validation externe iOrganoAssay v1.1.0 — 17 septembre 2026](2026-09-17-validation-externe-iorganoassay.md)
 - [Bruit d'étiquettes dans les voisinages visuels OoC — 17 septembre 2026](2026-09-17-bruit-labels-ooc.md)

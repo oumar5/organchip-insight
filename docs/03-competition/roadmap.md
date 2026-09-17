@@ -106,6 +106,9 @@ par semaine est dans [plan-soumission.md](submission-plan.md).
   assets et repli SPA borné (branche `frontend-ui`, REX du 17 septembre) ;
 - [x] refonte UX : onglets, dépôt multi-images avec galerie d'aperçus,
   visionneuse original/segmentation, modales de création et de détails ;
+- [x] finition scientifique : métadonnées puce/puits/lignée/jour persistées,
+  calibration facultative sourcée, conversions physiques dans les exports,
+  zoom/panoramique synchronisé et comparaison descriptive de deux expériences ;
 - [x] interface et réponses API bilingues français/anglais, choix persistant,
   attribut de langue du document et parcours Playwright dédié ;
 - [x] documentation rangée par ordre de lecture `01` à `06`, index de chaque
