@@ -25,6 +25,7 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await page.goto("/");
   await expect(page.getByText("Inférence disponible")).toBeVisible();
 
+  await page.getByRole("button", { name: /Nouvelle expérience/ }).first().click();
   await page.getByLabel("Nom de l’expérience").fill(experimentName);
   await page
     .getByLabel("Hypothèse ou objectif")
@@ -32,10 +33,7 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await page.getByRole("button", { name: "Créer l’expérience" }).click();
   await expect(page.getByLabel("Expérience active")).toContainText(experimentName);
 
-  await page
-    .locator(".field-grid label", { hasText: "Moteur" })
-    .locator("select")
-    .selectOption("adaptive-segmentation-v1");
+  await page.getByRole("radio", { name: /adaptative/i }).click();
   await page.locator('input[type="file"]').setInputFiles({
     name: "champ-synthetique.png",
     mimeType: "image/png",
@@ -45,17 +43,20 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await page.getByRole("button", { name: /Importer les images/ }).click();
   await expect(page.getByRole("status")).toContainText("1 importé");
 
-  const analyzeButton = page.getByRole("button", { name: "Lancer l’inférence" });
+  const analyzeButton = page.getByRole("button", { name: "Lancer l’analyse" });
   await expect(analyzeButton).toBeEnabled();
   await analyzeButton.click();
   await expect(page.getByText(`Expérience : ${experimentName}`)).toBeVisible();
   await expect(page.getByText("Composantes connexes", { exact: true })).toBeVisible();
   await expect(page.getByText(/pas validé comme cellule ou noyau/)).toBeVisible();
   await expect(page.getByAltText("Segmentation de champ-synthetique.png")).toBeVisible();
+  await page.getByRole("button", { name: "Benchmarks" }).click();
   await expect(page.getByRole("heading", { name: "Comparaison des moteurs" })).toBeVisible();
   await expect(page.getByText("0,816", { exact: true })).toBeVisible();
   await expect(page.getByText("Non promu · 2 critères sur 3 échouent")).toBeVisible();
 
+  await page.getByRole("button", { name: "Résultats" }).click();
+  await expect(page.getByRole("link", { name: "Exporter JSON" })).toBeVisible();
   const jsonDownloadPromise = page.waitForEvent("download");
   await page.getByRole("link", { name: "Exporter JSON" }).click();
   const jsonDownload = await jsonDownloadPromise;
@@ -74,6 +75,14 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   const exportedCsv = await readFile(csvPath!, "utf-8");
   expect(exportedCsv).toContain("filename");
   expect(exportedCsv).toContain("champ-synthetique.png");
+
+  await page.getByRole("button", { name: /Segmentation de champ-synthetique.png/ }).click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer.getByRole("heading", { name: "champ-synthetique.png" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Original" }).click();
+  await expect(viewer.getByAltText(/original/)).toBeVisible();
+  await viewer.getByRole("button", { name: "Fermer" }).click();
+  await expect(viewer).toBeHidden();
 
   expect(page.getByRole("alert")).toHaveCount(0);
   expect(pageErrors).toEqual([]);

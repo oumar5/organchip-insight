@@ -4,6 +4,7 @@ import type {
   BenchmarkSummary,
   Experiment,
   ExperimentCreate,
+  ImageRecord,
   UploadSummary,
   UploadLimits,
 } from "../types";
@@ -61,6 +62,10 @@ export function analyzeExperiment(
   return request<AnalysisResult>(`/experiments/${experimentId}/analyze?${query}`, {
     method: "POST",
   });
+}
+
+export function listImages(experimentId: string): Promise<ImageRecord[]> {
+  return request<ImageRecord[]>(`/experiments/${experimentId}/images`);
 }
 
 export function getExperimentResults(experimentId: string): Promise<AnalysisResult> {

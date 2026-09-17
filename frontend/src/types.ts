@@ -32,6 +32,13 @@ export interface UploadSummary {
   total_images: number;
 }
 
+export interface ImageRecord {
+  filename: string;
+  display_name: string;
+  size_bytes: number;
+  preview_url: string;
+}
+
 export interface UploadLimits {
   max_upload_bytes: number;
   max_image_pixels: number;

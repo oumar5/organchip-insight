@@ -1,25 +1,20 @@
 import type { FormEvent } from "react";
 import type { ExperimentCreate } from "../types";
+import { Modal } from "./Modal";
 
-interface ExperimentFormProps {
+interface ExperimentDialogProps {
+  open: boolean;
   form: ExperimentCreate;
   busy: boolean;
   onChange: (form: ExperimentCreate) => void;
   onSubmit: (event: FormEvent) => void;
+  onClose: () => void;
 }
 
-export function ExperimentForm({ form, busy, onChange, onSubmit }: ExperimentFormProps) {
+export function ExperimentDialog({ open, form, busy, onChange, onSubmit, onClose }: ExperimentDialogProps) {
   return (
-    <article className="panel create-panel">
-      <div className="panel-heading">
-        <div>
-          <p className="section-kicker">Nouvelle étude</p>
-          <h2>Cadre expérimental</h2>
-        </div>
-        <span className="panel-number" aria-hidden="true">01</span>
-      </div>
-
-      <form onSubmit={onSubmit}>
+    <Modal open={open} title="Nouvelle expérience" onClose={onClose}>
+      <form onSubmit={onSubmit} className="stack-form">
         <label>
           Nom de l’expérience
           <input
@@ -41,13 +36,13 @@ export function ExperimentForm({ form, busy, onChange, onSubmit }: ExperimentFor
           />
         </label>
         <p className="form-scope-note">
-          L’affectation témoin/traitement est masquée tant que chaque image ne peut pas être
-          rattachée explicitement à un groupe expérimental.
+          L’affectation témoin/traitement viendra avec le rattachement de chaque image à un groupe.
         </p>
-        <button className="primary-button" disabled={busy} type="submit">
-          Créer l’expérience <span aria-hidden="true">→</span>
-        </button>
+        <div className="modal-actions">
+          <button className="secondary-button" type="button" onClick={onClose}>Annuler</button>
+          <button className="primary-button" disabled={busy} type="submit">Créer l’expérience</button>
+        </div>
       </form>
-    </article>
+    </Modal>
   );
 }
