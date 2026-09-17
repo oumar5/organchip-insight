@@ -29,7 +29,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [x] Tests backend, lint, type-check, build et Playwright synthétique.
 - [x] README anglais et brouillons du rapport, du Writeup et de la vidéo.
 - [x] Validation de phase 1 terminée sur les trois images réelles verrouillées.
-- [ ] **Prochaine action unique : produire et geler la release candidate de la phase 2.**
+- [x] Release candidate reproductible de phase 2 validée et gelée sur `dev`.
+- [ ] **Prochaine action unique : obtenir les décisions du propriétaire de la phase 3.**
 
 ## Règles pendant l'exécution
 
@@ -89,35 +90,35 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 
 ### 2.1 Validation automatisée
 
-- [ ] `make check` passe sur le commit candidat.
-- [ ] `make test-e2e` passe avec reconstruction Docker.
-- [ ] Le parcours réel de la phase 1 passe sur ce même commit.
-- [ ] Le résumé frontend des benchmarks correspond aux rapports versionnés.
+- [x] `make check` passe sur le commit candidat.
+- [x] `make test-e2e` passe avec reconstruction Docker.
+- [x] Le parcours réel de la phase 1 passe sur ce même commit.
+- [x] Le résumé frontend des benchmarks correspond aux rapports versionnés.
 
 ### 2.2 Machine propre
 
-- [ ] Exécuter `docker compose build --pull --no-cache` depuis un réseau qui
+- [x] Exécuter `docker compose build --pull --no-cache` depuis un réseau qui
   accède correctement à Docker Hub.
-- [ ] Démarrer le projet sans images applicatives préexistantes.
-- [ ] Créer une expérience, importer, analyser, redémarrer puis retrouver les
+- [x] Démarrer le projet sans images applicatives préexistantes.
+- [x] Créer une expérience, importer, analyser, redémarrer puis retrouver les
   résultats.
-- [ ] Tester les exports, la galerie et la visionneuse après redémarrage.
+- [x] Tester les exports, la galerie et la visionneuse après redémarrage.
 
 ### 2.3 Contrôles de release
 
-- [ ] Vérifier clavier, focus, contraste, zoom navigateur et affichage mobile.
-- [ ] Vérifier qu'aucun secret, chemin personnel, cache ou donnée brute n'est
+- [x] Vérifier clavier, focus, contraste, zoom navigateur et affichage mobile.
+- [x] Vérifier qu'aucun secret, chemin personnel, cache ou donnée brute n'est
   suivi par Git.
-- [ ] Générer les checksums des rapports, manifestes, notebooks et éventuels
+- [x] Générer les checksums des rapports, manifestes, notebooks et éventuels
   poids distribués.
-- [ ] Corriger les derniers messages incohérents ou incomplets.
-- [ ] Choisir et geler le commit de release candidate.
+- [x] Corriger les derniers messages incohérents ou incomplets.
+- [x] Choisir et geler le commit de release candidate.
 
 ### Preuve de fin de phase 2
 
-- [ ] Toutes les commandes passent depuis un environnement propre.
-- [ ] Le commit candidat et les checksums sont enregistrés.
-- [ ] Aucun changement fonctionnel n'est ajouté après le gel, sauf correction
+- [x] Toutes les commandes passent depuis un environnement propre.
+- [x] Le commit candidat et les checksums sont enregistrés.
+- [x] Aucun changement fonctionnel n'est ajouté après le gel, sauf correction
   bloquante validée de nouveau.
 
 ---

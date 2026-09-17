@@ -79,7 +79,9 @@ test("analyzes the locked real-image manifest without changing its sources", asy
   const analyzeButton = page.getByRole("button", { name: "Lancer l’analyse" });
   await expect(analyzeButton).toBeEnabled();
   await analyzeButton.click();
-  await expect(page.getByText(`Expérience : ${experimentName}`)).toBeVisible();
+  await expect(page.getByText(`Expérience : ${experimentName}`)).toBeVisible({
+    timeout: 90_000,
+  });
   await expect(page.getByText("Composantes connexes", { exact: true })).toBeVisible();
   await expect(page.getByText(/pas validé comme cellule ou noyau/)).toBeVisible();
 

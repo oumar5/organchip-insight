@@ -41,7 +41,7 @@ def test_analysis_requires_images() -> None:
     response = client.post(f"/api/v1/experiments/{experiment_id}/analyze")
 
     assert response.status_code == 409
-    assert "Upload at least one image" in response.json()["detail"]
+    assert "Importez au moins une image" in response.json()["detail"]
 
 
 def test_upload_and_analyze_real_image() -> None:

@@ -38,7 +38,7 @@ ALLOWED_SUFFIXES = {".png", ".jpg", ".jpeg", ".tif", ".tiff"}
 def _get_experiment_or_404(experiment_id: UUID) -> Experiment:
     experiment = repository.get(experiment_id)
     if experiment is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Experiment not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expérience introuvable")
     return experiment
 
 
@@ -241,10 +241,10 @@ def list_images(experiment_id: UUID) -> list[ImageRecord]:
 def get_preview(experiment_id: UUID, filename: str) -> FileResponse:
     _get_experiment_or_404(experiment_id)
     if Path(filename).name != filename or Path(filename).suffix.lower() not in ALLOWED_SUFFIXES:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid image name")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nom d’image invalide")
     source = _experiment_image_dir(experiment_id) / filename
     if not source.is_file() or source.is_symlink():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image introuvable")
     preview = _experiment_preview_dir(experiment_id) / f"{filename}.png"
     if not preview.is_file() or preview.stat().st_mtime < source.stat().st_mtime:
         try:
@@ -266,7 +266,7 @@ def analyze_experiment(
     if experiment.image_count == 0:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Upload at least one image before analysis",
+            detail="Importez au moins une image avant l’analyse",
         )
 
     try:
@@ -380,8 +380,11 @@ def export_results_csv(experiment_id: UUID) -> Response:
 def get_artifact(experiment_id: UUID, artifact_name: str) -> FileResponse:
     _get_experiment_or_404(experiment_id)
     if Path(artifact_name).name != artifact_name:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid artifact name")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nom d’artefact invalide",
+        )
     artifact_path = _experiment_artifact_dir(experiment_id) / artifact_name
     if not artifact_path.is_file():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Artifact not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Artefact introuvable")
     return FileResponse(artifact_path, media_type="image/png", filename=artifact_name)
