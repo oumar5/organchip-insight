@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "generated_from": [
+    {
+      "path": "reports/benchmarks/bbbc019-microfluidic-adaptive-v1.json",
+      "sha256": "d7a915d670561cbe66757ce25de9ab29aea91ee93c1f856f1051638f5012ccac"
+    },
+    {
+      "path": "reports/benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.json",
+      "sha256": "91b5169e5139e8536c2dbd5a9d002e73e3c1581f5b7407d2ec87cfc8b2dcc203"
+    },
+    {
+      "path": "reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json",
+      "sha256": "5a5c4bf7909c4b39c152e753c5c120db329bc0b87f1997acc16e81b4509f6550"
+    }
+  ],
+  "sections": [
+    {
+      "id": "bbbc019-foreground",
+      "title": "Premier plan microfluidique · BBBC019",
+      "scope": "13 images DIC externes avec masques binaires manuels. Comparaison à protocole identique ; ce jeu n'est pas le dataset OoC du concours.",
+      "rows": [
+        {
+          "engine": "Segmentation adaptative v1",
+          "status": "Moteur produit",
+          "metrics": [
+            {
+              "label": "Macro-F1",
+              "value": 0.424892,
+              "format": "decimal",
+              "interval_95_percent": [
+                0.369769,
+                0.467653
+              ]
+            },
+            {
+              "label": "Macro-IoU",
+              "value": 0.273632,
+              "format": "decimal"
+            },
+            {
+              "label": "Temps / image",
+              "value": 0.112333,
+              "format": "seconds"
+            },
+            {
+              "label": "Mémoire max.",
+              "value": 324.668,
+              "format": "megabytes"
+            }
+          ]
+        },
+        {
+          "engine": "µSAM vit_b_lm · APG",
+          "status": "Benchmark isolé",
+          "metrics": [
+            {
+              "label": "Macro-F1",
+              "value": 0.815542,
+              "format": "decimal",
+              "interval_95_percent": [
+                0.758206,
+                0.861862
+              ]
+            },
+            {
+              "label": "Macro-IoU",
+              "value": 0.698535,
+              "format": "decimal"
+            },
+            {
+              "label": "Temps / image",
+              "value": 42.843791,
+              "format": "seconds"
+            },
+            {
+              "label": "Mémoire max.",
+              "value": 8702.957,
+              "format": "megabytes"
+            }
+          ]
+        }
+      ],
+      "decision": "µSAM améliore le premier plan sur ce petit jeu externe, mais son coût CPU et le benchmark d'instances BBBC038 empêchent sa promotion."
+    },
+    {
+      "id": "bbbc038-instances",
+      "title": "Instances nucléaires · BBBC038",
+      "scope": "Audit zéro-shot pré-enregistré sur 12 images choisies pour leur diversité, pas une estimation de population sur les 670 images.",
+      "rows": [
+        {
+          "engine": "µSAM vit_b_lm · APG",
+          "status": "Non promu · 2 critères sur 3 échouent",
+          "metrics": [
+            {
+              "label": "Macro-F1 objet · IoU 0,50",
+              "value": 0.628327,
+              "format": "decimal",
+              "interval_95_percent": [
+                0.401074,
+                0.835413
+              ]
+            },
+            {
+              "label": "Macro-F1 objet · IoU 0,75",
+              "value": 0.481698,
+              "format": "decimal",
+              "interval_95_percent": [
+                0.261909,
+                0.6959
+              ]
+            },
+            {
+              "label": "Erreur comptage médiane",
+              "value": 0.153409,
+              "format": "percent"
+            },
+            {
+              "label": "Temps / image",
+              "value": 36.690719,
+              "format": "seconds"
+            },
+            {
+              "label": "Mémoire max.",
+              "value": 8896.457,
+              "format": "megabytes"
+            }
+          ]
+        }
+      ],
+      "decision": "Ce résultat nucléaire externe ne valide pas le comptage de cellules sur les images OoC."
+    }
+  ]
+}

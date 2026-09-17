@@ -4,6 +4,7 @@ import {
   analyzeExperiment,
   createExperiment,
   experimentResultExportUrl,
+  getBenchmarkSummary,
   getExperimentResults,
   listExperiments,
   listInferenceEngines,
@@ -13,6 +14,8 @@ import {
 import type {
   AnalysisEngine,
   AnalysisResult,
+  BenchmarkMetric,
+  BenchmarkSummary,
   Experiment,
   ExperimentCreate,
   ExperimentStatus,
@@ -102,9 +105,34 @@ function readableFilename(filename: string): string {
   return filename.replace(/^[a-f0-9]{12}-/, "");
 }
 
+function formatBenchmarkMetric(metric: BenchmarkMetric): string {
+  if (metric.format === "percent") {
+    return percentFormatter.format(metric.value);
+  }
+  if (metric.format === "seconds") {
+    return `${decimalFormatter.format(metric.value)} s`;
+  }
+  if (metric.format === "megabytes") {
+    return `${Math.round(metric.value).toLocaleString("fr-FR")} Mo`;
+  }
+  return new Intl.NumberFormat("fr-FR", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  }).format(metric.value);
+}
+
+function formatBenchmarkInterval(interval: [number, number]): string {
+  const formatter = new Intl.NumberFormat("fr-FR", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  });
+  return `[${formatter.format(interval[0])} ; ${formatter.format(interval[1])}]`;
+}
+
 export default function App() {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [engines, setEngines] = useState<AnalysisEngine[]>([]);
+  const [benchmarkSummary, setBenchmarkSummary] = useState<BenchmarkSummary | null>(null);
   const [engineRegistryLoaded, setEngineRegistryLoaded] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEngineId, setSelectedEngineId] = useState("");
@@ -147,6 +175,7 @@ export default function App() {
   useEffect(() => {
     Promise.all([
       getUploadLimits().then(setUploadLimits),
+      getBenchmarkSummary().then(setBenchmarkSummary),
       refreshExperiments(),
       listInferenceEngines()
         .then((items) => {
@@ -294,6 +323,9 @@ export default function App() {
           </a>
           <a className="nav-item" href="#results">
             <span>03</span> Résultats
+          </a>
+          <a className="nav-item" href="#benchmarks">
+            <span>04</span> Benchmarks
           </a>
         </nav>
 
@@ -671,6 +703,66 @@ export default function App() {
                 </div>
               </aside>
             </div>
+          )}
+        </section>
+
+        <section className="benchmark-section" id="benchmarks" aria-labelledby="benchmarks-title">
+          <div className="benchmark-header">
+            <div>
+              <p className="section-kicker">Preuves externes versionnées</p>
+              <h2 id="benchmarks-title">Comparaison des moteurs</h2>
+            </div>
+            <span className="benchmark-source-badge">Générée depuis les rapports</span>
+          </div>
+
+          {benchmarkSummary ? (
+            <>
+              <div className="benchmark-grid">
+                {benchmarkSummary.sections.map((section) => (
+                  <article className="benchmark-card" key={section.id}>
+                    <h3>{section.title}</h3>
+                    <p className="benchmark-scope">{section.scope}</p>
+                    <div className="benchmark-rows">
+                      {section.rows.map((row) => (
+                        <div className="benchmark-row" key={row.engine}>
+                          <div className="benchmark-engine">
+                            <strong>{row.engine}</strong>
+                            <span>{row.status}</span>
+                          </div>
+                          <dl>
+                            {row.metrics.map((metric) => (
+                              <div key={metric.label}>
+                                <dt>{metric.label}</dt>
+                                <dd>{formatBenchmarkMetric(metric)}</dd>
+                                {metric.interval_95_percent && (
+                                  <small>
+                                    IC 95 % {formatBenchmarkInterval(metric.interval_95_percent)}
+                                  </small>
+                                )}
+                              </div>
+                            ))}
+                          </dl>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="benchmark-decision"><strong>Décision :</strong> {section.decision}</p>
+                  </article>
+                ))}
+              </div>
+              <details className="benchmark-provenance">
+                <summary>Provenance des chiffres</summary>
+                <ul>
+                  {benchmarkSummary.generated_from.map((source) => (
+                    <li key={source.path}>
+                      <span>{source.path}</span>
+                      <code>{source.sha256}</code>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </>
+          ) : (
+            <p className="benchmark-unavailable">Synthèse des benchmarks indisponible.</p>
           )}
         </section>
 

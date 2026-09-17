@@ -22,6 +22,7 @@ a été prise.
 - [Stabilisation produit, exports, sécurité et Docker — 17 septembre 2026](2026-09-17-stabilisation-produit-exports-securite-docker.md)
 - [Benchmark d'instances µSAM sur BBBC038 — 17 septembre 2026](2026-09-17-benchmark-instances-bbbc038.md)
 - [Parcours Playwright end-to-end — 17 septembre 2026](2026-09-17-playwright-e2e.md)
+- [Comparaison des moteurs alimentée par les rapports — 17 septembre 2026](2026-09-17-comparaison-moteurs.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles

@@ -1239,6 +1239,174 @@ figcaption small {
   margin-top: 5px;
 }
 
+.benchmark-section {
+  max-width: 1440px;
+  margin: 18px auto 0;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.benchmark-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 19px;
+  border-bottom: 1px solid #e5ebe7;
+}
+
+.benchmark-source-badge {
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #3f5a4f;
+  background: #eaf3ee;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.benchmark-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 20px;
+}
+
+.benchmark-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #dce6e1;
+  border-radius: 14px;
+  background: #fbfdfc;
+}
+
+.benchmark-card h3 {
+  margin-bottom: 6px;
+  color: #263d33;
+  font-size: 1rem;
+}
+
+.benchmark-scope,
+.benchmark-decision,
+.benchmark-unavailable {
+  color: #4f6259;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.benchmark-scope {
+  min-height: 56px;
+  margin-bottom: 14px;
+}
+
+.benchmark-rows {
+  display: grid;
+  gap: 10px;
+}
+
+.benchmark-row {
+  padding: 13px;
+  border: 1px solid #e1e8e4;
+  border-radius: 11px;
+  background: #fff;
+}
+
+.benchmark-engine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.benchmark-engine strong {
+  color: #263d33;
+  font-size: 0.78rem;
+}
+
+.benchmark-engine span {
+  color: #5b4a22;
+  font-size: 0.75rem;
+  font-weight: 750;
+  text-align: right;
+}
+
+.benchmark-row dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.benchmark-row dl > div {
+  min-width: 0;
+  padding: 9px;
+  border-radius: 8px;
+  background: #f2f6f4;
+}
+
+.benchmark-row dt,
+.benchmark-row small {
+  color: #56675f;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.benchmark-row dd {
+  margin: 4px 0 0;
+  color: #18372b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+}
+
+.benchmark-row small {
+  display: block;
+  margin-top: 3px;
+}
+
+.benchmark-decision {
+  margin: 14px 0 0;
+  padding: 11px 12px;
+  border-left: 3px solid #3d8a6d;
+  background: #edf6f1;
+}
+
+.benchmark-provenance {
+  margin-top: 15px;
+  color: #3f5149;
+  font-size: 0.75rem;
+}
+
+.benchmark-provenance summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.benchmark-provenance ul {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benchmark-provenance li {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 10px;
+  padding: 9px;
+  border-radius: 8px;
+  background: #f2f6f4;
+}
+
+.benchmark-provenance code {
+  overflow-wrap: anywhere;
+  color: #36483f;
+  font-size: 0.75rem;
+}
+
 .provenance-box {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -1280,6 +1448,7 @@ footer {
   .panel { min-height: auto; }
   .create-panel .primary-button { margin-top: 10px; }
   .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .benchmark-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 820px) {
@@ -1303,7 +1472,8 @@ footer {
   h1 { font-size: 2rem; }
   .intro-strip i { width: 14px; }
   .panel,
-  .results-section { padding: 18px; border-radius: 14px; }
+  .results-section,
+  .benchmark-section { padding: 18px; border-radius: 14px; }
   .two-columns,
   .field-grid { grid-template-columns: 1fr; }
   .engine-catalog-heading,
@@ -1313,6 +1483,10 @@ footer {
   .overlay-grid { grid-template-columns: 1fr; }
   .quality-result-card { grid-template-columns: 1fr; }
   .results-header { display: block; }
+  .benchmark-header { display: block; }
+  .benchmark-source-badge { display: inline-block; margin-top: 12px; }
+  .benchmark-row dl { grid-template-columns: 1fr; }
+  .benchmark-provenance li { grid-template-columns: 1fr; }
   .result-meta { justify-content: flex-start; margin-top: 12px; }
   .empty-results { flex-direction: column; text-align: center; }
   footer { flex-direction: column; }

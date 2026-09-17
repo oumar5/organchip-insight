@@ -66,7 +66,10 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   provenance, aucune décision automatique `good`/`bad`, aucun overlay ni
   comptage rattaché ; aucun moteur CNN de contrôle qualité ; poids non
   distribués dans le dépôt, voir le [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) ;
-- [ ] vue de comparaison des moteurs alimentée par les rapports versionnés ;
+- [x] vue de comparaison des moteurs alimentée par les rapports versionnés :
+  F1/IoU, intervalles, coût CPU, mémoire et décision de promotion sont générés
+  depuis trois rapports verrouillés par SHA-256 ; les overlays d'erreur restent
+  des artefacts de benchmark locaux, voir le [REX](retours-experience/2026-09-17-comparaison-moteurs.md) ;
 - [x] champs contrôle/traitement masqués tant que l'affectation par image et
   l'agrégation par groupe ne sont pas livrées ;
 - [x] export JSON complet et CSV par image depuis l'interface ;

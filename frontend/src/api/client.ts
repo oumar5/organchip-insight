@@ -1,6 +1,7 @@
 import type {
   AnalysisEngine,
   AnalysisResult,
+  BenchmarkSummary,
   Experiment,
   ExperimentCreate,
   UploadSummary,
@@ -71,4 +72,12 @@ export function experimentResultExportUrl(
   format: "json" | "csv",
 ): string {
   return `${API_BASE_URL}/experiments/${encodeURIComponent(experimentId)}/exports/results.${format}`;
+}
+
+export async function getBenchmarkSummary(): Promise<BenchmarkSummary> {
+  const response = await fetch("/benchmark-summary.json", { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error("La synthèse des benchmarks versionnés est indisponible.");
+  }
+  return response.json() as Promise<BenchmarkSummary>;
 }

@@ -105,3 +105,30 @@ export interface AnalysisResult {
   provenance: Record<string, string>;
   generated_at: string;
 }
+
+export interface BenchmarkMetric {
+  label: string;
+  value: number;
+  format: "decimal" | "percent" | "seconds" | "megabytes";
+  interval_95_percent?: [number, number];
+}
+
+export interface BenchmarkRow {
+  engine: string;
+  status: string;
+  metrics: BenchmarkMetric[];
+}
+
+export interface BenchmarkSection {
+  id: string;
+  title: string;
+  scope: string;
+  rows: BenchmarkRow[];
+  decision: string;
+}
+
+export interface BenchmarkSummary {
+  schema_version: number;
+  generated_from: Array<{ path: string; sha256: string }>;
+  sections: BenchmarkSection[];
+}

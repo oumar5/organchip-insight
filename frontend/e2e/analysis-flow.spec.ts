@@ -52,6 +52,9 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await expect(page.getByText("Composantes connexes", { exact: true })).toBeVisible();
   await expect(page.getByText(/pas validé comme cellule ou noyau/)).toBeVisible();
   await expect(page.getByAltText("Segmentation de champ-synthetique.png")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Comparaison des moteurs" })).toBeVisible();
+  await expect(page.getByText("0,816", { exact: true })).toBeVisible();
+  await expect(page.getByText("Non promu · 2 critères sur 3 échouent")).toBeVisible();
 
   const jsonDownloadPromise = page.waitForEvent("download");
   await page.getByRole("link", { name: "Exporter JSON" }).click();
