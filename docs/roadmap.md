@@ -1,6 +1,6 @@
 # Roadmap vers la soumission
 
-État au 16 septembre 2026. Calendrier officiel de l'organisateur :
+État au 17 septembre 2026. Calendrier officiel de l'organisateur :
 soumission du Writeup jusqu'au **10 octobre 2026 (17 h 59 à Paris)**,
 présélection de 20 équipes du 10 au 20 octobre, **finale en ligne avec
 soutenance du 20 au 30 octobre**, résultats avant novembre. Le plan détaillé
@@ -49,16 +49,20 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   seuil conditionnel RGB pré-enregistré n'est pas atteint ;
 - [x] audit structurel des campagnes (3 jours, lignée commune) : 29 campagnes,
   270 images test exposées ;
-- [ ] décision et génération éventuelle du manifeste v2 avec paramètres figés,
-  v1 conservé ;
+- [x] manifeste v2 généré avec paramètres figés
+  (`data/splits/ooc-campaign-v2-lock.json`), v1 conservé ;
 - [ ] documentation du bruit de labels intra-groupe ;
-- [ ] ouverture unique du test après gel de la sélection et des hashes, avec
-  archivage externe du reçu local avant fermeture du workspace final.
+- [x] clôture de la modélisation CNN sans ouverture du test : aucune
+  configuration n'atteint le plancher de `0,65` de balanced accuracy par mode ;
+  le test gelé n'a jamais été ouvert et ne le sera pas ; résultat négatif
+  consigné dans le [contre-audit](audit-2026-09-17-classification-cnn.md).
 
 ## Jalon 3 — Expérience scientifique
 
-- [ ] moteur CNN de contrôle qualité dans le registre, inférence ONNX Runtime,
-  seuil gelé, abstention « à vérifier » ;
+- [ ] démonstrateur ONNX expérimental du run B (optionnel) : abstention
+  systématique, softmax non calibré affiché avec le mode d'acquisition et la
+  provenance, aucune décision automatique `good`/`bad`, aucun overlay ni
+  comptage rattaché ; aucun moteur CNN de contrôle qualité ;
 - [ ] vue de comparaison des moteurs alimentée par les rapports versionnés ;
 - [ ] rattacher chaque image à contrôle/traitement à l'import, agrégation par
   groupe avec intervalles, ou masquer les champs non livrés ;

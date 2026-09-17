@@ -63,9 +63,9 @@ Laplace et seuil fixé à 0,5, obtient :
 | Test groupé | 0,695068 | 0,713569 | 0,713569 |
 
 Ce résultat n'est pas une baseline visuelle utile au produit : il quantifie le
-risque qu'un modèle apprenne le dispositif ou le format d'acquisition. Tout CNN
-doit donc publier ses tranches `L`/`RGB` et par résolution, puis démontrer un
-gain au-delà de ce raccourci.
+risque qu'un modèle apprenne le dispositif ou le format d'acquisition. Tout CNN doit donc publier ses tranches `L`/`RGB` et par résolution, puis
+démontrer un gain au-delà de ce raccourci et des autres métadonnées du
+manifeste (bucket de jour, lignée), apprises sur le seul train.
 
 Le premier baseline image-only utilise 50 caractéristiques déterministes, sans
 poids externe. Le modèle et le seuil sont sélectionnés uniquement sur la
@@ -86,8 +86,11 @@ expériences indépendantes documentées.
 Lecture honnête de ces deux tableaux : sur le test groupé, la macro-F1 du
 baseline image-only (0,692) n'est pas distinguable de celle du raccourci
 mode + résolution (0,695) ; seule la ROC-AUC sépare les deux (0,803 contre
-0,714). Il n'existe donc pas encore de preuve qu'un modèle apprenne la
-qualité d'image au-delà des propriétés d'acquisition. Tout futur CNN doit
+0,714). Il n'existe donc pas de preuve qu'un modèle apprenne la qualité d'image
+au-delà des propriétés d'acquisition. Ce constat est confirmé sur la campagne
+v2 : après validation GPU, comparateurs et ablations A/B (17 septembre 2026),
+aucun signal de qualité robuste et indépendant des métadonnées d'acquisition
+et de culture n'est démontré, et le test n'a jamais été ouvert. Tout futur CNN doit
 être jugé d'abord **à mode d'acquisition égal**.
 
 Rapport :
@@ -126,12 +129,15 @@ ouvert. La sélection gelée porte le SHA-256
 L'export ONNX opset 18 passe la parité avec une erreur absolue maximale de
 `2,0265579223632812e-06`, sous la tolérance `1e-4`. Son instantané runtime porte
 toutefois le libellé ambigu `mode: smoke` alors qu'il réutilise le checkpoint
-de validation vérifié ; cette provenance doit être corrigée avant soumission.
+de validation vérifié ; le code a été corrigé depuis (`operation: onnx-export`, `execution_device`) ;
+l'artefact historique conserve volontairement ce libellé pour préserver son hash.
 
-Avant tout accès final au test, il reste obligatoire d'auditer le bootstrap
-groupé et les tranches par mode, résolution, type cellulaire et jour, puis de
-réaliser les ablations pré-enregistrées. Le protocole scientifique réserve un
-seul accès final au test après cette revue. Le verrou logiciel refuse une
+Cette revue du bootstrap groupé et des tranches, puis les ablations
+pré-enregistrées A/B, ont été réalisées le 17 septembre 2026 : aucune
+configuration n'atteint le plancher de `0,65` de balanced accuracy par mode,
+aucun accès au test n'a lieu et la modélisation CNN est close (voir le
+[contre-audit](audit-2026-09-17-classification-cnn.md)). Le protocole
+scientifique réservait un seul accès final au test après cette revue. Le verrou logiciel refuse une
 seconde tentative dans un workspace qui conserve son reçu ; ce reçu devra être
 archivé hors de tout workspace Kaggle éphémère, car le verrou n'est pas global
 entre deux environnements recréés.
