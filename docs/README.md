@@ -27,6 +27,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 
 - [Exigences officielles du challenge](competition-requirements.md)
 - [Plan de soumission et de finale](plan-soumission.md)
+- [Brouillons de soumission en anglais](submission/README.md)
 - [Audit du projet au 16 septembre 2026](audit-2026-09-16.md)
 
 ## Produit et exploitation

@@ -103,6 +103,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [ ] vidéo ≤ 5 minutes montrant le produit réel ;
 - [ ] Writeup Kaggle : catégorie, résumé 200–300 mots, liens, limites,
   déclarations IA et licences ;
+- [x] brouillons anglais du rapport, du Writeup et du storyboard vidéo ; les
+  liens publics, auteurs, licences, figures et export PDF restent à finaliser ;
 - [ ] vérification de tous les liens en navigation privée.
 
 ## Jalon 6 — Finale (20 au 30 octobre)
