@@ -38,6 +38,21 @@ def _instance_report() -> dict:
     }
 
 
+def _iorganoassay_report() -> dict:
+    return {
+        "benchmark_id": "iorganoassay-validation-v1.1.0-adaptive-v1",
+        "results": {
+            "adaptive_macro": {"f1": 0.82, "iou": 0.72},
+            "adaptive_macro_by_condition": {
+                "Ctrl": {"f1": 0.84},
+                "DSS": {"f1": 0.81},
+            },
+            "adaptive_macro_f1_bootstrap_95_percent": [0.77, 0.87],
+        },
+        "performance": {"mean_adaptive_inference_seconds_per_image": 0.06},
+    }
+
+
 def test_build_summary_preserves_report_metrics() -> None:
     summary = build_summary(
         {
@@ -48,6 +63,7 @@ def test_build_summary_preserves_report_metrics() -> None:
                 "bbbc019-microfluidic-micro-sam-vit-b-lm-apg", 13, 0.81
             ),
             "bbbc038_micro_sam": _instance_report(),
+            "iorganoassay_adaptive": _iorganoassay_report(),
         },
         [{"path": "report.json", "sha256": "a" * 64}],
     )
@@ -55,6 +71,8 @@ def test_build_summary_preserves_report_metrics() -> None:
     assert summary["sections"][0]["rows"][0]["metrics"][0]["value"] == 0.42
     assert summary["sections"][0]["rows"][1]["metrics"][0]["value"] == 0.81
     assert summary["sections"][1]["rows"][0]["metrics"][2]["value"] == 0.15
+    assert summary["sections"][2]["rows"][0]["metrics"][0]["value"] == 0.82
+    assert summary["sections"][2]["rows"][0]["metrics"][2]["value"] == 0.84
 
 
 def test_build_summary_rejects_mismatched_bbbc019_samples() -> None:
@@ -68,6 +86,7 @@ def test_build_summary_rejects_mismatched_bbbc019_samples() -> None:
                     "bbbc019-microfluidic-micro-sam-vit-b-lm-apg", 12, 0.81
                 ),
                 "bbbc038_micro_sam": _instance_report(),
+                "iorganoassay_adaptive": _iorganoassay_report(),
             },
             [],
         )

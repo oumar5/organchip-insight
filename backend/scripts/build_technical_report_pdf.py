@@ -58,7 +58,7 @@ TEXT = {
     "en": {
         "header": "OrganChip Insight | Technical report candidate",
         "pdf_title": "OrganChip Insight - Technical Report Candidate",
-        "pdf_author": "OrganChip Insight - solo team",
+        "pdf_author": "Ben Lol OUMAR",
         "cover_title": "OrganChip Insight",
         "cover_subtitle": "A traceable microscopy workspace for organ-on-chip experiments",
         "cover_badge": "TOOL &amp; PLATFORM | AI4S OPEN INNOVATION 2026",
@@ -69,13 +69,13 @@ TEXT = {
         ),
         "cover_rows": [
             ["Candidate date", "17 September 2026"],
-            ["Team", "Solo team; public author name pending"],
+            ["Team", "Ben Lol OUMAR - solo team lead"],
             ["Release", "Validated on dev; public tag pending authorization"],
             ["Scientific scope", "Non-clinical, exploratory microscopy workflow"],
         ],
         "cover_note": (
-            "Candidate PDF. Apache-2.0 is fixed for the code; the public author "
-            "name, release tag, and public URLs remain owner-controlled fields."
+            "Candidate PDF. Apache-2.0 is fixed for the code; the release tag "
+            "and public URLs remain owner-controlled fields."
         ),
         "architecture_boxes": [
             ("React + TypeScript", "experiment workspace"),
@@ -104,7 +104,7 @@ TEXT = {
     "fr": {
         "header": "OrganChip Insight | Rapport technique candidat",
         "pdf_title": "OrganChip Insight - Rapport technique candidat",
-        "pdf_author": "OrganChip Insight - équipe solo",
+        "pdf_author": "Ben Lol OUMAR",
         "cover_title": "OrganChip Insight",
         "cover_subtitle": "Un espace de microscopie traçable pour les expériences sur puce",
         "cover_badge": "OUTIL &amp; PLATEFORME | AI4S OPEN INNOVATION 2026",
@@ -115,13 +115,13 @@ TEXT = {
         ),
         "cover_rows": [
             ["Date du candidat", "17 septembre 2026"],
-            ["Équipe", "Équipe solo ; nom public de l'auteur à confirmer"],
+            ["Équipe", "Ben Lol OUMAR - responsable de l'équipe solo"],
             ["Release", "Validée sur dev ; tag public en attente d'autorisation"],
             ["Périmètre scientifique", "Exploration microscopique non clinique"],
         ],
         "cover_note": (
-            "PDF candidat. Apache-2.0 est fixée pour le code ; le nom public de "
-            "l'auteur, le tag de release et les URL publiques restent à confirmer."
+            "PDF candidat. Apache-2.0 est fixée pour le code ; le tag de release "
+            "et les URL publiques restent à confirmer."
         ),
         "architecture_boxes": [
             ("React + TypeScript", "espace expérimental"),
@@ -396,7 +396,7 @@ def markdown_blocks(
                         ),
                     ]
                 )
-            if title.startswith("6.3 "):
+            if title.startswith("6.4 "):
                 blocks.extend(
                     [
                         GroupedBars(

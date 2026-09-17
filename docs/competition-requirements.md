@@ -130,8 +130,8 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 
 - [x] inscription Kaggle confirmée (CLI : `userHasEntered = True`) ;
 - [ ] formulaire d'inscription externe confirmé par le propriétaire ;
-- [x] format d'équipe solo et responsable unique décidés ; nom public exact et
-  affiliation éventuelle encore à confirmer ;
+- [x] équipe solo confirmée : **Ben Lol OUMAR**, responsable et unique membre ;
+  aucune affiliation institutionnelle déclarée ;
 - [ ] dépôt GitHub **rendu public** (il est privé au 16 septembre 2026) ;
 - [x] fichier `LICENSE` Apache-2.0 ajouté ;
 - [ ] release figée avec tag, checksums et DOI Zenodo optionnel ;
@@ -139,6 +139,6 @@ Champion 80 000 CNY, deuxième 50 000 CNY, troisième 20 000 CNY.
 - [x] résultats recréés depuis un environnement propre ;
 - [x] rapport technique complet localement ; PDF encore à publier ;
 - [x] vidéo locale validée à 3 min 18 s ; encore à publier sans connexion ;
-- [x] Writeup prêt hors identité publique et liens publics ;
+- [x] Writeup prêt hors liens publics ;
 - [x] déclarations IA, licences et citations complètes ;
 - [ ] soutenance préparée : diapositives, démo hors ligne de secours, Q/R.

@@ -34,9 +34,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
   interdisciplinaire revendiqué.
 - [x] Licence du code fixée à Apache-2.0 et bundle ONNX non distribué dans la
   soumission.
-- [ ] **Prochaine action unique : confirmer le nom public de l'auteur,
-  l'affiliation éventuelle et le formulaire externe, puis autoriser la
-  publication avant la soumission.**
+- [ ] **Prochaine action unique : pousser les commits techniques validés, puis
+  confirmer le formulaire externe et autoriser la publication.**
 
 ## Règles pendant l'exécution
 
@@ -134,18 +133,24 @@ et ne doit retarder ni la publication ni le Writeup.
 
 - [x] Rechercher des datasets externes récents et vérifier taille, licence,
   annotations et proximité avec le cas d'usage.
-- [ ] Prendre une décision go/no-go après inspection des seules métadonnées :
-  privilégier **iOrganoAssay** (CC-BY-4.0, archive de 113,9 Mo, images
-  bright-field, essais et 28 annotations manuelles) pour un test externe borné
-  de segmentation et de traçabilité des essais.
-- [ ] En alternative, pré-enregistrer un sous-ensemble du **Brain Organoid
-  Dataset** (CC-BY-4.0, 1 400 images, 64 organoïdes, deux laboratoires et
-  masques manuels) pour mesurer la robustesse inter-laboratoire.
-- [ ] Ne pas intégrer **MultiOrg** avant la soumission : environ 35,4 Go,
+- [x] Décision go prise sur **iOrganoAssay v1.1.0** : CC0-1.0, archive vérifiée
+  de 1,82 Go et sous-ensemble officiel de 28 triplets de validation ; protocole,
+  critères, adaptation d'entrée et manifeste gelés avant calcul des scores.
+- [x] Exécuter une fois le benchmark adaptatif sur les 28 triplets, sans
+  modification postérieure des paramètres : macro-F1 `0,822746`, IC 95 %
+  `[0,772415 ; 0,867911]`, contrôle `0,836929`, DSS `0,808564`, 1 image sur 28
+  sous F1 `0,50` ; les trois critères pré-enregistrés sont atteints.
+- [x] Publier le résultat complet dans les rapports JSON/CSV, la comparaison
+  d'interface et le
+  [REX dédié](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md),
+  avec la réserve que le GT cible un organoïde et n'est pas un masque exhaustif
+  d'instances ou de cellules.
+- [x] Conserver le **Brain Organoid Dataset** comme alternative non exécutée :
+  lancer deux validations externes ferait doublon avant la soumission.
+- [x] Ne pas intégrer **MultiOrg** avant la soumission : environ 35,4 Go,
   CC-BY-NC-SA-4.0, tâche de détection d'organoïdes et non de qualité OoC.
-- [ ] Ne fusionner aucun de ces datasets avec la classification `good`/`bad` et
-  ne pas rouvrir le test gelé. Toute mesure externe doit avoir un protocole,
-  des métriques et un hash fixés avant exécution.
+- [x] Ne fusionner aucun de ces datasets avec la classification `good`/`bad` et
+  ne pas rouvrir le test gelé ; le protocole externe et les hashes sont séparés.
 
 ---
 
@@ -158,10 +163,12 @@ et ne doit retarder ni la publication ni le Writeup.
   démonstrateur optionnel et sa procédure de montage local.
 - [x] Choisir une équipe solo ; le propriétaire est l'unique membre et
   responsable.
-- [ ] Confirmer le nom public exact de l'auteur et son affiliation éventuelle.
+- [x] Identité publique confirmée : **Ben Lol OUMAR**, responsable et unique
+  membre ; aucune affiliation institutionnelle déclarée.
 - [ ] Confirmer l'inscription obligatoire via le formulaire externe de
   l'organisateur, avec un responsable d'équipe et 1 à 5 membres.
-- [x] `dev` est poussée et synchronisée avec `origin/dev`.
+- [ ] Pousser les commits locaux validés : `dev` est actuellement en avance sur
+  `origin/dev` ; aucune publication n'est faite sans autorisation explicite.
 - [ ] Décider de rendre le dépôt public.
 - [ ] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
 - [ ] Valider le nom et la date du tag de release.
@@ -200,7 +207,7 @@ inéligible.
   réserve explicite relevant du propriétaire.
 - [x] Ajouter les figures générées depuis les rapports versionnés.
 - [x] Vérifier les légendes, citations, licences et limites.
-- [x] Exporter les deux PDF reproductibles et contrôler visuellement leurs 15
+- [x] Exporter les deux PDF reproductibles et contrôler visuellement leurs 16
   pages en anglais et en français.
 - [ ] Publier le PDF sur une URL publique stable.
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from evaluation.evaluate_iorganoassay import centroid_error, mask_metrics
+from evaluation.evaluate_iorganoassay import centroid_error, mask_metrics, write_csv
 
 
 def test_mask_metrics_match_identical_foreground() -> None:
@@ -20,3 +20,11 @@ def test_centroid_error_is_missing_when_a_mask_is_empty() -> None:
     truth[3:5, 3:5] = True
 
     assert centroid_error(empty, truth) is None
+
+
+def test_write_csv_uses_lf_endings(tmp_path) -> None:
+    output = tmp_path / "report.csv"
+
+    write_csv([{"sample_id": "Ctrl_01", "f1": 0.8}], output)
+
+    assert output.read_bytes() == b"sample_id,f1\nCtrl_01,0.8\n"

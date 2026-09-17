@@ -30,6 +30,7 @@ nor an automated biological conclusion.
   `validation`, and `final-eval` modes;
 - Docker Compose, unit tests, and an end-to-end Playwright browser scenario;
 - a benchmark comparison generated from versioned scientific reports.
+- a preregistered, versioned external validation on iOrganoAssay v1.1.0.
 
 The connected-component count has **not** been validated as a cell or nucleus
 count on the competition organ-on-chip images.
@@ -141,7 +142,15 @@ over the adaptive baseline but costs about 43 seconds per image and 8.7 GB of
 memory in the measured CPU environment. On the preregistered 12-image BBBC038
 instance audit, it fails two of three promotion criteria. µSAM therefore
 remains an isolated benchmark; the adaptive engine remains the product engine.
-Neither external benchmark validates cell counting on the competition images.
+Neither BBBC benchmark validates cell counting on the competition images.
+
+On all 28 official iOrganoAssay v1.1.0 validation triples, the frozen adaptive
+engine reaches macro-F1 `0.822746` (95% bootstrap interval
+`[0.772415, 0.867911]`) and passes all three preregistered criteria. This is
+evidence for target-organoid foreground only; it does not validate cell
+counting, `good`/`bad` classification, or segmentation on the competition OOC
+images. See the
+[iOrganoAssay REX](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md).
 
 ## Classification result and scientific boundary
 
@@ -204,6 +213,8 @@ scientific limits that remain visible in the product. The remaining work is
 release preparation and submission material, not additional model selection.
 
 ## Licence
+
+OrganChip Insight is created and led by **Ben Lol OUMAR**.
 
 Original OrganChip Insight code is released under the
 [Apache License 2.0](LICENSE). Third-party datasets, weights, libraries, and

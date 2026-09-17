@@ -19,6 +19,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 - [Protocole candidat de regroupement par campagne](protocole-campagnes-v2.md)
 - [Protocole de décision pour la classification v2](protocole-classification-campagne-v2.md)
 - [Contre-audit de la classification CNN, 17 septembre 2026](audit-2026-09-17-classification-cnn.md)
+- [Validation externe iOrganoAssay v1.1.0, 17 septembre 2026](retours-experience/2026-09-17-validation-externe-iorganoassay.md)
 - [Démonstrateur CNN ONNX abstentionniste, 17 septembre 2026](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md)
 - [Workflow Kaggle et GitHub](kaggle-workflow.md)
 - [Manifeste et acquisition des données](../data/README.md)

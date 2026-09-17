@@ -1,7 +1,7 @@
 # Publication runbook
 
 This is the final ordered procedure once the project owner supplies the missing
-public identity and publication decisions. Apache-2.0 and a solo team are
+publication decisions. Apache-2.0 and the solo team led by Ben Lol OUMAR are
 already fixed. The procedure prevents a partially public or internally
 inconsistent submission.
 
@@ -9,8 +9,6 @@ inconsistent submission.
 
 Record all of the following before changing repository visibility:
 
-- exact public author name, optional affiliation, and confirmation that the
-  owner is the solo team lead;
 - confirmation that the organizer's external registration form was submitted;
 - authorization to push `dev`, merge linearly to `main`, create the release and
   make the repository public;
@@ -19,7 +17,7 @@ Record all of the following before changing repository visibility:
 ## 2. Finalize the tracked content on `dev`
 
 1. Verify the Apache-2.0 `LICENSE` file and third-party attributions.
-2. Replace the remaining public-identity fields in the report and Writeup.
+2. Verify the author identity in the report and Writeup.
 3. Rebuild and inspect the PDF with `make report-pdf` and
    `make report-pdf-check`.
 4. Run `make check demo-video-check`.

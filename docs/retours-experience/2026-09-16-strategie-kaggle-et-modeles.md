@@ -31,7 +31,9 @@ Observation effectuée sur la page connectée le 16 septembre 2026 :
 - les règles sont acceptées et le compte a rejoint le challenge ;
 - le formulaire externe a été envoyé par l'utilisateur ;
 - l'échéance affichée est le **10 octobre 2026 à 17 h 59, heure de Paris** ;
-- l'équipe existe mais porte encore le nom par défaut `Oumar Ben Lol` ;
+- à la date de cette sonde, l'équipe portait encore le nom par défaut
+  `Oumar Ben Lol` ; l'identité publique a depuis été corrigée en
+  **Ben Lol OUMAR** dans les livrables du 17 septembre 2026 ;
 - aucun Writeup n'a encore été créé pour notre équipe ;
 - la page affichait 120 entrants, 2 participants, 2 équipes et 2 soumissions ;
 - les deux soumissions officielles sont anonymisées comme `Team 1` et `Team 2`

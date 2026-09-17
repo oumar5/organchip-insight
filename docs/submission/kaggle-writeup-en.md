@@ -2,7 +2,7 @@
 
 **Category:** Tool & Platform
 
-**Team:** solo team; public author display name and optional affiliation pending
+**Team:** Ben Lol OUMAR — solo team lead; no institutional affiliation declared
 
 **Public code:** Apache-2.0; public release URL pending
 
@@ -12,7 +12,7 @@
 
 **Optional live demo:** not provided; Docker, CLI, report, and video are the reproducible paths
 
-## Summary (265 words)
+## Summary
 
 OrganChip Insight is a local, reproducible analysis workspace for bright-field
 organ-on-chip microscopy. It turns an image folder into a traceable experiment:
@@ -31,6 +31,12 @@ instance annotation validates them as cells. A bounded preregistered BBBC038
 audit caused us not to promote µSAM despite its stronger BBBC019 foreground
 score: it failed two of three instance-level promotion criteria and required
 about 8.9 GB of memory in the measured CPU environment.
+
+On iOrganoAssay v1.1.0, the frozen adaptive engine passed all three
+preregistered criteria on the 28 official validation triples: macro-F1
+0.822746 (95% bootstrap interval [0.772415, 0.867911]), with 0.836929 on
+control and 0.808564 on DSS. This supports target-organoid foreground
+segmentation only; the ground truth is not an exhaustive instance mask.
 
 We also investigated binary image-quality classification with MobileNetV3.
 Acquisition mode, culture age, and lineage created strong shortcuts. Grouped
@@ -57,9 +63,9 @@ provenance, uncertainty, and negative findings visible together.
 
 ## Evidence and limitations
 
-- BBBC019 foreground segmentation and BBBC038 instance results are external
-  validation aids; they do not validate cell counting on the competition
-  organ-on-chip images.
+- BBBC019 foreground segmentation, BBBC038 instances, and iOrganoAssay
+  target-organoid foreground are external validation aids; they do not validate
+  cell counting or quality classification on the competition images.
 - The CNN study is closed. No configuration passed the preregistered minimum
   balanced accuracy in both acquisition modes, and the test split remains
   unopened.
@@ -93,7 +99,8 @@ The product does not call an LLM or commercial API. OpenAI Codex and Anthropic
 Claude Code supported code, tests, documentation, independent review, and
 literature-review work under human review; all reported measurements come from
 versioned scripts. The data sources are the
-CC-BY-4.0 OOC Image Dataset, CC-BY-3.0 BBBC019, and CC0 BBBC038. The isolated
+CC-BY-4.0 OOC Image Dataset, CC-BY-3.0 BBBC019, CC0 BBBC038, and CC0
+iOrganoAssay v1.1.0. The isolated
 µSAM benchmark uses MIT code and CC-BY-4.0 weights. The optional MobileNetV3
 demonstrator uses torchvision and ImageNet weights under BSD-3 terms. Exact
 versions are locked in `backend/uv.lock`, `frontend/package-lock.json`, and the

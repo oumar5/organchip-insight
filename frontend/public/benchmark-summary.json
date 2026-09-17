@@ -12,6 +12,10 @@
     {
       "path": "reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json",
       "sha256": "5a5c4bf7909c4b39c152e753c5c120db329bc0b87f1997acc16e81b4509f6550"
+    },
+    {
+      "path": "reports/benchmarks/iorganoassay-validation-v1.1.0-adaptive-v1.json",
+      "sha256": "e730cd9fb294afbb434eb8e70913e4ade2a926d833f9085dadcca6e3743026fd"
     }
   ],
   "sections": [
@@ -129,6 +133,49 @@
         }
       ],
       "decision": "Ce résultat nucléaire externe ne valide pas le comptage de cellules sur les images OoC."
+    },
+    {
+      "id": "iorganoassay-organoid-foreground",
+      "title": "Premier plan d'organoïde · iOrganoAssay v1.1.0",
+      "scope": "Validation externe pré-enregistrée sur les 28 triplets officiels BF/GT/Seg (14 contrôle, 14 DSS). Le masque cible un organoïde, pas toutes les instances du champ.",
+      "rows": [
+        {
+          "engine": "Segmentation adaptative v1",
+          "status": "Preuve externe · 3 critères sur 3 atteints",
+          "metrics": [
+            {
+              "label": "Macro-F1",
+              "value": 0.822746,
+              "format": "decimal",
+              "interval_95_percent": [
+                0.772415,
+                0.867911
+              ]
+            },
+            {
+              "label": "Macro-IoU",
+              "value": 0.717835,
+              "format": "decimal"
+            },
+            {
+              "label": "F1 contrôle",
+              "value": 0.836929,
+              "format": "decimal"
+            },
+            {
+              "label": "F1 DSS",
+              "value": 0.808564,
+              "format": "decimal"
+            },
+            {
+              "label": "Temps / image",
+              "value": 0.062657,
+              "format": "seconds"
+            }
+          ]
+        }
+      ],
+      "decision": "Le résultat peut être présenté comme une preuve externe de segmentation d'organoïde. Il ne valide ni la segmentation OoC, ni une classification good/bad, ni un comptage cellulaire."
     }
   ]
 }

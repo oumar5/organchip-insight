@@ -17,6 +17,8 @@ REPORT_PATHS = {
     / "reports/benchmarks/bbbc019-microfluidic-microsam-vit-b-lm-apg.json",
     "bbbc038_micro_sam": PROJECT_ROOT
     / "reports/benchmarks/bbbc038-stage1-subset-v1-microsam-vit-b-lm-apg.json",
+    "iorganoassay_adaptive": PROJECT_ROOT
+    / "reports/benchmarks/iorganoassay-validation-v1.1.0-adaptive-v1.json",
 }
 
 
@@ -52,6 +54,7 @@ def build_summary(
     adaptive = reports["bbbc019_adaptive"]
     micro_sam_foreground = reports["bbbc019_micro_sam"]
     micro_sam_instances = reports["bbbc038_micro_sam"]
+    iorganoassay_adaptive = reports["iorganoassay_adaptive"]
     if adaptive["benchmark_id"] != "bbbc019-microfluidic-adaptive-segmentation-v1":
         raise ValueError("Unexpected adaptive BBBC019 report")
     if (
@@ -64,6 +67,11 @@ def build_summary(
         != "bbbc038-stage1-subset-v1-micro-sam-vit-b-lm-apg"
     ):
         raise ValueError("Unexpected µSAM BBBC038 report")
+    if (
+        iorganoassay_adaptive["benchmark_id"]
+        != "iorganoassay-validation-v1.1.0-adaptive-v1"
+    ):
+        raise ValueError("Unexpected iOrganoAssay report")
     if adaptive["results"]["image_count"] != micro_sam_foreground["results"][
         "image_count"
     ]:
@@ -201,6 +209,62 @@ def build_summary(
                 "decision": (
                     "Ce résultat nucléaire externe ne valide pas le comptage de "
                     "cellules sur les images OoC."
+                ),
+            },
+            {
+                "id": "iorganoassay-organoid-foreground",
+                "title": "Premier plan d'organoïde · iOrganoAssay v1.1.0",
+                "scope": (
+                    "Validation externe pré-enregistrée sur les 28 triplets officiels "
+                    "BF/GT/Seg (14 contrôle, 14 DSS). Le masque cible un organoïde, "
+                    "pas toutes les instances du champ."
+                ),
+                "rows": [
+                    {
+                        "engine": "Segmentation adaptative v1",
+                        "status": "Preuve externe · 3 critères sur 3 atteints",
+                        "metrics": [
+                            _metric(
+                                "Macro-F1",
+                                iorganoassay_adaptive["results"]["adaptive_macro"][
+                                    "f1"
+                                ],
+                                interval=iorganoassay_adaptive["results"][
+                                    "adaptive_macro_f1_bootstrap_95_percent"
+                                ],
+                            ),
+                            _metric(
+                                "Macro-IoU",
+                                iorganoassay_adaptive["results"]["adaptive_macro"][
+                                    "iou"
+                                ],
+                            ),
+                            _metric(
+                                "F1 contrôle",
+                                iorganoassay_adaptive["results"][
+                                    "adaptive_macro_by_condition"
+                                ]["Ctrl"]["f1"],
+                            ),
+                            _metric(
+                                "F1 DSS",
+                                iorganoassay_adaptive["results"][
+                                    "adaptive_macro_by_condition"
+                                ]["DSS"]["f1"],
+                            ),
+                            _metric(
+                                "Temps / image",
+                                iorganoassay_adaptive["performance"][
+                                    "mean_adaptive_inference_seconds_per_image"
+                                ],
+                                format_name="seconds",
+                            ),
+                        ],
+                    }
+                ],
+                "decision": (
+                    "Le résultat peut être présenté comme une preuve externe de "
+                    "segmentation d'organoïde. Il ne valide ni la segmentation OoC, "
+                    "ni une classification good/bad, ni un comptage cellulaire."
                 ),
             },
         ],

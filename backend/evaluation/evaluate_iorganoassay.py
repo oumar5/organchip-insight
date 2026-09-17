@@ -86,6 +86,20 @@ def _summary(rows: list[dict[str, Any]], prefix: str) -> dict[str, float | None]
     return {metric: _rounded(_mean(rows, prefix, metric)) for metric in METRIC_NAMES}
 
 
+def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
+    """Write a stable UTF-8 CSV with repository-standard LF endings."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(
+            output,
+            fieldnames=list(rows[0]),
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def _bootstrap_interval(values: list[float], seed: int, iterations: int) -> list[float]:
     rng = np.random.default_rng(seed)
     samples = rng.choice(np.asarray(values), size=(iterations, len(values)), replace=True)
@@ -292,14 +306,10 @@ def evaluate(config_path: Path, project_root: Path) -> dict[str, Any]:
     json_path = project_root / config["output_json"]
     csv_path = project_root / config["output_csv"]
     json_path.parent.mkdir(parents=True, exist_ok=True)
-    csv_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(
         json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    with csv_path.open("w", encoding="utf-8", newline="") as output:
-        writer = csv.DictWriter(output, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows(rows)
+    write_csv(rows, csv_path)
     return report
 
 

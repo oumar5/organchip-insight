@@ -4,10 +4,9 @@ Proposed tag: **`v1.0.0-ai4s`** (owner approval pending)<br>
 Candidate branch: **`dev`**<br>
 Candidate date: **17 September 2026**
 
-These notes are ready to paste into the public GitHub release after the owner
-confirms the public author identity, authorizes the linear merge and public
-release, and validates the final tag. Project code is Apache-2.0 and the team is
-solo.
+These notes are ready to paste into the public GitHub release after Ben Lol
+OUMAR authorizes the linear merge and public release and validates the final
+tag. Project code is Apache-2.0 and the team has one member.
 
 ## What this release delivers
 
@@ -22,6 +21,9 @@ solo.
   remains an isolated external benchmark rather than a promoted product engine;
 - versioned BBBC019 and BBBC038 comparisons with confidence intervals, runtime,
   memory and preregistered promotion decisions;
+- a one-shot preregistered iOrganoAssay v1.1.0 validation on 28 official
+  BF/GT/Seg triples: adaptive macro-F1 0.822746, 95% interval
+  [0.772415, 0.867911], with all three criteria met;
 - a documented negative quality-classification result: no configuration met the
   minimum balanced-accuracy requirement in every acquisition mode, and the
   frozen test set remained unopened.
@@ -42,13 +44,13 @@ data, using paid APIs, or requiring a hosted model.
 
 ## Verification snapshot
 
-- backend: 177 collected, 176 passed, 1 explicitly skipped;
+- backend: 185 collected, 184 passed, 1 explicitly skipped;
 - frontend: TypeScript check and production build passed;
 - browser: synthetic and locked real-image flows passed;
 - clean build: `docker compose build --pull --no-cache` passed;
 - release audit: zero violations at candidate validation;
-- release inventory: 40 SHA-256 entries;
-- technical reports: deterministic 15-page A4 PDFs in English and French;
+- release inventory: 44 SHA-256 entries;
+- technical reports: deterministic 16-page A4 PDFs in English and French;
 - demos: two 198-second 1280×720 H.264/AAC videos, with local English or
   French narration, seven subtitle scenes, a presenter and licensed music.
 
@@ -59,6 +61,9 @@ data, using paid APIs, or requiring a hosted model.
   pixels rather than micrometres;
 - the adaptive engine is fast and available but less accurate than µSAM on the
   small external BBBC019 foreground benchmark;
+- iOrganoAssay validates a target-organoid foreground only; its GT is not an
+  exhaustive full-field instance annotation and does not validate OoC or cell
+  counting;
 - µSAM is computationally expensive in the measured CPU environment and failed
   two of three BBBC038 instance-promotion criteria;
 - acquisition and culture metadata are strong classification shortcuts;

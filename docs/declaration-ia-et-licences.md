@@ -51,6 +51,7 @@ de la soumission publique.
 | OOC Image Dataset, Zenodo 10203721 | v1 (2023) | CC-BY-4.0 | classification de qualité, split groupé | md5 archive, sha256 tableur |
 | BBBC019 Microfluidics | v2 | CC-BY-3.0 | benchmark de segmentation | sha256 |
 | BBBC038 stage 1 train | v1 | CC0-1.0 | benchmark borné d'instances et de comptage, 12 images | sha256 archive, images, arbres de masques et manifeste |
+| iOrganoAssay | v1.1.0 | CC0-1.0 | validation externe bornée du premier plan d'organoïde, 28 triplets BF/GT/Seg | archive MD5 `3cd6380e9413b977fdc531f32338ccd2`, manifeste SHA-256 `6cfc1261b8ada078f85368a6316286093517bd42c46dd792b6ef331026d25a18` |
 
 Aucune donnée personnelle, clinique ou privée n'est utilisée.
 
@@ -79,3 +80,5 @@ poids, bibliothèques, musique et autres contenus tiers listés dans ce document
   Archit & Pape, « Revisiting foundation models for cell instance
   segmentation », MIDL 2026.
 - Howard et al., « Searching for MobileNetV3 », ICCV 2019.
+- Nam et al., « iOrganoAssay: Microscopy Image Dataset for Organoid
+  Assessment Assays », *Data* 11(1):9, 2026.

@@ -10,8 +10,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 
 - [ ] dépôt GitHub public (privé au 16 septembre 2026) ;
 - [x] fichier `LICENSE` Apache-2.0 ajouté ;
-- [x] équipe solo décidée ; nom public exact et affiliation éventuelle à
-  confirmer avant publication.
+- [x] équipe solo confirmée : **Ben Lol OUMAR**, responsable et unique membre ;
+  aucune affiliation institutionnelle déclarée.
 
 ## Jalon 1 — Socle démontrable
 
@@ -55,7 +55,15 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   270 images test exposées ;
 - [x] manifeste v2 généré avec paramètres figés
   (`data/splits/ooc-campaign-v2-lock.json`), v1 conservé ;
-- [ ] documentation du bruit de labels intra-groupe ;
+- [x] bruit de labels documenté sans relabellisation : 116 paires candidates
+  dHash ≤ 8, dont 26 à labels contradictoires ; voir le
+  [REX dédié](retours-experience/2026-09-17-bruit-labels-ooc.md) ;
+- [x] validation externe iOrganoAssay v1.1.0 exécutée une seule fois selon le
+  protocole pré-enregistré : macro-F1 `0,822746`, IC 95 %
+  `[0,772415 ; 0,867911]`, macro-IoU `0,717835`, contrôle `0,836929`, DSS
+  `0,808564` et trois critères sur trois atteints ; résultat limité au premier
+  plan d'organoïde, voir le
+  [REX dédié](retours-experience/2026-09-17-validation-externe-iorganoassay.md) ;
 - [x] clôture de la modélisation CNN sans ouverture du test : aucune
   configuration n'atteint le plancher de `0,65` de balanced accuracy par mode ;
   le test gelé n'a jamais été ouvert et ne le sera pas ; résultat négatif
@@ -70,7 +78,7 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   distribués dans le dépôt, voir le [REX](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md) ;
 - [x] vue de comparaison des moteurs alimentée par les rapports versionnés :
   F1/IoU, intervalles, coût CPU, mémoire et décision de promotion sont générés
-  depuis trois rapports verrouillés par SHA-256 ; les overlays d'erreur restent
+  depuis quatre rapports verrouillés par SHA-256 ; les overlays d'erreur restent
   des artefacts de benchmark locaux, voir le [REX](retours-experience/2026-09-17-comparaison-moteurs.md) ;
 - [x] champs contrôle/traitement masqués tant que l'affectation par image et
   l'agrégation par groupe ne sont pas livrées ;
@@ -79,7 +87,9 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   comptage dans l'interface ; la réserve « composantes connexes, non validées
   comme cellules » est affichée ;
 - [x] analyse d'erreurs BBBC038 et cas hors distribution documentés ;
-- [ ] caractéristiques morphologiques plus riches (optionnel).
+- [x] décision de ne pas ajouter de caractéristiques morphologiques plus riches
+  avant la soumission : elles modifieraient le moteur gelé sans vérité terrain
+  biologique ; piste reportée après le terminus.
 
 ## Jalon 4 — Stabilisation produit
 
@@ -106,16 +116,17 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 
 ## Jalon 5 — Remise (avant le 9 octobre)
 
-- [x] figer données, code et résultats avec inventaire de 40 checksums ;
+- [x] figer données, code et résultats avec inventaire de checksums régénéré
+  automatiquement pour chaque livrable suivi ;
 - [ ] release taguée avec checksums, DOI Zenodo optionnel ;
-- [x] rapports techniques candidats anglais et français de 15 pages, PDF
-  déterministes contrôlés visuellement ; publication et identité d'équipe
-  encore requises ;
+- [x] rapports techniques candidats anglais et français de 16 pages, PDF
+  déterministes contrôlés visuellement avec l'identité de Ben Lol OUMAR ;
+  publication encore requise ;
 - [x] vidéos candidates anglaise et française de 3 min 18 s montrant le produit
   réel, avec narration, avatar, musique sous licence, sous-titres et SRT ;
   publication encore requise ;
-- [x] Writeup Kaggle : catégorie, résumé 200–300 mots, limites et déclarations
-  préparés ; liens publics, équipe et licence encore requis ;
+- [x] Writeup Kaggle : catégorie, équipe, résumé 200–300 mots, limites,
+  déclarations et licence préparés ; liens publics encore requis ;
 - [x] brouillons bilingues, figures, PDF et vidéos locales finalisés ;
 - [ ] vérification de tous les liens en navigation privée.
 

@@ -29,6 +29,7 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - pipeline expérimental MobileNetV3 reproductible, avec modes `smoke`,
   `validation` et `final-eval` isolés ;
 - Docker Compose, suites unitaires et parcours Playwright bout en bout.
+- validation externe iOrganoAssay v1.1.0 pré-enregistrée et versionnée.
 
 ## Démarrage recommandé
 
@@ -131,6 +132,14 @@ make benchmark-bbbc019
 
 Les données brutes restent dans `data/raw/`, hors Git. Le manifeste, l'audit et
 les résultats versionnés sont décrits dans [data/README.md](data/README.md).
+
+Sur les 28 triplets officiels de validation iOrganoAssay v1.1.0, le moteur
+adaptatif gelé atteint un macro-F1 de `0,822746` (IC bootstrap 95 %
+`[0,772415 ; 0,867911]`) et les trois critères pré-enregistrés sont atteints.
+Cette preuve concerne le premier plan d'un organoïde cible ; elle ne valide ni
+le comptage cellulaire, ni la classification `good`/`bad`, ni la segmentation
+sur les images OoC du concours. Voir le
+[REX iOrganoAssay](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md).
 
 La modélisation CNN OoC est close après validation GPU et ablations A/B : aucune
 configuration n'a atteint le plancher pré-enregistré par mode et le test gelé
@@ -235,6 +244,8 @@ terminés. Aucun CNN n'a satisfait le critère par mode, le test gelé n'a jamai
 et les livrables de soumission.
 
 ## Licence
+
+Projet conçu et porté par **Ben Lol OUMAR**.
 
 Le code original d'OrganChip Insight est distribué sous licence
 [Apache-2.0](LICENSE). Les jeux de données, poids, bibliothèques et médias tiers

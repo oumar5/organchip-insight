@@ -2,18 +2,16 @@
 
 **Rapport technique candidat - 17 septembre 2026**
 
-**Équipe :** équipe solo ; le propriétaire du projet est l'unique membre et
-responsable. Le nom public exact et l'affiliation éventuelle doivent être
-confirmés avant la soumission.
+**Équipe :** Ben Lol OUMAR, unique membre et responsable de l'équipe. Aucune
+affiliation institutionnelle n'est déclarée.
 
 **Catégorie :** Outil & Plateforme
 
 **Release :** candidat validé sur `dev` ; tag public en attente de l'autorisation du propriétaire
 
 > Note de publication : les valeurs sont reliées aux rapports versionnés du projet.
-> L'identité publique de l'auteur, le tag public et les URL publiques restent
-> sous le contrôle du propriétaire et doivent être renseignés avant la
-> soumission du Writeup Kaggle.
+> Le tag public et les URL publiques restent sous le contrôle du propriétaire
+> et doivent être renseignés avant la soumission du Writeup Kaggle.
 
 ## Résumé
 
@@ -25,9 +23,10 @@ et une plateforme locale et reproductible qui réunit la gestion d'expériences,
 l'import robuste d'images, la segmentation CPU, l'inspection des overlays, les
 mesures par image, l'export des résultats et un registre transparent des moteurs.
 Le moteur adaptatif par défaut ne requiert aucun poids appris et fonctionne hors
-ligne. Les benchmarks externes BBBC019 et BBBC038 sont produits par des scripts
-versionnés et présentés dans le produit avec l'incertitude, le temps d'exécution,
-la mémoire, les décisions de promotion et la provenance SHA-256.
+ligne. Les benchmarks externes BBBC019, BBBC038 et iOrganoAssay sont produits
+par des scripts versionnés et présentés dans le produit avec l'incertitude, le
+temps d'exécution, la mémoire, les décisions de promotion et la provenance
+SHA-256.
 
 La crédibilité fait partie de l'implémentation, et non d'une annexe. L'étude de
 classification de qualité des images d'organes sur puce emploie des splits
@@ -75,20 +74,22 @@ ni prédiction de toxicité ou d'efficacité, ni comptage cellulaire validé.
 | OOC Image Dataset, Zenodo 10203721 | version 2023, CC-BY-4.0 | étude groupée de classification de qualité | manifestes train/validation/test verrouillés et checksums |
 | BBBC019 Microfluidics | v2, CC-BY-3.0 | benchmark externe de segmentation du premier plan | manifeste, CSV par image et rapport JSON |
 | BBBC038 stage 1 train | v1, CC0-1.0 | benchmark borné d'instances et de comptage sur 12 images | hashes de l'archive, des images et des masques ; manifeste verrouillé |
+| iOrganoAssay | v1.1.0, CC0-1.0 | validation externe pré-enregistrée du premier plan d'organoïde sur 28 triplets BF/GT/Seg | MD5 de l'archive, manifeste verrouillé de 84 fichiers, CSV par image et rapport JSON |
 
 La déclaration complète des données est maintenue dans
 [`docs/declaration-ia-et-licences.md`](../declaration-ia-et-licences.md).
 Aucune donnée personnelle, clinique ou privée n'est utilisée.
 
-### 2.2 Pourquoi trois jeux de données ne forment pas une seule validation
+### 2.2 Pourquoi quatre jeux de données ne forment pas une seule validation
 
 Les jeux répondent à des questions différentes. BBBC019 fournit des masques
 binaires de premier plan pour un petit ensemble microfluidique DIC. BBBC038
 fournit des masques d'instances nucléaires qui permettent d'auditer la détection
 d'instances et le comptage. Le jeu OOC du concours fournit des étiquettes de
 qualité au niveau image, mais aucun masque d'instance. Les scores sont donc
-présentés par jeu et par tâche. Ils ne sont jamais fusionnés en un chiffre unique,
-et BBBC019 ou BBBC038 ne valide pas le comptage cellulaire sur les images OOC.
+présentés par jeu et par tâche. Ils ne sont jamais fusionnés en un chiffre unique.
+iOrganoAssay fournit le masque d'un organoïde cible ; il ne valide ni la
+segmentation OOC, ni la classification, ni le comptage cellulaire.
 
 ### 2.3 Dépendance longitudinale et conception du split
 
@@ -184,6 +185,13 @@ comptage et trois critères de promotion. Aucun réglage postérieur au résulta
 été effectué. Voir
 [`docs/protocole-bbbc038-instances-v1.md`](../protocole-bbbc038-instances-v1.md).
 
+Le protocole iOrganoAssay a également été committé avant le score. Il évalue une
+seule fois le moteur adaptatif gelé sur les 28 triplets officiels BF/GT/Seg de
+la v1.1.0, avec seuils, adaptation d'entrée et trois critères de succès fixés.
+Le GT officiel identifie un organoïde cible par champ et n'est pas une annotation
+exhaustive d'instances. Voir
+[`docs/protocole-iorganoassay-validation-v1.md`](../protocole-iorganoassay-validation-v1.md).
+
 ### 5.2 Classification de qualité
 
 La cible de classification est binaire : `good`/`bad`. Le jour de culture et la
@@ -236,7 +244,27 @@ Le rapport source est
 Deux des trois critères de promotion pré-enregistrés ont échoué. µSAM n'a pas été
 promu dans le produit et aucun réglage n'a été effectué après observation du résultat.
 
-### 6.3 Classification de qualité et raccourcis de métadonnées
+### 6.3 Premier plan externe d'organoïde sur iOrganoAssay v1.1.0
+
+| Métrique | Résultat adaptatif | Référence contextuelle Seg officielle |
+|---|---:|---:|
+| Macro-F1 | 0,822746 | 0,926390 |
+| IC bootstrap 95 % du macro-F1 adaptatif | [0,772415 ; 0,867911] | - |
+| Macro-IoU | 0,717835 | 0,868744 |
+| Macro-F1 contrôle | 0,836929 | 0,878810 |
+| Macro-F1 DSS | 0,808564 | 0,973971 |
+
+Une seule image sur 28 (3,5714 %) est sous F1 0,50 ; les trois critères
+pré-enregistrés sont atteints. Le temps moyen d'inférence adaptative est de
+0,062657 seconde par image. Le cas le plus faible, `DSS_13`, illustre la limite
+principale : le moteur inclut d'autres structures sombres ressemblant à des
+organoïdes tandis que le GT officiel marque une cible centrale ; un premier
+plan plausible supplémentaire est donc compté comme faux positif. Le résultat
+est une preuve externe de segmentation d'un organoïde cible, pas une validation
+d'instances plein champ ni d'essai biologique. Le rapport source est
+[`iorganoassay-validation-v1.1.0-adaptive-v1.json`](../../reports/benchmarks/iorganoassay-validation-v1.1.0-adaptive-v1.json).
+
+### 6.4 Classification de qualité et raccourcis de métadonnées
 
 | Run | BA globale | BA L | BA RGB | AUC globale | AUC L | AUC RGB |
 |---|---:|---:|---:|---:|---:|---:|
@@ -271,8 +299,8 @@ et le jeu de test gelé reste fermé.
 
 ## 7. Vérification du produit
 
-La suite backend contient 177 tests collectés dans le candidat du 17 septembre
-2026 : 176 réussissent et un test dépendant de l'environnement est ignoré. Ruff,
+La suite backend contient 185 tests collectés dans le candidat du 17 septembre
+2026 : 184 réussissent et un test dépendant de l'environnement est ignoré. Ruff,
 le type-check TypeScript, le build Vite de production, la synchronisation des
 notebooks, celle du résumé de benchmarks, l'audit de l'arbre de release,
 l'inventaire de checksums et la configuration Docker Compose passent via
@@ -298,9 +326,16 @@ sources de soumission et preuves frontend suivis.
 ## 8. Crédibilité et limites
 
 1. **Groupement biologique.** La date d'acquisition est un proxy, pas un identifiant de puce ou de puits. L'indépendance biologique ne peut pas être établie.
-2. **Étiquettes de qualité.** Des images adjacentes ou quasi dupliquées peuvent porter des étiquettes contradictoires. Le projet ne les réinterprète pas après observation des sorties.
+2. **Étiquettes de qualité.** L'écran exhaustif de 4 717 056 paires trouve 116
+   voisinages dHash ≤ 8, dont 26 à labels contradictoires. Cette similarité ne
+   prouve pas une identité biologique ; le projet ne réinterprète ni ne corrige
+   les labels après observation des sorties.
 3. **Raccourcis d'acquisition.** La résolution identifie presque le mode et le mode interagit fortement avec la prévalence des classes. Les métriques globales sont insuffisantes.
-4. **Petits benchmarks externes.** BBBC019 ne contient que 13 images évaluées et BBBC038 un audit pré-enregistré de 12 images. Aucun résultat n'est une estimation de population sur les images OOC.
+4. **Petits benchmarks externes.** BBBC019 contient 13 images évaluées,
+   BBBC038 un audit pré-enregistré de 12 images et iOrganoAssay 28 images de
+   validation dans deux conditions. Aucun résultat n'est une estimation de
+   population sur les images OOC. Le GT iOrganoAssay marque un organoïde cible,
+   pas toutes les instances visibles.
 5. **Aucune calibration physique.** Les surfaces et diamètres sont en pixels, pas en µm ou µm².
 6. **Aucun comptage cellulaire validé.** Les composantes connexes sont des structures heuristiques, pas des cellules ou noyaux vérifiés sur OOC.
 7. **Sortie CNN non calibrée.** Les valeurs softmax du démonstrateur optionnel ne sont pas des probabilités calibrées et ne pilotent aucune décision automatique.
@@ -362,7 +397,7 @@ make benchmark-summary
 ```
 
 `make check` vérifie que le résumé frontend généré correspond exactement aux
-trois rapports JSON verrouillés. Les jeux bruts restent hors de Git et sont
+quatre rapports JSON verrouillés. Les jeux bruts restent hors de Git et sont
 acquis ou vérifiés par les manifestes et scripts documentés dans
 [`data/README.md`](../../data/README.md).
 
@@ -390,9 +425,11 @@ OrganChip Insight montre qu'une plateforme utile d'imagerie d'organes sur puce
 ne se définit pas par un score unique. Elle se définit par un chemin complet
 depuis une entrée validée jusqu'à des preuves inspectables et exportables, avec
 provenance et limites préservées. Le workflow adaptatif est rapide, local et
-disponible ; une segmentation externe plus forte mais coûteuse reste un
-benchmark ; et un classifieur sensible aux raccourcis ne peut pas prendre de
-décision automatique. La plateforme est donc techniquement assez complète pour
+disponible ; il atteint un macro-F1 de 0,822746 sur la validation externe
+iOrganoAssay pré-enregistrée, tandis que le meilleur résultat µSAM sur BBBC019,
+plus coûteux, reste un benchmark isolé et qu'un classifieur sensible aux
+raccourcis ne peut pas prendre de décision automatique. La plateforme est donc
+techniquement assez complète pour
 être démontrée, tout en restant explicite sur les validations que les futures
 données devront apporter.
 
@@ -403,3 +440,4 @@ données devront apporter.
 3. Archit et al. “Segment Anything for Microscopy.” *Nature Methods*, 2025.
 4. Archit et Pape. “Revisiting foundation models for cell instance segmentation.” MIDL, 2026.
 5. Howard et al. “Searching for MobileNetV3.” ICCV, 2019.
+6. Nam et al. “iOrganoAssay: Microscopy Image Dataset for Organoid Assessment Assays.” *Data* 11(1):9, 2026.

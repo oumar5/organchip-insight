@@ -72,7 +72,7 @@ dataset d'entraînement :
 | Dataset | Contenu | Licence | Usage envisagé |
 |---|---|---|---|
 | [Brain organoid dataset, Zenodo 10301912](https://www.nature.com/articles/s41597-024-03330-z) | 1 400 images bright-field de 64 organoïdes suivis, quatre clones, deux laboratoires, masques binaires manuels | CC-BY-4.0, archive de 973,6 Mo | robustesse inter-laboratoire de la segmentation sur un sous-ensemble pré-enregistré |
-| [iOrganoAssay v1.1.0, *Data* 2026](https://doi.org/10.5281/zenodo.20351867) | 234 images bright-field, métadonnées d'essais, sorties morphométriques et 28 triplets officiels BF/GT/Seg de validation | CC0-1.0, archive de 1,82 Go | candidat retenu pour un test externe unique sur les 28 triplets, avec extraction sélective et protocole pré-enregistré |
+| [iOrganoAssay v1.1.0, *Data* 2026](https://doi.org/10.5281/zenodo.20351867) | 234 images bright-field, métadonnées d'essais, sorties morphométriques et 28 triplets officiels BF/GT/Seg de validation | CC0-1.0, archive de 1,82 Go | test externe exécuté une fois selon le protocole pré-enregistré : macro-F1 0,822746, IC 95 % [0,772415 ; 0,867911] ; preuve bornée de premier plan d'organoïde |
 | [MultiOrg, NeurIPS 2024](https://arxiv.org/abs/2410.14612) | plus de 400 images de plaques, 60 000 annotations par boîtes et trois jeux de labels par deux experts | CC-BY-NC-SA-4.0, environ 35,4 Go | référence sur l'incertitude d'annotation ; non intégré avant soumission |
 | [SWIFT, *Communications Biology* 2026](https://www.nature.com/articles/s42003-026-10768-x) | 417 images bright-field de côlon pour segmentation, classification et suivi YOLOv8s/SAM | code public ; bundle de données à auditer | concurrent récent et source méthodologique, pas une nouvelle dépendance de release |
 | BBBC038 | noyaux, masques d'instances, CC0 | CC0 | audit zéro-shot exécuté sur 12 images diverses ; résultat mitigé, non généralisable aux images OoC |
@@ -80,8 +80,9 @@ dataset d'entraînement :
 Aucun second dataset public d'images OoC bright-field avec le même label de
 qualité n'a été trouvé. La validation externe la plus honnête reste donc une
 segmentation sur organoïdes bright-field et une robustesse inter-laboratoire,
-avec le label `good`/`bad` strictement limité au dataset OoC. Un seul test
-externe supplémentaire est envisagé ; il ne doit pas retarder la publication.
+avec le label `good`/`bad` strictement limité au dataset OoC. Le test
+iOrganoAssay a été exécuté une seule fois après pré-enregistrement ; aucun
+second dataset externe n'est lancé avant la publication.
 
 ## Contraintes d'exécution Kaggle
 

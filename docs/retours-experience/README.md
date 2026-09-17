@@ -6,6 +6,7 @@ a été prise.
 
 ## Index
 
+- [Validation externe iOrganoAssay v1.1.0 — 17 septembre 2026](2026-09-17-validation-externe-iorganoassay.md)
 - [Bruit d'étiquettes dans les voisinages visuels OoC — 17 septembre 2026](2026-09-17-bruit-labels-ooc.md)
 - [Refonte UX : onglets, galerie, visionneuse et modales — 17 septembre 2026](2026-09-17-refonte-ux-galerie-modales.md)
 - [Refonte de l'interface : composants, lisibilité, cache nginx — 17 septembre 2026](2026-09-17-refonte-interface-composants.md)

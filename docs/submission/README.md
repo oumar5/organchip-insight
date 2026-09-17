@@ -3,7 +3,8 @@
 This directory contains editable English and French deliverables for the AI4S
 Open Innovation submission. It deliberately keeps publication-dependent fields
 visible rather than inventing links. The code licence is Apache-2.0 and the
-team format is solo.
+team is Ben Lol OUMAR as sole member and lead, with no institutional affiliation
+declared.
 
 - [English technical report source](technical-report-en.md)
 - [French technical report source](technical-report-fr.md)
@@ -20,7 +21,6 @@ team format is solo.
 
 ## Fields that still require the project owner's decision
 
-- exact public author name and optional affiliation;
 - public repository URL and release tag;
 - public video URL;
 - optional hosted-demo URL;

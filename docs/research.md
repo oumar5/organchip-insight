@@ -51,7 +51,7 @@ Source : [BBBC038 v1](https://bbbc.broadinstitute.org/BBBC038).
 | BBBC047 | 30 616 composés, licence commerciale permise | 919 265 champs ; sous-échantillon futur |
 | IDR | images et métadonnées de publications | hétérogène ; validation externe ciblée |
 | BioImage Model Zoo | modèles normalisés | licence à vérifier modèle par modèle |
-| iOrganoAssay v1.1.0, 2026 | 234 bright-fields, essais, segmentation, morphométrie et 28 triplets officiels BF/GT/Seg | CC0-1.0, archive de 1,82 Go ; retenu pour un test externe borné, sans classification `good`/`bad` |
+| iOrganoAssay v1.1.0, 2026 | 234 bright-fields, essais, segmentation, morphométrie et 28 triplets officiels BF/GT/Seg | CC0-1.0, archive de 1,82 Go ; test externe borné exécuté une fois, macro-F1 0,822746 [0,772415 ; 0,867911], sans classification `good`/`bad` |
 | Brain Organoid Dataset v2 | 1 400 images suivies dans deux laboratoires avec masques manuels | CC-BY-4.0 ; alternative pour robustesse inter-laboratoire |
 | MultiOrg | 60 000 boîtes annotées par deux experts et trois jeux de labels | 35,4 Go, CC-BY-NC-SA-4.0 ; référence sur l'incertitude, non intégré avant soumission |
 | SWIFT 2026 | pipeline YOLOv8s/SAM sur 417 bright-fields de côlon | état de l'art récent ; ne pas ajouter une nouvelle chaîne avant release |
