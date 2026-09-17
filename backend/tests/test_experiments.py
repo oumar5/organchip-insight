@@ -44,6 +44,35 @@ def test_analysis_requires_images() -> None:
     assert "Importez au moins une image" in response.json()["detail"]
 
 
+def test_api_localizes_human_facing_errors_and_engine_metadata() -> None:
+    create_response = client.post(
+        "/api/v1/experiments",
+        json={"name": "English API contract"},
+    )
+    experiment_id = create_response.json()["id"]
+
+    response = client.post(
+        f"/api/v1/experiments/{experiment_id}/analyze",
+        headers={"Accept-Language": "en-US,en;q=0.9"},
+    )
+    assert response.status_code == 409
+    assert response.json()["detail"] == "Upload at least one image before analysis"
+    assert response.headers["content-language"] == "en"
+
+    registry_response = client.get(
+        "/api/v1/inference/engines",
+        headers={"Accept-Language": "en"},
+    )
+    assert registry_response.status_code == 200
+    adaptive = next(
+        engine
+        for engine in registry_response.json()
+        if engine["id"] == "adaptive-segmentation-v1"
+    )
+    assert adaptive["name"] == "Adaptive segmentation v1"
+    assert "clinical decisions" in adaptive["limitations"][0]
+
+
 def test_upload_and_analyze_real_image() -> None:
     create_response = client.post(
         "/api/v1/experiments",

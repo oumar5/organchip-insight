@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useI18n } from "../i18n";
 import { Modal } from "./Modal";
 
 export interface LightboxItem {
@@ -16,6 +17,7 @@ interface LightboxProps {
 }
 
 export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
+  const { locale } = useI18n();
   const [layer, setLayer] = useState<"overlay" | "original">("overlay");
   const item = index === null ? null : items[index] ?? null;
 
@@ -41,23 +43,25 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
         <div className="lightbox">
           <div className="lightbox-toolbar">
             {item.overlay_url && item.original_url && (
-              <div className="segmented" role="group" aria-label="Couche affichée">
-                <button type="button" className={layer === "original" ? "active" : ""} onClick={() => setLayer("original")}>Source (aperçu)</button>
+              <div className="segmented" role="group" aria-label={locale === "fr" ? "Couche affichée" : "Displayed layer"}>
+                <button type="button" className={layer === "original" ? "active" : ""} onClick={() => setLayer("original")}>{locale === "fr" ? "Source (aperçu)" : "Source (preview)"}</button>
                 <button type="button" className={layer === "overlay" ? "active" : ""} onClick={() => setLayer("overlay")}>Segmentation</button>
               </div>
             )}
             <div className="lightbox-nav">
-              <button type="button" className="secondary-button" disabled={index === 0} onClick={() => onNavigate((index ?? 0) - 1)}>← Précédente</button>
+              <button type="button" className="secondary-button" disabled={index === 0} onClick={() => onNavigate((index ?? 0) - 1)}>← {locale === "fr" ? "Précédente" : "Previous"}</button>
               <span className="muted">{(index ?? 0) + 1} / {items.length}</span>
-              <button type="button" className="secondary-button" disabled={index === items.length - 1} onClick={() => onNavigate((index ?? 0) + 1)}>Suivante →</button>
+              <button type="button" className="secondary-button" disabled={index === items.length - 1} onClick={() => onNavigate((index ?? 0) + 1)}>{locale === "fr" ? "Suivante" : "Next"} →</button>
             </div>
           </div>
           <div className="lightbox-stage">
-            {source ? <img src={source} alt={`${item.title} · ${layer === "overlay" ? "segmentation" : "aperçu source"}`} /> : <p className="muted">Aucune image disponible.</p>}
+            {source ? <img src={source} alt={`${item.title} · ${layer === "overlay" ? "segmentation" : locale === "fr" ? "aperçu source" : "source preview"}`} /> : <p className="muted">{locale === "fr" ? "Aucune image disponible." : "No image available."}</p>}
           </div>
           {item.original_url && (
             <p className="muted lightbox-preview-note">
-              L’aperçu est un PNG 8 bits destiné uniquement à l’affichage. L’analyse utilise le fichier source conservé dans son format d’origine.
+              {locale === "fr"
+                ? "L’aperçu est un PNG 8 bits destiné uniquement à l’affichage. L’analyse utilise le fichier source conservé dans son format d’origine."
+                : "The preview is an 8-bit PNG for display only. Analysis uses the source file in its original format."}
             </p>
           )}
           {item.facts.length > 0 && (

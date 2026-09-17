@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
+import { useI18n } from "../i18n";
 
 interface ModalProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface ModalProps {
 }
 
 export function Modal({ open, title, onClose, children, wide = false }: ModalProps) {
+  const { locale } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export function Modal({ open, title, onClose, children, wide = false }: ModalPro
       <div className="modal-body">
         <div className="modal-heading">
           <h2 id="modal-title">{title}</h2>
-          <button className="icon-button" type="button" onClick={onClose} aria-label="Fermer">×</button>
+          <button className="icon-button" type="button" onClick={onClose} aria-label={locale === "fr" ? "Fermer" : "Close"}>×</button>
         </div>
         {children}
       </div>

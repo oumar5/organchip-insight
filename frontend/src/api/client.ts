@@ -12,14 +12,17 @@ import type {
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api/v1";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, init);
+  const english = document.documentElement.lang.startsWith("en");
+  const headers = new Headers(init?.headers);
+  headers.set("Accept-Language", english ? "en" : "fr");
+  const response = await fetch(`${API_BASE_URL}${path}`, { ...init, headers });
   if (!response.ok) {
     const payload = (await response.json().catch(() => null)) as { detail?: unknown } | null;
     const detail = payload?.detail;
     const message = typeof detail === "string" ? detail : Array.isArray(detail)
-      ? detail.map((item) => `${item.loc?.slice(1).join(".") ?? "Champ"} : ${item.msg ?? "Valeur invalide"}`).join(" ; ")
-      : response.status === 413 ? "Fichier trop volumineux pour le serveur."
-        : `La requête a échoué (HTTP ${response.status}).`;
+      ? detail.map((item) => `${item.loc?.slice(1).join(".") ?? (english ? "Field" : "Champ")} : ${item.msg ?? (english ? "Invalid value" : "Valeur invalide")}`).join(" ; ")
+      : response.status === 413 ? (english ? "The file is too large for the server." : "Fichier trop volumineux pour le serveur.")
+        : english ? `Request failed (HTTP ${response.status}).` : `La requête a échoué (HTTP ${response.status}).`;
     throw new Error(message);
   }
   return response.json() as Promise<T>;
@@ -82,7 +85,7 @@ export function experimentResultExportUrl(
 export async function getBenchmarkSummary(): Promise<BenchmarkSummary> {
   const response = await fetch("/benchmark-summary.json", { cache: "no-store" });
   if (!response.ok) {
-    throw new Error("La synthèse des benchmarks versionnés est indisponible.");
+    throw new Error(document.documentElement.lang.startsWith("en") ? "The versioned benchmark summary is unavailable." : "La synthèse des benchmarks versionnés est indisponible.");
   }
   return response.json() as Promise<BenchmarkSummary>;
 }

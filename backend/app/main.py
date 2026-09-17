@@ -1,10 +1,12 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.api.router import api_router
 from app.config import get_settings
+from app.i18n import resolve_locale, translate_text
 from app.repository import repository
 
 settings = get_settings()
@@ -32,9 +34,25 @@ app.add_middleware(
 )
 
 
+@app.exception_handler(HTTPException)
+async def localized_http_exception(request: Request, error: HTTPException) -> JSONResponse:
+    locale = resolve_locale(request.headers.get("accept-language"))
+    detail = error.detail
+    if isinstance(detail, str):
+        detail = translate_text(detail, locale)
+    return JSONResponse(
+        status_code=error.status_code,
+        content={"detail": detail},
+        headers=error.headers,
+    )
+
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next) -> Response:
     response = await call_next(request)
+    response.headers["Content-Language"] = resolve_locale(
+        request.headers.get("accept-language")
+    )
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"

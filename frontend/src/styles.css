@@ -116,6 +116,28 @@ h3 { font-size: 0.95rem; }
   background: #57d09f;
 }
 
+.language-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.language-switch button {
+  min-width: 34px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted-on-dark);
+  background: transparent;
+  font-size: var(--font-xs);
+  font-weight: 800;
+}
+.language-switch button.active {
+  color: var(--green-950);
+  background: #a7edcf;
+}
+
 .system-status {
   display: inline-flex;
   align-items: center;
@@ -940,7 +962,8 @@ input:focus, textarea:focus, select:focus { border-color: #5dad8d; box-shadow: 0
   .rail-footnote { margin-top: 0; }
   .appbar { flex-wrap: wrap; gap: 10px; padding: 10px 16px; }
   .tabs { order: 3; width: 100%; margin-left: 0; overflow-x: auto; }
-  .system-status { margin-left: auto; }
+  .language-switch { margin-left: auto; }
+  .system-status { margin-left: 0; }
   .stepper { flex-wrap: wrap; }
 }
 

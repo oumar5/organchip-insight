@@ -1,6 +1,9 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Header
 
 from app.config import get_settings
+from app.i18n import localize_engine, resolve_locale
 from app.ml.runtime import list_inference_engines
 from app.schemas import AnalysisEngine
 
@@ -17,5 +20,8 @@ def get_upload_limits() -> dict[str, int]:
 
 
 @router.get("/engines", response_model=list[AnalysisEngine])
-def get_inference_engines() -> list[AnalysisEngine]:
-    return list_inference_engines()
+def get_inference_engines(
+    accept_language: Annotated[str | None, Header()] = None,
+) -> list[AnalysisEngine]:
+    locale = resolve_locale(accept_language)
+    return [localize_engine(engine, locale) for engine in list_inference_engines()]

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { AnalysisEngine } from "../types";
-import { engineKindLabels, engineStatusLabels } from "../lib/format";
+import { engineKindLabel, engineStatusLabel, localizedEngine, localizedRuntimeText } from "../lib/format";
+import { useI18n } from "../i18n";
 import { Modal } from "./Modal";
 
 interface EngineSelectorProps {
@@ -11,17 +12,20 @@ interface EngineSelectorProps {
 }
 
 export function EngineSelector({ engines, selectedEngineId, busy, onSelect }: EngineSelectorProps) {
+  const { locale } = useI18n();
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const details = engines.find((engine) => engine.id === detailsId) ?? null;
+  const localizedDetails = details ? localizedEngine(details, locale) : null;
 
   return (
     <section className="card" aria-labelledby="engine-title">
       <div className="card-heading">
-        <h2 id="engine-title">Moteur</h2>
-        <span className="card-meta">Maturité et disponibilité affichées séparément</span>
+        <h2 id="engine-title">{locale === "fr" ? "Moteur" : "Engine"}</h2>
+        <span className="card-meta">{locale === "fr" ? "Maturité et disponibilité affichées séparément" : "Maturity and availability shown separately"}</span>
       </div>
       <div className="engine-grid" role="radiogroup" aria-labelledby="engine-title">
-        {engines.map((engine) => {
+        {engines.map((sourceEngine) => {
+          const engine = localizedEngine(sourceEngine, locale);
           const selected = engine.id === selectedEngineId;
           return (
             <div className={`engine-option ${selected ? "selected" : ""} ${engine.runnable ? "" : "disabled"}`} key={engine.id}>
@@ -34,34 +38,34 @@ export function EngineSelector({ engines, selectedEngineId, busy, onSelect }: En
                 onClick={() => onSelect(engine.id)}
               >
                 <span className="engine-name">{engine.name}</span>
-                <span className={`engine-status status-${engine.status}`}>{engineStatusLabels[engine.status]}</span>
+                <span className={`engine-status status-${engine.status}`}>{engineStatusLabel(engine.status, locale)}</span>
                 <span className="engine-desc">{engine.description}</span>
                 <span className="engine-meta">
-                  {engineKindLabels[engine.kind]} · {engine.runnable ? "exécutable" : "indisponible"}
+                  {engineKindLabel(engine.kind, locale)} · {engine.runnable ? (locale === "fr" ? "exécutable" : "runnable") : (locale === "fr" ? "indisponible" : "unavailable")}
                 </span>
               </button>
               <button type="button" className="link-button" onClick={() => setDetailsId(engine.id)}>
-                Détails et limites
+                {locale === "fr" ? "Détails et limites" : "Details and limits"}
               </button>
             </div>
           );
         })}
-        {engines.length === 0 && <p className="muted">Registre indisponible.</p>}
+        {engines.length === 0 && <p className="muted">{locale === "fr" ? "Registre indisponible." : "Registry unavailable."}</p>}
       </div>
 
-      <Modal open={details !== null} title={details?.name ?? "Moteur"} onClose={() => setDetailsId(null)}>
-        {details && (
+      <Modal open={localizedDetails !== null} title={localizedDetails?.name ?? (locale === "fr" ? "Moteur" : "Engine")} onClose={() => setDetailsId(null)}>
+        {localizedDetails && (
           <div className="engine-details">
-            <p>{details.description}</p>
+            <p>{localizedDetails.description}</p>
             <dl className="kv">
-              <dt>Statut</dt><dd>{engineStatusLabels[details.status]}</dd>
-              <dt>Type</dt><dd>{engineKindLabels[details.kind]}</dd>
-              <dt>Entraînement local</dt><dd>{details.training_required ? "requis" : "aucun"}</dd>
-              <dt>Disponibilité</dt><dd>{details.runnable ? "exécutable ici" : `indisponible : ${details.unavailable_reason ?? "raison non précisée"}`}</dd>
+              <dt>{locale === "fr" ? "Statut" : "Status"}</dt><dd>{engineStatusLabel(localizedDetails.status, locale)}</dd>
+              <dt>{locale === "fr" ? "Type" : "Type"}</dt><dd>{engineKindLabel(localizedDetails.kind, locale)}</dd>
+              <dt>{locale === "fr" ? "Entraînement local" : "Local training"}</dt><dd>{localizedDetails.training_required ? (locale === "fr" ? "requis" : "required") : (locale === "fr" ? "aucun" : "none")}</dd>
+              <dt>{locale === "fr" ? "Disponibilité" : "Availability"}</dt><dd>{localizedDetails.runnable ? (locale === "fr" ? "exécutable ici" : "runnable here") : `${locale === "fr" ? "indisponible" : "unavailable"} : ${localizedRuntimeText(localizedDetails.unavailable_reason ?? (locale === "fr" ? "raison non précisée" : "reason not specified"), locale)}`}</dd>
             </dl>
-            <h3>Limites connues</h3>
+            <h3>{locale === "fr" ? "Limites connues" : "Known limitations"}</h3>
             <ul>
-              {details.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
+              {localizedDetails.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
             </ul>
           </div>
         )}
