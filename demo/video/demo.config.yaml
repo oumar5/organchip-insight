@@ -13,9 +13,9 @@ paths:
   output: output
 pipeline:
   narration:
-    provider: none
+    provider: chatterbox
   avatar:
-    provider: none
+    provider: rhubarb
 theme:
   background: "#071d17"
   accent: "#1f7a61"

@@ -1,27 +1,27 @@
 1
-00:00:00,000 --> 00:00:10,836
+00:00:00,000 --> 00:00:08,960
 Organ-on-chip microscopy needs more than a model score. OrganChip Insight keeps images, measurements, provenance, and scientific limits inside one local experiment.
 
 2
-00:00:18,000 --> 00:00:29,926
+00:00:18,000 --> 00:00:27,680
 Before analysis, the user records an objective and imports hash-locked public microscopy images. Upload is separated from inference, so a failed analysis never duplicates the source files.
 
 3
-00:00:50,000 --> 00:00:59,623
+00:00:50,000 --> 00:00:57,600
 The default adaptive engine runs locally on the CPU without model weights. The original TIFF is analyzed, while the normalized preview is used only for inspection.
 
 4
-00:01:26,000 --> 00:01:37,275
+00:01:26,000 --> 00:01:35,160
 Each segmentation overlay remains linked to its source and measurements. Components are never presented as validated cells, and geometry stays in pixels when physical calibration is unavailable.
 
 5
-00:01:56,000 --> 00:02:07,184
+00:01:56,000 --> 00:02:04,160
 JSON and CSV exports preserve the experiment, engine, parameters, per-image results, and generation time, making every result independently auditable.
 
 6
-00:02:16,000 --> 00:02:31,479
+00:02:16,000 --> 00:02:29,720
 Versioned external benchmarks report both accuracy and computational cost. MicroSAM performs better on BBBC019 foreground segmentation, but it fails two of three preregistered BBBC038 promotion criteria.
 
 7
-00:02:52,000 --> 00:03:05,992
+00:02:52,000 --> 00:03:01,640
 Quality classification did not establish a robust signal independent of acquisition shortcuts. The frozen test set remains unopened, and the product ships with abstention, checksums, tests, and explicit limits.

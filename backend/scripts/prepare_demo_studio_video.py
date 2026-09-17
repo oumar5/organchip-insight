@@ -238,6 +238,20 @@ def create_narration(
     return segments, subtitle_path
 
 
+def clear_delegated_narration(
+    project_root: Path,
+    specification: LanguageSpec,
+) -> None:
+    """Remove generated narration before Demo Studio rebuilds it."""
+    run_root = project_root / "public/runs" / specification.journey_id
+    shutil.rmtree(run_root / "audio", ignore_errors=True)
+    for generated_path in (
+        run_root / "narration.json",
+        run_root / f"{specification.language}.srt",
+    ):
+        generated_path.unlink(missing_ok=True)
+
+
 def create_timeline(
     project_root: Path,
     specification: LanguageSpec,
@@ -334,6 +348,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw-video", type=Path, required=True)
     parser.add_argument("--project-root", type=Path, default=DEFAULT_PROJECT_ROOT)
+    parser.add_argument(
+        "--timeline-only",
+        action="store_true",
+        help="Let Demo Studio generate neural narration and subtitles.",
+    )
     arguments = parser.parse_args()
 
     raw_video = arguments.raw_video.resolve()
@@ -344,24 +363,36 @@ def main() -> None:
 
     shared_root = project_root / "public/runs/shared"
     shared_root.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(raw_video, shared_root / "capture.webm")
+    shared_capture = (shared_root / "capture.webm").resolve()
+    if raw_video != shared_capture:
+        shutil.copy2(raw_video, shared_capture)
 
     result: dict[str, object] = {"raw_duration_ms": raw_duration_ms, "languages": {}}
     for language, specification in LANGUAGES.items():
-        segments, subtitle_path = create_narration(
-            project_root, specification, raw_duration_ms
-        )
         create_timeline(project_root, specification, raw_duration_ms)
-        result["languages"][language] = {
-            "journey_id": specification.journey_id,
-            "voice": specification.voice,
-            "subtitle": str(subtitle_path),
-            "narration_seconds": round(
-                sum(int(segment["endMs"]) - int(segment["startMs"]) for segment in segments)
-                / 1000,
-                3,
-            ),
-        }
+        if arguments.timeline_only:
+            clear_delegated_narration(project_root, specification)
+            result["languages"][language] = {
+                "journey_id": specification.journey_id,
+                "narration": "delegated-to-demo-studio",
+            }
+        else:
+            segments, subtitle_path = create_narration(
+                project_root, specification, raw_duration_ms
+            )
+            result["languages"][language] = {
+                "journey_id": specification.journey_id,
+                "voice": specification.voice,
+                "subtitle": str(subtitle_path),
+                "narration_seconds": round(
+                    sum(
+                        int(segment["endMs"]) - int(segment["startMs"])
+                        for segment in segments
+                    )
+                    / 1000,
+                    3,
+                ),
+            }
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

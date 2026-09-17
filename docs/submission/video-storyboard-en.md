@@ -9,15 +9,15 @@ five-minute limit. The product is on screen immediately. Both candidates are
 Run `make demo-video` to build the **English and French 3:18 candidates** from
 one capture of the locked real-image manifest. The command starts an isolated
 Docker stack, checks every source hash, records the browser, generates local
-system narration without voice cloning, and uses Demo Studio to add a visible
-presenter, licensed background music and language-specific subtitles. It then
+Chatterbox narration without voice cloning, and uses Demo Studio with Rhubarb
+to add a lip-synced presenter, licensed music and language-specific subtitles. It then
 normalizes both outputs to H.264 yuv420p/AAC and validates duration, codecs,
 resolution, file size, subtitle reservations and non-silent audio. Run
 `make demo-video-check` for a read-only verification.
 
-English uses the macOS `Daniel` voice and French uses `Thomas`. The presenter
-is static because the optional Rhubarb lip-sync runtime is not required for the
-submission. The soundtrack licence notice is versioned next to the audio.
+English and French use the same local neural pipeline without reference audio.
+Rhubarb produces mouth cues for the presenter. The soundtrack licence notice
+is versioned next to the audio.
 
 ## Recording prerequisites
 

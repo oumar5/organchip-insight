@@ -14,15 +14,18 @@ classification test set.
 
 ## Rebuild
 
-On macOS, make sure Docker, FFmpeg, Node, the system `say` command, and the
-local Demo Studio checkout are available. Demo Studio defaults to the sibling
-directory `../demo-studio`; set `DEMO_STUDIO_ROOT` to override it.
+On macOS, make sure Docker, FFmpeg, Node, the local Demo Studio checkout, and a
+compatible Chatterbox/Rhubarb runtime are available. Demo Studio defaults to
+the sibling directory `../demo-studio`; the natural-voice runtime defaults to
+`../solmik/product-demos/.runtime`. Set `DEMO_STUDIO_ROOT` or
+`ORGANCHIP_NATURAL_VOICE_ROOT` to override either location.
 
 ```bash
 make demo-video
 make demo-video-check
 ```
 
-Narration uses the system voices `Daniel` (`en_GB`) and `Thomas` (`fr_FR`). No
-voice clone or remote speech service is used. The soundtrack and its Pixabay
-licence notice are stored under `public/music/`.
+Narration uses the local Chatterbox neural runtime and Rhubarb generates mouth
+cues for the presenter. No reference voice, voice clone or remote speech
+service is used. The soundtrack and its Pixabay licence notice are stored
+under `public/music/`.

@@ -1,27 +1,27 @@
 1
-00:00:00,000 --> 00:00:10,865
+00:00:00,000 --> 00:00:08,840
 La microscopie d'organes sur puce exige plus qu'un score de modèle. OrganChip Insight réunit images, mesures, provenance et limites scientifiques dans une expérience locale.
 
 2
-00:00:18,000 --> 00:00:29,956
+00:00:18,000 --> 00:00:27,720
 Avant l'analyse, l'utilisateur consigne un objectif et importe des images publiques verrouillées par empreinte. L'import reste séparé de l'inférence, afin qu'un échec d'analyse ne duplique jamais les sources.
 
 3
-00:00:50,000 --> 00:01:00,749
+00:00:50,000 --> 00:00:59,040
 Le moteur adaptatif par défaut s'exécute localement sur processeur, sans poids de modèle. Le TIFF original est analysé ; l'aperçu normalisé sert uniquement à l'inspection.
 
 4
-00:01:26,000 --> 00:01:37,328
+00:01:26,000 --> 00:01:35,560
 Chaque overlay de segmentation reste relié à sa source et à ses mesures. Les composantes ne sont jamais présentées comme des cellules validées, et la géométrie reste en pixels sans calibration physique.
 
 5
-00:01:56,000 --> 00:02:07,085
+00:01:56,000 --> 00:02:04,360
 Les exports JSON et CSV conservent l'expérience, le moteur, les paramètres, les résultats par image et l'heure de génération, afin que chaque résultat soit auditable.
 
 6
-00:02:16,000 --> 00:02:29,848
+00:02:16,000 --> 00:02:27,480
 Les benchmarks externes versionnés publient à la fois la précision et le coût de calcul. MicroSAM est meilleur sur la segmentation BBBC019, mais échoue à deux des trois critères préenregistrés sur BBBC038.
 
 7
-00:02:52,000 --> 00:03:05,140
+00:02:52,000 --> 00:03:03,080
 La classification de qualité n'a pas établi de signal robuste indépendant des raccourcis d'acquisition. Le jeu de test gelé reste fermé, et le produit livre abstention, checksums, tests et limites explicites.
