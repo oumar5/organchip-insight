@@ -33,6 +33,7 @@ Ce dossier est la source de vérité produit, scientifique et technique.
 
 - [Expérience utilisateur](ux.md)
 - [Sécurité et données](security-and-data.md)
+- [Stabilisation produit, exports, sécurité et Docker](retours-experience/2026-09-17-stabilisation-produit-exports-securite-docker.md)
 - [Roadmap](roadmap.md)
 - [Retours d'expérience](retours-experience/README.md)
 

@@ -18,6 +18,7 @@ a été prise.
 - [Validation CNN GPU Kaggle, campagne v2 — 16 septembre 2026](2026-09-16-validation-cnn-kaggle-campagne-v2.md)
 - [Ablations CNN A/B, campagne v2 — 17 septembre 2026](2026-09-17-ablations-cnn-campagne-v2.md)
 - [Démonstrateur CNN ONNX abstentionniste — 17 septembre 2026](2026-09-17-demonstrateur-cnn-onnx.md)
+- [Stabilisation produit, exports, sécurité et Docker — 17 septembre 2026](2026-09-17-stabilisation-produit-exports-securite-docker.md)
 - [Modèle d'une nouvelle entrée](template.md)
 
 ## Règles
