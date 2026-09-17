@@ -51,12 +51,21 @@ Source : [BBBC038 v1](https://bbbc.broadinstitute.org/BBBC038).
 | BBBC047 | 30 616 composés, licence commerciale permise | 919 265 champs ; sous-échantillon futur |
 | IDR | images et métadonnées de publications | hétérogène ; validation externe ciblée |
 | BioImage Model Zoo | modèles normalisés | licence à vérifier modèle par modèle |
+| iOrganoAssay 2026 | bright-field, essais, traitements, segmentation et morphométrie dans une archive de 113,9 Mo | CC-BY-4.0 ; meilleur candidat à un test externe borné, sans classification `good`/`bad` |
+| Brain Organoid Dataset v2 | 1 400 images suivies dans deux laboratoires avec masques manuels | CC-BY-4.0 ; alternative pour robustesse inter-laboratoire |
+| MultiOrg | 60 000 boîtes annotées par deux experts et trois jeux de labels | 35,4 Go, CC-BY-NC-SA-4.0 ; référence sur l'incertitude, non intégré avant soumission |
+| SWIFT 2026 | pipeline YOLOv8s/SAM sur 417 bright-fields de côlon | état de l'art récent ; ne pas ajouter une nouvelle chaîne avant release |
 
 Sources : [RxRx1](https://www.rxrx.ai/rxrx1),
 [JUMP Hub](https://broadinstitute.github.io/jump_hub/),
 [BBBC047](https://bbbc.broadinstitute.org/BBBC047),
 [IDR](https://idr.openmicroscopy.org/about/),
 [BioImage Model Zoo](https://bioimage.io/).
+
+La recherche du 17 septembre 2026 n'a trouvé aucun second jeu public portant
+le même label OoC `good`/`bad`. Les candidats organoïdes ne sont donc utilisables
+que pour une validation externe de segmentation, de robustesse ou de
+traçabilité. Ils ne doivent pas alimenter le classifieur actuel.
 
 ## Standards et écosystème
 

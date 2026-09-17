@@ -30,7 +30,13 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [x] README anglais et brouillons du rapport, du Writeup et de la vidéo.
 - [x] Validation de phase 1 terminée sur les trois images réelles verrouillées.
 - [x] Release candidate reproductible de phase 2 validée et gelée sur `dev`.
-- [ ] **Prochaine action unique : obtenir les décisions du propriétaire de la phase 3.**
+- [x] Équipe de compétition fixée à une personne ; aucun bonus
+  interdisciplinaire revendiqué.
+- [x] Licence du code fixée à Apache-2.0 et bundle ONNX non distribué dans la
+  soumission.
+- [ ] **Prochaine action unique : confirmer le nom public de l'auteur,
+  l'affiliation éventuelle et le formulaire externe, puis autoriser la
+  publication avant la soumission.**
 
 ## Règles pendant l'exécution
 
@@ -121,18 +127,41 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [x] Aucun changement fonctionnel n'est ajouté après le gel, sauf correction
   bloquante validée de nouveau.
 
+## Piste scientifique optionnelle — validation externe bornée
+
+Cette piste peut renforcer la candidature, mais elle ne bloque pas le terminus
+et ne doit retarder ni la publication ni le Writeup.
+
+- [x] Rechercher des datasets externes récents et vérifier taille, licence,
+  annotations et proximité avec le cas d'usage.
+- [ ] Prendre une décision go/no-go après inspection des seules métadonnées :
+  privilégier **iOrganoAssay** (CC-BY-4.0, archive de 113,9 Mo, images
+  bright-field, essais et 28 annotations manuelles) pour un test externe borné
+  de segmentation et de traçabilité des essais.
+- [ ] En alternative, pré-enregistrer un sous-ensemble du **Brain Organoid
+  Dataset** (CC-BY-4.0, 1 400 images, 64 organoïdes, deux laboratoires et
+  masques manuels) pour mesurer la robustesse inter-laboratoire.
+- [ ] Ne pas intégrer **MultiOrg** avant la soumission : environ 35,4 Go,
+  CC-BY-NC-SA-4.0, tâche de détection d'organoïdes et non de qualité OoC.
+- [ ] Ne fusionner aucun de ces datasets avec la classification `good`/`bad` et
+  ne pas rouvrir le test gelé. Toute mesure externe doit avoir un protocole,
+  des métriques et un hash fixés avant exécution.
+
 ---
 
 ## Phase 3 — Décisions et publication officielle
 
 ### 3.1 Décisions du propriétaire
 
-- [ ] Choisir la licence du code.
-- [ ] Choisir la licence du bundle ONNX, ou décider de ne pas le distribuer.
-- [ ] Compléter le nom de l'équipe et la liste des auteurs.
+- [x] Choisir la licence du code : **Apache-2.0**.
+- [x] Ne pas distribuer le bundle ONNX dans cette soumission ; conserver le
+  démonstrateur optionnel et sa procédure de montage local.
+- [x] Choisir une équipe solo ; le propriétaire est l'unique membre et
+  responsable.
+- [ ] Confirmer le nom public exact de l'auteur et son affiliation éventuelle.
 - [ ] Confirmer l'inscription obligatoire via le formulaire externe de
   l'organisateur, avec un responsable d'équipe et 1 à 5 membres.
-- [ ] Autoriser le push de `dev`.
+- [x] `dev` est poussée et synchronisée avec `origin/dev`.
 - [ ] Décider de rendre le dépôt public.
 - [ ] Autoriser explicitement la fusion linéaire de `dev` vers `main`.
 - [ ] Valider le nom et la date du tag de release.
@@ -147,6 +176,11 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [ ] Joindre notes de release, checksums et instructions de reproduction.
 - [ ] Publier les poids uniquement si licence, attribution et hashes sont
   résolus.
+
+Le dépôt peut rester privé pendant la finalisation, mais il doit devenir
+public **avant** la soumission du Writeup et rester accessible sans connexion
+pendant toute l'évaluation. Attendre un éventuel prix rendrait la candidature
+inéligible.
 - [ ] Vérifier le dépôt et la release sans être connecté à GitHub.
 
 ### Preuve de fin de phase 3

@@ -1,5 +1,7 @@
 # Stratégie de données
 
+Dernière revue externe : **17 septembre 2026**.
+
 ## Décision en trois jeux
 
 | Rôle | Dataset | Licence | Pourquoi |
@@ -67,3 +69,25 @@ L'archive OoC complète est désactivée par défaut : les 15 Gio libres observ�
 RxRx1 est riche mais pèse 296 Go et sa licence est CC-BY-NC-SA. JUMP est encore
 plus volumineux. Ces ressources pourront servir via profils pré-calculés, pas
 comme dépendance de la première démonstration.
+
+## Recherche externe du 17 septembre 2026
+
+La recherche n'a trouvé aucun second dataset public reproduisant exactement la
+classification OoC `good`/`bad`. Les jeux ci-dessous répondent donc à d'autres
+questions et ne doivent jamais être fusionnés avec l'entraînement actuel.
+
+| Dataset | Contenu vérifié | Licence et taille | Décision avant soumission |
+|---|---|---|---|
+| [iOrganoAssay](https://doi.org/10.5281/zenodo.18627307) | images bright-field quotidiennes, métadonnées d'essais, traitements, sorties de segmentation et morphométrie ; 28 annotations manuelles décrites dans l'article | CC-BY-4.0 ; ZIP 113 949 908 octets, MD5 `f09c388342b2453cf8a7e184dd5afe9a` | **premier candidat** pour un test externe borné de segmentation, import et traçabilité ; inspecter les métadonnées avant téléchargement complet |
+| [Brain Organoid Dataset v2](https://doi.org/10.5281/zenodo.10301912) | 1 400 images de 64 organoïdes suivis, quatre clones, deux laboratoires, JPEG/TIFF et masques binaires manuels | CC-BY-4.0 ; ZIP 973 563 674 octets, MD5 `53e6b41af957ac33c03b927e0fbe69aa` | alternative robuste pour un protocole inter-laboratoire sur un sous-ensemble pré-enregistré |
+| [MultiOrg](https://doi.org/10.34740/kaggle/ds/5097172) | plus de 400 images de plaques, plus de 60 000 boîtes d'organoïdes, 26 expériences et trois jeux d'annotations par deux experts | CC-BY-NC-SA-4.0 ; environ 35,4 Go | ne pas intégrer avant la soumission : coût, licence non commerciale et tâche de détection distincte ; conserver comme référence sur l'incertitude inter-annotateurs |
+| [SWIFT](https://www.nature.com/articles/s42003-026-10768-x) | workflow 2026 de segmentation, classification et suivi ; entraînement YOLOv8s sur 417 images bright-field de côlon | données hébergées sur OMERO et code public ; bundle de reproduction encore à auditer | état de l'art uniquement ; ne pas introduire une nouvelle chaîne YOLO/SAM avant la release |
+
+### Règle go/no-go
+
+Un seul test externe supplémentaire est autorisé avant publication, uniquement
+s'il tient dans un protocole borné, n'exige aucun réglage sur les résultats et
+ne décale pas les tâches P0. iOrganoAssay est prioritaire pour sa petite taille
+et ses liens avec des essais ; le dataset cérébral est l'alternative si ses
+masques manuels répondent mieux à la question de segmentation. Un résultat
+négatif sera publié tel quel.

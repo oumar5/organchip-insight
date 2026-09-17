@@ -1,6 +1,6 @@
 # État de l'art et paysage concurrentiel
 
-Dernière revue : **16 septembre 2026**. Cette page rassemble ce qui existe
+Dernière revue : **17 septembre 2026**. Cette page rassemble ce qui existe
 autour du dataset OoC, des moteurs de segmentation et des outils comparables,
 afin de situer OrganChip Insight dans le rapport technique et la soutenance.
 Chaque affirmation est reliée à une source ; les chiffres externes ne sont pas
@@ -71,14 +71,17 @@ dataset d'entraînement :
 
 | Dataset | Contenu | Licence | Usage envisagé |
 |---|---|---|---|
-| [Brain organoid dataset, Zenodo 10301912](https://www.nature.com/articles/s41597-024-03330-z) | 1 400 images bright-field de 64 organoïdes, deux microscopes, annotations pixel | à vérifier sur Zenodo | robustesse inter-microscope de la segmentation et du QC |
-| [iOrganoAssay, *Data* 2026](https://doi.org/10.3390/data11060132) | 234 images grand champ d'organoïdes intestinaux, 28 annotations manuelles, métriques Dice | à vérifier | test de généralisation de la segmentation |
+| [Brain organoid dataset, Zenodo 10301912](https://www.nature.com/articles/s41597-024-03330-z) | 1 400 images bright-field de 64 organoïdes suivis, quatre clones, deux laboratoires, masques binaires manuels | CC-BY-4.0, archive de 973,6 Mo | robustesse inter-laboratoire de la segmentation sur un sous-ensemble pré-enregistré |
+| [iOrganoAssay, *Data* 2026](https://doi.org/10.3390/data11060132) | images bright-field quotidiennes, métadonnées d'essais et traitements, sorties morphométriques, 28 annotations manuelles | CC-BY-4.0, archive de 113,9 Mo | premier candidat pour un test externe borné de segmentation et de traçabilité |
+| [MultiOrg, NeurIPS 2024](https://arxiv.org/abs/2410.14612) | plus de 400 images de plaques, 60 000 annotations par boîtes et trois jeux de labels par deux experts | CC-BY-NC-SA-4.0, environ 35,4 Go | référence sur l'incertitude d'annotation ; non intégré avant soumission |
+| [SWIFT, *Communications Biology* 2026](https://www.nature.com/articles/s42003-026-10768-x) | 417 images bright-field de côlon pour segmentation, classification et suivi YOLOv8s/SAM | code public ; bundle de données à auditer | concurrent récent et source méthodologique, pas une nouvelle dépendance de release |
 | BBBC038 | noyaux, masques d'instances, CC0 | CC0 | audit zéro-shot exécuté sur 12 images diverses ; résultat mitigé, non généralisable aux images OoC |
 
-Aucun second dataset public d'images OoC bright-field avec label de qualité
-n'a été trouvé le 16 septembre 2026. La validation externe la plus honnête
-reste donc : segmentation sur organoïdes bright-field et robustesse
-inter-microscope, avec le label `good`/`bad` limité au dataset OoC.
+Aucun second dataset public d'images OoC bright-field avec le même label de
+qualité n'a été trouvé. La validation externe la plus honnête reste donc une
+segmentation sur organoïdes bright-field et une robustesse inter-laboratoire,
+avec le label `good`/`bad` strictement limité au dataset OoC. Un seul test
+externe supplémentaire est envisagé ; il ne doit pas retarder la publication.
 
 ## Contraintes d'exécution Kaggle
 
