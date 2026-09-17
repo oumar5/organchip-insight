@@ -13,11 +13,13 @@ import {
 } from "../lib/format";
 import { useI18n } from "../i18n";
 import { EvidencePanel } from "./EvidencePanel";
+import { ExperimentComparison } from "./ExperimentComparison";
 
 interface ResultsViewProps {
   result: AnalysisResult | null;
   images: ImageRecord[];
   selectedExperiment: Experiment | null;
+  experiments: Experiment[];
   onOpenImage: (index: number) => void;
   onGoToWorkspace: () => void;
 }
@@ -26,7 +28,7 @@ function previewFor(images: ImageRecord[], filename: string): string | null {
   return images.find((image) => image.filename === filename)?.preview_url ?? null;
 }
 
-export function ResultsView({ result, images, selectedExperiment, onOpenImage, onGoToWorkspace }: ResultsViewProps) {
+export function ResultsView({ result, images, selectedExperiment, experiments, onOpenImage, onGoToWorkspace }: ResultsViewProps) {
   const { locale, localeTag } = useI18n();
   if (!result) {
     return (
@@ -115,6 +117,8 @@ export function ResultsView({ result, images, selectedExperiment, onOpenImage, o
                     <th scope="col">{locale === "fr" ? "Aire moyenne (px²)" : "Mean area (px²)"}</th>
                     <th scope="col">{locale === "fr" ? "Aire médiane (px²)" : "Median area (px²)"}</th>
                     <th scope="col">{locale === "fr" ? "Diamètre équivalent (px)" : "Equivalent diameter (px)"}</th>
+                    {result.experiment_metadata.microns_per_pixel !== null && <th scope="col">{locale === "fr" ? "Aire moyenne (µm²)" : "Mean area (µm²)"}</th>}
+                    {result.experiment_metadata.microns_per_pixel !== null && <th scope="col">{locale === "fr" ? "Diamètre équivalent (µm)" : "Equivalent diameter (µm)"}</th>}
                     <th scope="col">{locale === "fr" ? "Seuil" : "Threshold"}</th>
                     <th scope="col">{locale === "fr" ? "Premier plan" : "Foreground"}</th>
                   </tr>
@@ -128,6 +132,8 @@ export function ResultsView({ result, images, selectedExperiment, onOpenImage, o
                       <td>{formatDecimal(image.mean_object_area, locale)}</td>
                       <td>{formatDecimal(image.median_object_area, locale)}</td>
                       <td>{formatDecimal(image.mean_equivalent_diameter, locale)}</td>
+                      {result.experiment_metadata.microns_per_pixel !== null && <td>{formatDecimal(image.mean_object_area * result.experiment_metadata.microns_per_pixel ** 2, locale)}</td>}
+                      {result.experiment_metadata.microns_per_pixel !== null && <td>{formatDecimal(image.mean_equivalent_diameter * result.experiment_metadata.microns_per_pixel, locale)}</td>}
                       <td>{formatDecimal(image.threshold, locale)}</td>
                       <td>{image.foreground_polarity === "bright" ? (locale === "fr" ? "clair" : "bright") : (locale === "fr" ? "sombre" : "dark")}</td>
                     </tr>
@@ -165,6 +171,14 @@ export function ResultsView({ result, images, selectedExperiment, onOpenImage, o
             ))}
           </ul>
         </section>
+      )}
+
+      {selectedExperiment && (
+        <ExperimentComparison
+          currentExperiment={selectedExperiment}
+          currentResult={result}
+          experiments={experiments}
+        />
       )}
 
       <details className="card evidence-details" open>

@@ -26,12 +26,21 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await expect(page.getByText("Inférence disponible")).toBeVisible();
 
   await page.getByRole("button", { name: /Nouvelle expérience/ }).first().click();
-  await page.getByLabel("Nom de l’expérience").fill(experimentName);
-  await page
+  const createDialog = page.getByRole("dialog");
+  await createDialog.getByLabel("Nom de l’expérience").fill(experimentName);
+  await createDialog
     .getByLabel("Hypothèse ou objectif")
     .fill("Vérifier le parcours reproductible de la création aux exports.");
-  await page.getByRole("button", { name: "Créer l’expérience" }).click();
+  await createDialog.getByLabel("Identifiant de puce").fill("chip-e2e-01");
+  await createDialog.getByLabel("Puits").fill("A01");
+  await createDialog.getByLabel("Lignée / modèle").fill("iPSC-E2E");
+  await createDialog.getByLabel("Jour de culture").fill("14");
+  await createDialog.getByLabel("Échelle (µm/pixel)").fill("0.5");
+  await createDialog.getByLabel("Source de calibration").fill("Microscope E2E metadata");
+  await createDialog.getByRole("button", { name: "Créer l’expérience" }).click();
   await expect(page.getByLabel("Expérience active")).toContainText(experimentName);
+  await expect(page.getByText("Puce · chip-e2e-01")).toBeVisible();
+  await expect(page.getByText("0,5 µm/pixel")).toBeVisible();
 
   await page.getByRole("radio", { name: /adaptative/i }).click();
   await page.locator('input[type="file"]').setInputFiles({
@@ -66,6 +75,13 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   expect(exportedResult.task).toBe("segmentation");
   expect(exportedResult.image_count).toBe(1);
   expect(exportedResult.image_results).toHaveLength(1);
+  expect(exportedResult.experiment_metadata).toMatchObject({
+    chip_id: "chip-e2e-01",
+    well_id: "A01",
+    culture_day: 14,
+    microns_per_pixel: 0.5,
+    calibration_source: "Microscope E2E metadata",
+  });
 
   const csvDownloadPromise = page.waitForEvent("download");
   await page.getByRole("link", { name: "Exporter CSV" }).click();
@@ -75,15 +91,56 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   const exportedCsv = await readFile(csvPath!, "utf-8");
   expect(exportedCsv).toContain("filename");
   expect(exportedCsv).toContain("champ-synthetique.png");
+  expect(exportedCsv).toContain("mean_object_area_um2");
 
   await page.getByRole("button", { name: /Segmentation de champ-synthetique.png/ }).click();
   const viewer = page.getByRole("dialog");
   await expect(viewer.getByRole("heading", { name: "champ-synthetique.png" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Augmenter le zoom" }).click();
+  await expect(viewer.getByText("125 %")).toBeVisible();
+  await viewer.getByRole("button", { name: "Côte à côte" }).click();
+  await expect(viewer.getByAltText(/aperçu source/)).toBeVisible();
+  await expect(viewer.getByAltText(/segmentation/)).toBeVisible();
+  await viewer.getByRole("button", { name: "Réinitialiser" }).click();
   await viewer.getByRole("button", { name: "Source (aperçu)" }).click();
   await expect(viewer.getByAltText(/aperçu source/)).toBeVisible();
   await expect(viewer.getByText(/PNG 8 bits destiné uniquement à l’affichage/)).toBeVisible();
   await viewer.getByRole("button", { name: "Fermer" }).click();
   await expect(viewer).toBeHidden();
+
+  const comparisonName = `Comparaison E2E ${Date.now()}`;
+  const comparisonCreate = await page.request.post("/api/v1/experiments", {
+    data: {
+      name: comparisonName,
+      chip_id: "chip-e2e-02",
+      well_id: "B02",
+      cell_line: "iPSC-E2E",
+      culture_day: 21,
+      microns_per_pixel: 0.5,
+      calibration_source: "Microscope E2E metadata",
+    },
+  });
+  expect(comparisonCreate.ok()).toBeTruthy();
+  const comparison = await comparisonCreate.json();
+  const comparisonUpload = await page.request.post(`/api/v1/experiments/${comparison.id}/images`, {
+    multipart: {
+      files: {
+        name: "comparaison-synthetique.png",
+        mimeType: "image/png",
+        buffer: SYNTHETIC_FIELD_PNG,
+      },
+    },
+  });
+  expect(comparisonUpload.ok()).toBeTruthy();
+  const comparisonAnalysis = await page.request.post(`/api/v1/experiments/${comparison.id}/analyze`);
+  expect(comparisonAnalysis.ok()).toBeTruthy();
+
+  await page.reload();
+  await page.getByLabel("Expérience active").selectOption({ label: experimentName });
+  await page.getByRole("button", { name: "Résultats" }).click();
+  await page.getByLabel("Seconde expérience").selectOption({ label: comparisonName });
+  await expect(page.getByText("Métriques communes aux deux analyses", { exact: true })).toBeVisible();
+  await expect(page.getByRole("rowheader", { name: "Aire moyenne calibrée (µm²)" })).toBeVisible();
 
   expect(page.getByRole("alert")).toHaveCount(0);
   expect(pageErrors).toEqual([]);

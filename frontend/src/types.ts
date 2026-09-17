@@ -5,7 +5,16 @@ export type ExperimentStatus =
   | "complete"
   | "failed";
 
-export interface Experiment {
+export interface ExperimentMetadata {
+  chip_id: string;
+  well_id: string;
+  cell_line: string;
+  culture_day: number | null;
+  microns_per_pixel: number | null;
+  calibration_source: string;
+}
+
+export interface Experiment extends ExperimentMetadata {
   id: string;
   name: string;
   description: string;
@@ -16,7 +25,7 @@ export interface Experiment {
   created_at: string;
 }
 
-export interface ExperimentCreate {
+export interface ExperimentCreate extends ExperimentMetadata {
   name: string;
   description: string;
   control_label: string;
@@ -115,6 +124,7 @@ export interface AnalysisResult {
   artifacts: AnalysisArtifact[];
   warnings: string[];
   provenance: Record<string, string>;
+  experiment_metadata: ExperimentMetadata;
   generated_at: string;
 }
 

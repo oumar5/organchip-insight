@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import type { ExperimentCreate } from "../types";
 import { useI18n } from "../i18n";
+import { ExperimentMetadataFields } from "./ExperimentMetadataFields";
 import { Modal } from "./Modal";
 
 interface ExperimentDialogProps {
@@ -37,6 +38,7 @@ export function ExperimentDialog({ open, form, busy, onChange, onSubmit, onClose
             placeholder={locale === "fr" ? "Décrire la comparaison et le signal attendu…" : "Describe the comparison and expected signal…"}
           />
         </label>
+        <ExperimentMetadataFields value={form} onChange={(metadata) => onChange({ ...form, ...metadata })} />
         <p className="form-scope-note">
           {locale === "fr"
             ? "L’affectation témoin/traitement viendra avec le rattachement de chaque image à un groupe."

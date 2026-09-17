@@ -4,6 +4,7 @@ import type {
   BenchmarkSummary,
   Experiment,
   ExperimentCreate,
+  ExperimentMetadata,
   ImageRecord,
   UploadSummary,
   UploadLimits,
@@ -39,6 +40,17 @@ export function listInferenceEngines(): Promise<AnalysisEngine[]> {
 export function createExperiment(payload: ExperimentCreate): Promise<Experiment> {
   return request<Experiment>("/experiments", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateExperimentMetadata(
+  experimentId: string,
+  payload: ExperimentMetadata,
+): Promise<Experiment> {
+  return request<Experiment>(`/experiments/${experimentId}/metadata`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });

@@ -9,6 +9,7 @@ import {
   listExperiments,
   listImages,
   listInferenceEngines,
+  updateExperimentMetadata,
   uploadImage,
 } from "./api/client";
 import type {
@@ -17,6 +18,7 @@ import type {
   BenchmarkSummary,
   Experiment,
   ExperimentCreate,
+  ExperimentMetadata,
   ImageRecord,
   UploadLimits,
   UploadSummary,
@@ -25,6 +27,7 @@ import { AppBar } from "./components/AppBar";
 import type { Tab } from "./components/AppBar";
 import { ExperimentRail } from "./components/ExperimentRail";
 import { ExperimentDialog } from "./components/ExperimentDialog";
+import { ExperimentMetadataDialog } from "./components/ExperimentMetadataDialog";
 import { Stepper } from "./components/Stepper";
 import type { StepState } from "./components/Stepper";
 import { ImportPanel } from "./components/ImportPanel";
@@ -43,8 +46,34 @@ function initialForm(locale: Locale): ExperimentCreate {
     description: "",
     control_label: locale === "fr" ? "Contrôle" : "Control",
     treatment_label: locale === "fr" ? "Traitement" : "Treatment",
+    chip_id: "",
+    well_id: "",
+    cell_line: "",
+    culture_day: null,
+    microns_per_pixel: null,
+    calibration_source: "",
   };
 }
+
+function metadataFromExperiment(experiment: Experiment): ExperimentMetadata {
+  return {
+    chip_id: experiment.chip_id,
+    well_id: experiment.well_id,
+    cell_line: experiment.cell_line,
+    culture_day: experiment.culture_day,
+    microns_per_pixel: experiment.microns_per_pixel,
+    calibration_source: experiment.calibration_source,
+  };
+}
+
+const EMPTY_METADATA: ExperimentMetadata = {
+  chip_id: "",
+  well_id: "",
+  cell_line: "",
+  culture_day: null,
+  microns_per_pixel: null,
+  calibration_source: "",
+};
 
 export default function App() {
   const { locale } = useI18n();
@@ -57,6 +86,8 @@ export default function App() {
   const [selectedEngineId, setSelectedEngineId] = useState("");
   const [form, setForm] = useState<ExperimentCreate>(() => initialForm(locale));
   const [createOpen, setCreateOpen] = useState(false);
+  const [metadataOpen, setMetadataOpen] = useState(false);
+  const [metadataForm, setMetadataForm] = useState<ExperimentMetadata>(EMPTY_METADATA);
   const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<ImageRecord[]>([]);
   const [uploadSummary, setUploadSummary] = useState<UploadSummary | null>(null);
@@ -212,6 +243,23 @@ export default function App() {
     }
   }
 
+  async function handleMetadataUpdate(event: FormEvent) {
+    event.preventDefault();
+    if (!selectedExperiment) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const updated = await updateExperimentMetadata(selectedExperiment.id, metadataForm);
+      setExperiments((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+      setResult(null);
+      setMetadataOpen(false);
+    } catch (requestError) {
+      setError((requestError as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function handleAnalyze() {
     if (!selectedExperiment) { setError(locale === "fr" ? "Créez ou sélectionnez une expérience avant l’analyse." : "Create or select an experiment before analysis."); return; }
     if (!selectedEngine?.runnable) { setError(locale === "fr" ? "Sélectionnez un moteur exécutable avant l’analyse." : "Select a runnable engine before analysis."); return; }
@@ -275,6 +323,7 @@ export default function App() {
           ]
         : [];
       if (item.analysis_type === "segmentation") {
+        const scale = result.experiment_metadata.microns_per_pixel;
         return {
           title: readableFilename(item.filename),
           original_url: original,
@@ -285,6 +334,10 @@ export default function App() {
             { label: locale === "fr" ? "Surface segmentée" : "Segmented area", value: formatPercent(item.foreground_fraction, locale) },
             { label: locale === "fr" ? "Aire moyenne (px²)" : "Mean area (px²)", value: formatDecimal(item.mean_object_area, locale) },
             { label: locale === "fr" ? "Diamètre équivalent (px)" : "Equivalent diameter (px)", value: formatDecimal(item.mean_equivalent_diameter, locale) },
+            ...(scale === null ? [] : [
+              { label: locale === "fr" ? "Aire moyenne (µm²)" : "Mean area (µm²)", value: formatDecimal(item.mean_object_area * scale ** 2, locale) },
+              { label: locale === "fr" ? "Diamètre équivalent (µm)" : "Equivalent diameter (µm)", value: formatDecimal(item.mean_equivalent_diameter * scale, locale) },
+            ]),
             { label: locale === "fr" ? "Seuil" : "Threshold", value: formatDecimal(item.threshold, locale) },
             { label: locale === "fr" ? "Premier plan" : "Foreground", value: item.foreground_polarity === "bright" ? (locale === "fr" ? "clair" : "bright") : (locale === "fr" ? "sombre" : "dark") },
           ],
@@ -342,6 +395,31 @@ export default function App() {
                     ))}
                   </select>
                   {selectedExperiment?.description && <p className="muted">{selectedExperiment.description}</p>}
+                  {selectedExperiment && (
+                    <div className="experiment-context" aria-label={locale === "fr" ? "Contexte expérimental" : "Experimental context"}>
+                      <div className="context-chips">
+                        {selectedExperiment.chip_id && <span>{locale === "fr" ? "Puce" : "Chip"} · {selectedExperiment.chip_id}</span>}
+                        {selectedExperiment.well_id && <span>{locale === "fr" ? "Puits" : "Well"} · {selectedExperiment.well_id}</span>}
+                        {selectedExperiment.cell_line && <span>{locale === "fr" ? "Lignée" : "Model"} · {selectedExperiment.cell_line}</span>}
+                        {selectedExperiment.culture_day !== null && <span>{locale === "fr" ? "Jour" : "Day"} · {selectedExperiment.culture_day}</span>}
+                        {selectedExperiment.microns_per_pixel !== null && <span>{formatDecimal(selectedExperiment.microns_per_pixel, locale)} µm/pixel</span>}
+                        {!selectedExperiment.chip_id && !selectedExperiment.well_id && !selectedExperiment.cell_line && selectedExperiment.culture_day === null && selectedExperiment.microns_per_pixel === null && (
+                          <span>{locale === "fr" ? "Contexte non renseigné" : "Context not provided"}</span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className="text-button"
+                        disabled={busy}
+                        onClick={() => {
+                          setMetadataForm(metadataFromExperiment(selectedExperiment));
+                          setMetadataOpen(true);
+                        }}
+                      >
+                        {locale === "fr" ? "Modifier les métadonnées" : "Edit metadata"}
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <Stepper steps={steps} />
               </div>
@@ -395,6 +473,7 @@ export default function App() {
               result={result}
               images={images}
               selectedExperiment={selectedExperiment}
+              experiments={experiments}
               onOpenImage={(index) => setLightbox({ source: "results", index })}
               onGoToWorkspace={() => setTab("workspace")}
             />
@@ -410,6 +489,14 @@ export default function App() {
       </div>
 
       <ExperimentDialog open={createOpen} form={form} busy={busy} onChange={setForm} onSubmit={handleCreate} onClose={() => setCreateOpen(false)} />
+      <ExperimentMetadataDialog
+        open={metadataOpen}
+        value={metadataForm}
+        busy={busy}
+        onChange={setMetadataForm}
+        onSubmit={handleMetadataUpdate}
+        onClose={() => setMetadataOpen(false)}
+      />
       <Lightbox items={lightboxItems} index={lightbox?.index ?? null} onClose={() => setLightbox(null)} onNavigate={(index) => setLightbox((current) => (current ? { ...current, index } : null))} />
     </div>
   );
