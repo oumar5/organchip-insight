@@ -137,7 +137,7 @@ button {
 .brand small {
   margin-top: 1px;
   color: #8eb4a5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -165,7 +165,7 @@ nav {
 .nav-item span {
   color: #5d7f72;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .nav-item:hover,
@@ -192,7 +192,7 @@ nav {
   justify-content: space-between;
   padding: 0 9px 10px;
   color: #708f82;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 750;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -206,7 +206,7 @@ nav {
   border-radius: 50%;
   color: #a8c5b9;
   background: rgba(255, 255, 255, 0.07);
-  font-size: 0.63rem;
+  font-size: 0.75rem;
 }
 
 .experiment-list {
@@ -259,7 +259,7 @@ nav {
 .experiment-item > small {
   margin-top: 3px;
   color: #6f9082;
-  font-size: 0.63rem;
+  font-size: 0.75rem;
 }
 
 .status-dot {
@@ -287,7 +287,7 @@ nav {
   margin: 0;
   padding: 12px;
   color: #6e8c80;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -310,17 +310,17 @@ nav {
   border-radius: 8px;
   color: #69cea6;
   background: rgba(78, 192, 148, 0.12);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .trust-card strong {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .trust-card p {
   margin: 4px 0 0;
   color: #719084;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
@@ -345,7 +345,7 @@ main {
 .section-kicker {
   margin: 0 0 7px;
   color: var(--green-600);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -388,7 +388,7 @@ h2 {
   border-radius: 999px;
   color: #52655d;
   background: rgba(255, 255, 255, 0.72);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -455,7 +455,7 @@ h2 {
 .intro-index {
   color: var(--green-600);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
 }
 
 .intro-strip p {
@@ -468,13 +468,13 @@ h2 {
 }
 
 .intro-strip strong {
-  font-size: 0.74rem;
+  font-size: 0.75rem;
 }
 
 .intro-strip small {
   margin-top: 2px;
   color: #819088;
-  font-size: 0.63rem;
+  font-size: 0.75rem;
 }
 
 .intro-strip i {
@@ -489,7 +489,7 @@ h2 {
   border-radius: 8px;
   color: #596961;
   background: #eef3f0;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -537,7 +537,7 @@ h2 {
   border-radius: 10px;
   color: #8ba197;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
 }
 
 form {
@@ -552,7 +552,7 @@ label {
   gap: 7px;
   margin-bottom: 16px;
   color: #46564f;
-  font-size: 0.73rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -586,7 +586,7 @@ textarea {
   border-radius: 10px;
   color: #73684f;
   background: #fffcf3;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -657,7 +657,7 @@ select:focus {
 
 .engine-catalog-heading small {
   color: #718078;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   line-height: 1.4;
   text-align: right;
 }
@@ -691,7 +691,7 @@ select:focus {
   border-radius: 999px;
   color: #5b665f;
   background: #e8ece9;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -720,14 +720,14 @@ select:focus {
 .engine-card p {
   margin: 7px 0 5px;
   color: #527064;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
 .engine-meta {
   display: block;
-  color: #658174;
-  font-size: 0.68rem;
+  color: #465f54;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -735,15 +735,15 @@ select:focus {
   display: block;
   margin-top: 5px;
   color: #8b432e;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
 .engine-card ul {
   margin: 7px 0 0;
   padding-left: 16px;
-  color: #68766f;
-  font-size: 0.7rem;
+  color: #4f5f57;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
@@ -757,7 +757,7 @@ select:focus {
   border: 1px dashed #d5ded9;
   border-radius: 10px;
   color: #78857f;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 
@@ -791,7 +791,7 @@ select:focus {
 
 .drop-zone small {
   color: #83918a;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
@@ -814,7 +814,7 @@ select:focus {
   border: 1px solid #ccdad3;
   color: #41584e;
   background: #fff;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
 }
 
 .file-list {
@@ -846,12 +846,12 @@ select:focus {
 }
 
 .file-list strong {
-  font-size: 0.67rem;
+  font-size: 0.75rem;
 }
 
 .file-list small {
   color: #7d8d85;
-  font-size: 0.59rem;
+  font-size: 0.75rem;
 }
 
 .file-icon {
@@ -859,14 +859,14 @@ select:focus {
   border-radius: 6px;
   color: #28795d;
   background: #dcefe6;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   font-weight: 800;
 }
 
 .existing-files {
   margin: 0 0 12px;
   color: #387c63;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -911,9 +911,9 @@ select:focus {
 .result-meta span {
   padding: 6px 8px;
   border-radius: 7px;
-  color: #6a7b73;
+  color: #50645b;
   background: #f0f4f2;
-  font-size: 0.61rem;
+  font-size: 0.75rem;
 }
 
 .result-actions {
@@ -929,7 +929,7 @@ select:focus {
   border-radius: 8px;
   color: #27634d;
   background: #f5faf7;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-decoration: none;
 }
@@ -1032,8 +1032,8 @@ select:focus {
 
 .metric-card > span {
   min-height: 28px;
-  color: #718078;
-  font-size: 0.64rem;
+  color: #596860;
+  font-size: 0.75rem;
 }
 
 .metric-card.featured > span,
@@ -1051,8 +1051,8 @@ select:focus {
 .metric-card > small {
   min-height: 12px;
   margin-top: 2px;
-  color: #9aa59f;
-  font-size: 0.55rem;
+  color: #626f68;
+  font-size: 0.75rem;
 }
 
 .overlay-grid {
@@ -1089,7 +1089,7 @@ select:focus {
 .raw-score span {
   margin-top: 4px;
   color: #78837d;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
 }
 
 .raw-score > strong {
@@ -1104,7 +1104,7 @@ select:focus {
   border-radius: 999px;
   color: #76510a;
   background: #fff0c9;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -1139,15 +1139,15 @@ figcaption > div {
 
 figcaption strong {
   overflow: hidden;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 figcaption span,
 figcaption small {
-  color: #77867f;
-  font-size: 0.61rem;
+  color: #5c6a63;
+  font-size: 0.75rem;
 }
 
 .evidence-panel {
@@ -1167,7 +1167,7 @@ figcaption small {
   display: block;
   overflow-wrap: anywhere;
   color: #45534c;
-  font-size: 0.56rem;
+  font-size: 0.75rem;
 }
 
 .evidence-title {
@@ -1194,19 +1194,19 @@ figcaption small {
 }
 
 .evidence-title strong {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .evidence-title small {
   margin-top: 2px;
-  color: #9b8049;
-  font-size: 0.6rem;
+  color: #745b27;
+  font-size: 0.75rem;
 }
 
 .evidence-panel > p {
   margin: 14px 0;
   color: #726446;
-  font-size: 0.67rem;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 
@@ -1224,14 +1224,14 @@ figcaption small {
 .evidence-panel h3 {
   margin: 0 0 8px;
   color: #645534;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .evidence-panel ul {
   margin: 0;
   padding-left: 17px;
   color: #796b4e;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -1246,11 +1246,11 @@ figcaption small {
   margin-top: 16px;
   padding-top: 13px;
   border-top: 1px solid #eadfca;
-  font-size: 0.59rem;
+  font-size: 0.75rem;
 }
 
 .provenance-box span {
-  color: #948264;
+  color: #6f5e3e;
 }
 
 .provenance-box strong {
@@ -1266,7 +1266,7 @@ footer {
   margin: 0 auto;
   padding: 22px 3px 0;
   color: #819088;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 @media (max-width: 1280px) {

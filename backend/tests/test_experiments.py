@@ -128,6 +128,9 @@ def test_inference_engine_registry_is_transparent() -> None:
     assert runnable["ooc-quality-cnn-campaign-v2-gray448"] is (
         "ooc-quality-cnn-campaign-v2-gray448" in runtime.ANALYZERS_BY_ENGINE_ID
     )
+    micro_sam = next(engine for engine in engines if engine["id"] == "micro-sam-pretrained")
+    assert any("deux des trois critères" in item for item in micro_sam["limitations"])
+    assert any("images OoC" in item for item in micro_sam["limitations"])
 
 
 def test_unavailable_inference_engines_are_rejected() -> None:

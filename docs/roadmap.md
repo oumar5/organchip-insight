@@ -35,7 +35,8 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
 - [x] split OoC groupé par préfixe d'acquisition ;
 - [x] baseline OoC image-only avec test tenu à l'écart ;
 - [x] comparaison segmentation adaptative / µSAM sur BBBC019 ;
-- [x] décision produit : aperçu adaptatif, analyse µSAM asynchrone ;
+- [x] décision produit : moteur adaptatif disponible ; µSAM conservé en
+  benchmark isolé après échec de 2 critères BBBC038 sur 3 ;
 - [x] audit exhaustif des quasi-doublons sur le nouveau split ;
 - [x] baseline de confondants mode/résolution avant CNN ;
 - [x] runtime MobileNetV3 séparant `smoke`, `validation` et `final-eval` ;
@@ -81,8 +82,10 @@ par semaine est dans [plan-soumission.md](plan-soumission.md).
   lisibles, verrou de sélection pendant l'analyse ;
 - [x] limite nginx cohérente avec la limite par fichier ;
 - [x] TIFF 16 bits, limite de pixels, reprise après échec d'analyse ;
-- [ ] plancher typographique et contraste AA sur tout texte informatif ;
-- [ ] file de tâches et progression (si µSAM devient un moteur produit) ;
+- [x] plancher typographique de 12 px et contraste AA contrôlés dans Chromium
+  par Playwright + Axe après analyse ;
+- [x] file de tâches et progression retirée du périmètre : µSAM n'est pas
+  promu comme moteur produit avant la soumission ;
 - [x] limites de pixels et en-têtes de sécurité API/Nginx ;
 - [x] parcours end-to-end navigateur local du démonstrateur CNN ;
 - [x] test end-to-end Playwright automatisé sur pile Docker et volume isolés ;

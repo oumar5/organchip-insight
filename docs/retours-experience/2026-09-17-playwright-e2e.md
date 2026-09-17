@@ -91,3 +91,30 @@ une machine réellement propre avec accès au registre.
 - la reconstruction Docker sur machine propre reste un jalon séparé ;
 - le scénario doit être ajouté au CI seulement après décision sur le coût des
   minutes et la disponibilité de Docker/Chromium sur le runner.
+
+## Addendum — plancher typographique et contraste
+
+Le même scénario a été étendu le 17 septembre 2026 pour contrôler l'état final
+de la page après analyse :
+
+- parcours de chaque nœud texte visible et échec si la taille calculée est
+  inférieure à `12 px` ;
+- audit Axe `color-contrast`, règle WCAG 2 AA, sur tous les éléments visibles ;
+- dépendance de test figée `@axe-core/playwright==4.13.0`.
+
+Le premier audit, après relèvement mécanique des tailles, a détecté 25 textes
+secondaires sous le ratio `4,5:1` : métadonnées des moteurs, libellés et unités
+des métriques, légende de l'overlay et provenance. Les couleurs de ces textes
+ont été assombries sans modifier les couleurs d'état.
+
+Résultat après correction sur Chromium :
+
+- zéro texte visible sous `12 px` ;
+- zéro violation Axe `color-contrast` ;
+- scénario complet toujours passant : `1 passed (3.9s)` ;
+- inspection visuelle desktop effectuée sur les sources Vite courantes.
+
+La variable `VITE_PROXY_TARGET` permet d'exécuter cet audit contre une API
+temporaire sur un port dédié, sans réutiliser la base locale principale. Axe
+automatise le contraste calculable mais ne remplace pas une revue complète du
+clavier, des lecteurs d'écran et des différents niveaux de zoom.

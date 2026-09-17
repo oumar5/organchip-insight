@@ -66,9 +66,10 @@ MICRO_SAM_ENGINE = AnalysisEngine(
     ),
     training_required=False,
     limitations=[
-        "Pas encore activé dans le chemin d'inférence de production.",
-        "Benchmark BBBC019 zéro-shot réalisé ; promotion produit encore à intégrer.",
-        "Empreinte mémoire plus élevée que la baseline adaptative.",
+        "Non activé dans le chemin produit après la décision de non-promotion.",
+        "Le benchmark BBBC038 échoue à deux des trois critères pré-enregistrés.",
+        "Mesure CPU locale : 36,7 s/image en moyenne et 8,9 Go de mémoire maximale.",
+        "La validation nucléaire externe ne valide pas le comptage sur les images OoC.",
     ],
 )
 

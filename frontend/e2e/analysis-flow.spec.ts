@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const SYNTHETIC_FIELD_PNG = Buffer.from(
@@ -48,7 +49,7 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   await expect(analyzeButton).toBeEnabled();
   await analyzeButton.click();
   await expect(page.getByText(`Expérience : ${experimentName}`)).toBeVisible();
-  await expect(page.getByText("Composantes connexes")).toBeVisible();
+  await expect(page.getByText("Composantes connexes", { exact: true })).toBeVisible();
   await expect(page.getByText(/pas validé comme cellule ou noyau/)).toBeVisible();
   await expect(page.getByAltText("Segmentation de champ-synthetique.png")).toBeVisible();
 
@@ -74,4 +75,40 @@ test("creates, imports, analyzes and exports a microscopy experiment", async ({ 
   expect(page.getByRole("alert")).toHaveCount(0);
   expect(pageErrors).toEqual([]);
   expect(unexpectedHttpErrors).toEqual([]);
+
+  const undersizedText = await page.evaluate(() => {
+    const findings = new Set<string>();
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const text = node.textContent?.trim();
+      const element = node.parentElement;
+      if (!text || !element) continue;
+      const style = window.getComputedStyle(element);
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        Number(style.opacity) === 0 ||
+        element.getClientRects().length === 0
+      ) {
+        continue;
+      }
+      const fontSize = Number.parseFloat(style.fontSize);
+      if (fontSize < 12) {
+        findings.add(`${element.tagName.toLowerCase()}.${element.className}: ${fontSize}px — ${text.slice(0, 60)}`);
+      }
+    }
+    return [...findings].sort();
+  });
+  expect(undersizedText).toEqual([]);
+
+  const contrastAudit = await new AxeBuilder({ page })
+    .withRules(["color-contrast"])
+    .analyze();
+  const contrastFailures = contrastAudit.violations.flatMap((violation) =>
+    violation.nodes.map((node) => ({
+      target: node.target.join(" "),
+      message: node.any.map((check) => check.message).join("; "),
+    })),
+  );
+  expect(contrastFailures).toEqual([]);
 });
