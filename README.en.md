@@ -12,7 +12,8 @@ nor an automated biological conclusion.
 
 ## What the platform provides
 
-- responsive React and TypeScript interface;
+- responsive French/English React and TypeScript interface with a persistent
+  language choice;
 - FastAPI backend documented with OpenAPI;
 - persistent experiments and results in SQLite;
 - decoded uploads with file-size, pixel-count, and binary-duplicate checks;
@@ -29,7 +30,7 @@ nor an automated biological conclusion.
 - reproducible MobileNetV3 experimental pipeline with isolated `smoke`,
   `validation`, and `final-eval` modes;
 - Docker Compose, unit tests, and an end-to-end Playwright browser scenario;
-- a benchmark comparison generated from versioned scientific reports.
+- a benchmark comparison generated from versioned scientific reports;
 - a preregistered, versioned external validation on iOrganoAssay v1.1.0.
 
 The connected-component count has **not** been validated as a cell or nucleus
@@ -150,7 +151,7 @@ engine reaches macro-F1 `0.822746` (95% bootstrap interval
 evidence for target-organoid foreground only; it does not validate cell
 counting, `good`/`bad` classification, or segmentation on the competition OOC
 images. See the
-[iOrganoAssay REX](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md).
+[iOrganoAssay REX](docs/06-retrospectives/2026-09-17-validation-externe-iorganoassay.md).
 
 ## Classification result and scientific boundary
 
@@ -170,8 +171,8 @@ returns “Needs review,” presents its softmax as uncalibrated, displays the
 acquisition mode and provenance hashes, and makes no automatic good/bad
 decision. The product quality-control path remains the adaptive engine plus
 metadata. See the
-[classification counter-audit](docs/audit-2026-09-17-classification-cnn.md)
-and the [ONNX product REX](docs/retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
+[classification counter-audit](docs/02-research/audits/audit-2026-09-17-classification-cnn.md)
+and the [ONNX product REX](docs/06-retrospectives/2026-09-17-demonstrateur-cnn-onnx.md).
 
 Model weights remain outside Git. Without ONNX Runtime or a conforming bundle,
 the engine stays visible but unavailable and adaptive analysis still works.
@@ -194,12 +195,12 @@ React frontend
 
 Start with the [documentation index](docs/README.md), then see:
 
-- [product vision](docs/product-brief.md);
-- [training-free inference](docs/inference.md);
-- [research and decisions](docs/research.md);
-- [data strategy](docs/data-strategy.md);
-- [validation plan](docs/validation.md);
-- [submission roadmap](docs/roadmap.md).
+- [product vision](docs/01-product/product-brief.md);
+- [training-free inference](docs/01-product/inference.md);
+- [research and decisions](docs/02-research/research.md);
+- [data strategy](docs/02-research/data-strategy.md);
+- [validation plan](docs/02-research/validation.md);
+- [submission roadmap](docs/03-competition/roadmap.md).
 
 ## Challenge positioning
 
@@ -219,4 +220,4 @@ OrganChip Insight is created and led by **Ben Lol OUMAR**.
 Original OrganChip Insight code is released under the
 [Apache License 2.0](LICENSE). Third-party datasets, weights, libraries, and
 media retain their own licences as listed in the
-[AI, model, data, and licence disclosure](docs/declaration-ia-et-licences.md).
+[AI, model, data, and licence disclosure](docs/03-competition/ai-and-licenses.md).

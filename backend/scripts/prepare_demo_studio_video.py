@@ -256,6 +256,7 @@ def create_timeline(
     project_root: Path,
     specification: LanguageSpec,
     raw_duration_ms: int,
+    video_asset: str,
 ) -> None:
     run_root = project_root / "public/runs" / specification.journey_id
     events: list[dict[str, object]] = []
@@ -305,7 +306,7 @@ def create_timeline(
         "height": 720,
         "fps": 30,
         "durationMs": raw_duration_ms,
-        "video": "runs/shared/capture.webm",
+        "video": video_asset,
         "presenter": {
             "name": "OrganChip Insight guide",
             "initials": "OCI",
@@ -346,7 +347,13 @@ def create_timeline(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--raw-video", type=Path, required=True)
+    parser.add_argument(
+        "--raw-video",
+        type=Path,
+        help="Backward-compatible shared capture for both languages.",
+    )
+    parser.add_argument("--raw-video-en", type=Path)
+    parser.add_argument("--raw-video-fr", type=Path)
     parser.add_argument("--project-root", type=Path, default=DEFAULT_PROJECT_ROOT)
     parser.add_argument(
         "--timeline-only",
@@ -355,21 +362,48 @@ def main() -> None:
     )
     arguments = parser.parse_args()
 
-    raw_video = arguments.raw_video.resolve()
     project_root = arguments.project_root.resolve()
-    raw_duration_ms = duration_ms(raw_video)
-    if not 190_000 <= raw_duration_ms <= 210_000:
-        raise RuntimeError(f"Unexpected raw capture duration: {raw_duration_ms} ms")
+    if arguments.raw_video is not None:
+        shared_capture = arguments.raw_video.resolve()
+        raw_videos = {language: shared_capture for language in LANGUAGES}
+    elif arguments.raw_video_en is not None and arguments.raw_video_fr is not None:
+        raw_videos = {
+            "en": arguments.raw_video_en.resolve(),
+            "fr": arguments.raw_video_fr.resolve(),
+        }
+    else:
+        parser.error("provide --raw-video or both --raw-video-en and --raw-video-fr")
+
+    raw_durations_ms = {language: duration_ms(path) for language, path in raw_videos.items()}
+    for language, raw_duration_ms in raw_durations_ms.items():
+        if not 190_000 <= raw_duration_ms <= 210_000:
+            raise RuntimeError(
+                f"Unexpected {language} raw capture duration: {raw_duration_ms} ms"
+            )
+    if abs(raw_durations_ms["en"] - raw_durations_ms["fr"]) > 1_000:
+        raise RuntimeError("English and French captures differ by more than one second")
 
     shared_root = project_root / "public/runs/shared"
     shared_root.mkdir(parents=True, exist_ok=True)
-    shared_capture = (shared_root / "capture.webm").resolve()
-    if raw_video != shared_capture:
-        shutil.copy2(raw_video, shared_capture)
+    video_assets: dict[str, str] = {}
+    for language, raw_video in raw_videos.items():
+        shared_capture = (shared_root / f"capture-{language}.webm").resolve()
+        if raw_video != shared_capture:
+            shutil.copy2(raw_video, shared_capture)
+        video_assets[language] = f"runs/shared/{shared_capture.name}"
 
-    result: dict[str, object] = {"raw_duration_ms": raw_duration_ms, "languages": {}}
+    result: dict[str, object] = {
+        "raw_duration_ms": raw_durations_ms,
+        "languages": {},
+    }
     for language, specification in LANGUAGES.items():
-        create_timeline(project_root, specification, raw_duration_ms)
+        raw_duration_ms = raw_durations_ms[language]
+        create_timeline(
+            project_root,
+            specification,
+            raw_duration_ms,
+            video_assets[language],
+        )
         if arguments.timeline_only:
             clear_delegated_narration(project_root, specification)
             result["languages"][language] = {

@@ -18,6 +18,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
+    CondPageBreak,
     Flowable,
     ListFlowable,
     ListItem,
@@ -32,28 +33,14 @@ from reportlab.platypus import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 SOURCE_PATHS = {
-    "en": REPOSITORY_ROOT / "docs/submission/technical-report-en.md",
-    "fr": REPOSITORY_ROOT / "docs/submission/technical-report-fr.md",
+    "en": REPOSITORY_ROOT / "docs/04-submission/technical-report-en.md",
+    "fr": REPOSITORY_ROOT / "docs/04-submission/technical-report-fr.md",
 }
 OUTPUT_PATHS = {
     "en": REPOSITORY_ROOT / "output/pdf/organchip-insight-technical-report-candidate-en.pdf",
     "fr": REPOSITORY_ROOT / "output/pdf/organchip-insight-technical-report-candidate-fr.pdf",
 }
-PAGE_BREAK_PREFIXES = (
-    "1. ",
-    "2. ",
-    "3. ",
-    "4. ",
-    "5. ",
-    "6. ",
-    "6.2 ",
-    "6.3 ",
-    "7. ",
-    "8. ",
-    "9. ",
-    "10. ",
-    "11. ",
-)
+CHAPTER_BREAK_PREFIXES = ("2. ", "3. ", "4. ", "5. ", "10. ", "11. ")
 TEXT = {
     "en": {
         "header": "OrganChip Insight | Technical report candidate",
@@ -369,8 +356,13 @@ def markdown_blocks(
         if stripped.startswith("## ") or stripped.startswith("### "):
             level = 3 if stripped.startswith("### ") else 2
             title = stripped[level + 1 :]
-            if title.startswith(PAGE_BREAK_PREFIXES):
+            if level == 2 and title.startswith(CHAPTER_BREAK_PREFIXES):
                 blocks.append(PageBreak())
+            else:
+                minimum_space = 34 * mm if level == 2 else 22 * mm
+                if title.startswith(("6.1 ", "6.4 ")):
+                    minimum_space = 88 * mm
+                blocks.append(CondPageBreak(minimum_space))
             blocks.append(Paragraph(inline_markup(title), report_styles[f"h{level}"]))
             if title.startswith("3. "):
                 blocks.extend(

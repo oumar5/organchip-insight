@@ -16,10 +16,82 @@ const rawVideoPath = resolve(
     resolve(repositoryRoot, "output/video/organchip-insight-demo-candidate.webm"),
 );
 const burnCaptions = process.env.ORGANCHIP_DEMO_BURN_CAPTIONS !== "false";
+const language = process.env.ORGANCHIP_DEMO_LANGUAGE ?? "fr";
+if (!new Set(["en", "fr"]).has(language)) {
+  throw new Error(`Unsupported demo language: ${language}`);
+}
 const subtitlePath = resolve(
   process.env.ORGANCHIP_DEMO_SUBTITLE ??
     resolve(repositoryRoot, "output/video/organchip-insight-demo-candidate.en.srt"),
 );
+
+const ui = language === "en"
+  ? {
+      status: "Inference available",
+      newExperiment: /New experiment/,
+      experimentName: "Experiment name",
+      objective: "Hypothesis or objective",
+      createExperiment: "Create experiment",
+      activeExperiment: "Active experiment",
+      importImages: /Upload images/,
+      importButtonText: "Upload images",
+      importSummary: "3 imported",
+      importedCount: "3 images imported",
+      importedImages: "Imported images",
+      sourceOriginal: "original source file",
+      close: "Close",
+      runAnalysis: "Run analysis",
+      experimentPrefix: "Experiment",
+      connectedComponents: "Connected components",
+      overlays: "Segmentation overlays",
+      sourcePreview: "Source (preview)",
+      reservation: /not been validated as a cell or nucleus/,
+      exportJson: "Export JSON",
+      exportCsv: "Export CSV",
+      evidence: "Evidence level, limitations, and provenance",
+      engineComparison: "Engine comparison",
+      foreground: "Microfluidic foreground · BBBC019",
+      instances: "Nuclear instances · BBBC038",
+      provenance: "Metric provenance",
+      workspace: "Workspace",
+      engine: "Engine",
+      details: "Details and limits",
+      results: "Results",
+      description: "Demonstrate traceable analysis on three public, hash-locked images.",
+    }
+  : {
+      status: "Inférence disponible",
+      newExperiment: /Nouvelle expérience/,
+      experimentName: "Nom de l’expérience",
+      objective: "Hypothèse ou objectif",
+      createExperiment: "Créer l’expérience",
+      activeExperiment: "Expérience active",
+      importImages: /Importer les images/,
+      importButtonText: "Importer les images",
+      importSummary: "3 importé(s)",
+      importedCount: "3 images importées",
+      importedImages: "Images importées",
+      sourceOriginal: "fichier source original",
+      close: "Fermer",
+      runAnalysis: "Lancer l’analyse",
+      experimentPrefix: "Expérience",
+      connectedComponents: "Composantes connexes",
+      overlays: "Overlays de segmentation",
+      sourcePreview: "Source (aperçu)",
+      reservation: /pas validé comme cellule ou noyau/,
+      exportJson: "Exporter JSON",
+      exportCsv: "Exporter CSV",
+      evidence: "Niveau de preuve, limites et provenance",
+      engineComparison: "Comparaison des moteurs",
+      foreground: "Premier plan microfluidique · BBBC019",
+      instances: "Instances nucléaires · BBBC038",
+      provenance: "Provenance des chiffres",
+      workspace: "Espace de travail",
+      engine: "Moteur",
+      details: "Détails et limites",
+      results: "Résultats",
+      description: "Démontrer une analyse traçable sur trois images publiques verrouillées par empreinte.",
+    };
 
 const scenes = [
   {
@@ -132,10 +204,13 @@ const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   acceptDownloads: true,
   colorScheme: "light",
-  locale: "fr-FR",
+  locale: language === "en" ? "en-US" : "fr-FR",
   recordVideo: { dir: dirname(rawVideoPath), size: { width: 1280, height: 720 } },
   viewport: { width: 1280, height: 720 },
 });
+await context.addInitScript((locale) => {
+  window.localStorage.setItem("organchip.locale", locale);
+}, language);
 const page = await context.newPage();
 const video = page.video();
 const startedAt = Date.now();
@@ -153,79 +228,102 @@ try {
   if (burnCaptions) await installCaption(page);
   await scene(0, async () => {
     await page.locator("body").press("Home");
-    await page.getByText("Inférence disponible").waitFor();
+    await page.getByText(ui.status).waitFor();
   });
 
   const experimentName = "Public demo · evidence-gated microscopy";
   await scene(1, async () => {
-    await page.getByRole("button", { name: /Nouvelle expérience/ }).first().click();
-    await page.getByLabel("Nom de l’expérience").fill(experimentName);
+    await page.getByRole("button", { name: ui.newExperiment }).first().click();
+    await page.getByLabel(ui.experimentName).fill(experimentName);
     await page
-      .getByLabel("Hypothèse ou objectif")
-      .fill("Demonstrate traceable analysis on three public, hash-locked images.");
-    await page.getByRole("button", { name: "Créer l’expérience" }).click();
-    await page.getByLabel("Expérience active").filter({ hasText: experimentName }).waitFor();
-    await page.locator('input[type="file"]').setInputFiles(sourcePaths);
-    await page.getByRole("button", { name: /Importer les images/ }).click();
-    await page.getByRole("status").filter({ hasText: "3 importé(s)" }).waitFor();
-    await page.getByText("3 images importées").scrollIntoViewIfNeeded();
+      .getByLabel(ui.objective)
+      .fill(ui.description);
+    await page.getByRole("button", { name: ui.createExperiment }).click();
+    const experimentSelect = page.getByLabel(ui.activeExperiment);
+    await experimentSelect.waitFor();
+    await page.waitForFunction(
+      ({ selector, expected }) => {
+        const select = document.querySelector(selector);
+        return select instanceof HTMLSelectElement
+          && !select.disabled
+          && select.selectedOptions[0]?.textContent === expected;
+      },
+      { selector: "#active-experiment", expected: experimentName },
+    );
+    const fileInput = page.locator('input[type="file"]');
+    await page.waitForFunction(
+      () => {
+        const input = document.querySelector('input[type="file"]');
+        return input instanceof HTMLInputElement && !input.disabled;
+      },
+    );
+    await fileInput.setInputFiles(sourcePaths);
+    await page.waitForFunction(
+      (label) => Array.from(document.querySelectorAll("button")).some(
+        (button) => button.textContent?.includes(label) && !button.disabled,
+      ),
+      ui.importButtonText,
+    );
+    await page.getByRole("button", { name: ui.importImages }).click();
+    await page.getByRole("status").filter({ hasText: ui.importSummary }).waitFor();
+    await page.getByText(ui.importedCount).scrollIntoViewIfNeeded();
   });
 
   await scene(2, async () => {
-    const gallery = page.getByRole("list", { name: "Images importées" });
+    const gallery = page.getByRole("list", { name: ui.importedImages });
     await gallery.getByRole("button", { name: /SN90_C_1_000_dic\.tif/ }).click();
     const viewer = page.getByRole("dialog");
-    await viewer.getByText("fichier source original").waitFor();
+    await viewer.getByText(ui.sourceOriginal).waitFor();
     await page.waitForTimeout(3500);
-    await viewer.getByRole("button", { name: "Fermer" }).click();
-    await page.getByRole("button", { name: "Lancer l’analyse" }).click();
-    await page.getByText(`Expérience : ${experimentName}`).waitFor({ timeout: 90_000 });
-    await page.getByText("Composantes connexes", { exact: true }).scrollIntoViewIfNeeded();
+    await viewer.getByRole("button", { name: ui.close }).click();
+    await page.getByRole("button", { name: ui.runAnalysis }).click();
+    await page.getByText(`${ui.experimentPrefix} : ${experimentName}`).waitFor({ timeout: 90_000 });
+    await page.getByText(ui.connectedComponents, { exact: true }).scrollIntoViewIfNeeded();
   });
 
   await scene(3, async () => {
-    const gallery = page.getByRole("list", { name: "Overlays de segmentation" });
+    const gallery = page.getByRole("list", { name: ui.overlays });
     await gallery.getByRole("button").first().click();
     const viewer = page.getByRole("dialog");
-    await viewer.getByRole("button", { name: "Source (aperçu)" }).click();
+    await viewer.getByRole("button", { name: ui.sourcePreview }).click();
     await page.waitForTimeout(3500);
     await viewer.getByRole("button", { name: "Segmentation" }).click();
     await page.waitForTimeout(3500);
-    await viewer.getByRole("button", { name: "Fermer" }).click();
-    await page.getByText(/pas validé comme cellule ou noyau/).scrollIntoViewIfNeeded();
+    await viewer.getByRole("button", { name: ui.close }).click();
+    await page.getByText(ui.reservation).scrollIntoViewIfNeeded();
   });
 
   await scene(4, async () => {
     const jsonDownload = page.waitForEvent("download");
-    await page.getByRole("link", { name: "Exporter JSON" }).click();
+    await page.getByRole("link", { name: ui.exportJson }).click();
     await jsonDownload;
     const csvDownload = page.waitForEvent("download");
-    await page.getByRole("link", { name: "Exporter CSV" }).click();
+    await page.getByRole("link", { name: ui.exportCsv }).click();
     await csvDownload;
-    await page.getByText("Niveau de preuve, limites et provenance").scrollIntoViewIfNeeded();
+    await page.getByText(ui.evidence).scrollIntoViewIfNeeded();
   });
 
   await scene(5, async () => {
     await page.getByRole("button", { name: "Benchmarks" }).click();
-    await page.getByRole("heading", { name: "Comparaison des moteurs" }).waitFor();
-    await page.getByText("Premier plan microfluidique · BBBC019").scrollIntoViewIfNeeded();
+    await page.getByRole("heading", { name: ui.engineComparison }).waitFor();
+    await page.getByText(ui.foreground).scrollIntoViewIfNeeded();
     await page.waitForTimeout(6000);
-    await page.getByText("Instances nucléaires · BBBC038").scrollIntoViewIfNeeded();
+    await page.getByText(ui.instances).scrollIntoViewIfNeeded();
     await page.waitForTimeout(6000);
-    await page.getByText("Provenance des chiffres").click();
+    await page.getByText(ui.provenance).click();
     await page.getByText(/reports\/benchmarks\/bbbc019/).first().scrollIntoViewIfNeeded();
   });
 
   await scene(6, async () => {
-    await page.getByRole("button", { name: "Espace de travail" }).click();
-    await page.getByRole("heading", { name: "Moteur" }).scrollIntoViewIfNeeded();
-    const detailButtons = page.getByRole("button", { name: "Détails et limites" });
+    await page.getByRole("button", { name: ui.workspace }).click();
+    await page.getByRole("heading", { name: ui.engine }).scrollIntoViewIfNeeded();
+    const detailButtons = page.getByRole("button", { name: ui.details });
     await detailButtons.last().click();
     await page.getByRole("dialog").waitFor();
     await page.waitForTimeout(8000);
-    await page.getByRole("dialog").getByRole("button", { name: "Fermer" }).click();
-    await page.getByRole("button", { name: "Résultats" }).click();
-    await page.getByRole("heading", { name: "Résultats" }).first().scrollIntoViewIfNeeded();
+    await page.getByRole("dialog").getByRole("button", { name: ui.close }).click();
+    await page.getByRole("button", { name: ui.results }).click();
+    await page.getByRole("heading", { name: ui.results }).first().scrollIntoViewIfNeeded();
   });
 } catch (error) {
   recordingError = error;

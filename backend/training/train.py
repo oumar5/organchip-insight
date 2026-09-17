@@ -1,7 +1,7 @@
 """Training entry point reserved for the selected competition dataset.
 
 This module intentionally refuses to invent a training run before the dataset,
-labels, split policy and evaluation protocol are documented in docs/data-strategy.md.
+labels, split policy and evaluation protocol are documented in docs/02-research/data-strategy.md.
 """
 
 import argparse

@@ -1,46 +1,38 @@
 # Documentation OrganChip Insight
 
-Ce dossier est la source de vérité produit, scientifique et technique.
+Ce dossier est la source de vérité produit, scientifique, technique et de
+soumission. Les préfixes numériques indiquent l'ordre de lecture ; ils ne sont
+pas des numéros de version.
 
-## Commencer
+## Parcours recommandé
 
-1. [Vision produit](product-brief.md)
-2. [Démarrage du projet](../README.md)
-3. [Inférence avant entraînement](inference.md)
-4. [Architecture](architecture.md)
-5. [API](api.md)
+1. [`01-product/`](01-product/README.md) — comprendre le produit, son
+   architecture, son API, l'inférence et les limites de sécurité.
+2. [`02-research/`](02-research/README.md) — suivre les données, protocoles,
+   validations, audits et décisions scientifiques.
+3. [`03-competition/`](03-competition/README.md) — vérifier les exigences du
+   concours, la stratégie Kaggle, la roadmap et la déclaration IA/licences.
+4. [`04-submission/`](04-submission/README.md) — relire les rapports bilingues,
+   le Writeup, les storyboards vidéo et le runbook de publication.
+5. [`05-release/`](05-release/README.md) — préparer la release et vérifier ses
+   checksums.
+6. [`06-retrospectives/`](06-retrospectives/README.md) — consulter la mémoire
+   datée des expériences, incidents et décisions.
 
-## Recherche scientifique
+Le [README principal](../README.md) reste le point d'entrée d'installation et
+le [fichier des tâches](../TASKS.md) reste la liste opérationnelle jusqu'à la
+soumission.
 
-- [Recherche et décisions](research.md)
-- [État de l'art et paysage concurrentiel](etat-de-l-art.md)
-- [Stratégie de données](data-strategy.md)
-- [Plan de validation](validation.md)
-- [Protocole candidat de regroupement par campagne](protocole-campagnes-v2.md)
-- [Protocole de décision pour la classification v2](protocole-classification-campagne-v2.md)
-- [Contre-audit de la classification CNN, 17 septembre 2026](audit-2026-09-17-classification-cnn.md)
-- [Validation externe iOrganoAssay v1.1.0, 17 septembre 2026](retours-experience/2026-09-17-validation-externe-iorganoassay.md)
-- [Démonstrateur CNN ONNX abstentionniste, 17 septembre 2026](retours-experience/2026-09-17-demonstrateur-cnn-onnx.md)
-- [Workflow Kaggle et GitHub](kaggle-workflow.md)
-- [Manifeste et acquisition des données](../data/README.md)
+## Règles documentaires
 
-## Challenge AI4S
-
-- [Exigences officielles du challenge](competition-requirements.md)
-- [Plan de soumission et de finale](plan-soumission.md)
-- [Brouillons de soumission en anglais](submission/README.md)
-- [Audit du projet au 16 septembre 2026](audit-2026-09-16.md)
-
-## Produit et exploitation
-
-- [Expérience utilisateur](ux.md)
-- [Sécurité et données](security-and-data.md)
-- [Stabilisation produit, exports, sécurité et Docker](retours-experience/2026-09-17-stabilisation-produit-exports-securite-docker.md)
-- [Roadmap](roadmap.md)
-- [Retours d'expérience](retours-experience/README.md)
-
-## Règle documentaire
-
-Une performance, une licence ou une capacité n'est annoncée comme acquise que si
-elle est reliée à une source, un script ou un test versionné. Les intentions
-restent marquées comme `planifié`, `candidat` ou `à valider`.
+- Une performance, une licence ou une capacité n'est annoncée comme acquise
+  que si elle est reliée à une source, un script, un rapport ou un test
+  versionné.
+- Les intentions restent marquées comme `planifié`, `candidat` ou `à valider`.
+- Les expériences négatives ne sont pas supprimées : elles sont conservées
+  dans les retours d'expérience avec leur contexte.
+- Les rapports de soumission existent en français et en anglais ; les
+  documents internes peuvent rester en français lorsqu'ils servent de journal
+  de décision.
+- `make docs-check` vérifie tous les liens locaux et interdit les anciens
+  chemins documentaires.

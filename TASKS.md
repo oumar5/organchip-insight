@@ -21,6 +21,8 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 ## État actuel
 
 - [x] Produit local fonctionnel : interface, API, SQLite et Docker Compose.
+- [x] Interface et messages API internationalisés en français et en anglais,
+  avec choix persistant, langue de document correcte et tests navigateur.
 - [x] Import multiple PNG/JPEG/TIFF et prise en charge des TIFF 16 bits.
 - [x] Galerie, visionneuse Original / Segmentation et exports JSON/CSV.
 - [x] Moteur adaptatif et réserve explicite sur les composantes connexes.
@@ -30,6 +32,11 @@ retenue pour la finale, la phase 5 devient alors obligatoire.
 - [x] README anglais et brouillons du rapport, du Writeup et de la vidéo.
 - [x] Validation de phase 1 terminée sur les trois images réelles verrouillées.
 - [x] Release candidate reproductible de phase 2 validée et gelée sur `dev`.
+- [x] Artefacts d'expériences CNN contrôlés automatiquement : manifestes,
+  tailles, SHA-256, parité ONNX, sélection sur validation uniquement et zéro
+  reçu d'accès au test gelé.
+- [x] Documentation réorganisée par ordre de lecture, liens locaux contrôlés et
+  provenance historique conservée dans les retours d'expérience.
 - [x] Équipe de compétition fixée à une personne ; aucun bonus
   interdisciplinaire revendiqué.
 - [x] Licence du code fixée à Apache-2.0 et bundle ONNX non distribué dans la
@@ -142,7 +149,7 @@ et ne doit retarder ni la publication ni le Writeup.
   sous F1 `0,50` ; les trois critères pré-enregistrés sont atteints.
 - [x] Publier le résultat complet dans les rapports JSON/CSV, la comparaison
   d'interface et le
-  [REX dédié](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md),
+  [REX dédié](docs/06-retrospectives/2026-09-17-validation-externe-iorganoassay.md),
   avec la réserve que le GT cible un organoïde et n'est pas un masque exhaustif
   d'instances ou de cellules.
 - [x] Conserver le **Brain Organoid Dataset** comme alternative non exécutée :
@@ -207,16 +214,17 @@ inéligible.
   réserve explicite relevant du propriétaire.
 - [x] Ajouter les figures générées depuis les rapports versionnés.
 - [x] Vérifier les légendes, citations, licences et limites.
-- [x] Exporter les deux PDF reproductibles et contrôler visuellement leurs 16
-  pages en anglais et en français.
+- [x] Exporter les deux PDF reproductibles et contrôler visuellement leurs 11
+  pages en anglais et en français, sans page vide ni titre isolé.
 - [ ] Publier le PDF sur une URL publique stable.
 
 ### 4.2 Vidéo de cinq minutes maximum
 
 - [x] Préparer une expérience de démonstration reproductible fondée sur le
   manifeste réel verrouillé de la phase 1.
-- [x] Enregistrer un candidat reproductible de 3 min 18 s sur le produit réel et
-  produire les montages anglais et français avec Demo Studio.
+- [x] Enregistrer deux captures reproductibles de 3 min 18 s sur le produit réel,
+  avec interface anglaise pour le montage anglais et interface française pour
+  le montage français, puis produire les deux montages avec Demo Studio.
 - [x] Ajouter narration locale, avatar, musique sous licence, sous-titres visibles
   et fichiers SRT dans les deux langues.
 - [x] Vérifier durée, résolution, codecs, taille, secrets, chemins personnels et

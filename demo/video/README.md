@@ -1,7 +1,9 @@
 # Bilingual competition video
 
-This Demo Studio project turns one deterministic Playwright capture of the real
-product into two submission candidates:
+This Demo Studio project turns two deterministic Playwright captures of the real
+product into two submission candidates. Each capture uses the matching interface
+language and a separate disposable Docker volume, while the scientific actions
+and timing remain identical:
 
 - `organchip-insight-demo-candidate-en.mp4` with English narration and subtitles;
 - `organchip-insight-demo-candidate-fr.mp4` with French narration and subtitles.

@@ -12,7 +12,8 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 
 ## Capacités actuelles
 
-- interface React/TypeScript en français et responsive ;
+- interface React/TypeScript responsive en français et en anglais, avec choix
+  persistant ;
 - API FastAPI documentée par OpenAPI ;
 - expériences et résultats persistés dans SQLite ;
 - décodage des uploads, limites de taille/pixels et détection des doublons binaires ;
@@ -28,7 +29,7 @@ elles ne constituent ni un diagnostic ni une conclusion biologique.
 - même pipeline depuis l'interface, l'API ou `inference.py` ;
 - pipeline expérimental MobileNetV3 reproductible, avec modes `smoke`,
   `validation` et `final-eval` isolés ;
-- Docker Compose, suites unitaires et parcours Playwright bout en bout.
+- Docker Compose, suites unitaires et parcours Playwright bout en bout ;
 - validation externe iOrganoAssay v1.1.0 pré-enregistrée et versionnée.
 
 ## Démarrage recommandé
@@ -139,14 +140,14 @@ adaptatif gelé atteint un macro-F1 de `0,822746` (IC bootstrap 95 %
 Cette preuve concerne le premier plan d'un organoïde cible ; elle ne valide ni
 le comptage cellulaire, ni la classification `good`/`bad`, ni la segmentation
 sur les images OoC du concours. Voir le
-[REX iOrganoAssay](docs/retours-experience/2026-09-17-validation-externe-iorganoassay.md).
+[REX iOrganoAssay](docs/06-retrospectives/2026-09-17-validation-externe-iorganoassay.md).
 
 La modélisation CNN OoC est close après validation GPU et ablations A/B : aucune
 configuration n'a atteint le plancher pré-enregistré par mode et le test gelé
 n'a jamais été ouvert. Le run B est disponible uniquement comme démonstrateur
 ONNX expérimental à abstention systématique. Voir le
-[contre-audit](docs/audit-2026-09-17-classification-cnn.md) et le
-[REX produit](docs/retours-experience/2026-09-17-demonstrateur-cnn-onnx.md).
+[contre-audit](docs/02-research/audits/audit-2026-09-17-classification-cnn.md) et le
+[REX produit](docs/06-retrospectives/2026-09-17-demonstrateur-cnn-onnx.md).
 
 Pour activer localement le démonstrateur avec le bundle autorisé déjà présent :
 
@@ -217,12 +218,12 @@ frontend React
 
 Commencer par l'[index documentaire](docs/README.md), puis lire :
 
-- [vision produit](docs/product-brief.md) ;
-- [inférence avant entraînement](docs/inference.md) ;
-- [recherche et décisions](docs/research.md) ;
-- [stratégie de données](docs/data-strategy.md) ;
-- [plan de validation](docs/validation.md) ;
-- [roadmap](docs/roadmap.md).
+- [vision produit](docs/01-product/product-brief.md) ;
+- [inférence avant entraînement](docs/01-product/inference.md) ;
+- [recherche et décisions](docs/02-research/research.md) ;
+- [stratégie de données](docs/02-research/data-strategy.md) ;
+- [plan de validation](docs/02-research/validation.md) ;
+- [roadmap](docs/03-competition/roadmap.md).
 
 ## Positionnement challenge
 
@@ -232,9 +233,9 @@ volet international du 5ᵉ Pazhou Algorithm Competition. Le règlement officiel
 la grille Kaggle (impact 30 %, approche et innovation 30 %, résultats 20 %,
 reproductibilité 10 %, présentation 10 %) et le calendrier (soumission le 10 octobre 2026, finale
 avec soutenance du 20 au 30 octobre) sont résumés dans
-[docs/competition-requirements.md](docs/competition-requirements.md). Le plan
+[docs/03-competition/requirements.md](docs/03-competition/requirements.md). Le plan
 de travail jusqu'à la finale est dans
-[docs/plan-soumission.md](docs/plan-soumission.md).
+[docs/03-competition/submission-plan.md](docs/03-competition/submission-plan.md).
 
 Les benchmarks reproductibles adaptatif et µSAM ciblent BBBC019 Microfluidics ;
 un audit d'instances µSAM pré-enregistré a aussi été exécuté sur BBBC038. Le
@@ -250,4 +251,4 @@ Projet conçu et porté par **Ben Lol OUMAR**.
 Le code original d'OrganChip Insight est distribué sous licence
 [Apache-2.0](LICENSE). Les jeux de données, poids, bibliothèques et médias tiers
 conservent leurs licences propres, répertoriées dans
-[la déclaration des outils et licences](docs/declaration-ia-et-licences.md).
+[la déclaration des outils et licences](docs/03-competition/ai-and-licenses.md).

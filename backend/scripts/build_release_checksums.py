@@ -10,7 +10,7 @@ import subprocess
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-OUTPUT_PATH = REPOSITORY_ROOT / "docs/release/release-checksums.sha256"
+OUTPUT_PATH = REPOSITORY_ROOT / "docs/05-release/release-checksums.sha256"
 WEIGHT_SUFFIXES = {".onnx", ".pt", ".pth"}
 
 
@@ -32,10 +32,10 @@ def is_deliverable(path: Path) -> bool:
         or (posix_path.startswith("notebooks/") and path.suffix == ".ipynb")
         or posix_path == "frontend/public/benchmark-summary.json"
         or (
-            posix_path.startswith("docs/release/")
+            posix_path.startswith("docs/05-release/")
             and path.suffix == ".md"
         )
-        or posix_path.startswith("docs/submission/")
+        or posix_path.startswith("docs/04-submission/")
         or (posix_path.startswith("output/pdf/") and path.suffix == ".pdf")
         or (
             posix_path.startswith("output/video/")

@@ -11,7 +11,8 @@ DEMO_PROJECT_ROOT="$REPOSITORY_ROOT/demo/video"
 DEMO_CONFIG="$DEMO_PROJECT_ROOT/demo.config.yaml"
 NATURAL_VOICE_ROOT=${ORGANCHIP_NATURAL_VOICE_ROOT:-"$(CDPATH= cd -- "$REPOSITORY_ROOT/.." && pwd)/solmik/product-demos/.runtime"}
 TEMPORARY_DIRECTORY=$(mktemp -d)
-RAW_VIDEO="$TEMPORARY_DIRECTORY/organchip-insight-demo.webm"
+RAW_VIDEO_EN="$TEMPORARY_DIRECTORY/organchip-insight-demo-en.webm"
+RAW_VIDEO_FR="$TEMPORARY_DIRECTORY/organchip-insight-demo-fr.webm"
 MANIFEST="$REPOSITORY_ROOT/data/manifests/product-real-smoke-v1.json"
 
 cleanup() {
@@ -60,21 +61,35 @@ if [ ! -x "$CHATTERBOX_PYTHON" ] || [ ! -x "$RHUBARB_COMMAND" ]; then
 fi
 
 mkdir -p "$REPOSITORY_ROOT/output/video"
-ORGANCHIP_BACKEND_PORT="$BACKEND_PORT" \
-  ORGANCHIP_FRONTEND_PORT="$FRONTEND_PORT" \
-  docker compose --project-directory "$REPOSITORY_ROOT" \
-    -p "$PROJECT_NAME" up --detach --build --wait
-
-PLAYWRIGHT_BASE_URL="http://127.0.0.1:$FRONTEND_PORT" \
-  ORGANCHIP_REAL_E2E_MANIFEST="$MANIFEST" \
-  ORGANCHIP_DEMO_RAW_VIDEO="$RAW_VIDEO" \
-  ORGANCHIP_DEMO_SUBTITLE="$TEMPORARY_DIRECTORY/raw-capture.en.srt" \
-  ORGANCHIP_DEMO_BURN_CAPTIONS="false" \
-  node "$REPOSITORY_ROOT/frontend/scripts/record-demo-video.mjs"
+for language in en fr; do
+  # Start from an empty disposable volume for each language. Otherwise the
+  # second capture would show the experiment created by the first capture.
+  ORGANCHIP_BACKEND_PORT="$BACKEND_PORT" \
+    ORGANCHIP_FRONTEND_PORT="$FRONTEND_PORT" \
+    docker compose --project-directory "$REPOSITORY_ROOT" \
+      -p "$PROJECT_NAME" up --detach --build --wait
+  if [ "$language" = "en" ]; then
+    raw_video="$RAW_VIDEO_EN"
+  else
+    raw_video="$RAW_VIDEO_FR"
+  fi
+  PLAYWRIGHT_BASE_URL="http://127.0.0.1:$FRONTEND_PORT" \
+    ORGANCHIP_REAL_E2E_MANIFEST="$MANIFEST" \
+    ORGANCHIP_DEMO_LANGUAGE="$language" \
+    ORGANCHIP_DEMO_RAW_VIDEO="$raw_video" \
+    ORGANCHIP_DEMO_SUBTITLE="$TEMPORARY_DIRECTORY/raw-capture.$language.srt" \
+    ORGANCHIP_DEMO_BURN_CAPTIONS="false" \
+    node "$REPOSITORY_ROOT/frontend/scripts/record-demo-video.mjs"
+  ORGANCHIP_BACKEND_PORT="$BACKEND_PORT" \
+    ORGANCHIP_FRONTEND_PORT="$FRONTEND_PORT" \
+    docker compose --project-directory "$REPOSITORY_ROOT" \
+      -p "$PROJECT_NAME" down --volumes --remove-orphans
+done
 
 uv run --project "$REPOSITORY_ROOT/backend" \
   python "$REPOSITORY_ROOT/backend/scripts/prepare_demo_studio_video.py" \
-  --raw-video "$RAW_VIDEO" \
+  --raw-video-en "$RAW_VIDEO_EN" \
+  --raw-video-fr "$RAW_VIDEO_FR" \
   --project-root "$DEMO_PROJECT_ROOT" \
   --timeline-only
 
