@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "manifest_id": "product-real-smoke-v1",
+  "purpose": "Local product smoke test on real public images; never a biological accuracy claim.",
+  "path_root": "../..",
+  "frozen_classification_test_used": false,
+  "images": [
+    {
+      "path": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/0-1_days/221123_10.png",
+      "dataset": "OOC Image Dataset",
+      "license": "CC-BY-4.0",
+      "campaign_split": "train",
+      "published_split": "train",
+      "acquisition_mode": "RGB",
+      "sha256": "e5f9036d9c2855b477633c15c8d18cbfb2bc75c3da32a99bfcea5f64cc7f1571"
+    },
+    {
+      "path": "data/raw/ooc/OOC_image_dataset/train/bad/cell_type_A549/0-1_days/230525_111.png",
+      "dataset": "OOC Image Dataset",
+      "license": "CC-BY-4.0",
+      "campaign_split": "train",
+      "published_split": "train",
+      "acquisition_mode": "L",
+      "sha256": "899f5602f9e93076a06074f7ce80e3507873d637fa38eba72387327029b6514b"
+    },
+    {
+      "path": "data/raw/bbbc019/Microfluidic/images/SN90_C_1_000_dic.tif",
+      "dataset": "BBBC019 Microfluidics v2",
+      "license": "CC-BY-3.0",
+      "campaign_split": "external-benchmark",
+      "published_split": "benchmark",
+      "acquisition_mode": "DIC grayscale",
+      "sha256": "cd139f943e26b550d1274563b8288ff3b77a5d9298192f425a7cd82b66d37701"
+    }
+  ]
+}

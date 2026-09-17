@@ -1,3 +1,4 @@
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -102,7 +103,8 @@ class AdaptiveSegmentationAnalyzer:
             "Inférence exploratoire : inspectez les overlays avant d'interpréter les mesures."
         ]
 
-        for image_path in image_paths:
+        stem_counts = Counter(path.stem for path in image_paths)
+        for image_index, image_path in enumerate(image_paths, start=1):
             try:
                 rgb, grayscale = read_image(image_path)
             except (
@@ -123,6 +125,11 @@ class AdaptiveSegmentationAnalyzer:
             diameters = [float(region.equivalent_diameter_area) for region in regions]
 
             overlay_filename = f"{image_path.stem}-overlay.png"
+            if stem_counts[image_path.stem] > 1:
+                source_suffix = image_path.suffix.lower().lstrip(".") or "image"
+                overlay_filename = (
+                    f"{image_path.stem}-{source_suffix}-{image_index:03d}-overlay.png"
+                )
             overlay_path = artifact_dir / overlay_filename
             self._save_overlay(rgb, labels, overlay_path)
             overlay_url = f"{artifact_url_prefix}/{overlay_filename}"
